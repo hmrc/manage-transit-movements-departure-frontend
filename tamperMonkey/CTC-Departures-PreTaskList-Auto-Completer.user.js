@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures PreTaskList Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      3.0
+// @version      4.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/what-do-you-want-to-do
@@ -14,11 +14,11 @@
 // @updateURL https://github.com/hmrc/manage-transit-movements-departure-frontend/raw/main/tamperMonkey/CTC-Departures-PreTaskList-Auto-Completer.user.js
 // ==/UserScript==
 
-(function() {
+(function () {
     'use strict';
 })();
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     generateLRN()
     isAButtonToggled()
 }, false);
@@ -26,10 +26,10 @@ window.addEventListener('load', function() {
 /* Main Functions */
 
 function isAButtonToggled() {
-    if(GM_getValue('preTaskT1NoSecurityToggle',false)){
+    if (GM_getValue('preTaskT1NoSecurityToggle', false)) {
         preTaskListT1NoSecurity()
-    }else {
-        if(!location.href.includes('task-list')) {
+    } else {
+        if (!location.href.includes('task-list')) {
             document.body.appendChild(setupGUI())
         }
     }
@@ -48,7 +48,7 @@ function setupGUI() {
 /* Helper Functions */
 
 function generateLRN() {
-    if(location.href.includes('manage-transit-movements/departures/local-reference-number')){
+    if (location.href.includes('manage-transit-movements/departures/local-reference-number')) {
         GM_setValue('lrn', Math.floor((Math.random() + 1) * 10000))
     }
 }
@@ -58,7 +58,7 @@ function getLRN() {
 }
 
 const currentPageIs = (path) => {
-    if(path.includes("*")) {
+    if (path.includes("*")) {
         let matches = window.location.pathname.match(path)
         return matches && window.location.pathname.endsWith(path.slice(-5))
     } else {
@@ -70,77 +70,77 @@ const currentPageIs = (path) => {
 
 function createPreTaskT1NoSecurityButton() {
     let button = document.createElement('button')
-            button.id='preTaskT1NoSecurityButton'
+    button.id = 'preTaskT1NoSecurityButton'
 
-            if (!!document.getElementById('global-header')) {
-                button.classList.add('button-start', 'govuk-!-display-none-print')
-            } else {
-                button.classList.add('govuk-button','govuk-!-display-none-print')
-            }
+    if (!!document.getElementById('global-header')) {
+        button.classList.add('button-start', 'govuk-!-display-none-print')
+    } else {
+        button.classList.add('govuk-button', 'govuk-!-display-none-print')
+    }
 
-            button.style.position = 'absolute'
-            button.style.top = '50px'
-            button.innerHTML = 'Complete Pretask List (T1/No Security)'
-            button.addEventListener("click", function handleClick() {
-                GM_setValue('preTaskT1NoSecurityToggle',true)
-                preTaskListT1NoSecurity()
-            })
+    button.style.position = 'absolute'
+    button.style.top = '50px'
+    button.innerHTML = 'Complete Pretask List (T1/No Security)'
+    button.addEventListener("click", function handleClick() {
+        GM_setValue('preTaskT1NoSecurityToggle', true)
+        preTaskListT1NoSecurity()
+    })
 
-            return button
+    return button
 }
 
 /* #### PreTaskList Pages #### */
 
 const departureDeclarationPage = () => {
-    if(currentPageIs('/manage-transit-movements/what-do-you-want-to-do')){
+    if (currentPageIs('/manage-transit-movements/what-do-you-want-to-do')) {
         document.getElementById('make-departure-declaration').click()
-        document.getElementsByClassName('govuk-button')[0].click()
+        document.getElementById('submit').click()
     }
 }
 
 const lrnPage = (lrn) => {
-    if(currentPageIs('/manage-transit-movements/departures/local-reference-number')){
+    if (currentPageIs('/manage-transit-movements/departures/local-reference-number')) {
         document.getElementById('value').value = lrn
-        document.getElementsByClassName('govuk-button')[0].click()
+        document.getElementById('submit').click()
     }
 }
 
 const officeOfDeparturePage = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/office-of-departure`)){
+    if (currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/office-of-departure`)) {
         document.getElementById('value-select').value = data
-        document.getElementsByClassName('govuk-button')[0].click()
+        document.getElementById('submit').click()
     }
 }
 
 const procedureTypePage = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/procedure-type`)){
+    if (currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/procedure-type`)) {
         document.getElementById(data).click()
-        document.getElementsByClassName('govuk-button')[0].click()
+        document.getElementById('submit').click()
     }
 }
 
 const declarationTypePage = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/declaration-type`)){
+    if (currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/declaration-type`)) {
         document.getElementById(data).click()
-        document.getElementsByClassName('govuk-button')[0].click()
+        document.getElementById('submit').click()
     }
 }
 
 const securityDetails = (lrn, data) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/security-details`)){
+    if (currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/security-details`)) {
         document.getElementById(data).click()
-        document.getElementsByClassName('govuk-button')[0].click()
+        document.getElementById('submit').click()
     }
 }
 
 const preTaskListCYA = (lrn) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/check-answers`)){
-        document.getElementsByClassName('govuk-button')[0].click()
+    if (currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/check-answers`)) {
+        document.getElementById('submit').click()
     }
 }
 
 const taskListPage = (lrn) => {
-    if(currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)){
+    if (currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)) {
         toggleButtonsOff()
     }
 }

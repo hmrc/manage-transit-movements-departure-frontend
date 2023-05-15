@@ -14,3 +14,4 @@
 
 + nocsrf
 POST       /manage-transit-movements/departures/test-only/user-answers/:sessionId          controllers.testOnly.TestOnlyController.setUserAnswers(sessionId: String)
+POST       /manage-transit-movements/departures/test-only/submit-declaration/:sessionId    controllers.testOnly.TestOnlyController.submitDeclaration(sessionId: String)
