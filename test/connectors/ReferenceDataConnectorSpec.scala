@@ -18,6 +18,7 @@ package connectors
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
+import com.github.tomakehurst.wiremock.matching.StringValuePattern
 import helper.WireMockServerHandler
 import models.reference._
 import org.scalacheck.Gen
@@ -27,18 +28,20 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import play.mvc.Http.MimeTypes.JSON
 import play.mvc.Http.Status._
+import com.github.tomakehurst.wiremock.client.WireMock._
+import scala.collection.JavaConverters._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with ScalaCheckPropertyChecks {
 
-  private val baseUrl = "test-only/transit-movements-trader-reference-data"
+  private val baseUrl = "customs-reference-data"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder = super
     .guiceApplicationBuilder()
     .configure(
-      conf = "microservice.services.referenceData.port" -> server.port()
+      conf = "microservice.services.customsReferenceData.port" -> server.port()
     )
 
   private lazy val connector: ReferenceDataConnector = app.injector.instanceOf[ReferenceDataConnector]
@@ -71,12 +74,18 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |]
       |""".stripMargin
 
+  private val queryParams: Seq[(String, StringValuePattern)] = Seq(
+    "countryId" -> equalTo("GB"),
+    "role"      -> equalTo("DEP")
+  )
+
   "Reference Data" - {
 
     "getCustomsOfficesOfDepartureForCountry" - {
       "must return a successful future response with a sequence of CustomsOffices" in {
         server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/customs-offices/GB?role=DEP"))
+          get(urlPathMatching(s"/$baseUrl/filtered-lists/customsOffices"))
+            .withQueryParams(queryParams.toMap.asJava)
             .willReturn(okJson(customsOfficeDestinationResponseJson))
         )
 
@@ -90,11 +99,13 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return a successful future response when CustomsOffice is not found" in {
         server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/customs-offices/AR?role=DEP")).willReturn(
-            aResponse()
-              .withStatus(NOT_FOUND)
-              .withHeader(CONTENT_TYPE, JSON)
-          )
+          get(urlPathMatching(s"/$baseUrl/filtered-lists/customsOffices"))
+            .withQueryParams(queryParams.toMap.asJava)
+            .willReturn(
+              aResponse()
+                .withStatus(NOT_FOUND)
+                .withHeader(CONTENT_TYPE, JSON)
+            )
         )
 
         val expectedResult = Nil
@@ -103,14 +114,20 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$baseUrl/customs-offices/GB?role=DEP", connector.getCustomsOfficesOfDepartureForCountry("GB"))
+        server.stubFor(
+          get(urlPathMatching(s"/$baseUrl/filtered-lists/customsOffices"))
+            .withQueryParams(queryParams.toMap.asJava)
+            .willReturn(aResponse().withStatus(BAD_REQUEST))
+        )
+
+        checkErrorResponse(s"/$baseUrl/lists/customsOffices", connector.getCustomsOfficesOfDepartureForCountry("GB"))
       }
     }
 
     "getCountryCodesCTC" - {
       "must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/country-codes-ctc"))
+          get(urlEqualTo(s"/$baseUrl/CountryCodesCommonTransit"))
             .willReturn(okJson(countriesResponseJson))
         )
 
@@ -123,14 +140,14 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$baseUrl/country-codes-ctc", connector.getCountryCodesCTC())
+        checkErrorResponse(s"/$baseUrl/CountryCodesCommonTransit", connector.getCountryCodesCTC())
       }
     }
 
     "getCustomsSecurityAgreementAreaCountries" - {
       "must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/country-customs-office-security-agreement-area"))
+          get(urlEqualTo(s"/$baseUrl/CountryCustomsSecurityAgreementArea"))
             .willReturn(okJson(countriesResponseJson))
         )
 
@@ -143,7 +160,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$baseUrl/country-customs-office-security-agreement-area", connector.getCustomsSecurityAgreementAreaCountries())
+        checkErrorResponse(s"/$baseUrl/CountryCustomsSecurityAgreementArea", connector.getCustomsSecurityAgreementAreaCountries())
       }
     }
   }
