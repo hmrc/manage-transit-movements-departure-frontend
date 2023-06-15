@@ -34,22 +34,22 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[CustomsOffice]] = {
 
     val queryStrings: Seq[(String, String)] = Seq(
-      "countryId" -> countryCode,
-      "role"      -> "DEP"
+      "data.countryId"  -> countryCode,
+      "data.roles.role" -> "DEP"
     )
 
-    val serviceUrl = s"${config.customsReferenceDataUrl}/filtered-lists/customsOffices"
+    val serviceUrl = s"${config.customsReferenceDataUrl}/filtered-lists/CustomsOffices"
 
     http.GET[Seq[CustomsOffice]](serviceUrl, headers = version2Header, queryParams = queryStrings)
   }
 
   def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.customsReferenceDataUrl}/CountryCodesCommonTransit"
+    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCodesCommonTransit"
     http.GET[Seq[Country]](serviceUrl, headers = version2Header)
   }
 
   def getCustomsSecurityAgreementAreaCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.customsReferenceDataUrl}/CountryCustomsSecurityAgreementArea"
+    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCustomsSecurityAgreementArea"
     http.GET[Seq[Country]](serviceUrl, headers = version2Header)
   }
 
@@ -58,15 +58,16 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   )
 
   implicit val responseHandlerCustomsOfficeList: HttpReads[Seq[CustomsOffice]] =
-    (_: String, _: String, response: HttpResponse) =>
+    (_: String, _: String, response: HttpResponse) => {
       response.status match {
         case OK =>
-          response.json
-            .as[Seq[CustomsOffice]]
-        case NOT_FOUND =>
+          val cols = (response.json \ "data").get
+          cols.as[Seq[CustomsOffice]]
+        case NOT_FOUND => // TODO - why do we allow an empty COL but not other reference data?
           Nil
         case other =>
           logger.info(s"[ReferenceDataConnector][getCustomsOfficesOfDepartureForCountry] Invalid downstream status $other")
           throw new IllegalStateException(s"Invalid Downstream Status $other")
       }
+    }
 }
