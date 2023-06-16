@@ -20,8 +20,9 @@ import config.FrontendAppConfig
 import models.reference.{Country, CustomsOffice}
 import play.api.Logging
 import play.api.http.Status.{NOT_FOUND, OK}
+import play.api.libs.json.Format.GenericFormat
+import play.api.libs.json.Reads
 import sttp.model.HeaderNames
-import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 
 import javax.inject.Inject
@@ -33,14 +34,14 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     countryCode: String
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[CustomsOffice]] = {
 
-    val queryStrings: Seq[(String, String)] = Seq(
+    val queryParams: Seq[(String, String)] = Seq(
       "data.countryId"  -> countryCode,
       "data.roles.role" -> "DEP"
     )
 
     val serviceUrl = s"${config.customsReferenceDataUrl}/filtered-lists/CustomsOffices"
 
-    http.GET[Seq[CustomsOffice]](serviceUrl, headers = version2Header, queryParams = queryStrings)
+    http.GET[Seq[CustomsOffice]](serviceUrl, headers = version2Header, queryParams = queryParams)
   }
 
   def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
@@ -57,17 +58,36 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     HeaderNames.Accept -> "application/vnd.hmrc.2.0+json"
   )
 
-  implicit val responseHandlerCustomsOfficeList: HttpReads[Seq[CustomsOffice]] =
+  // TODO - May need readers like this for other reference data too given different response format?
+  // TODO Q. Can we use generics so this method could fit all ref data calls?
+//  implicit val responseHandlerCustomsOfficeList: HttpReads[Seq[CustomsOffice]] =
+//    (_: String, _: String, response: HttpResponse) => {
+//      response.status match {
+//        case OK =>
+//          val cols = (response.json \ "data").get
+//          cols.as[Seq[CustomsOffice]]
+//        case NOT_FOUND => // TODO - why do we allow an empty COL but not other reference data?
+//          Nil
+//        case other =>
+//          logger.info(s"[ReferenceDataConnector][getCustomsOfficesOfDepartureForCountry] Invalid downstream status $other")
+//          throw new IllegalStateException(s"Invalid Downstream Status $other")
+//      }
+//    }
+
+  implicit def responseHandlerGeneric[A](implicit reads: Reads[A]): HttpReads[Seq[A]] =
     (_: String, _: String, response: HttpResponse) => {
       response.status match {
         case OK =>
-          val cols = (response.json \ "data").get
-          cols.as[Seq[CustomsOffice]]
-        case NOT_FOUND => // TODO - why do we allow an empty COL but not other reference data?
+          val referenceData = (response.json \ "data").getOrElse(
+            throw new IllegalArgumentException("[ReferenceDataConnector][responseHandlerGeneric] Reference data could not be found")
+          )
+
+          referenceData.as[Seq[A]]
+        case NOT_FOUND => // TODO Q. - why do we allow an empty COL but not other reference data?
           Nil
         case other =>
-          logger.info(s"[ReferenceDataConnector][getCustomsOfficesOfDepartureForCountry] Invalid downstream status $other")
-          throw new IllegalStateException(s"Invalid Downstream Status $other")
+          logger.info(s"[ReferenceDataConnector][responseHandlerGeneric] Invalid downstream status $other")
+          throw new IllegalStateException(s"[ReferenceDataConnector][responseHandlerGeneric] Invalid Downstream Status $other")
       }
     }
 }

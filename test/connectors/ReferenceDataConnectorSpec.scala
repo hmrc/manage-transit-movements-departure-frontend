@@ -48,35 +48,82 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
   private val customsOfficeDestinationResponseJson: String =
     """
-      |[
-      | {
-      |   "id" : "GB1",
-      |   "name" : "testName1"
-      | },
-      | {
-      |   "id" : "GB2",
-      |   "name" : "testName2"
-      | }
-      |]
+      {
+      |  "_links": {
+      |    "self": {
+      |      "href": "/customs-reference-data/lists/CustomsOffices"
+      |    }
+      |  },
+      |  "meta": {
+      |    "version": "410157ad-bc37-4e71-af2a-404d1ddad94c",
+      |    "snapshotDate": "2023-01-01"
+      |  },
+      |  "id": "CustomsOffices",
+      |  "data": [
+      |    {
+      |      "state": "valid",
+      |      "activeFrom": "2019-01-01",
+      |      "id": "GB1",
+      |      "name": "testName1",
+      |      "LanguageCode": "EN",
+      |      "countryId": "GB",
+      |      "eMailAddress": "foo@andorra.ad",
+      |      "roles": [
+      |        {
+      |          "role": "DEP"
+      |        }
+      |      ]
+      |    },
+      |    {
+      |      "state": "valid",
+      |      "activeFrom": "2019-01-01",
+      |      "id": "GB2",
+      |      "name": "testName2",
+      |      "LanguageCode": "ES",
+      |      "countryId": "GB",
+      |      "roles": [
+      |        {
+      |          "role": "DEP"
+      |        }
+      |      ]
+      |    }
+      |  ]
+      |}
       |""".stripMargin
 
   private val countriesResponseJson: String =
     """
-      |[
-      | {
-      |   "code":"GB",
-      |   "description":"United Kingdom"
-      | },
-      | {
-      |   "code":"AD",
-      |   "description":"Andorra"
-      | }
-      |]
+      |{
+      |  "_links": {
+      |    "self": {
+      |      "href": "/customs-reference-data/lists/CountryCodesCommonTransit"
+      |    }
+      |  },
+      |  "meta": {
+      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+      |    "snapshotDate": "2023-01-01"
+      |  },
+      |  "id": "CountryCodesCommonTransit",
+      |  "data": [
+      |    {
+      |      "activeFrom": "2023-01-23",
+      |      "code": "GB",
+      |      "state": "valid",
+      |      "description": "United Kingdom"
+      |    },
+      |    {
+      |      "activeFrom": "2023-01-23",
+      |      "code": "AD",
+      |      "state": "valid",
+      |      "description": "Andorra"
+      |    }
+      |  ]
+      |}
       |""".stripMargin
 
   private val queryParams: Seq[(String, StringValuePattern)] = Seq(
-    "countryId" -> equalTo("GB"),
-    "role"      -> equalTo("DEP")
+    "data.countryId"  -> equalTo("GB"),
+    "data.roles.role" -> equalTo("DEP")
   )
 
   "Reference Data" - {
@@ -84,7 +131,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
     "getCustomsOfficesOfDepartureForCountry" - {
       "must return a successful future response with a sequence of CustomsOffices" in {
         server.stubFor(
-          get(urlPathMatching(s"/$baseUrl/filtered-lists/customsOffices"))
+          get(urlPathMatching(s"/$baseUrl/filtered-lists/CustomsOffices"))
             .withQueryParams(queryParams.toMap.asJava)
             .willReturn(okJson(customsOfficeDestinationResponseJson))
         )
@@ -99,7 +146,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return a successful future response when CustomsOffice is not found" in {
         server.stubFor(
-          get(urlPathMatching(s"/$baseUrl/filtered-lists/customsOffices"))
+          get(urlPathMatching(s"/$baseUrl/filtered-lists/CustomsOffices"))
             .withQueryParams(queryParams.toMap.asJava)
             .willReturn(
               aResponse()
@@ -115,19 +162,19 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return an exception when an error response is returned" in {
         server.stubFor(
-          get(urlPathMatching(s"/$baseUrl/filtered-lists/customsOffices"))
+          get(urlPathMatching(s"/$baseUrl/filtered-lists/CustomsOffices"))
             .withQueryParams(queryParams.toMap.asJava)
             .willReturn(aResponse().withStatus(BAD_REQUEST))
         )
 
-        checkErrorResponse(s"/$baseUrl/lists/customsOffices", connector.getCustomsOfficesOfDepartureForCountry("GB"))
+        checkErrorResponse(s"/$baseUrl/filtered-lists/CustomsOffices", connector.getCustomsOfficesOfDepartureForCountry("GB"))
       }
     }
 
     "getCountryCodesCTC" - {
       "must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/CountryCodesCommonTransit"))
+          get(urlEqualTo(s"/$baseUrl/lists/CountryCodesCommonTransit"))
             .willReturn(okJson(countriesResponseJson))
         )
 
@@ -140,14 +187,14 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$baseUrl/CountryCodesCommonTransit", connector.getCountryCodesCTC())
+        checkErrorResponse(s"/$baseUrl/lists/CountryCodesCommonTransit", connector.getCountryCodesCTC())
       }
     }
 
     "getCustomsSecurityAgreementAreaCountries" - {
       "must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/CountryCustomsSecurityAgreementArea"))
+          get(urlEqualTo(s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea"))
             .willReturn(okJson(countriesResponseJson))
         )
 
@@ -160,7 +207,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$baseUrl/CountryCustomsSecurityAgreementArea", connector.getCustomsSecurityAgreementAreaCountries())
+        checkErrorResponse(s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea", connector.getCustomsSecurityAgreementAreaCountries())
       }
     }
   }
