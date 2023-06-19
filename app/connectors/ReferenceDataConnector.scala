@@ -34,6 +34,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     countryCode: String
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[CustomsOffice]] = {
 
+    // TODO - do we want to specify this in config?
     val queryParams: Seq[(String, String)] = Seq(
       "data.countryId"  -> countryCode,
       "data.roles.role" -> "DEP"
@@ -58,22 +59,6 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     HeaderNames.Accept -> "application/vnd.hmrc.2.0+json"
   )
 
-  // TODO - May need readers like this for other reference data too given different response format?
-  // TODO Q. Can we use generics so this method could fit all ref data calls?
-//  implicit val responseHandlerCustomsOfficeList: HttpReads[Seq[CustomsOffice]] =
-//    (_: String, _: String, response: HttpResponse) => {
-//      response.status match {
-//        case OK =>
-//          val cols = (response.json \ "data").get
-//          cols.as[Seq[CustomsOffice]]
-//        case NOT_FOUND => // TODO - why do we allow an empty COL but not other reference data?
-//          Nil
-//        case other =>
-//          logger.info(s"[ReferenceDataConnector][getCustomsOfficesOfDepartureForCountry] Invalid downstream status $other")
-//          throw new IllegalStateException(s"Invalid Downstream Status $other")
-//      }
-//    }
-
   implicit def responseHandlerGeneric[A](implicit reads: Reads[A]): HttpReads[Seq[A]] =
     (_: String, _: String, response: HttpResponse) => {
       response.status match {
@@ -83,7 +68,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
           )
 
           referenceData.as[Seq[A]]
-        case NOT_FOUND => // TODO Q. - why do we allow an empty COL but not other reference data?
+        case NOT_FOUND => // TODO Q. - why do we allow an empty list? Is this different for COLs for standard ref data? Do we want to raise?
           Nil
         case other =>
           logger.info(s"[ReferenceDataConnector][responseHandlerGeneric] Invalid downstream status $other")
