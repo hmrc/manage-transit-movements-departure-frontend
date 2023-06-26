@@ -91,7 +91,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |}
       |""".stripMargin
 
-  private val countriesResponseJson: String =
+  private val countriesResponseCTJson: String =
     """
       |{
       |  "_links": {
@@ -104,6 +104,36 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |    "snapshotDate": "2023-01-01"
       |  },
       |  "id": "CountryCodesCommonTransit",
+      |  "data": [
+      |    {
+      |      "activeFrom": "2023-01-23",
+      |      "code": "GB",
+      |      "state": "valid",
+      |      "description": "United Kingdom"
+      |    },
+      |    {
+      |      "activeFrom": "2023-01-23",
+      |      "code": "AD",
+      |      "state": "valid",
+      |      "description": "Andorra"
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
+
+  private val countriesResponseAAJson: String =
+    """
+      |{
+      |  "_links": {
+      |    "self": {
+      |      "href": "/customs-reference-data/lists/CountryCustomsSecurityAgreementArea"
+      |    }
+      |  },
+      |  "meta": {
+      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+      |    "snapshotDate": "2023-01-01"
+      |  },
+      |  "id": "CountryCustomsSecurityAgreementArea",
       |  "data": [
       |    {
       |      "activeFrom": "2023-01-23",
@@ -175,7 +205,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       "must return Seq of Country when successful" in {
         server.stubFor(
           get(urlEqualTo(s"/$baseUrl/lists/CountryCodesCommonTransit"))
-            .willReturn(okJson(countriesResponseJson))
+            .willReturn(okJson(countriesResponseCTJson))
         )
 
         val expectedResult: Seq[Country] = Seq(
@@ -195,7 +225,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       "must return Seq of Country when successful" in {
         server.stubFor(
           get(urlEqualTo(s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea"))
-            .willReturn(okJson(countriesResponseJson))
+            .willReturn(okJson(countriesResponseAAJson))
         )
 
         val expectedResult: Seq[Country] = Seq(
