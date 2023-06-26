@@ -34,7 +34,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
   private val formProvider = new LocalReferenceNumberFormProvider()
   private val form         = formProvider()
 
-  private lazy val localReferenceNumberRoute: String = routes.LocalReferenceNumberController.onPageLoad().url
+  private lazy val localReferenceNumberRoute: String = routes.NewLocalReferenceNumberController.onPageLoad().url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

@@ -16,60 +16,72 @@
 
 package controllers
 
+import connectors.CacheConnector
 import controllers.actions._
+import forms.NewLocalReferenceNumberFormProvider
 import forms.preTaskList.LocalReferenceNumberFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{LocalReferenceNumber, NormalMode, UserAnswers}
 import navigation.PreTaskListNavigatorProvider
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.NewLocalReferenceNumberView
 import views.html.preTaskList.LocalReferenceNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class NewLocalReferenceNumberController @Inject()(
+class NewLocalReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   identify: IdentifierAction,
-  formProvider: LocalReferenceNumberFormProvider,
+  formProvider: NewLocalReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: LocalReferenceNumberView
+  view: NewLocalReferenceNumberView,
+  cacheConnector: CacheConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists)
 
-  def onPageLoad(): Action[AnyContent] = identify {
+  def onPageLoad(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify {
     implicit request =>
-      Ok(view(form))
+      Ok(view(form(), oldLocalReferenceNumber))
   }
 
-  def onSubmit(): Action[AnyContent] = identify.async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-          value => {
-            def getOrCreateUserAnswers(): Future[Option[UserAnswers]] =
-              sessionRepository.get(value).flatMap {
-                case None =>
-                  sessionRepository.put(value).flatMap {
-                    _ => sessionRepository.get(value)
-                  }
-                case someUserAnswers =>
-                  Future.successful(someUserAnswers)
-              }
+  def isDuplicate(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
+    cacheConnector.isDuplicateLRN(lrn)
 
-            getOrCreateUserAnswers().map {
-              case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
-              case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
-            }
+  def onSubmit(oldLocalReferenceNumber: LocalReferenceNumber, newLocalReferenceNumber: Option[LocalReferenceNumber]): Action[AnyContent] = identify.async {
+    implicit request =>
+      newLocalReferenceNumber match {
+        case Some(newLocalReferenceNumber) =>
+          isDuplicate(newLocalReferenceNumber) map {
+            case None => Future.successful(Redirect(controllers.routes.ErrorController.internalServerError()))
+            case Some(alreadyExists) =>
+              form(alreadyExists)
+                .bindFromRequest()
+                .fold(
+                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
+                  value => {
+                    val userAnswersToCopy = cacheConnector.get(oldLocalReferenceNumber)
+                    userAnswersToCopy flatMap {
+                      case Some(userAnswers) =>
+                        val updatedUserAnswers = userAnswers.copy(lrn = value, eoriNumber = request.eoriNumber)
+                        cacheConnector.post(updatedUserAnswers) map {
+                          case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(value)))
+                          case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
+                        }
+                      case None => Future.successful(Redirect(controllers.routes.ErrorController.notFound()))
+                    }
+                  }
+                )
           }
-        )
+      }
   }
 }

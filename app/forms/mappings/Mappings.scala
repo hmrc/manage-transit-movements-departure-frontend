@@ -49,6 +49,9 @@ trait Mappings extends Formatters with Constraints {
   protected def boolean(requiredKey: String = "error.required", invalidKey: String = "error.boolean", args: Seq[Any] = Seq.empty): FieldMapping[Boolean] =
     of(booleanFormatter(requiredKey, invalidKey, args))
 
+  protected def isConditionTrue(alreadyExistsKey: String = "error.alreadyExists", condition: Boolean, defaultValue: Boolean): FieldMapping[Boolean] =
+    if (condition) boolean(alreadyExistsKey) else of(ignoredFormat(defaultValue))
+
   protected def enumerable[A](requiredKey: String = "error.required", invalidKey: String = "error.invalid")(implicit ev: Enumerable[A]): FieldMapping[A] =
     of(enumerableFormatter[A](requiredKey, invalidKey))
 

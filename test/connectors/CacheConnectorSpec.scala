@@ -17,13 +17,13 @@
 package connectors
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.{okJson, _}
 import helper.WireMockServerHandler
 import models.UserAnswers
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
+import play.api.libs.json.{JsBoolean, Json}
 import play.api.test.Helpers._
 
 class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler {
@@ -185,6 +185,40 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
         }
       }
     }
-  }
 
+    "isDuplicateLRN" - {
+      val url = s"/manage-transit-movements-departure-cache/is-duplicate-lrn/${lrn.value}"
+
+      "must return false when status is Ok and lrn does not exists in cache/API" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(Json.stringify(JsBoolean(false))))
+        )
+
+        connector.isDuplicateLRN(lrn).futureValue mustBe Some(false)
+      }
+
+      "must return true when status is Ok and lrn does exists in cache/API" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(Json.stringify(JsBoolean(true))))
+        )
+
+        connector.isDuplicateLRN(lrn).futureValue mustBe Some(true)
+      }
+
+      "return None for 4xx or 5xx response" in {
+        val status = Gen.choose(400: Int, 599: Int).sample.value
+
+        server.stubFor(
+          post(urlEqualTo(url))
+            .willReturn(aResponse().withStatus(status))
+        )
+
+        val result: Option[Boolean] = await(connector.isDuplicateLRN(lrn))
+
+        result mustBe None
+      }
+    }
+  }
 }

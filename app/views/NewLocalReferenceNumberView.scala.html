@@ -27,24 +27,24 @@
     errorSummary: ErrorSummary
 )
 
-@(form: Form[LocalReferenceNumber])(implicit request: Request[_], messages: Messages)
+@(form: Form[LocalReferenceNumber], oldLocalReferenceNumber: LocalReferenceNumber)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("localReferenceNumber.title"),
+    title = messages("newLocalReferenceNumber.title"),
     showBackLink = true
 ) {
 
-    @formHelper(action = routes.LocalReferenceNumberController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.routes.NewLocalReferenceNumberController.onSubmit(oldLocalReferenceNumber, form.value), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputText(
             field = form("value"),
             inputTextType = TextInputWithHiddenLabel(
-                heading = messages("localReferenceNumber.heading"),
-                additionalHtml = messages("localReferenceNumber.paragraph").toParagraph
+                heading = messages("newLocalReferenceNumber.heading"),
+                additionalHtml = messages("newLocalReferenceNumber.paragraph").toParagraph
             ),
-            hint = Some(messages("localReferenceNumber.hint")),
+            hint = Some(messages("newLocalReferenceNumber.hint")),
             inputClass = InputSize.Width20
         )
 

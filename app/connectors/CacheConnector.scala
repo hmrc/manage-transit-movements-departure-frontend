@@ -16,6 +16,7 @@
 
 package connectors
 
+import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import config.FrontendAppConfig
 import models.{LocalReferenceNumber, UserAnswers}
 import play.api.Logging
@@ -78,4 +79,15 @@ class CacheConnector @Inject() (
     }
   }
 
+  def isDuplicateLRN(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
+    val url = s"$baseUrl/is-duplicate-lrn/${lrn.toString}"
+    http
+      .GET[Boolean](url)
+      .map(Some(_))
+      .recover {
+        case e =>
+          logger.error(s"Failed to check if lrn was a duplicate with error: $e")
+          None
+      }
+  }
 }
