@@ -36,7 +36,7 @@ import scala.concurrent.Future
 
 class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with ScalaCheckPropertyChecks {
 
-  private val baseUrl = "customs-reference-data"
+  private val baseUrl = "customs-reference-data/test-only"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder = super
     .guiceApplicationBuilder()
