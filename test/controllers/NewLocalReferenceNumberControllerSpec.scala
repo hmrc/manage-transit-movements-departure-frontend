@@ -18,6 +18,7 @@ package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.preTaskList.LocalReferenceNumberFormProvider
+import models.LocalReferenceNumber
 import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
@@ -34,12 +35,14 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
   private val formProvider = new LocalReferenceNumberFormProvider()
   private val form         = formProvider()
 
-  private lazy val localReferenceNumberRoute: String = routes.NewLocalReferenceNumberController.onPageLoad().url
+  private val oldLrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").get
+  private val newLrn: LocalReferenceNumber = LocalReferenceNumber("DCBA0987654321321").get
+
+  private lazy val localReferenceNumberRoute: String = routes.NewLocalReferenceNumberController.onPageLoad(oldLrn).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
 
   "LocalReferenceNumber Controller" - {
 

@@ -26,6 +26,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.DuplicateService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.NewLocalReferenceNumberView
@@ -42,7 +43,7 @@ class NewLocalReferenceNumberController @Inject() (
   formProvider: NewLocalReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: NewLocalReferenceNumberView,
-  cacheConnector: CacheConnector
+  duplicateService: DuplicateService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -54,32 +55,21 @@ class NewLocalReferenceNumberController @Inject() (
       Ok(view(form(), oldLocalReferenceNumber))
   }
 
-  def isDuplicate(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
-    cacheConnector.isDuplicateLRN(lrn)
-
   def onSubmit(oldLocalReferenceNumber: LocalReferenceNumber, newLocalReferenceNumber: Option[LocalReferenceNumber]): Action[AnyContent] = identify.async {
     implicit request =>
       newLocalReferenceNumber match {
         case Some(newLocalReferenceNumber) =>
-          isDuplicate(newLocalReferenceNumber) map {
-            case None => Future.successful(Redirect(controllers.routes.ErrorController.internalServerError()))
-            case Some(alreadyExists) =>
-              form(alreadyExists)
+          duplicateService.isDuplicate(newLocalReferenceNumber) flatMap {
+            isDuplicateLrn =>
+              form(isDuplicateLrn)
                 .bindFromRequest()
                 .fold(
                   formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
-                  value => {
-                    val userAnswersToCopy = cacheConnector.get(oldLocalReferenceNumber)
-                    userAnswersToCopy flatMap {
-                      case Some(userAnswers) =>
-                        val updatedUserAnswers = userAnswers.copy(lrn = value, eoriNumber = request.eoriNumber)
-                        cacheConnector.post(updatedUserAnswers) map {
-                          case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(value)))
-                          case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
-                        }
-                      case None => Future.successful(Redirect(controllers.routes.ErrorController.notFound()))
+                  value =>
+                    duplicateService.copyUserAnswers(oldLocalReferenceNumber, value, request.eoriNumber) flatMap {
+                      case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(value)))
+                      case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
                     }
-                  }
                 )
           }
       }

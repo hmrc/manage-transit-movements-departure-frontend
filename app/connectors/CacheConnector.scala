@@ -79,15 +79,14 @@ class CacheConnector @Inject() (
     }
   }
 
-  def isDuplicateLRN(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
+  def isDuplicateLRN(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
     val url = s"$baseUrl/is-duplicate-lrn/${lrn.toString}"
     http
       .GET[Boolean](url)
-      .map(Some(_))
-      .recover {
+      .recoverWith {
         case e =>
           logger.error(s"Failed to check if lrn was a duplicate with error: $e")
-          None
+          Future.failed(e)
       }
   }
 }

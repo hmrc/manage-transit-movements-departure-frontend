@@ -195,7 +195,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
             .willReturn(okJson(Json.stringify(JsBoolean(false))))
         )
 
-        connector.isDuplicateLRN(lrn).futureValue mustBe Some(false)
+        connector.isDuplicateLRN(lrn).futureValue mustBe false
       }
 
       "must return true when status is Ok and lrn does exists in cache/API" in {
@@ -204,7 +204,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
             .willReturn(okJson(Json.stringify(JsBoolean(true))))
         )
 
-        connector.isDuplicateLRN(lrn).futureValue mustBe Some(true)
+        connector.isDuplicateLRN(lrn).futureValue mustBe true
       }
 
       "return None for 4xx or 5xx response" in {
@@ -215,7 +215,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
             .willReturn(aResponse().withStatus(status))
         )
 
-        val result: Option[Boolean] = await(connector.isDuplicateLRN(lrn))
+        val result: Boolean = await(connector.isDuplicateLRN(lrn))
 
         result mustBe None
       }
