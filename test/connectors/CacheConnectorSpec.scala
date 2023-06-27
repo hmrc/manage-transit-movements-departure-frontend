@@ -207,17 +207,17 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
         connector.isDuplicateLRN(lrn).futureValue mustBe true
       }
 
-      "return None for 4xx or 5xx response" in {
+      "return an exception for 4xx or 5xx response" in {
         val status = Gen.choose(400: Int, 599: Int).sample.value
 
         server.stubFor(
-          post(urlEqualTo(url))
+          get(urlEqualTo(url))
             .willReturn(aResponse().withStatus(status))
         )
 
-        val result: Boolean = await(connector.isDuplicateLRN(lrn))
-
-        result mustBe None
+        assertThrows[Exception] {
+          await(connector.isDuplicateLRN(lrn))
+        }
       }
     }
   }

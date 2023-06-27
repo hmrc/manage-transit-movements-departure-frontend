@@ -86,7 +86,7 @@ class CacheConnector @Inject() (
       .recoverWith {
         case e =>
           logger.error(s"Failed to check if lrn was a duplicate with error: $e")
-          Future.failed(e)
+          Future.failed(new Exception(e))
       }
   }
 }

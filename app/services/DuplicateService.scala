@@ -17,13 +17,18 @@
 package services
 
 import connectors.CacheConnector
+import forms.NewLocalReferenceNumberFormProvider
 import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
+import play.api.data.Form
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DuplicateService @Inject() (cacheConnector: CacheConnector)(implicit ec: ExecutionContext) {
+class DuplicateService @Inject() (
+  cacheConnector: CacheConnector,
+  formProvider: NewLocalReferenceNumberFormProvider
+)(implicit ec: ExecutionContext) {
 
   def copyUserAnswers(
     oldLocalReferenceNumber: LocalReferenceNumber,
@@ -36,7 +41,16 @@ class DuplicateService @Inject() (cacheConnector: CacheConnector)(implicit ec: E
     case None => Future.successful(false)
   }
 
-  def isDuplicate(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
+  def isDuplicateLRN(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
     cacheConnector.isDuplicateLRN(lrn)
 
+  def populateForm(newLocalReferenceNumber: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Form[LocalReferenceNumber]] =
+    newLocalReferenceNumber match {
+      case Some(newLocalReferenceNumber) =>
+        isDuplicateLRN(newLocalReferenceNumber) map {
+          isDuplicateLrn =>
+            formProvider(alreadyExists = isDuplicateLrn)
+        }
+      case None => Future.successful(formProvider(alreadyExists = false))
+    }
 }

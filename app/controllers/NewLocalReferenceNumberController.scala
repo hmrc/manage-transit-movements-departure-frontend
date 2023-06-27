@@ -16,21 +16,16 @@
 
 package controllers
 
-import connectors.CacheConnector
 import controllers.actions._
 import forms.NewLocalReferenceNumberFormProvider
-import forms.preTaskList.LocalReferenceNumberFormProvider
-import models.{LocalReferenceNumber, NormalMode, UserAnswers}
-import navigation.PreTaskListNavigatorProvider
+import models.LocalReferenceNumber
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.DuplicateService
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.NewLocalReferenceNumberView
-import views.html.preTaskList.LocalReferenceNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,7 +33,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class NewLocalReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  navigatorProvider: PreTaskListNavigatorProvider,
   identify: IdentifierAction,
   formProvider: NewLocalReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -57,21 +51,16 @@ class NewLocalReferenceNumberController @Inject() (
 
   def onSubmit(oldLocalReferenceNumber: LocalReferenceNumber, newLocalReferenceNumber: Option[LocalReferenceNumber]): Action[AnyContent] = identify.async {
     implicit request =>
-      newLocalReferenceNumber match {
-        case Some(newLocalReferenceNumber) =>
-          duplicateService.isDuplicate(newLocalReferenceNumber) flatMap {
-            isDuplicateLrn =>
-              form(isDuplicateLrn)
-                .bindFromRequest()
-                .fold(
-                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
-                  value =>
-                    duplicateService.copyUserAnswers(oldLocalReferenceNumber, value, request.eoriNumber) flatMap {
-                      case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(value)))
-                      case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
-                    }
-                )
-          }
+      duplicateService.populateForm(newLocalReferenceNumber).flatMap {
+        _.bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
+            value =>
+              duplicateService.copyUserAnswers(oldLocalReferenceNumber, value, request.eoriNumber) flatMap {
+                case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(value)))
+                case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
+              }
+          )
       }
   }
 }
