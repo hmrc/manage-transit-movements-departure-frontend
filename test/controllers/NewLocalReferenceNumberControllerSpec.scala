@@ -28,6 +28,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.DuplicateService
+import viewModels.taskList.TaskStatus
 import views.html.NewLocalReferenceNumberView
 
 import scala.concurrent.Future
@@ -71,6 +72,33 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
 
       contentAsString(result) mustEqual
         view(form(), oldLrn)(request, messages).toString
+    }
+
+    "must create new user answers with old lrns data" - {
+      "and redirect to taskList" in {
+
+        val oldLrnData    = emptyUserAnswers.copy(lrn = oldLrn, tasks = Map("task1" -> TaskStatus.Error))
+        val newDataToSend = oldLrnData.copy(lrn = newLrn)
+
+        when(mockDuplicateService.isDuplicateLRN(any())(any())).thenReturn(Future.successful(false))
+        when(mockCacheConnector.isDuplicateLRN(any())(any())).thenReturn(Future.successful(false))
+        when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form()))
+
+        when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(true))
+        when(mockCacheConnector.get(eqTo(oldLrn))(any())) thenReturn Future.successful(Some(oldLrnData))
+        when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(true)
+
+        val request = FakeRequest(POST, localReferenceNumberOnSubmit)
+          .withFormUrlEncodedBody(("value", newLrn.toString))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(newLrn).url
+
+        verify(mockCacheConnector).get(eqTo(oldLrn))(any())
+        verify(mockCacheConnector).post(eqTo(newDataToSend))(any())
+      }
     }
 
     "must return a Bad Request and errors when invalid data that cannot convert to a lrn is submitted" in {

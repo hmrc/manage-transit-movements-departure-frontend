@@ -28,10 +28,10 @@ class NewLocalReferenceNumberFormProvider @Inject() extends Mappings {
   def apply(alreadyExists: Boolean): Form[LocalReferenceNumber] =
     Form(
       "value" -> newLrn(
-        requiredKey = "newlocalReferenceNumber.error.required",
-        lengthKey = "newlocalReferenceNumber.error.length",
-        invalidCharactersKey = "newlocalReferenceNumber.error.invalidCharacters",
-        invalidFormatKey = "newlocalReferenceNumber.error.invalidFormat",
+        requiredKey = "newLocalReferenceNumber.error.required",
+        lengthKey = "newLocalReferenceNumber.error.length",
+        invalidCharactersKey = "newLocalReferenceNumber.error.invalidCharacters",
+        invalidFormatKey = "newLocalReferenceNumber.error.invalidFormat",
         alreadyExistsKey = "newLocalReferenceNumber.error.alreadyExists",
         alreadyExists = alreadyExists
       )

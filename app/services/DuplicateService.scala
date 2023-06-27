@@ -41,8 +41,9 @@ class DuplicateService @Inject() (
     case None => Future.successful(false)
   }
 
-  def isDuplicateLRN(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
+  def isDuplicateLRN(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
     cacheConnector.isDuplicateLRN(lrn)
+  }
 
   def populateForm(newLocalReferenceNumber: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Form[LocalReferenceNumber]] =
     newLocalReferenceNumber match {
