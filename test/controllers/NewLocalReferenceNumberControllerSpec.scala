@@ -86,6 +86,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
         when(mockCacheConnector.get(eqTo(oldLrn))(any())) thenReturn Future.successful(Some(oldLrnData))
         when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(true)
         when(mockDuplicateService.copyUserAnswers(eqTo(oldLrn), eqTo(newLrn), any())(any())).thenReturn(Future.successful(true))
+        when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form()))
 
         val request = FakeRequest(POST, localReferenceNumberOnSubmit)
           .withFormUrlEncodedBody(("value", newLrn.toString))
@@ -108,6 +109,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
 
       when(mockDuplicateService.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
       when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
+      when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form()))
 
       val request = FakeRequest(POST, localReferenceNumberOnSubmit)
         .withFormUrlEncodedBody(("value", invalidAnswer))
@@ -132,6 +134,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
 
       when(mockDuplicateService.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
       when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
+      when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form(alreadyExists = true)))
 
       val request = FakeRequest(POST, localReferenceNumberOnSubmit)
         .withFormUrlEncodedBody(("value", oldLrn.toString))
@@ -156,6 +159,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
         when(mockCacheConnector.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
         when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(None))
         when(mockDuplicateService.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
+        when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form()))
         when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
 
         val request = FakeRequest(POST, localReferenceNumberOnSubmit)
@@ -175,6 +179,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
         when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(Some(emptyUserAnswers)))
         when(mockCacheConnector.post(any())(any())).thenReturn(Future.successful(false))
         when(mockDuplicateService.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
+        when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form()))
         when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
 
         val request = FakeRequest(POST, localReferenceNumberOnSubmit)

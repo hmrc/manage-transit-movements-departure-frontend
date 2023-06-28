@@ -19,6 +19,7 @@ package services
 import connectors.CacheConnector
 import forms.NewLocalReferenceNumberFormProvider
 import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
+import play.api.data.Form
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -43,4 +44,9 @@ class DuplicateService @Inject() (
   def isDuplicateLRN(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
     cacheConnector.isDuplicateLRN(lrn)
 
+  def populateForm(submittedValue: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Form[LocalReferenceNumber]] =
+    submittedValue match {
+      case Some(newLocalReferenceNumber) => isDuplicateLRN(newLocalReferenceNumber).map(formProvider(_))
+      case None                          => Future.successful(formProvider(alreadyExists = false))
+    }
 }

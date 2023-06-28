@@ -51,12 +51,8 @@ class NewLocalReferenceNumberController @Inject() (
 
   def onSubmit(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
     implicit request =>
-      val submittedValue: Option[LocalReferenceNumber] = form().bindFromRequest().value
-      val populatedForm: Future[Form[LocalReferenceNumber]] = submittedValue match {
-        case Some(newLocalReferenceNumber) => duplicateService.isDuplicateLRN(newLocalReferenceNumber).map(form)
-        case None                          => Future.successful(form())
-      }
-      populatedForm.flatMap {
+      val submittedValue = form().bindFromRequest().value
+      duplicateService.populateForm(submittedValue).flatMap {
         _.bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
