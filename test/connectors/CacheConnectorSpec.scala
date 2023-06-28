@@ -17,7 +17,7 @@
 package connectors
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import com.github.tomakehurst.wiremock.client.WireMock.{okJson, _}
+import com.github.tomakehurst.wiremock.client.WireMock._
 import helper.WireMockServerHandler
 import models.UserAnswers
 import org.scalacheck.Gen

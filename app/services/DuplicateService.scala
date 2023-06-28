@@ -19,7 +19,6 @@ package services
 import connectors.CacheConnector
 import forms.NewLocalReferenceNumberFormProvider
 import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
-import play.api.data.Form
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject

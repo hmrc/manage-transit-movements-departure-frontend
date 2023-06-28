@@ -16,7 +16,6 @@
 
 package connectors
 
-import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import config.FrontendAppConfig
 import models.{LocalReferenceNumber, UserAnswers}
 import play.api.Logging

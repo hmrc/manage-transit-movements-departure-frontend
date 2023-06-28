@@ -21,7 +21,7 @@ import connectors.CacheConnector
 import forms.NewLocalReferenceNumberFormProvider
 import models.LocalReferenceNumber
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{reset, times, verify, when}
+import org.mockito.Mockito.{reset, verify, when}
 import play.api.data.Form
 import play.api.inject
 import play.api.inject.guice.GuiceApplicationBuilder

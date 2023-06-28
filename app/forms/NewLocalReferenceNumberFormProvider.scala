@@ -19,7 +19,6 @@ package forms
 import forms.mappings.Mappings
 import models.LocalReferenceNumber
 import play.api.data.Form
-import play.api.data.Forms.{mapping, tuple}
 
 import javax.inject.Inject
 
