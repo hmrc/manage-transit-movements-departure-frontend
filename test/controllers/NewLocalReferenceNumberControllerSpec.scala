@@ -134,9 +134,9 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
       when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
 
       val request = FakeRequest(POST, localReferenceNumberOnSubmit)
-        .withFormUrlEncodedBody(("value", newLrn.toString))
+        .withFormUrlEncodedBody(("value", oldLrn.toString))
 
-      val filledForm = form(isDuplicate).bind(Map("value" -> newLrn.toString))
+      val filledForm = form(isDuplicate).bind(Map("value" -> oldLrn.toString))
 
       val result = route(app, request).value
 
