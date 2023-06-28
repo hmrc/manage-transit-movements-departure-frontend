@@ -51,24 +51,21 @@ class NewLocalReferenceNumberController @Inject() (
 
   def onSubmit(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
     implicit request =>
-      form()
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
-          newLocalReferenceNumber =>
-            duplicateService.isDuplicateLRN(newLocalReferenceNumber).flatMap {
-              alreadyExists =>
-                form(alreadyExists)
-                  .bindFromRequest()
-                  .fold(
-                    formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
-                    newLocalReferenceNumber =>
-                      duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, request.eoriNumber) flatMap {
-                        case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(newLocalReferenceNumber)))
-                        case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
-                      }
-                  )
-            }
-        )
+      val submittedValue: Option[LocalReferenceNumber] = form().bindFromRequest().value
+      val populatedForm: Future[Form[LocalReferenceNumber]] = submittedValue match {
+        case Some(newLocalReferenceNumber) => duplicateService.isDuplicateLRN(newLocalReferenceNumber).map(form)
+        case None                          => Future.successful(form())
+      }
+      populatedForm.flatMap {
+        _.bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
+            newLocalReferenceNumber =>
+              duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, request.eoriNumber) flatMap {
+                case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(newLocalReferenceNumber)))
+                case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
+              }
+          )
+      }
   }
 }
