@@ -38,11 +38,11 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
   private val formProvider                                                     = new NewLocalReferenceNumberFormProvider()
   private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists)
 
-  private val oldLrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").get
-  private val newLrn: LocalReferenceNumber = LocalReferenceNumber("DCBA0987654321321").get
+  private val oldLrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").value
+  private val newLrn: LocalReferenceNumber = LocalReferenceNumber("DCBA0987654321321").value
 
   private lazy val localReferenceNumberOnPageLoad: String = routes.NewLocalReferenceNumberController.onPageLoad(oldLrn).url
-  private lazy val localReferenceNumberOnSubmit: String   = routes.NewLocalReferenceNumberController.onSubmit(oldLrn, Some(newLrn)).url
+  private lazy val localReferenceNumberOnSubmit: String   = routes.NewLocalReferenceNumberController.onSubmit(oldLrn).url
 
   private lazy val mockDuplicateService: DuplicateService = mock[DuplicateService]
   private lazy val mockCacheConnector: CacheConnector     = mock[CacheConnector]
@@ -74,19 +74,18 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
         view(form(), oldLrn)(request, messages).toString
     }
 
-    "must create new user answers with old lrns data" - {
+    "must create new user answers with old lrn's data" - {
       "and redirect to taskList" in {
 
         val oldLrnData    = emptyUserAnswers.copy(lrn = oldLrn, tasks = Map("task1" -> TaskStatus.Error))
         val newDataToSend = oldLrnData.copy(lrn = newLrn)
 
-        when(mockDuplicateService.isDuplicateLRN(any())(any())).thenReturn(Future.successful(false))
-        when(mockCacheConnector.isDuplicateLRN(any())(any())).thenReturn(Future.successful(false))
-        when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form()))
+        when(mockDuplicateService.isDuplicateLRN(eqTo(newLrn))(any())).thenReturn(Future.successful(false))
+        when(mockCacheConnector.isDuplicateLRN(eqTo(newLrn))(any())).thenReturn(Future.successful(false))
 
-        when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(true))
         when(mockCacheConnector.get(eqTo(oldLrn))(any())) thenReturn Future.successful(Some(oldLrnData))
         when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(true)
+        when(mockDuplicateService.copyUserAnswers(eqTo(oldLrn), eqTo(newLrn), any())(any())).thenReturn(Future.successful(true))
 
         val request = FakeRequest(POST, localReferenceNumberOnSubmit)
           .withFormUrlEncodedBody(("value", newLrn.toString))
@@ -96,24 +95,21 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(newLrn).url
 
-        verify(mockCacheConnector).get(eqTo(oldLrn))(any())
-        verify(mockCacheConnector).post(eqTo(newDataToSend))(any())
+        verify(mockDuplicateService).copyUserAnswers(eqTo(oldLrn), eqTo(newLrn), any())(any())
       }
     }
 
     "must return a Bad Request and errors when invalid data that cannot convert to a lrn is submitted" in {
 
-      val invalidAnswer                              = ""
-      val isDuplicate                                = false
-      val convertToLRN: Option[LocalReferenceNumber] = LocalReferenceNumber.apply(invalidAnswer)
+      val invalidAnswer = ""
+      val isDuplicate   = false
 
       when(mockCacheConnector.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
 
       when(mockDuplicateService.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
-      when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form()))
       when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
 
-      val request = FakeRequest(POST, routes.NewLocalReferenceNumberController.onSubmit(oldLrn, convertToLRN).url)
+      val request = FakeRequest(POST, localReferenceNumberOnSubmit)
         .withFormUrlEncodedBody(("value", invalidAnswer))
 
       val filledForm = form(isDuplicate).bind(Map("value" -> invalidAnswer))
@@ -135,10 +131,9 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
       when(mockCacheConnector.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
 
       when(mockDuplicateService.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
-      when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form(isDuplicate)))
       when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
 
-      val request = FakeRequest(POST, routes.NewLocalReferenceNumberController.onSubmit(oldLrn, Some(newLrn)).url)
+      val request = FakeRequest(POST, localReferenceNumberOnSubmit)
         .withFormUrlEncodedBody(("value", newLrn.toString))
 
       val filledForm = form(isDuplicate).bind(Map("value" -> newLrn.toString))
@@ -161,10 +156,9 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
         when(mockCacheConnector.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
         when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(None))
         when(mockDuplicateService.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
-        when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form(isDuplicate)))
         when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
 
-        val request = FakeRequest(POST, routes.NewLocalReferenceNumberController.onSubmit(oldLrn, Some(newLrn)).url)
+        val request = FakeRequest(POST, localReferenceNumberOnSubmit)
           .withFormUrlEncodedBody(("value", newLrn.toString))
 
         val result = route(app, request).value
@@ -181,27 +175,9 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
         when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(Some(emptyUserAnswers)))
         when(mockCacheConnector.post(any())(any())).thenReturn(Future.successful(false))
         when(mockDuplicateService.isDuplicateLRN(any())(any())).thenReturn(Future.successful(isDuplicate))
-        when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form(isDuplicate)))
         when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
 
-        val request = FakeRequest(POST, routes.NewLocalReferenceNumberController.onSubmit(oldLrn, Some(newLrn)).url)
-          .withFormUrlEncodedBody(("value", newLrn.toString))
-
-        val result = route(app, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
-      }
-      "isDuplicateLRN fails" in {
-        val isDuplicate = false
-
-        when(mockCacheConnector.isDuplicateLRN(any())(any())).thenReturn(Future.failed(new Throwable))
-        when(mockDuplicateService.isDuplicateLRN(any())(any())).thenReturn(Future.failed(new Throwable))
-        when(mockDuplicateService.populateForm(any())(any())).thenReturn(Future.successful(form(isDuplicate)))
-        when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
-
-        val request = FakeRequest(POST, routes.NewLocalReferenceNumberController.onSubmit(oldLrn, Some(newLrn)).url)
+        val request = FakeRequest(POST, localReferenceNumberOnSubmit)
           .withFormUrlEncodedBody(("value", newLrn.toString))
 
         val result = route(app, request).value

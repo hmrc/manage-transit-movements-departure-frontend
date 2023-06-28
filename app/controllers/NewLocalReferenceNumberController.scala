@@ -57,12 +57,17 @@ class NewLocalReferenceNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
           newLocalReferenceNumber =>
             duplicateService.isDuplicateLRN(newLocalReferenceNumber).flatMap {
-              case true => Future.successful(BadRequest(view(form(alreadyExists = true), oldLocalReferenceNumber)))
-              case false =>
-                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, request.eoriNumber) flatMap {
-                  case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(newLocalReferenceNumber)))
-                  case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
-                }
+              alreadyExists =>
+                form(alreadyExists)
+                  .bindFromRequest()
+                  .fold(
+                    formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
+                    newLocalReferenceNumber =>
+                      duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, request.eoriNumber) flatMap {
+                        case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(newLocalReferenceNumber)))
+                        case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
+                      }
+                  )
             }
         )
   }
