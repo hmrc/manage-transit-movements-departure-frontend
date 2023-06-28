@@ -33,5 +33,4 @@ GET        /:lrn/delete-lock                              controllers.DeleteLock
 GET        /cannot-open                                   controllers.LockedController.onPageLoad()
 
 GET        /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onPageLoad(oldLrn: LocalReferenceNumber)
-POST       /:oldLrn/new-local-reference-number/:newLrn    controllers.NewLocalReferenceNumberController.onSubmit(oldLrn: LocalReferenceNumber, newLrn: Option[LocalReferenceNumber])
-POST       /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onSubmit(oldLrn: LocalReferenceNumber, newLrn: Option[LocalReferenceNumber] = None)
+POST       /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onSubmit(oldLrn: LocalReferenceNumber)

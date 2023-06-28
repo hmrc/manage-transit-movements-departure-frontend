@@ -49,18 +49,21 @@ class NewLocalReferenceNumberController @Inject() (
       Ok(view(form(), oldLocalReferenceNumber))
   }
 
-  def onSubmit(oldLocalReferenceNumber: LocalReferenceNumber, newLocalReferenceNumber: Option[LocalReferenceNumber]): Action[AnyContent] = identify.async {
+  def onSubmit(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
     implicit request =>
-      duplicateService.populateForm(newLocalReferenceNumber).flatMap {
-        _.bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
-            value =>
-              duplicateService.copyUserAnswers(oldLocalReferenceNumber, value, request.eoriNumber) flatMap {
-                case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(value)))
-                case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
-              }
-          )
-      }
+      form()
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
+          newLocalReferenceNumber =>
+            duplicateService.isDuplicateLRN(newLocalReferenceNumber).flatMap {
+              case true => Future.successful(BadRequest(view(form(alreadyExists = true), oldLocalReferenceNumber)))
+              case false =>
+                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, request.eoriNumber) flatMap {
+                  case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(newLocalReferenceNumber)))
+                  case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
+                }
+            }
+        )
   }
 }
