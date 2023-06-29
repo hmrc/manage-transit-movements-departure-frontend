@@ -19,7 +19,7 @@ package connectors
 import config.FrontendAppConfig
 import models.reference.{Country, CustomsOffice}
 import play.api.Logging
-import play.api.http.Status.{NOT_FOUND, OK}
+import play.api.http.Status.{NOT_FOUND, NO_CONTENT, OK}
 import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json.Reads
 import sttp.model.HeaderNames
@@ -64,14 +64,17 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
       response.status match {
         case OK =>
           val referenceData = (response.json \ "data").getOrElse(
-            throw new IllegalArgumentException("[ReferenceDataConnector][responseHandlerGeneric] Reference data could not be found")
+            throw new IllegalStateException("[ReferenceDataConnector][responseHandlerGeneric] Reference data could not be parsed")
           )
 
           referenceData.as[Seq[A]]
-        case NOT_FOUND => // TODO Q. - why do we allow an empty list? Is this different for COLs for standard ref data? Do we want to raise?
+        case NO_CONTENT =>
           Nil
+        case NOT_FOUND =>
+          logger.warn("[ReferenceDataConnector][responseHandlerGeneric] Reference data call returned NOT_FOUND")
+          throw new IllegalStateException("[ReferenceDataConnector][responseHandlerGeneric] Reference data could not be found")
         case other =>
-          logger.info(s"[ReferenceDataConnector][responseHandlerGeneric] Invalid downstream status $other")
+          logger.warn(s"[ReferenceDataConnector][responseHandlerGeneric] Invalid downstream status $other")
           throw new IllegalStateException(s"[ReferenceDataConnector][responseHandlerGeneric] Invalid Downstream Status $other")
       }
     }

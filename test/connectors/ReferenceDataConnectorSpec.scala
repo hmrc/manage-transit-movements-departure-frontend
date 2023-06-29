@@ -17,24 +17,33 @@
 package connectors
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
+import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.matching.StringValuePattern
 import helper.WireMockServerHandler
 import models.reference._
 import org.scalacheck.Gen
-import org.scalatest.Assertion
+import org.scalatest.{Assertion, BeforeAndAfterEach}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import play.mvc.Http.MimeTypes.JSON
 import play.mvc.Http.Status._
-import com.github.tomakehurst.wiremock.client.WireMock._
-import scala.collection.JavaConverters._
 
+import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with ScalaCheckPropertyChecks {
+class ReferenceDataConnectorSpec
+    extends SpecBase
+    with AppWithDefaultMockFixtures
+    with WireMockServerHandler
+    with ScalaCheckPropertyChecks
+    with BeforeAndAfterEach {
+
+  override def beforeEach(): Unit = {
+    server.resetAll()
+    super.beforeEach()
+  }
 
   private val baseUrl = "customs-reference-data/test-only"
 
@@ -174,13 +183,12 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
         connector.getCustomsOfficesOfDepartureForCountry("GB").futureValue mustBe expectedResult
       }
 
-      "must return a successful future response when CustomsOffice is not found" in {
+      "must return a successful future response when CustomsOffice returns no data" in {
         server.stubFor(
           get(urlPathMatching(s"/$baseUrl/filtered-lists/CustomsOffices"))
-            .withQueryParams(queryParams.toMap.asJava)
             .willReturn(
               aResponse()
-                .withStatus(NOT_FOUND)
+                .withStatus(NO_CONTENT)
                 .withHeader(CONTENT_TYPE, JSON)
             )
         )
@@ -195,6 +203,16 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
           get(urlPathMatching(s"/$baseUrl/filtered-lists/CustomsOffices"))
             .withQueryParams(queryParams.toMap.asJava)
             .willReturn(aResponse().withStatus(BAD_REQUEST))
+        )
+
+        checkErrorResponse(s"/$baseUrl/filtered-lists/CustomsOffices", connector.getCustomsOfficesOfDepartureForCountry("GB"))
+      }
+
+      "must return an exception when NOT_FOUND" in {
+        server.stubFor(
+          get(urlPathMatching(s"/$baseUrl/filtered-lists/CustomsOffices"))
+            .withQueryParams(queryParams.toMap.asJava)
+            .willReturn(aResponse().withStatus(NOT_FOUND))
         )
 
         checkErrorResponse(s"/$baseUrl/filtered-lists/CustomsOffices", connector.getCustomsOfficesOfDepartureForCountry("GB"))
