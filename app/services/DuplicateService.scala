@@ -37,7 +37,9 @@ class DuplicateService @Inject() (
   )(implicit hc: HeaderCarrier): Future[Boolean] = cacheConnector.get(oldLocalReferenceNumber) flatMap {
     case Some(userAnswers) =>
       val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, eoriNumber = eoriNumber)
-      cacheConnector.post(updatedUserAnswers)  // TODO CTCP-#### Will have to keep the draft declaration, change UUID (priimary key) of copied/new lrn potentially
+      cacheConnector.post(
+        updatedUserAnswers
+      ) // TODO CTCP-3469 Will have to keep any draft declaration with same LRN, can probably handle this when the isDuplicateLrn is called in the backend
     case None => Future.successful(false)
   }
 
