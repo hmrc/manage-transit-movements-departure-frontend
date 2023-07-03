@@ -25,6 +25,13 @@ import uk.gov.hmrc.http.HttpVerbs._
 trait ModelGenerators {
   self: Generators =>
 
+  implicit lazy val arbitrarySubmissionState: Arbitrary[SubmissionState] = Arbitrary {
+    val validStates = Seq("notSubmitted", "submitted", "rejectedPendingChanges", "rejectedAndResubmitted")
+    for {
+      state <- Gen.oneOf(validStates)
+    } yield SubmissionState(state)
+  }
+
   implicit lazy val arbitraryProcedureType: Arbitrary[ProcedureType] =
     Arbitrary {
       Gen.oneOf(ProcedureType.values)
