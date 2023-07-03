@@ -18,6 +18,7 @@ package services
 
 import connectors.CacheConnector
 import forms.NewLocalReferenceNumberFormProvider
+import models.SubmissionState.RejectedPendingChanges
 import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
 import play.api.data.Form
 import uk.gov.hmrc.http.HeaderCarrier
@@ -32,11 +33,10 @@ class DuplicateService @Inject() (
 
   def copyUserAnswers(
     oldLocalReferenceNumber: LocalReferenceNumber,
-    newLocalReferenceNumber: LocalReferenceNumber,
-    eoriNumber: EoriNumber
+    newLocalReferenceNumber: LocalReferenceNumber
   )(implicit hc: HeaderCarrier): Future[Boolean] = cacheConnector.get(oldLocalReferenceNumber) flatMap {
     case Some(userAnswers) =>
-      val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, eoriNumber = eoriNumber)
+      val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, isSubmitted = Some(RejectedPendingChanges))
       cacheConnector.post(
         updatedUserAnswers
       ) // TODO CTCP-3469 Will have to keep any draft declaration with same LRN, can probably handle this when the isDuplicateLrn is called in the backend

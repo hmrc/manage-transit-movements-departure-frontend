@@ -57,7 +57,7 @@ class NewLocalReferenceNumberController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
             newLocalReferenceNumber =>
-              duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, request.eoriNumber) flatMap {
+              duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber) flatMap {
                 case true  => Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(newLocalReferenceNumber)))
                 case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
               }
