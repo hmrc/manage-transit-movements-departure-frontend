@@ -137,7 +137,7 @@ function initialiseJourneys() {
                 new ButtonPage("/manage-transit-movements/departures/transport-details/authorisations/add/", "value-no"),
                 new InputPage("/manage-transit-movements/departures/transport-details/authorisations/1/reference-number/", "TRD123"),
                 new ButtonPage("/manage-transit-movements/departures/transport-details/authorisations/add-another/", "value-no"),
-                new InputPage("/manage-transit-movements/departures/transport-details/carrier/eori-tcuin/", "carrierEORI123"),
+                new InputPage("/manage-transit-movements/departures/transport-details/carrier/eori-tcuin/", "GB123456"),
                 new ButtonPage("/manage-transit-movements/departures/transport-details/carrier/add-contact/", "value-no"),
                 new ButtonPage("/manage-transit-movements/departures/transport-details/transport-equipment/add-transport-equipment/", "value"),
                 new ButtonPage("/manage-transit-movements/departures/transport-details/transport-equipment/1/seals/add/", "value"),
