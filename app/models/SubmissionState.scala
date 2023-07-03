@@ -16,40 +16,29 @@
 
 package models
 
-import play.api.libs.json.{__, JsString, Reads, Writes}
+import models.SubmissionState.isAmendable
+import play.api.libs.json.{JsString, Reads, Writes, __}
 
 sealed trait SubmissionState {
   def toString: String
-  val amendable: Boolean
 }
 
 object SubmissionState {
 
   case object NotSubmitted extends SubmissionState {
     override def toString: String = "notSubmitted"
-    val amendable: Boolean        = isAmendable(this)
   }
 
   case object Submitted extends SubmissionState {
     override def toString: String = "submitted"
-    val amendable: Boolean        = isAmendable(this)
   }
 
   case object RejectedPendingChanges extends SubmissionState {
     override def toString: String = "rejectedPendingChanges"
-    val amendable: Boolean        = isAmendable(this)
   }
 
   case object RejectedAndResubmitted extends SubmissionState {
     override def toString: String = "rejectedAndResubmitted"
-    val amendable: Boolean        = isAmendable(this)
-  }
-
-  def isAmendable(state: SubmissionState): Boolean = state match {
-    case NotSubmitted           => false
-    case RejectedAndResubmitted => false
-    case Submitted              => true
-    case RejectedPendingChanges => true
   }
 
   def apply(state: String): SubmissionState = state match {
