@@ -16,11 +16,11 @@
 
 package models
 
-import models.SubmissionState.isAmendable
-import play.api.libs.json.{JsString, Reads, Writes, __}
+import play.api.libs.json.{__, JsString, Reads, Writes}
 
 sealed trait SubmissionState {
   def toString: String
+  val showErrorContent: Boolean = SubmissionState.showErrorContent(this)
 }
 
 object SubmissionState {
@@ -39,6 +39,13 @@ object SubmissionState {
 
   case object RejectedAndResubmitted extends SubmissionState {
     override def toString: String = "rejectedAndResubmitted"
+  }
+
+  def showErrorContent(state: SubmissionState): Boolean = state match {
+    case NotSubmitted           => false
+    case RejectedAndResubmitted => false
+    case Submitted              => true
+    case RejectedPendingChanges => true
   }
 
   def apply(state: String): SubmissionState = state match {

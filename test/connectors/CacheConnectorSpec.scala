@@ -41,7 +41,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
       |    "_id" : "2e8ede47-dbfb-44ea-a1e3-6c57b1fe6fe2",
       |    "lrn" : "1234567890",
       |    "eoriNumber" : "GB1234567",
-      |    "isSubmitted" : false,
+      |    "isSubmitted" : "notSubmitted",
       |    "data" : {},
       |    "tasks" : {},
       |    "createdAt" : "2022-09-05T15:58:44.188Z",
