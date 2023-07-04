@@ -79,7 +79,7 @@ class CacheConnector @Inject() (
   }
 
   def doesDraftOrSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    val url = s"$baseUrl/is-duplicate-lrn/${lrn.toString}"
+    val url = s"$baseUrl/does-draft-or-submission-exist-for-lrn/${lrn.toString}"
     http
       .GET[Boolean](url)
       .recoverWith {
@@ -90,7 +90,7 @@ class CacheConnector @Inject() (
   }
 
   def doesSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    val url = s"$baseUrl/is-lrn-in-api/${lrn.toString}"
+    val url = s"$baseUrl/does-submission-exist-for-lrn/${lrn.toString}"
     http
       .GET[Boolean](url)
       .recoverWith {

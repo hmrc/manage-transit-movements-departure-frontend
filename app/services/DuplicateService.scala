@@ -19,8 +19,7 @@ package services
 import connectors.CacheConnector
 import forms.NewLocalReferenceNumberFormProvider
 import models.SubmissionState.RejectedPendingChanges
-import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
-import play.api.data.Form
+import models.{LocalReferenceNumber, UserAnswers}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject

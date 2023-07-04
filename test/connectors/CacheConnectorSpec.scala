@@ -187,7 +187,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
     }
 
     "doesDraftOrSubmissionExistForLrn" - {
-      val url = s"/manage-transit-movements-departure-cache/is-duplicate-lrn/${lrn.value}"
+      val url = s"/manage-transit-movements-departure-cache/does-draft-or-submission-exist-for-lrn/${lrn.value}"
 
       "must return false when status is Ok and lrn does not exists in cache/API" in {
         server.stubFor(
@@ -222,7 +222,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
     }
 
     "doesSubmissionExistForLrn" - {
-      val url = s"/manage-transit-movements-departure-cache/is-lrn-in-api/${lrn.value}"
+      val url = s"/manage-transit-movements-departure-cache/does-submission-exist-for-lrn/${lrn.value}"
 
       "must return false when status is Ok and lrn does not exists in API" in {
         server.stubFor(
