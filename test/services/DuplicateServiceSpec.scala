@@ -93,61 +93,61 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
     }
 
-    "populateForm" - {
-      "must return correct form" - {
+    "alreadyExists" - {
+      "must return correct boolean" - {
 
         "when local reference number" in {
           forAll(arbitrary[Boolean]) {
             isDuplicate =>
-              when(mockCacheConnector.isDuplicateLRN(eqTo(lrn))(any())).thenReturn(Future.successful(isDuplicate))
+              when(mockCacheConnector.doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(isDuplicate))
 
-              duplicateService.populateForm(Some(lrn)).futureValue mustBe formProvider(alreadyExists = isDuplicate)
+              duplicateService.alreadyExists(Some(lrn)).futureValue mustBe isDuplicate
           }
         }
 
         "when none" in {
-          duplicateService.populateForm(None).futureValue mustBe formProvider(alreadyExists = false)
+          duplicateService.alreadyExists(None).futureValue mustBe false
         }
 
       }
 
     }
 
-    "isDuplicateLRN" - {
+    "doesDraftOrSubmissionExistForLrn" - {
       "must return true if LRN is a duplicate" in {
 
-        when(mockCacheConnector.isDuplicateLRN(eqTo(lrn))(any())).thenReturn(Future.successful(true))
+        when(mockCacheConnector.doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(true))
 
-        duplicateService.isDuplicateLRN(lrn).futureValue mustBe true
+        duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe true
 
-        verify(mockCacheConnector).isDuplicateLRN(eqTo(lrn))(any())
+        verify(mockCacheConnector).doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())
       }
 
       "must return false if LRN is not a duplicate" in {
-        when(mockCacheConnector.isDuplicateLRN(eqTo(lrn))(any())).thenReturn(Future.successful(false))
+        when(mockCacheConnector.doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(false))
 
-        duplicateService.isDuplicateLRN(lrn).futureValue mustBe false
+        duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe false
 
-        verify(mockCacheConnector).isDuplicateLRN(eqTo(lrn))(any())
+        verify(mockCacheConnector).doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())
       }
     }
 
-    "isDuplicateLRN" - {
+    "doesDraftOrSubmissionExistForLrn" - {
       "must return true if LRN exists in API" in {
 
-        when(mockCacheConnector.apiLRNCheck(eqTo(lrn))(any())).thenReturn(Future.successful(true))
+        when(mockCacheConnector.doesSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(true))
 
-        duplicateService.apiLRNCheck(lrn).futureValue mustBe true
+        duplicateService.doesSubmissionExistForLrn(lrn).futureValue mustBe true
 
-        verify(mockCacheConnector).apiLRNCheck(eqTo(lrn))(any())
+        verify(mockCacheConnector).doesSubmissionExistForLrn(eqTo(lrn))(any())
       }
 
       "must return false if LRN does not exist in API" in {
-        when(mockCacheConnector.apiLRNCheck(eqTo(lrn))(any())).thenReturn(Future.successful(false))
+        when(mockCacheConnector.doesSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(false))
 
-        duplicateService.apiLRNCheck(lrn).futureValue mustBe false
+        duplicateService.doesSubmissionExistForLrn(lrn).futureValue mustBe false
 
-        verify(mockCacheConnector).apiLRNCheck(eqTo(lrn))(any())
+        verify(mockCacheConnector).doesSubmissionExistForLrn(eqTo(lrn))(any())
       }
     }
 

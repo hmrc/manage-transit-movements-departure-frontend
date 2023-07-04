@@ -180,20 +180,14 @@ trait Formatters {
     new Formatter[LocalReferenceNumber] {
 
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalReferenceNumber] =
-        spacelessStringFormatter(requiredKey)
+        lrnFormatter(requiredKey, lengthKey, invalidCharactersKey, invalidFormatKey)
           .bind(key, data)
           .flatMap {
-            str =>
-              if (str.length <= LocalReferenceNumber.maxLength) {
-                if (str.startsWith("-") || str.startsWith("_")) {
-                  Left(Seq(FormError(key, invalidFormatKey)))
-                } else if (alreadyExists) {
-                  Left(Seq(FormError(key, alreadyExistsKey)))
-                } else {
-                  LocalReferenceNumber(str).map(Right.apply).getOrElse(Left(Seq(FormError(key, invalidCharactersKey))))
-                }
+            lrn =>
+              if (alreadyExists) {
+                Left(Seq(FormError(key, alreadyExistsKey)))
               } else {
-                Left(Seq(FormError(key, lengthKey)))
+                Right(lrn)
               }
           }
 

@@ -186,7 +186,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
       }
     }
 
-    "isDuplicateLRN" - {
+    "doesDraftOrSubmissionExistForLrn" - {
       val url = s"/manage-transit-movements-departure-cache/is-duplicate-lrn/${lrn.value}"
 
       "must return false when status is Ok and lrn does not exists in cache/API" in {
@@ -195,7 +195,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
             .willReturn(okJson(Json.stringify(JsBoolean(false))))
         )
 
-        connector.isDuplicateLRN(lrn).futureValue mustBe false
+        connector.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe false
       }
 
       "must return true when status is Ok and lrn does exists in cache/API" in {
@@ -204,7 +204,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
             .willReturn(okJson(Json.stringify(JsBoolean(true))))
         )
 
-        connector.isDuplicateLRN(lrn).futureValue mustBe true
+        connector.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe true
       }
 
       "return an exception for 4xx or 5xx response" in {
@@ -216,12 +216,12 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
         )
 
         assertThrows[Exception] {
-          await(connector.isDuplicateLRN(lrn))
+          await(connector.doesDraftOrSubmissionExistForLrn(lrn))
         }
       }
     }
 
-    "apiLRNCheck" - {
+    "doesSubmissionExistForLrn" - {
       val url = s"/manage-transit-movements-departure-cache/is-lrn-in-api/${lrn.value}"
 
       "must return false when status is Ok and lrn does not exists in API" in {
@@ -230,7 +230,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
             .willReturn(okJson(Json.stringify(JsBoolean(false))))
         )
 
-        connector.apiLRNCheck(lrn).futureValue mustBe false
+        connector.doesSubmissionExistForLrn(lrn).futureValue mustBe false
       }
 
       "must return true when status is Ok and lrn does exists in API" in {
@@ -239,7 +239,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
             .willReturn(okJson(Json.stringify(JsBoolean(true))))
         )
 
-        connector.apiLRNCheck(lrn).futureValue mustBe true
+        connector.doesSubmissionExistForLrn(lrn).futureValue mustBe true
       }
 
       "return an exception for 4xx or 5xx response" in {
@@ -251,7 +251,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
         )
 
         assertThrows[Exception] {
-          await(connector.apiLRNCheck(lrn))
+          await(connector.doesSubmissionExistForLrn(lrn))
         }
       }
     }

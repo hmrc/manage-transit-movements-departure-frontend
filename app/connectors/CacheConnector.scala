@@ -78,7 +78,7 @@ class CacheConnector @Inject() (
     }
   }
 
-  def isDuplicateLRN(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
+  def doesDraftOrSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
     val url = s"$baseUrl/is-duplicate-lrn/${lrn.toString}"
     http
       .GET[Boolean](url)
@@ -89,7 +89,7 @@ class CacheConnector @Inject() (
       }
   }
 
-  def apiLRNCheck(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
+  def doesSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
     val url = s"$baseUrl/is-lrn-in-api/${lrn.toString}"
     http
       .GET[Boolean](url)

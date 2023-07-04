@@ -39,19 +39,19 @@ class DuplicateService @Inject() (
       val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, isSubmitted = Some(RejectedPendingChanges))
       cacheConnector.post(
         updatedUserAnswers
-      ) // TODO CTCP-3469 Will have to keep any draft declaration with same LRN, can probably handle this when the isDuplicateLrn is called in the backend
+      ) // TODO CTCP-3469 Will have to keep any draft declaration with same LRN, can probably handle this when the doesDraftOrSubmissionExistForLrn is called in the backend
     case None => Future.successful(false)
   }
 
-  def isDuplicateLRN(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
-    cacheConnector.isDuplicateLRN(lrn)
+  def doesDraftOrSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
+    cacheConnector.doesDraftOrSubmissionExistForLrn(lrn)
 
-  def apiLRNCheck(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
-    cacheConnector.apiLRNCheck(lrn)
+  def doesSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
+    cacheConnector.doesSubmissionExistForLrn(lrn)
 
-  def populateForm(submittedValue: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Form[LocalReferenceNumber]] =
+  def alreadyExists(submittedValue: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Boolean] =
     submittedValue match {
-      case Some(newLocalReferenceNumber) => isDuplicateLRN(newLocalReferenceNumber).map(formProvider(_))
-      case None                          => Future.successful(formProvider(alreadyExists = false))
+      case Some(newLocalReferenceNumber) => doesDraftOrSubmissionExistForLrn(newLocalReferenceNumber)
+      case None                          => Future.successful(false)
     }
 }
