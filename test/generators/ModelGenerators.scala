@@ -16,6 +16,7 @@
 
 package generators
 
+import models.SubmissionState.{NotSubmitted, RejectedAndResubmitted, RejectedPendingChanges, Submitted}
 import models._
 import models.reference._
 import org.scalacheck.{Arbitrary, Gen}
@@ -26,7 +27,7 @@ trait ModelGenerators {
   self: Generators =>
 
   implicit lazy val arbitrarySubmissionState: Arbitrary[SubmissionState] = Arbitrary {
-    val validStates = Seq("notSubmitted", "submitted", "rejectedPendingChanges", "rejectedAndResubmitted")
+    val validStates = Seq(NotSubmitted.toString, Submitted.toString, RejectedPendingChanges.toString, RejectedAndResubmitted.toString)
     for {
       state <- Gen.oneOf(validStates)
     } yield SubmissionState(state)
