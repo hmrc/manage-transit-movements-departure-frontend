@@ -16,13 +16,13 @@ lazy val root = (project in file("."))
   )
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .configs(A11yTest)
-  .settings(inConfig(A11yTest)(org.scalafmt.sbt.ScalafmtPlugin.scalafmtConfigSettings) *)
-  .settings(DefaultBuildSettings.scalaSettings *)
-  .settings(DefaultBuildSettings.defaultSettings() *)
-  .settings(inConfig(Test)(testSettings) *)
+  .settings(inConfig(A11yTest)(org.scalafmt.sbt.ScalafmtPlugin.scalafmtConfigSettings): _*)
+  .settings(DefaultBuildSettings.scalaSettings: _*)
+  .settings(DefaultBuildSettings.defaultSettings(): _*)
+  .settings(inConfig(Test)(testSettings): _*)
   .settings(majorVersion := 0)
   .settings(scalaVersion := "2.13.8")
-  .settings(headerSettings(A11yTest) *)
+  .settings(headerSettings(A11yTest): _*)
   .settings(automateHeaderSettings(A11yTest))
   .settings(
     name := appName,
@@ -74,7 +74,7 @@ lazy val root = (project in file("."))
     ThisBuild / scalafmtOnCompile := true
   )
 
-lazy val testSettings: Seq[Def.Setting[?]] = Seq(
+lazy val testSettings: Seq[Def.Setting[_]] = Seq(
   fork := true,
   unmanagedResourceDirectories += baseDirectory.value / "test" / "resources",
   javaOptions ++= Seq(
