@@ -51,17 +51,21 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
       val newLrn: LocalReferenceNumber = LocalReferenceNumber("DCBA0987654321321").value
       val oldLrnData                   = emptyUserAnswers.copy(lrn = lrn, tasks = Map("task1" -> TaskStatus.Error))
       val newDataToSend                = oldLrnData.copy(lrn = newLrn, isSubmitted = Some(RejectedPendingChanges))
+      val newDataWithResubmittedLRrn   = oldLrnData.copy(resubmittedLrn = Some(newLrn), isSubmitted = Some(RejectedPendingChanges))
+
 
       "must return true" - {
         "when answers in the cache can be found and data posts to cache" in {
 
           when(mockCacheConnector.get(eqTo(lrn))(any())) thenReturn Future.successful(Some(oldLrnData))
           when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(true)
+          when(mockCacheConnector.post(eqTo(newDataWithResubmittedLRrn))(any())) thenReturn Future.successful(true)
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe true
 
           verify(mockCacheConnector).get(eqTo(lrn))(any())
           verify(mockCacheConnector).post(eqTo(newDataToSend))(any())
+          verify(mockCacheConnector).post(eqTo(newDataWithResubmittedLRrn))(any())
 
         }
       }
@@ -83,6 +87,18 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
           when(mockCacheConnector.get(eqTo(lrn))(any())) thenReturn Future.successful(Some(oldLrnData))
           when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(false)
+
+          duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe false
+
+          verify(mockCacheConnector).get(eqTo(lrn))(any())
+          verify(mockCacheConnector).post(eqTo(newDataToSend))(any())
+        }
+
+        "when answers found in the cache, but first post succeed and second post fails" in {
+
+          when(mockCacheConnector.get(eqTo(lrn))(any())) thenReturn Future.successful(Some(oldLrnData))
+          when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(true)
+          when(mockCacheConnector.post(eqTo(newDataWithResubmittedLRrn))(any())) thenReturn Future.successful(false)
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe false
 

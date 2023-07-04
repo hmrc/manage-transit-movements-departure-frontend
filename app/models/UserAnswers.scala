@@ -26,6 +26,7 @@ import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(
   lrn: LocalReferenceNumber,
+  resubmittedLrn: Option[LocalReferenceNumber] = None,
   eoriNumber: EoriNumber,
   data: JsObject = Json.obj(),
   tasks: Map[String, TaskStatus] = Map(),

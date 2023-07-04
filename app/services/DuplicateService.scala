@@ -31,15 +31,26 @@ class DuplicateService @Inject() (
 )(implicit ec: ExecutionContext) {
 
   def copyUserAnswers(
-    oldLocalReferenceNumber: LocalReferenceNumber,
-    newLocalReferenceNumber: LocalReferenceNumber
-  )(implicit hc: HeaderCarrier): Future[Boolean] = cacheConnector.get(oldLocalReferenceNumber) flatMap {
+                       oldLocalReferenceNumber: LocalReferenceNumber,
+                       newLocalReferenceNumber: LocalReferenceNumber
+                     )(implicit hc: HeaderCarrier): Future[Boolean] = cacheConnector.get(oldLocalReferenceNumber) flatMap {
     case Some(userAnswers) =>
       val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, isSubmitted = Some(RejectedPendingChanges))
       cacheConnector.post(
         updatedUserAnswers
       ) // TODO CTCP-3469 Will have to keep any draft declaration with same LRN, can probably handle this when the doesDraftOrSubmissionExistForLrn is called in the backend
     case None => Future.successful(false)
+  }
+
+
+  def updateResubmittedLrn(
+                            newLocalReferenceNumber: LocalReferenceNumber,
+                            oldUserAnswers: UserAnswers
+                          )(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val updatedUserAnswers: UserAnswers = oldUserAnswers.copy(resubmittedLrn = Some(newLocalReferenceNumber), isSubmitted = Some(RejectedPendingChanges))
+    cacheConnector.post(
+      updatedUserAnswers
+    )
   }
 
   def doesDraftOrSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
