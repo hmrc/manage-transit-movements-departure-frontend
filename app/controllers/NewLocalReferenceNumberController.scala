@@ -44,9 +44,12 @@ class NewLocalReferenceNumberController @Inject() (
 
   private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists)
 
-  def onPageLoad(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify {
+  def onPageLoad(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
     implicit request =>
-      Ok(view(form(), oldLocalReferenceNumber))
+      duplicateService.isDuplicateLRN(oldLocalReferenceNumber).flatMap {
+        case true  => Future.successful(Ok(view(form(), oldLocalReferenceNumber)))
+        case false => Future.successful(Redirect(controllers.routes.ErrorController.badRequest())) //TODO: More generic error page?
+      }
   }
 
   def onSubmit(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {

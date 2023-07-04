@@ -61,7 +61,11 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
 
   "NewLocalReferenceNumber Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET when old local reference number has been submitted" in {
+
+      when(mockDuplicateService.isDuplicateLRN(eqTo(oldLrn))(any())).thenReturn(Future.successful(true))
+      when(mockCacheConnector.isDuplicateLRN(eqTo(oldLrn))(any())).thenReturn(Future.successful(true))
+
       val request = FakeRequest(GET, localReferenceNumberOnPageLoad)
 
       val result = route(app, request).value
@@ -72,6 +76,21 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
 
       contentAsString(result) mustEqual
         view(form(), oldLrn)(request, messages).toString
+    }
+
+    "must redirect to bad request page when old local reference number is not in the API" in {
+
+      when(mockDuplicateService.isDuplicateLRN(eqTo(oldLrn))(any())).thenReturn(Future.successful(false))
+      when(mockCacheConnector.isDuplicateLRN(eqTo(oldLrn))(any())).thenReturn(Future.successful(false))
+
+      val request = FakeRequest(GET, localReferenceNumberOnPageLoad)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.ErrorController.badRequest().url
+
     }
 
     "must create new user answers with old lrn's data" - {

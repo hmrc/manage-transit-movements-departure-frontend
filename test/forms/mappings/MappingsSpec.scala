@@ -305,9 +305,8 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
     }
 
     "must not bind an lrn which is too long" in {
-      val numberGenerator = Gen.chooseNum(LocalReferenceNumber.maxLength, LocalReferenceNumber.maxLength * 100).sample.value
 
-      val invalidLengthString = Gen.resize(numberGenerator, Gen.alphaNumStr).sample.value
+      val invalidLengthString = "LOCALREFERENCENUMBER1234567890123456789"
 
       val result = testForm.bind(Map("value" -> invalidLengthString))
       result.errors must contain(FormError("value", "lengthKey"))
@@ -365,9 +364,8 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
     }
 
     "must not bind an lrn which is too long" in {
-      val numberGenerator = Gen.chooseNum(LocalReferenceNumber.maxLength, LocalReferenceNumber.maxLength * 100).sample.value
 
-      val invalidLengthString = Gen.resize(numberGenerator, Gen.alphaNumStr).sample.value
+      val invalidLengthString = "LOCALREFERENCENUMBER1234567890123456789"
 
       val result = testForm(alreadyExists = false).bind(Map("value" -> invalidLengthString))
       result.errors must contain(FormError("value", "lengthKey"))
