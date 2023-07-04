@@ -46,7 +46,7 @@ class NewLocalReferenceNumberController @Inject() (
 
   def onPageLoad(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
     implicit request =>
-      duplicateService.isDuplicateLRN(oldLocalReferenceNumber).flatMap {
+      duplicateService.apiLRNCheck(oldLocalReferenceNumber).flatMap {
         case true  => Future.successful(Ok(view(form(), oldLocalReferenceNumber)))
         case false => Future.successful(Redirect(controllers.routes.ErrorController.badRequest())) //TODO: More generic error page?
       }

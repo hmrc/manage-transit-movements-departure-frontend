@@ -46,6 +46,9 @@ class DuplicateService @Inject() (
   def isDuplicateLRN(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
     cacheConnector.isDuplicateLRN(lrn)
 
+  def apiLRNCheck(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
+    cacheConnector.apiLRNCheck(lrn)
+
   def populateForm(submittedValue: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Form[LocalReferenceNumber]] =
     submittedValue match {
       case Some(newLocalReferenceNumber) => isDuplicateLRN(newLocalReferenceNumber).map(formProvider(_))

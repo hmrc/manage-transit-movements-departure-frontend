@@ -88,4 +88,15 @@ class CacheConnector @Inject() (
           Future.failed(new Exception(e))
       }
   }
+
+  def apiLRNCheck(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val url = s"$baseUrl/is-lrn-in-api/${lrn.toString}"
+    http
+      .GET[Boolean](url)
+      .recoverWith {
+        case e =>
+          logger.error(s"Failed to check if lrn was inside the API with error: $e")
+          Future.failed(new Exception(e))
+      }
+  }
 }

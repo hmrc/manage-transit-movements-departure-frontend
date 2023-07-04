@@ -131,5 +131,25 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
         verify(mockCacheConnector).isDuplicateLRN(eqTo(lrn))(any())
       }
     }
+
+    "isDuplicateLRN" - {
+      "must return true if LRN exists in API" in {
+
+        when(mockCacheConnector.apiLRNCheck(eqTo(lrn))(any())).thenReturn(Future.successful(true))
+
+        duplicateService.apiLRNCheck(lrn).futureValue mustBe true
+
+        verify(mockCacheConnector).apiLRNCheck(eqTo(lrn))(any())
+      }
+
+      "must return false if LRN does not exist in API" in {
+        when(mockCacheConnector.apiLRNCheck(eqTo(lrn))(any())).thenReturn(Future.successful(false))
+
+        duplicateService.apiLRNCheck(lrn).futureValue mustBe false
+
+        verify(mockCacheConnector).apiLRNCheck(eqTo(lrn))(any())
+      }
+    }
+
   }
 }

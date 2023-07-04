@@ -220,5 +220,41 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
         }
       }
     }
+
+    "apiLRNCheck" - {
+      val url = s"/manage-transit-movements-departure-cache/is-lrn-in-api/${lrn.value}"
+
+      "must return false when status is Ok and lrn does not exists in API" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(Json.stringify(JsBoolean(false))))
+        )
+
+        connector.apiLRNCheck(lrn).futureValue mustBe false
+      }
+
+      "must return true when status is Ok and lrn does exists in API" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(Json.stringify(JsBoolean(true))))
+        )
+
+        connector.apiLRNCheck(lrn).futureValue mustBe true
+      }
+
+      "return an exception for 4xx or 5xx response" in {
+        val status = Gen.choose(400: Int, 599: Int).sample.value
+
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(aResponse().withStatus(status))
+        )
+
+        assertThrows[Exception] {
+          await(connector.apiLRNCheck(lrn))
+        }
+      }
+    }
+
   }
 }
