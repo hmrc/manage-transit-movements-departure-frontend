@@ -53,7 +53,6 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
       val newDataToSend                = oldLrnData.copy(lrn = newLrn, isSubmitted = Some(RejectedPendingChanges))
       val newDataWithResubmittedLRrn   = oldLrnData.copy(resubmittedLrn = Some(newLrn), isSubmitted = Some(RejectedPendingChanges))
 
-
       "must return true" - {
         "when answers in the cache can be found and data posts to cache" in {
 

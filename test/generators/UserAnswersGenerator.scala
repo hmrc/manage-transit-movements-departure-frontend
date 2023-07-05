@@ -30,7 +30,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with PreTaskListUs
       for {
         lrn        <- arbitrary[LocalReferenceNumber]
         eoriNumber <- arbitrary[EoriNumber]
-        initialAnswers = UserAnswers(lrn, eoriNumber)
+        initialAnswers = UserAnswers(lrn, Some(lrn), eoriNumber)
         answers <- arbitraryPreTaskListAnswers(initialAnswers)
       } yield answers
     }

@@ -92,17 +92,19 @@ object UserAnswers {
   implicit lazy val reads: Reads[UserAnswers] =
     (
       (__ \ "lrn").read[LocalReferenceNumber] and
+        (__ \ "resubmittedLrn").readNullable[LocalReferenceNumber] and
         (__ \ "eoriNumber").read[EoriNumber] and
         (__ \ "data").read[JsObject] and
         (__ \ "tasks").read[Map[String, TaskStatus]] and
         (__ \ "isSubmitted").readWithDefault[SubmissionState](NotSubmitted)
     ).apply {
-      (lrn, eoriNumber, data, tasks, isSubmitted) => UserAnswers.apply(lrn, eoriNumber, data, tasks, Some(isSubmitted))
+      (lrn, resubmittedLrn, eoriNumber, data, tasks, isSubmitted) => UserAnswers.apply(lrn, resubmittedLrn, eoriNumber, data, tasks, Some(isSubmitted))
     }
 
   implicit lazy val writes: Writes[UserAnswers] =
     (
       (__ \ "lrn").write[LocalReferenceNumber] and
+        (__ \ "resubmittedLrn").write[Option[LocalReferenceNumber]] and
         (__ \ "eoriNumber").write[EoriNumber] and
         (__ \ "data").write[JsObject] and
         (__ \ "tasks").write[Map[String, TaskStatus]] and
