@@ -166,5 +166,33 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
       }
     }
 
+    "updateResubmittedLrn" - {
+
+      val newLrn: LocalReferenceNumber = LocalReferenceNumber("DCBA0987654321321").value
+      val oldLrnData                   = emptyUserAnswers.copy(lrn = lrn, tasks = Map("task1" -> TaskStatus.Error))
+      val newDataToSend                = oldLrnData.copy(lrn = newLrn, isSubmitted = Some(RejectedPendingChanges))
+      val newDataWithResubmittedLRrn   = oldLrnData.copy(resubmittedLrn = Some(newLrn), isSubmitted = Some(RejectedPendingChanges))
+
+      "must return true when updated lrn post to cache succeeds" in {
+
+        when(mockCacheConnector.post(eqTo(newDataWithResubmittedLRrn))(any())) thenReturn Future.successful(true)
+
+        duplicateService.updateResubmittedLrn(newLrn, newDataWithResubmittedLRrn).futureValue mustBe true
+
+        verify(mockCacheConnector).post(eqTo(newDataWithResubmittedLRrn))(any())
+
+      }
+
+      "must return false when updated lrn post to cache fails" in {
+
+        when(mockCacheConnector.post(eqTo(newDataWithResubmittedLRrn))(any())) thenReturn Future.successful(false)
+
+        duplicateService.updateResubmittedLrn(newLrn, newDataWithResubmittedLRrn).futureValue mustBe false
+
+        verify(mockCacheConnector).post(eqTo(newDataWithResubmittedLRrn))(any())
+
+      }
+    }
+
   }
 }
