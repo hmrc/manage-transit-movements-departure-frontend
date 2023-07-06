@@ -101,12 +101,13 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must redirect to the next page when valid data is submitted" - {
-      "and office is in CL112 but not CL147" in {
+      "and office is in CL112 but not CL147 and not CL010" in {
         setExistingUserAnswers(emptyUserAnswers)
         when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
         when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
         when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(Seq(Country("GB"))))
         when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(Seq(Country("FR"))))
+        when(mockCountriesService.getCommunityCountries()(any())).thenReturn(Future.successful(Seq(Country("IT"))))
 
         val request = FakeRequest(POST, officeOfDepartureRoute)
           .withFormUrlEncodedBody(("value", "GB1"))
@@ -125,19 +126,21 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
             |      "id" : "GB1",
             |      "name" : "someName",
             |      "isInCL112" : true,
-            |      "isInCL147" : false
+            |      "isInCL147" : false,
+            |      "isInCL010" : false
             |    }
             |  }
             |}
             |""".stripMargin)
       }
 
-      "and office is not in CL112 but is in CL147" in {
+      "and office is in CL147 but is not in CL112 and not CL010" in {
         setExistingUserAnswers(emptyUserAnswers)
         when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
         when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
         when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(Seq(Country("FR"))))
         when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(Seq(Country("GB"))))
+        when(mockCountriesService.getCommunityCountries()(any())).thenReturn(Future.successful(Seq(Country("IT"))))
 
         val request = FakeRequest(POST, officeOfDepartureRoute)
           .withFormUrlEncodedBody(("value", "GB1"))
@@ -156,7 +159,41 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
             |      "id" : "GB1",
             |      "name" : "someName",
             |      "isInCL112" : false,
-            |      "isInCL147" : true
+            |      "isInCL147" : true,
+            |      "isInCL010" : false
+            |    }
+            |  }
+            |}
+            |""".stripMargin)
+      }
+
+      "and office is in CL010 but is not in CL112 and not CL147" in {
+        setExistingUserAnswers(emptyUserAnswers)
+        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+        when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
+        when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(Seq(Country("FR"))))
+        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(Seq(Country("IT"))))
+        when(mockCountriesService.getCommunityCountries()(any())).thenReturn(Future.successful(Seq(Country("GB"))))
+
+        val request = FakeRequest(POST, officeOfDepartureRoute)
+          .withFormUrlEncodedBody(("value", "GB1"))
+
+        val result: Future[Result] = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+
+        val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
+        userAnswersCaptor.getValue.data mustBe Json.parse("""
+            |{
+            |  "preTaskList" : {
+            |    "officeOfDeparture" : {
+            |      "id" : "GB1",
+            |      "name" : "someName",
+            |      "isInCL112" : false,
+            |      "isInCL147" : false,
+            |      "isInCL010" : true
             |    }
             |  }
             |}
