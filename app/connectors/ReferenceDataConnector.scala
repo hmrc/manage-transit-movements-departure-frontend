@@ -30,9 +30,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpClient) extends Logging {
 
-  def getCountries(queryParameters: Seq[(String, String)])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.referenceDataUrl}/countries"
-    http.GET[Seq[Country]](serviceUrl, queryParameters, headers = version2Header)
+  def getCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCodesCommunity"
+    http.GET[Seq[Country]](serviceUrl, headers = version2Header)
   }
 
   def getCustomsOfficesOfDepartureForCountry(

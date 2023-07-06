@@ -160,6 +160,36 @@ class ReferenceDataConnectorSpec
       |}
       |""".stripMargin
 
+  private val countriesResponseCommunity: String =
+    """
+      |{
+      |  "_links": {
+      |    "self": {
+      |      "href": "/customs-reference-data/lists/CountryCodesCommunity"
+      |    }
+      |  },
+      |  "meta": {
+      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+      |    "snapshotDate": "2023-01-01"
+      |  },
+      |  "id": "CountryCodesCommunity",
+      |  "data": [
+      |    {
+      |      "activeFrom": "2023-01-23",
+      |      "code": "GB",
+      |      "state": "valid",
+      |      "description": "United Kingdom"
+      |    },
+      |    {
+      |      "activeFrom": "2023-01-23",
+      |      "code": "AD",
+      |      "state": "valid",
+      |      "description": "Andorra"
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
+
   private val queryParams: Seq[(String, StringValuePattern)] = Seq(
     "data.countryId"  -> equalTo("GB"),
     "data.roles.role" -> equalTo("DEP")
@@ -256,6 +286,26 @@ class ReferenceDataConnectorSpec
 
       "must return an exception when an error response is returned" in {
         checkErrorResponse(s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea", connector.getCustomsSecurityAgreementAreaCountries())
+      }
+    }
+
+    "getCountries" - {
+      "must return Seq of Country when successful" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$baseUrl/lists/CountryCodesCommunity"))
+            .willReturn(okJson(countriesResponseCommunity))
+        )
+
+        val expectedResult: Seq[Country] = Seq(
+          Country("GB"),
+          Country("AD")
+        )
+
+        connector.getCountries().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(s"/$baseUrl/lists/CountryCodesCommunity", connector.getCountries())
       }
     }
   }
