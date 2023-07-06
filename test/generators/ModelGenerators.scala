@@ -16,6 +16,7 @@
 
 package generators
 
+import models.SubmissionState.{NotSubmitted, RejectedAndResubmitted, RejectedPendingChanges, Submitted}
 import models._
 import models.reference._
 import org.scalacheck.{Arbitrary, Gen}
@@ -24,6 +25,13 @@ import uk.gov.hmrc.http.HttpVerbs._
 
 trait ModelGenerators {
   self: Generators =>
+
+  implicit lazy val arbitrarySubmissionState: Arbitrary[SubmissionState] = Arbitrary {
+    val validStates = Seq(NotSubmitted.toString, Submitted.toString, RejectedPendingChanges.toString, RejectedAndResubmitted.toString)
+    for {
+      state <- Gen.oneOf(validStates)
+    } yield SubmissionState(state)
+  }
 
   implicit lazy val arbitraryProcedureType: Arbitrary[ProcedureType] =
     Arbitrary {

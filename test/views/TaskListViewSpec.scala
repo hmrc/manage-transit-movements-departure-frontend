@@ -27,7 +27,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
   override def view: HtmlFormat.Appendable = applyView(tasks)
 
   private def applyView(tasks: Seq[TaskListTask]): HtmlFormat.Appendable =
-    injector.instanceOf[TaskListView].apply(lrn, tasks, isSubmitted = false)(fakeRequest, messages)
+    injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = false)(fakeRequest, messages)
 
   override val prefix: String = "taskList"
 
@@ -53,7 +53,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
     val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryErrorTask)).sample.value
 
     def applyViewWithErrors(tasks: Seq[TaskListTask]): HtmlFormat.Appendable =
-      injector.instanceOf[TaskListView].apply(lrn, tasks, isSubmitted = true)(fakeRequest, messages)
+      injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = true)(fakeRequest, messages)
 
     val doc = parseView(applyViewWithErrors(tasks))
 

@@ -20,6 +20,7 @@ import com.google.inject.Inject
 import connectors.SubmissionConnector
 import controllers.actions.{Actions, DependentTaskAction}
 import models.LocalReferenceNumber
+import models.SubmissionState.NotSubmitted
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,7 +49,7 @@ class TaskListController @Inject() (
     .andThen(checkPreTaskListCompleted) {
       implicit request =>
         val tasks                = viewModel(request.userAnswers)
-        val isSubmitted: Boolean = request.userAnswers.isSubmitted.getOrElse(false)
+        val isSubmitted: Boolean = request.userAnswers.isSubmitted.getOrElse(NotSubmitted).showErrorContent
 
         Ok(view(lrn, tasks, isSubmitted))
     }
