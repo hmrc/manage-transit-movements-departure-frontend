@@ -174,7 +174,7 @@ locked.paragraph = Another person from your organisation is currently working on
 locked.button = Return to drafts
 
 newLocalReferenceNumber.title = What is the new Local Reference Number (LRN)?
-newLocalReferenceNumber.heading = What is the new Local Reference Number (LRN)
+newLocalReferenceNumber.heading = What is the new Local Reference Number (LRN)?
 newLocalReferenceNumber.paragraph = You cannot use the same Local Reference Number (LRN) more than once. To amend this declaration, you need to enter a new one.
 newLocalReferenceNumber.hint = This can be up to 22 characters long and include letters, numbers, hyphens and underscores. For example, ABCD123456EF-789.
 newLocalReferenceNumber.error.required = Enter the new Local Reference Number
