@@ -36,7 +36,7 @@ class DuplicateService @Inject() (
   )(implicit hc: HeaderCarrier): Future[Boolean] = cacheConnector.get(oldLocalReferenceNumber) flatMap {
     case Some(userAnswers) =>
       val updatedUserAnswers: UserAnswers =
-        userAnswers.copy(lrn = newLocalReferenceNumber, resubmittedLrn = Some(oldLocalReferenceNumber), isSubmitted = Some(RejectedPendingChanges))
+        userAnswers.copy(lrn = newLocalReferenceNumber, isSubmitted = Some(RejectedPendingChanges))
       cacheConnector
         .post(
           updatedUserAnswers
