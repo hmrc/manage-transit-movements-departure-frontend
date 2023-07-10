@@ -78,4 +78,25 @@ class CacheConnector @Inject() (
     }
   }
 
+  def doesDraftOrSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val url = s"$baseUrl/does-draft-or-submission-exist-for-lrn/${lrn.toString}"
+    http
+      .GET[Boolean](url)
+      .recoverWith {
+        case e =>
+          logger.error(s"Failed to check if lrn was a duplicate with error: $e")
+          Future.failed(new Exception(e))
+      }
+  }
+
+  def doesSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val url = s"$baseUrl/does-submission-exist-for-lrn/${lrn.toString}"
+    http
+      .GET[Boolean](url)
+      .recoverWith {
+        case e =>
+          logger.error(s"Failed to check if lrn was inside the API with error: $e")
+          Future.failed(new Exception(e))
+      }
+  }
 }

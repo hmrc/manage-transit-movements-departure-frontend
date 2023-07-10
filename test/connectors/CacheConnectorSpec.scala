@@ -23,7 +23,7 @@ import models.UserAnswers
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
+import play.api.libs.json.{JsBoolean, Json}
 import play.api.test.Helpers._
 
 class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler {
@@ -41,7 +41,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
       |    "_id" : "2e8ede47-dbfb-44ea-a1e3-6c57b1fe6fe2",
       |    "lrn" : "1234567890",
       |    "eoriNumber" : "GB1234567",
-      |    "isSubmitted" : false,
+      |    "isSubmitted" : "notSubmitted",
       |    "data" : {},
       |    "tasks" : {},
       |    "createdAt" : "2022-09-05T15:58:44.188Z",
@@ -185,6 +185,76 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
         }
       }
     }
-  }
 
+    "doesDraftOrSubmissionExistForLrn" - {
+      val url = s"/manage-transit-movements-departure-cache/does-draft-or-submission-exist-for-lrn/${lrn.value}"
+
+      "must return false when status is Ok and lrn does not exists in cache/API" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(Json.stringify(JsBoolean(false))))
+        )
+
+        connector.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe false
+      }
+
+      "must return true when status is Ok and lrn does exists in cache/API" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(Json.stringify(JsBoolean(true))))
+        )
+
+        connector.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe true
+      }
+
+      "return an exception for 4xx or 5xx response" in {
+        val status = Gen.choose(400: Int, 599: Int).sample.value
+
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(aResponse().withStatus(status))
+        )
+
+        assertThrows[Exception] {
+          await(connector.doesDraftOrSubmissionExistForLrn(lrn))
+        }
+      }
+    }
+
+    "doesSubmissionExistForLrn" - {
+      val url = s"/manage-transit-movements-departure-cache/does-submission-exist-for-lrn/${lrn.value}"
+
+      "must return false when status is Ok and lrn does not exists in API" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(Json.stringify(JsBoolean(false))))
+        )
+
+        connector.doesSubmissionExistForLrn(lrn).futureValue mustBe false
+      }
+
+      "must return true when status is Ok and lrn does exists in API" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(Json.stringify(JsBoolean(true))))
+        )
+
+        connector.doesSubmissionExistForLrn(lrn).futureValue mustBe true
+      }
+
+      "return an exception for 4xx or 5xx response" in {
+        val status = Gen.choose(400: Int, 599: Int).sample.value
+
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(aResponse().withStatus(status))
+        )
+
+        assertThrows[Exception] {
+          await(connector.doesSubmissionExistForLrn(lrn))
+        }
+      }
+    }
+
+  }
 }

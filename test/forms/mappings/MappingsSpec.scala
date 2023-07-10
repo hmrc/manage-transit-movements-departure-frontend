@@ -16,13 +16,15 @@
 
 package forms.mappings
 
-import models.{Enumerable, Selectable, SelectableList}
+import generators.Generators
+import models.{Enumerable, LocalReferenceNumber, Selectable, SelectableList}
+import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.data.{Form, FormError}
 
-class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mappings {
+class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Generators with Mappings {
 
   "text" - {
 
@@ -272,4 +274,127 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
       result.apply("value").value.value mustEqual "foo"
     }
   }
+
+  "lrn" - {
+
+    val validLrn = LocalReferenceNumber("ABCD1234567890123").value
+
+    val testForm: Form[LocalReferenceNumber] =
+      Form(
+        "value" -> lrn(
+          "requiredKey",
+          "lengthKey",
+          "invalidCharactersKey",
+          "invalidFormatKey"
+        )
+      )
+
+    "must bind a valid lrn" in {
+      val result = testForm.bind(Map("value" -> "ABCD1234567890123"))
+      result.get mustEqual validLrn
+    }
+
+    "must not bind an empty lrn" in {
+      val result = testForm.bind(Map("value" -> ""))
+      result.errors must contain(FormError("value", "requiredKey"))
+    }
+
+    "must not bind an empty map" in {
+      val result = testForm.bind(Map.empty[String, String])
+      result.errors must contain(FormError("value", "requiredKey"))
+    }
+
+    "must not bind an lrn which is too long" in {
+
+      val invalidLengthString = "LOCALREFERENCENUMBER1234567890123456789"
+
+      val result = testForm.bind(Map("value" -> invalidLengthString))
+      result.errors must contain(FormError("value", "lengthKey"))
+    }
+
+    "must not bind an lrn with invalid characters" in {
+      val result = testForm.bind(Map("value" -> "'#ABCD12345/.,;[)23"))
+      result.errors must contain(FormError("value", "invalidCharactersKey"))
+    }
+
+    "must not bind an lrn with the incorrect format" in {
+      val invalidFormats = Seq("-ABCD1234567890", "_ABCD1234567890")
+
+      val invalidString = Gen.oneOf(invalidFormats).sample.value
+
+      val result = testForm.bind(Map("value" -> invalidString))
+      result.errors must contain(FormError("value", "invalidFormatKey"))
+    }
+
+    "must unbind a valid value" in {
+      val result = testForm.fill(validLrn)
+      result.apply("value").value.value mustEqual validLrn.toString
+    }
+  }
+
+  "newLrn" - {
+
+    val validLrn = LocalReferenceNumber("ABCD1234567890123").value
+
+    def testForm(alreadyExists: Boolean): Form[LocalReferenceNumber] =
+      Form(
+        "value" -> newLrn(
+          "requiredKey",
+          "lengthKey",
+          "invalidCharactersKey",
+          "invalidFormatKey",
+          "alreadyExistsKey",
+          alreadyExists
+        )
+      )
+
+    "must bind a valid lrn" in {
+      val result = testForm(alreadyExists = false).bind(Map("value" -> "ABCD1234567890123"))
+      result.get mustEqual validLrn
+    }
+
+    "must not bind an empty lrn" in {
+      val result = testForm(alreadyExists = false).bind(Map("value" -> ""))
+      result.errors must contain(FormError("value", "requiredKey"))
+    }
+
+    "must not bind an empty map" in {
+      val result = testForm(alreadyExists = false).bind(Map.empty[String, String])
+      result.errors must contain(FormError("value", "requiredKey"))
+    }
+
+    "must not bind an lrn which is too long" in {
+
+      val invalidLengthString = "LOCALREFERENCENUMBER1234567890123456789"
+
+      val result = testForm(alreadyExists = false).bind(Map("value" -> invalidLengthString))
+      result.errors must contain(FormError("value", "lengthKey"))
+    }
+
+    "must not bind an lrn with invalid characters" in {
+      val result = testForm(alreadyExists = false).bind(Map("value" -> "'#ABCD12345/.,;[)23"))
+      result.errors must contain(FormError("value", "invalidCharactersKey"))
+    }
+
+    "must not bind an lrn with the incorrect format" in {
+      val invalidFormats = Seq("-ABCD1234567890", "_ABCD1234567890")
+
+      val invalidString = Gen.oneOf(invalidFormats).sample.value
+
+      val result = testForm(alreadyExists = false).bind(Map("value" -> invalidString))
+      result.errors must contain(FormError("value", "invalidFormatKey"))
+    }
+
+    "must not bind an lrn which already exists" in {
+
+      val result = testForm(alreadyExists = true).bind(Map("value" -> validLrn.toString))
+      result.errors must contain(FormError("value", "alreadyExistsKey"))
+    }
+
+    "must unbind a valid value" in {
+      val result = testForm(alreadyExists = false).fill(validLrn)
+      result.apply("value").value.value mustEqual validLrn.toString
+    }
+  }
+
 }

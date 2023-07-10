@@ -16,6 +16,7 @@
 
 package models
 
+import models.SubmissionState.NotSubmitted
 import pages._
 import play.api.libs.json._
 import queries.Gettable
@@ -28,7 +29,7 @@ final case class UserAnswers(
   eoriNumber: EoriNumber,
   data: JsObject = Json.obj(),
   tasks: Map[String, TaskStatus] = Map(),
-  isSubmitted: Option[Boolean] = Some(false)
+  isSubmitted: Option[SubmissionState] = Some(NotSubmitted)
 ) {
 
   def getOptional[A](page: Gettable[A])(implicit rds: Reads[A]): Either[String, Option[A]] =
@@ -93,8 +94,10 @@ object UserAnswers {
         (__ \ "eoriNumber").read[EoriNumber] and
         (__ \ "data").read[JsObject] and
         (__ \ "tasks").read[Map[String, TaskStatus]] and
-        (__ \ "isSubmitted").readNullable[Boolean]
-    )(UserAnswers.apply _)
+        (__ \ "isSubmitted").readWithDefault[SubmissionState](NotSubmitted)
+    ).apply {
+      (lrn, eoriNumber, data, tasks, isSubmitted) => UserAnswers.apply(lrn, eoriNumber, data, tasks, Some(isSubmitted))
+    }
 
   implicit lazy val writes: Writes[UserAnswers] =
     (
@@ -102,6 +105,6 @@ object UserAnswers {
         (__ \ "eoriNumber").write[EoriNumber] and
         (__ \ "data").write[JsObject] and
         (__ \ "tasks").write[Map[String, TaskStatus]] and
-        (__ \ "isSubmitted").writeNullable[Boolean]
+        (__ \ "isSubmitted").write[Option[SubmissionState]]
     )(unlift(UserAnswers.unapply))
 }

@@ -28,7 +28,7 @@
     button: Button
 )
 
-@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask], isSubmitted: Boolean)(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask], showErrorContent: Boolean)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("taskList.title"),
@@ -38,7 +38,7 @@
     <span class="govuk-caption-xl">@lrn.toString</span>
     @heading(heading = messages("taskList.heading"))
 
-    @if(isSubmitted) {
+    @if(showErrorContent) {
         <p class="govuk-body">@messages("taskList.paragraph.thereIsAProblem")</p>
         <p class="govuk-body">@messages("taskList.paragraph.amendErrors")</p>
     }
@@ -49,7 +49,7 @@
          @* TODO - @if(tasks.forall(_.isCompleted)) { *@
             @formHelper(action = routes.TaskListController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
 
-                @if(isSubmitted) {
+                @if(showErrorContent) {
                     @button(messageKey = "site.resend", attributes = Map("id" -> "submit"))
                 } else {
                     <h2 class="govuk-heading-m">@messages("taskList.sendDeclaration")</h2>
