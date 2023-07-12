@@ -35,7 +35,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
 
   //TODO: Move out into it's own config object like `ManageTransitMovementsService`
-  lazy val referenceDataUrl: String = configuration.get[Service]("microservice.services.referenceData").fullServiceUrl
+  lazy val customsReferenceDataUrl: String = configuration.get[Service]("microservice.services.customsReferenceData").fullServiceUrl
 
   //TODO: Move out into it's own config object like `ManageTransitMovementsService`
   lazy val departureHost: String    = configuration.get[Service]("microservice.services.departures").fullServiceUrl
