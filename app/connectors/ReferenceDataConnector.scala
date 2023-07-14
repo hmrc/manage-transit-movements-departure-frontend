@@ -19,9 +19,10 @@ package connectors
 import config.FrontendAppConfig
 import models.reference.{Country, CustomsOffice}
 import play.api.Logging
-import play.api.http.Status.{NOT_FOUND, OK}
+import play.api.http.Status.{NOT_FOUND, NO_CONTENT, OK}
+import play.api.libs.json.Format.GenericFormat
+import play.api.libs.json.Reads
 import sttp.model.HeaderNames
-import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
 
 import javax.inject.Inject
@@ -29,20 +30,33 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpClient) extends Logging {
 
+  def getCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCodesCommunity"
+    http.GET[Seq[Country]](serviceUrl, headers = version2Header)
+  }
+
   def getCustomsOfficesOfDepartureForCountry(
     countryCode: String
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[CustomsOffice]] = {
-    val serviceUrl = s"${config.referenceDataUrl}/customs-offices/$countryCode?role=DEP"
-    http.GET[Seq[CustomsOffice]](serviceUrl, headers = version2Header)
+
+    // TODO - do we want to specify this in config?
+    val queryParams: Seq[(String, String)] = Seq(
+      "data.countryId"  -> countryCode,
+      "data.roles.role" -> "DEP"
+    )
+
+    val serviceUrl = s"${config.customsReferenceDataUrl}/filtered-lists/CustomsOffices"
+
+    http.GET[Seq[CustomsOffice]](serviceUrl, headers = version2Header, queryParams = queryParams)
   }
 
   def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.referenceDataUrl}/country-codes-ctc"
+    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCodesCommonTransit"
     http.GET[Seq[Country]](serviceUrl, headers = version2Header)
   }
 
   def getCustomsSecurityAgreementAreaCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.referenceDataUrl}/country-customs-office-security-agreement-area"
+    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCustomsSecurityAgreementArea"
     http.GET[Seq[Country]](serviceUrl, headers = version2Header)
   }
 
@@ -50,16 +64,23 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     HeaderNames.Accept -> "application/vnd.hmrc.2.0+json"
   )
 
-  implicit val responseHandlerCustomsOfficeList: HttpReads[Seq[CustomsOffice]] =
-    (_: String, _: String, response: HttpResponse) =>
+  implicit def responseHandlerGeneric[A](implicit reads: Reads[A]): HttpReads[Seq[A]] =
+    (_: String, _: String, response: HttpResponse) => {
       response.status match {
         case OK =>
-          response.json
-            .as[Seq[CustomsOffice]]
-        case NOT_FOUND =>
+          val referenceData = (response.json \ "data").getOrElse(
+            throw new IllegalStateException("[ReferenceDataConnector][responseHandlerGeneric] Reference data could not be parsed")
+          )
+
+          referenceData.as[Seq[A]]
+        case NO_CONTENT =>
           Nil
+        case NOT_FOUND =>
+          logger.warn("[ReferenceDataConnector][responseHandlerGeneric] Reference data call returned NOT_FOUND")
+          throw new IllegalStateException("[ReferenceDataConnector][responseHandlerGeneric] Reference data could not be found")
         case other =>
-          logger.info(s"[ReferenceDataConnector][getCustomsOfficesOfDepartureForCountry] Invalid downstream status $other")
-          throw new IllegalStateException(s"Invalid Downstream Status $other")
+          logger.warn(s"[ReferenceDataConnector][responseHandlerGeneric] Invalid downstream status $other")
+          throw new IllegalStateException(s"[ReferenceDataConnector][responseHandlerGeneric] Invalid Downstream Status $other")
       }
+    }
 }
