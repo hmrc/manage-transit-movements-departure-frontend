@@ -42,7 +42,7 @@ class EnrolmentStoreConnector @Inject() (val config: FrontendAppConfig, val http
         }
     } recover {
       case exception =>
-        logger.info("[EnrolmentStoreProxyConnector][checkSaGroup] Enrolment Store Proxy error", exception)
+        logger.warn("[EnrolmentStoreProxyConnector][checkSaGroup] Enrolment Store Proxy error", exception)
         false
     }
   }

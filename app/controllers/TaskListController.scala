@@ -67,7 +67,7 @@ class TaskListController @Inject() (
             logger.warn(s"TaskListController:onSubmit: bad request: ${response.status}: ${response.body}")
             BadRequest(response.body)
           case e =>
-            logger.warn(s"TaskListController:onSubmit: something went wrong: ${e.status}-${e.body}")
+            logger.error(s"TaskListController:onSubmit: something went wrong: ${e.status}-${e.body}")
             InternalServerError(e.body)
         }
     }
