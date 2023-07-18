@@ -24,7 +24,6 @@ import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
 import views.html.NewLocalReferenceNumberView
-import views.html.preTaskList.LocalReferenceNumberView
 
 class NewLocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalReferenceNumber] {
 
