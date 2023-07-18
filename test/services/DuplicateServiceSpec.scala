@@ -18,7 +18,7 @@ package services
 
 import base.SpecBase
 import connectors.CacheConnector
-import forms.NewLocalReferenceNumberFormProvider
+import forms.preTaskList.LocalReferenceNumberFormProvider
 import generators.Generators
 import models.LocalReferenceNumber
 import models.SubmissionState.RejectedPendingChanges
@@ -34,10 +34,8 @@ import scala.concurrent.Future
 
 class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generators {
 
-  private val formProvider = new NewLocalReferenceNumberFormProvider()
-
   private val mockCacheConnector: CacheConnector = mock[CacheConnector]
-  private val duplicateService: DuplicateService = new DuplicateService(mockCacheConnector, formProvider)
+  private val duplicateService: DuplicateService = new DuplicateService(mockCacheConnector)
 
   override def beforeEach(): Unit = {
     reset(mockCacheConnector)
@@ -93,7 +91,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
     }
 
-    "alreadyExists" - {
+    "alreadyExistsInSubmissionOrCache" - {
       "must return correct boolean" - {
 
         "when local reference number" in {
@@ -101,12 +99,32 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
             isDuplicate =>
               when(mockCacheConnector.doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(isDuplicate))
 
-              duplicateService.alreadyExists(Some(lrn)).futureValue mustBe isDuplicate
+              duplicateService.alreadyExistsInSubmissionOrCache(Some(lrn)).futureValue mustBe isDuplicate
           }
         }
 
         "when none" in {
-          duplicateService.alreadyExists(None).futureValue mustBe false
+          duplicateService.alreadyExistsInSubmissionOrCache(None).futureValue mustBe false
+        }
+
+      }
+
+    }
+
+    "alreadySubmitted" - {
+      "must return correct boolean" - {
+
+        "when local reference number" in {
+          forAll(arbitrary[Boolean]) {
+            isDuplicate =>
+              when(mockCacheConnector.doesSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(isDuplicate))
+
+              duplicateService.alreadySubmitted(Some(lrn)).futureValue mustBe isDuplicate
+          }
+        }
+
+        "when none" in {
+          duplicateService.alreadySubmitted(None).futureValue mustBe false
         }
 
       }

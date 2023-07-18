@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions._
-import forms.NewLocalReferenceNumberFormProvider
+import forms.preTaskList.LocalReferenceNumberFormProvider
 import models.LocalReferenceNumber
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -34,7 +34,7 @@ class NewLocalReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   identify: IdentifierAction,
-  formProvider: NewLocalReferenceNumberFormProvider,
+  formProvider: LocalReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: NewLocalReferenceNumberView,
   duplicateService: DuplicateService
@@ -42,7 +42,9 @@ class NewLocalReferenceNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists)
+  private val prefix: String = "newLocalReferenceNumber"
+
+  private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists, prefix)
 
   def onPageLoad(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
     implicit request =>
@@ -55,7 +57,7 @@ class NewLocalReferenceNumberController @Inject() (
   def onSubmit(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
     implicit request =>
       val submittedValue = form().bindFromRequest().value
-      duplicateService.alreadyExists(submittedValue).flatMap {
+      duplicateService.alreadyExistsInSubmissionOrCache(submittedValue).flatMap {
         alreadyExists =>
           form(alreadyExists)
             .bindFromRequest()

@@ -17,7 +17,6 @@
 package services
 
 import connectors.CacheConnector
-import forms.NewLocalReferenceNumberFormProvider
 import models.SubmissionState.RejectedPendingChanges
 import models.{LocalReferenceNumber, UserAnswers}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -26,8 +25,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DuplicateService @Inject() (
-  cacheConnector: CacheConnector,
-  formProvider: NewLocalReferenceNumberFormProvider
+  cacheConnector: CacheConnector
 )(implicit ec: ExecutionContext) {
 
   def copyUserAnswers(
@@ -48,7 +46,13 @@ class DuplicateService @Inject() (
   def doesSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
     cacheConnector.doesSubmissionExistForLrn(lrn)
 
-  def alreadyExists(submittedValue: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Boolean] =
+  def alreadySubmitted(submittedValue: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Boolean] =
+    submittedValue match {
+      case Some(newLocalReferenceNumber) => doesSubmissionExistForLrn(newLocalReferenceNumber)
+      case None                          => Future.successful(false)
+    }
+
+  def alreadyExistsInSubmissionOrCache(submittedValue: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Boolean] =
     submittedValue match {
       case Some(newLocalReferenceNumber) => doesDraftOrSubmissionExistForLrn(newLocalReferenceNumber)
       case None                          => Future.successful(false)

@@ -59,12 +59,13 @@ technicalDifficulties.contact.link = contact the New Computerised Transit System
 
 localReferenceNumber.title = What is the Local Reference Number (LRN)?
 localReferenceNumber.heading = What is the Local Reference Number (LRN)?
-localReferenceNumber.paragraph = This is the declarant’s unique reference number for this declaration.
-localReferenceNumber.hint = It can be up to 22 characters long and include letters, numbers, hyphens and underscores.
+localReferenceNumber.paragraph = This is a unique reference number you create that is used to identify the declaration.
+localReferenceNumber.hint = It can be up to 22 characters long and include letters, numbers, hyphens and underscores. For example, ABCD123456EF-789.
 localReferenceNumber.error.required = Enter the Local Reference Number
 localReferenceNumber.error.length = The Local Reference Number must be 22 characters or less
 localReferenceNumber.error.invalidCharacters = The Local Reference Number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
 localReferenceNumber.error.invalidFormat = The Local Reference Number must not start with a hyphen or an underscore
+localReferenceNumber.error.alreadyExists = The Local Reference Number must be unique
 localReferenceNumber.checkYourAnswersLabel = Local Reference Number (LRN)
 localReferenceNumber.change.hidden = local reference number
 

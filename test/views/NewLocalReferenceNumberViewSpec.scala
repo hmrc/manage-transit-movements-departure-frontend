@@ -23,16 +23,17 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
+import views.html.NewLocalReferenceNumberView
 import views.html.preTaskList.LocalReferenceNumberView
 
 class NewLocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalReferenceNumber] {
 
-  override def form: Form[LocalReferenceNumber] = new LocalReferenceNumberFormProvider()()
+  override def form: Form[LocalReferenceNumber] = new LocalReferenceNumberFormProvider().apply(alreadyExists = false, prefix = "newLocalReferenceNumber")
 
   override def applyView(form: Form[LocalReferenceNumber]): HtmlFormat.Appendable =
-    injector.instanceOf[LocalReferenceNumberView].apply(form)(fakeRequest, messages)
+    injector.instanceOf[NewLocalReferenceNumberView].apply(form, LocalReferenceNumber("ABC123").value)(fakeRequest, messages)
 
-  override val prefix: String = "localReferenceNumber"
+  override val prefix: String = "newLocalReferenceNumber"
 
   implicit override val arbitraryT: Arbitrary[LocalReferenceNumber] = arbitraryLocalReferenceNumber
 
@@ -44,9 +45,11 @@ class NewLocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalRefer
 
   behave like pageWithHeading()
 
-  behave like pageWithContent("p", "This is the declarant’s unique reference number for this declaration.")
+  behave like pageWithContent("p",
+                              "You cannot use the same Local Reference Number (LRN) more than once. To amend this declaration, you need to enter a new one."
+  )
 
-  behave like pageWithHint("It can be up to 22 characters long and include letters, numbers, hyphens and underscores.")
+  behave like pageWithHint("This can be up to 22 characters long and include letters, numbers, hyphens and underscores. For example, ABCD123456EF-789.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 
