@@ -23,9 +23,10 @@ import models.{LocalReferenceNumber, NormalMode}
 import navigation.PreTaskListNavigatorProvider
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import services.DuplicateService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.DuplicateDraftLocalReferenceNumberView
 
@@ -63,16 +64,25 @@ class DuplicateDraftLocalReferenceNumberController @Inject() (
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
-              value =>
-                duplicateService.copyUserAnswers(oldLocalReferenceNumber, value, NotSubmitted).flatMap {
+              newLocalReferenceNumber =>
+                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, NotSubmitted).flatMap {
                   case true =>
-                    sessionRepository.get(value).map {
-                      case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
-                      case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
-                    }
+                    handleRedirects(oldLocalReferenceNumber, newLocalReferenceNumber)
                   case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
                 }
             )
       }
   }
+
+  private def handleRedirects(oldLocalReferenceNumber: LocalReferenceNumber, newLocalReferenceNumber: LocalReferenceNumber)(implicit
+    hc: HeaderCarrier
+  ): Future[Result] =
+    sessionRepository.get(newLocalReferenceNumber).flatMap {
+      case Some(userAnswers) =>
+        sessionRepository.delete(oldLocalReferenceNumber).flatMap {
+          case true  => Future.successful(Redirect(navigatorProvider(NormalMode).nextPage(userAnswers)))
+          case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
+        }
+      case None => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
+    }
 }

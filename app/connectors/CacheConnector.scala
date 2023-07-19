@@ -50,6 +50,15 @@ class CacheConnector @Inject() (
     http.POST[UserAnswers, HttpResponse](url, userAnswers).map(_.status == OK)
   }
 
+  def delete(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val url = s"$baseUrl/user-answers/$lrn"
+    http
+      .DELETE[HttpResponse](url)
+      .map {
+        _.status == OK
+      }
+  }
+
   def checkLock(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] = {
 
     val url = s"$baseUrl/user-answers/${userAnswers.lrn}/lock"

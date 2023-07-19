@@ -17,7 +17,6 @@
 package services
 
 import connectors.CacheConnector
-import models.SubmissionState.RejectedPendingChanges
 import models.{LocalReferenceNumber, SubmissionState, UserAnswers}
 import uk.gov.hmrc.http.HeaderCarrier
 

@@ -118,22 +118,26 @@ class DuplicateDraftLocalReferenceNumberControllerSpec extends SpecBase with App
 
     "must create new user answers" - {
       "with old LRN data" in {
-
+        val newUserAnswers         = emptyUserAnswers.copy(lrn = LocalReferenceNumber("ABC").value)
         val alreadyExists: Boolean = false
-        when(mockDuplicateService.doesSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(alreadyExists))
-        when(mockDuplicateService.alreadySubmitted(any())(any())).thenReturn(Future.successful(alreadyExists))
-        when(mockDuplicateService.copyUserAnswers(any(), any(), eqTo(NotSubmitted))(any())).thenReturn(Future.successful(true))
-        when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(Some(emptyUserAnswers))
+        when(mockDuplicateService.alreadySubmitted(eqTo(Some(newUserAnswers.lrn)))(any())).thenReturn(Future.successful(alreadyExists))
+        when(mockDuplicateService.copyUserAnswers(eqTo(lrn), eqTo(newUserAnswers.lrn), eqTo(NotSubmitted))(any())).thenReturn(Future.successful(true))
+        when(mockSessionRepository.get(eqTo(newUserAnswers.lrn))(any())) thenReturn Future.successful(Some(newUserAnswers))
+        when(mockSessionRepository.delete(eqTo(lrn))(any())) thenReturn Future.successful(true)
 
         val request = FakeRequest(POST, localReferenceNumberRoute)
-          .withFormUrlEncodedBody(("value", lrn.toString))
+          .withFormUrlEncodedBody(("value", newUserAnswers.lrn.toString))
 
         val result = route(app, request).value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
 
-        verify(mockSessionRepository).get(eqTo(lrn))(any())
+        verify(mockDuplicateService).alreadySubmitted(eqTo(Some(newUserAnswers.lrn)))(any())
+        verify(mockDuplicateService).copyUserAnswers(eqTo(lrn), eqTo(newUserAnswers.lrn), eqTo(NotSubmitted))(any())
+        verify(mockSessionRepository).get(eqTo(newUserAnswers.lrn))(any())
+        verify(mockSessionRepository).delete(eqTo(lrn))(any())
+
       }
     }
 
@@ -156,9 +160,27 @@ class DuplicateDraftLocalReferenceNumberControllerSpec extends SpecBase with App
 
         verify(mockSessionRepository).get(eqTo(lrn))(any())
       }
-    }
 
-    "must redirect to technical difficulties" - {
+      "when delete returns false" in {
+
+        val newUserAnswers         = emptyUserAnswers.copy(lrn = LocalReferenceNumber("ABC").value)
+        val alreadyExists: Boolean = false
+        when(mockDuplicateService.alreadySubmitted(eqTo(Some(newUserAnswers.lrn)))(any())).thenReturn(Future.successful(alreadyExists))
+        when(mockDuplicateService.copyUserAnswers(eqTo(lrn), eqTo(newUserAnswers.lrn), eqTo(NotSubmitted))(any())).thenReturn(Future.successful(true))
+        when(mockSessionRepository.get(eqTo(newUserAnswers.lrn))(any())) thenReturn Future.successful(Some(newUserAnswers))
+        when(mockSessionRepository.delete(eqTo(lrn))(any())) thenReturn Future.successful(false)
+
+        val request = FakeRequest(POST, localReferenceNumberRoute)
+          .withFormUrlEncodedBody(("value", newUserAnswers.lrn.toString))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+
+        verify(mockSessionRepository).delete(eqTo(lrn))(any())
+      }
+
       "when copy user answers fails" in {
 
         val alreadyExists: Boolean = false
@@ -175,6 +197,7 @@ class DuplicateDraftLocalReferenceNumberControllerSpec extends SpecBase with App
         redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
 
       }
+
     }
   }
 }
