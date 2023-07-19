@@ -30,7 +30,7 @@ class DuplicateDraftLocalReferenceNumberViewSpec extends InputTextViewBehaviours
   override def form: Form[LocalReferenceNumber] = new LocalReferenceNumberFormProvider().apply(alreadyExists = false, "duplicateDraftLocalReferenceNumber")
 
   override def applyView(form: Form[LocalReferenceNumber]): HtmlFormat.Appendable =
-    injector.instanceOf[DuplicateDraftLocalReferenceNumberView].apply(form)(fakeRequest, messages)
+    injector.instanceOf[DuplicateDraftLocalReferenceNumberView].apply(form, lrn)(fakeRequest, messages)
 
   override val prefix: String = "duplicateDraftLocalReferenceNumber"
 

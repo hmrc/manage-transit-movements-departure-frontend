@@ -18,7 +18,7 @@ package services
 
 import connectors.CacheConnector
 import models.SubmissionState.RejectedPendingChanges
-import models.{LocalReferenceNumber, UserAnswers}
+import models.{LocalReferenceNumber, SubmissionState, UserAnswers}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -30,10 +30,11 @@ class DuplicateService @Inject() (
 
   def copyUserAnswers(
     oldLocalReferenceNumber: LocalReferenceNumber,
-    newLocalReferenceNumber: LocalReferenceNumber
+    newLocalReferenceNumber: LocalReferenceNumber,
+    isSubmitted: SubmissionState
   )(implicit hc: HeaderCarrier): Future[Boolean] = cacheConnector.get(oldLocalReferenceNumber) flatMap {
     case Some(userAnswers) =>
-      val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, isSubmitted = Some(RejectedPendingChanges))
+      val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, isSubmitted = Some(isSubmitted))
       cacheConnector.post(
         updatedUserAnswers
       ) // TODO CTCP-3469 Will have to keep any draft declaration with same LRN, can probably handle this when the doesDraftOrSubmissionExistForLrn is called in the backend

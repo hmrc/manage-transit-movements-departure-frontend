@@ -42,7 +42,7 @@ class DraftIndexController @Inject() (
   def index(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
       service.doesSubmissionExistForLrn(lrn).map {
-        case true => Redirect(controllers.routes.DuplicateDraftLocalReferenceNumberController.onPageLoad())
+        case true => Redirect(controllers.routes.DuplicateDraftLocalReferenceNumberController.onPageLoad(lrn))
         case false =>
           UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
             case Left(value) =>

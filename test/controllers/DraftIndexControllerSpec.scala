@@ -29,7 +29,6 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
 import services.DuplicateService
 
 import scala.concurrent.Future
@@ -100,7 +99,7 @@ class DraftIndexControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
 
       val result = route(app, request).value
 
-      redirectLocation(result).value mustEqual controllers.routes.DuplicateDraftLocalReferenceNumberController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.DuplicateDraftLocalReferenceNumberController.onPageLoad(lrn).url
     }
 
   }

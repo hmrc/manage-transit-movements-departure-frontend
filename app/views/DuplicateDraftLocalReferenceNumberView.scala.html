@@ -27,14 +27,14 @@
     errorSummary: ErrorSummary
 )
 
-@(form: Form[LocalReferenceNumber])(implicit request: Request[_], messages: Messages)
+@(form: Form[LocalReferenceNumber], lrn: LocalReferenceNumber)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("duplicateDraftLocalReferenceNumber.title"),
     showBackLink = true
 ) {
 
-    @formHelper(action = routes.DuplicateDraftLocalReferenceNumberController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.DuplicateDraftLocalReferenceNumberController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

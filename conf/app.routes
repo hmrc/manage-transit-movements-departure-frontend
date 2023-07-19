@@ -4,8 +4,8 @@
 
 GET        /drafts/:lrn                                   controllers.DraftIndexController.index(lrn: models.LocalReferenceNumber)
 
-GET        /local-reference-number-already-used           controllers.DuplicateDraftLocalReferenceNumberController.onPageLoad()
-POST       /local-reference-number-already-used           controllers.DuplicateDraftLocalReferenceNumberController.onSubmit()
+GET        /:lrn/local-reference-number-already-used      controllers.DuplicateDraftLocalReferenceNumberController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/local-reference-number-already-used      controllers.DuplicateDraftLocalReferenceNumberController.onSubmit(lrn: LocalReferenceNumber)
 
 GET        /                                              controllers.RedirectController.onPageLoad()
 

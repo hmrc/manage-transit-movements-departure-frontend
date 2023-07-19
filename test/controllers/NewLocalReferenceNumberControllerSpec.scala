@@ -20,6 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.CacheConnector
 import forms.preTaskList.LocalReferenceNumberFormProvider
 import models.LocalReferenceNumber
+import models.SubmissionState.RejectedPendingChanges
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
 import play.api.data.Form
@@ -105,7 +106,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
 
         when(mockCacheConnector.get(eqTo(oldLrn))(any())) thenReturn Future.successful(Some(oldLrnData))
         when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(true)
-        when(mockDuplicateService.copyUserAnswers(eqTo(oldLrn), eqTo(newLrn))(any())).thenReturn(Future.successful(true))
+        when(mockDuplicateService.copyUserAnswers(eqTo(oldLrn), eqTo(newLrn), eqTo(RejectedPendingChanges))(any())).thenReturn(Future.successful(true))
         when(mockDuplicateService.alreadyExistsInSubmissionOrCache(any())(any())).thenReturn(Future.successful(false))
 
         val request = FakeRequest(POST, localReferenceNumberOnSubmit)
@@ -116,7 +117,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(newLrn).url
 
-        verify(mockDuplicateService).copyUserAnswers(eqTo(oldLrn), eqTo(newLrn))(any())
+        verify(mockDuplicateService).copyUserAnswers(eqTo(oldLrn), eqTo(newLrn), eqTo(RejectedPendingChanges))(any())
       }
     }
 
@@ -128,7 +129,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
       when(mockCacheConnector.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(isDuplicate))
 
       when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(isDuplicate))
-      when(mockDuplicateService.copyUserAnswers(any(), any())(any())).thenReturn(Future.successful(false))
+      when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
       when(mockDuplicateService.alreadyExistsInSubmissionOrCache(any())(any())).thenReturn(Future.successful(false))
 
       val request = FakeRequest(POST, localReferenceNumberOnSubmit)
@@ -153,7 +154,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
       when(mockCacheConnector.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(isDuplicate))
 
       when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(isDuplicate))
-      when(mockDuplicateService.copyUserAnswers(any(), any())(any())).thenReturn(Future.successful(false))
+      when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
       when(mockDuplicateService.alreadyExistsInSubmissionOrCache(any())(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, localReferenceNumberOnSubmit)
@@ -180,7 +181,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
         when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(None))
         when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(isDuplicate))
         when(mockDuplicateService.alreadyExistsInSubmissionOrCache(any())(any())).thenReturn(Future.successful(false))
-        when(mockDuplicateService.copyUserAnswers(any(), any())(any())).thenReturn(Future.successful(false))
+        when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
 
         val request = FakeRequest(POST, localReferenceNumberOnSubmit)
           .withFormUrlEncodedBody(("value", newLrn.toString))
@@ -200,7 +201,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
         when(mockCacheConnector.post(any())(any())).thenReturn(Future.successful(false))
         when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(isDuplicate))
         when(mockDuplicateService.alreadyExistsInSubmissionOrCache(any())(any())).thenReturn(Future.successful(false))
-        when(mockDuplicateService.copyUserAnswers(any(), any())(any())).thenReturn(Future.successful(false))
+        when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
 
         val request = FakeRequest(POST, localReferenceNumberOnSubmit)
           .withFormUrlEncodedBody(("value", newLrn.toString))
