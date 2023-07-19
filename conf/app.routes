@@ -2,7 +2,10 @@
 
 ->         /                                              app.preTaskList.Routes
 
-GET        /drafts/:lrn                                    controllers.DraftController.draftRedirect(lrn: models.LocalReferenceNumber)
+GET        /drafts/:lrn                                   controllers.DraftIndexController.index(lrn: models.LocalReferenceNumber)
+
+GET        /local-reference-number-already-used           controllers.DuplicateDraftLocalReferenceNumberController.onPageLoad()
+POST       /local-reference-number-already-used           controllers.DuplicateDraftLocalReferenceNumberController.onSubmit()
 
 GET        /                                              controllers.RedirectController.onPageLoad()
 
