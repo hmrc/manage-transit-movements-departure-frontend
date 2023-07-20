@@ -32,6 +32,6 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
     referenceDataConnector.getCustomsSecurityAgreementAreaCountries()
 
   def getCommunityCountries()(implicit hc: HeaderCarrier): Future[Seq[Country]] =
-    referenceDataConnector.getCountries
+    referenceDataConnector.getCountries()
 
 }
