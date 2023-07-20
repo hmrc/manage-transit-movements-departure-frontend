@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package config
+package models.reference
 
-object Constants {
-  val GB = "GB"
-  val XI = "XI"
-  val AD = "AD"
+import models.{DynamicEnumerableType, Radioable}
+import play.api.libs.json.{Format, Json}
 
-  val TIR  = "TIR"
-  val T2SM = "T2SM"
+case class DeclarationType(
+  code: String,
+  description: String
+) extends Radioable[DeclarationType] {
+
+  override def toString: String = s"$code - $description"
+
+  override val messageKeyPrefix: String = DeclarationType.messageKeyPrefix
+}
+
+object DeclarationType extends DynamicEnumerableType[DeclarationType] {
+  implicit val format: Format[DeclarationType] = Json.format[DeclarationType]
+
+  val messageKeyPrefix = "declarationType"
 }

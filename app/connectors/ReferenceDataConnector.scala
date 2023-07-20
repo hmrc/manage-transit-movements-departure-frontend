@@ -17,7 +17,7 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.reference.{Country, CustomsOffice}
+import models.reference.{Country, CustomsOffice, DeclarationType, SecurityType}
 import play.api.Logging
 import play.api.http.Status.{NOT_FOUND, NO_CONTENT, OK}
 import play.api.libs.json.Format.GenericFormat
@@ -31,8 +31,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpClient) extends Logging {
 
   def getCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCodesCommunity"
-    http.GET[Seq[Country]](serviceUrl, headers = version2Header)
+    val url = s"${config.customsReferenceDataUrl}/lists/CountryCodesCommunity"
+    http.GET[Seq[Country]](url, headers = version2Header)
   }
 
   def getCustomsOfficesOfDepartureForCountry(
@@ -45,19 +45,29 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
       "data.roles.role" -> "DEP"
     )
 
-    val serviceUrl = s"${config.customsReferenceDataUrl}/filtered-lists/CustomsOffices"
+    val url = s"${config.customsReferenceDataUrl}/filtered-lists/CustomsOffices"
 
-    http.GET[Seq[CustomsOffice]](serviceUrl, headers = version2Header, queryParams = queryParams)
+    http.GET[Seq[CustomsOffice]](url, headers = version2Header, queryParams = queryParams)
   }
 
   def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCodesCommonTransit"
-    http.GET[Seq[Country]](serviceUrl, headers = version2Header)
+    val url = s"${config.customsReferenceDataUrl}/lists/CountryCodesCommonTransit"
+    http.GET[Seq[Country]](url, headers = version2Header)
   }
 
   def getCustomsSecurityAgreementAreaCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCustomsSecurityAgreementArea"
-    http.GET[Seq[Country]](serviceUrl, headers = version2Header)
+    val url = s"${config.customsReferenceDataUrl}/lists/CountryCustomsSecurityAgreementArea"
+    http.GET[Seq[Country]](url, headers = version2Header)
+  }
+
+  def getSecurityTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[SecurityType]] = {
+    val url = s"${config.customsReferenceDataUrl}/lists/DeclarationTypeSecurity"
+    http.GET[Seq[SecurityType]](url, headers = version2Header)
+  }
+
+  def getDeclarationTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[DeclarationType]] = {
+    val url = s"${config.customsReferenceDataUrl}/lists/DeclarationType"
+    http.GET[Seq[DeclarationType]](url, headers = version2Header)
   }
 
   private def version2Header: Seq[(String, String)] = Seq(

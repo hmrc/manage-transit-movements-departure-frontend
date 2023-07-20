@@ -14,13 +14,24 @@
  * limitations under the License.
  */
 
-package config
+package models.reference
 
-object Constants {
-  val GB = "GB"
-  val XI = "XI"
-  val AD = "AD"
+import models.{DynamicEnumerableType, Radioable}
+import org.apache.commons.text.StringEscapeUtils
+import play.api.libs.json.{Format, Json}
 
-  val TIR  = "TIR"
-  val T2SM = "T2SM"
+case class SecurityType(
+  code: String,
+  description: String
+) extends Radioable[SecurityType] {
+
+  override def toString: String = StringEscapeUtils.unescapeXml(description)
+
+  override val messageKeyPrefix: String = SecurityType.messageKeyPrefix
+}
+
+object SecurityType extends DynamicEnumerableType[SecurityType] {
+  implicit val format: Format[SecurityType] = Json.format[SecurityType]
+
+  val messageKeyPrefix = "securityDetailsType"
 }

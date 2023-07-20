@@ -38,14 +38,14 @@ trait ModelGenerators {
       Gen.oneOf(ProcedureType.values)
     }
 
-  implicit lazy val arbitraryDeclarationType: Arbitrary[DeclarationType] =
+  implicit lazy val arbitraryDeclarationType: Arbitrary[models.DeclarationType] =
     Arbitrary {
-      Gen.oneOf(DeclarationType.values)
+      Gen.oneOf(models.DeclarationType.values)
     }
 
-  lazy val arbitraryNonOption4DeclarationType: Arbitrary[DeclarationType] =
+  lazy val arbitraryNonOption4DeclarationType: Arbitrary[models.DeclarationType] =
     Arbitrary {
-      Gen.oneOf(DeclarationType.values.filterNot(_ == DeclarationType.Option4))
+      Gen.oneOf(models.DeclarationType.values.filterNot(_ == models.DeclarationType.Option4))
     }
 
   implicit lazy val arbitrarySecurityDetailsType: Arbitrary[SecurityDetailsType] =
@@ -87,7 +87,7 @@ trait ModelGenerators {
         id          <- stringsWithMaxLength(stringMaxLength)
         name        <- stringsWithMaxLength(stringMaxLength)
         phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
-      } yield CustomsOffice(id, name, phoneNumber)
+      } yield CustomsOffice(s"XI$id", name, phoneNumber)
     }
 
   lazy val arbitraryGbCustomsOffice: Arbitrary[CustomsOffice] =
@@ -96,7 +96,7 @@ trait ModelGenerators {
         id          <- stringsWithMaxLength(stringMaxLength)
         name        <- stringsWithMaxLength(stringMaxLength)
         phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
-      } yield CustomsOffice(id, name, phoneNumber)
+      } yield CustomsOffice(s"GB$id", name, phoneNumber)
     }
 
   lazy val arbitraryOfficeOfDeparture: Arbitrary[CustomsOffice] =

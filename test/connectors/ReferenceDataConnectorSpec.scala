@@ -188,6 +188,58 @@ class ReferenceDataConnectorSpec
       |}
       |""".stripMargin
 
+  private val securityTypesResponseJson: String =
+    """
+      |{
+      |  "_links": {
+      |    "self": {
+      |      "href": "/customs-reference-data/lists/DeclarationTypeSecurity"
+      |    }
+      |  },
+      |  "meta": {
+      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+      |    "snapshotDate": "2023-01-01"
+      |  },
+      |  "id": "DeclarationTypeSecurity",
+      |  "data": [
+      |    {
+      |      "code": "2",
+      |      "description": "EXS"
+      |    },
+      |    {
+      |      "code": "3",
+      |      "description": "ENS &amp; EXS"
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
+
+  private val declarationTypesResponseJson: String =
+    """
+      |{
+      |  "_links": {
+      |    "self": {
+      |      "href": "/customs-reference-data/lists/DeclarationType"
+      |    }
+      |  },
+      |  "meta": {
+      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+      |    "snapshotDate": "2023-01-01"
+      |  },
+      |  "id": "DeclarationType",
+      |  "data": [
+      |    {
+      |      "code": "T2",
+      |      "description": "Goods having the customs status of Union goods, which are placed under the common transit procedure"
+      |    },
+      |    {
+      |      "code": "TIR",
+      |      "description": "TIR carnet"
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
+
   "Reference Data" - {
 
     "getCustomsOfficesOfDepartureForCountry" - {
@@ -312,6 +364,50 @@ class ReferenceDataConnectorSpec
 
       "must return an exception when an error response is returned" in {
         checkErrorResponse(url, connector.getCountries())
+      }
+    }
+
+    "getSecurityTypes" - {
+      val url = s"/$baseUrl/lists/DeclarationTypeSecurity"
+
+      "must return Seq of security types when successful" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(securityTypesResponseJson))
+        )
+
+        val expectedResult: Seq[SecurityType] = Seq(
+          SecurityType("2", "EXS"),
+          SecurityType("3", "ENS &amp; EXS")
+        )
+
+        connector.getSecurityTypes().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(url, connector.getSecurityTypes())
+      }
+    }
+
+    "getDeclarationTypes" - {
+      val url = s"/$baseUrl/lists/DeclarationType"
+
+      "must return Seq of security types when successful" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(declarationTypesResponseJson))
+        )
+
+        val expectedResult: Seq[DeclarationType] = Seq(
+          DeclarationType("T2", "Goods having the customs status of Union goods, which are placed under the common transit procedure"),
+          DeclarationType("TIR", "TIR carnet")
+        )
+
+        connector.getDeclarationTypes().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(url, connector.getDeclarationTypes())
       }
     }
   }
