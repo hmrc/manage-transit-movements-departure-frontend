@@ -68,11 +68,9 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     (_: String, _: String, response: HttpResponse) => {
       response.status match {
         case OK =>
-          val referenceData = (response.json \ "data").getOrElse(
+          (response.json \ "data").validate[Seq[A]].getOrElse {
             throw new IllegalStateException("[ReferenceDataConnector][responseHandlerGeneric] Reference data could not be parsed")
-          )
-
-          referenceData.as[Seq[A]]
+          }
         case NO_CONTENT =>
           Nil
         case NOT_FOUND =>

@@ -23,9 +23,9 @@ import generators.Generators
 import models.LocalReferenceNumber
 import models.SubmissionState.RejectedPendingChanges
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{reset, verify, verifyNoInteractions, verifyNoMoreInteractions, when}
-import org.scalatest.BeforeAndAfterEach
+import org.mockito.Mockito.{reset, verify, verifyNoMoreInteractions, when}
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import viewModels.taskList.TaskStatus
 
