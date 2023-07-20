@@ -16,6 +16,7 @@
 
 package models.reference
 
+import config.Constants.TIR
 import models.{DynamicEnumerableType, Radioable}
 import play.api.libs.json.{Format, Json}
 
@@ -27,6 +28,8 @@ case class DeclarationType(
   override def toString: String = s"$code - $description"
 
   override val messageKeyPrefix: String = DeclarationType.messageKeyPrefix
+
+  def isTIR: Boolean = code == TIR
 }
 
 object DeclarationType extends DynamicEnumerableType[DeclarationType] {

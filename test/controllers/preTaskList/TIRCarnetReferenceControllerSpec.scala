@@ -19,13 +19,12 @@ package controllers.preTaskList
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.preTaskList.TIRCarnetReferenceFormProvider
 import generators.Generators
-import models.{DeclarationType, NormalMode, ProcedureType}
+import models.NormalMode
 import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage, TIRCarnetReferencePage}
+import pages.preTaskList.TIRCarnetReferencePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -47,14 +46,10 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
       .guiceApplicationBuilder()
       .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
 
-  private val baseAnswers = emptyUserAnswers
-    .setValue(ProcedureTypePage, ProcedureType.Normal)
-    .setValue(DeclarationTypePage, DeclarationType.Option4)
-
   "TIRCarnetReference Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      setExistingUserAnswers(baseAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, tirCarnetReferenceRoute)
 
@@ -69,7 +64,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = baseAnswers.setValue(TIRCarnetReferencePage, "1234567890")
+      val userAnswers = emptyUserAnswers.setValue(TIRCarnetReferencePage, "1234567890")
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, tirCarnetReferenceRoute)
@@ -84,50 +79,6 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, mode)(request, messages).toString
-    }
-
-    "must redirect to local reference number page" - {
-      "when non-Normal or non-Option4 procedure and declaration types" in {
-        forAll(arbitrary[(ProcedureType, DeclarationType)].retryUntil {
-          case (procedureType, declarationType) =>
-            procedureType != ProcedureType.Normal || declarationType != DeclarationType.Option4
-        }) {
-          case (procedureType, declarationType) =>
-            val userAnswers = emptyUserAnswers
-              .setValue(ProcedureTypePage, procedureType)
-              .setValue(DeclarationTypePage, declarationType)
-            setExistingUserAnswers(userAnswers)
-
-            val request = FakeRequest(GET, tirCarnetReferenceRoute)
-
-            val result = route(app, request).value
-
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.LocalReferenceNumberController.onPageLoad().url
-        }
-      }
-    }
-
-    "must redirect to session expired" - {
-      "when procedure type and/or declaration type undefined" in {
-        forAll(arbitrary[(Option[ProcedureType], Option[DeclarationType])].retryUntil {
-          case (None, _) | (_, None) => true
-          case _                     => false
-        }) {
-          case (procedureType, declarationType) =>
-            val userAnswers = emptyUserAnswers
-              .setValue(ProcedureTypePage, procedureType)
-              .setValue(DeclarationTypePage, declarationType)
-            setExistingUserAnswers(userAnswers)
-
-            val request = FakeRequest(GET, tirCarnetReferenceRoute)
-
-            val result = route(app, request).value
-
-            status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-        }
-      }
     }
 
     "must redirect to the next page when valid data is submitted" in {

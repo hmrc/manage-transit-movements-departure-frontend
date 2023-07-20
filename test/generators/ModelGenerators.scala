@@ -38,24 +38,43 @@ trait ModelGenerators {
       Gen.oneOf(ProcedureType.values)
     }
 
-  implicit lazy val arbitraryDeclarationType: Arbitrary[models.DeclarationType] =
+  implicit lazy val arbitraryDeclarationType: Arbitrary[DeclarationType] =
     Arbitrary {
-      Gen.oneOf(models.DeclarationType.values)
+      for {
+        code        <- Gen.oneOf("T", "T1", "T2", "T2F", "TIR")
+        description <- nonEmptyString
+      } yield DeclarationType(code, description)
     }
 
-  lazy val arbitraryNonOption4DeclarationType: Arbitrary[models.DeclarationType] =
+  lazy val arbitraryNonTIRDeclarationType: Arbitrary[DeclarationType] =
     Arbitrary {
-      Gen.oneOf(models.DeclarationType.values.filterNot(_ == models.DeclarationType.Option4))
+      for {
+        code        <- Gen.oneOf("T", "T1", "T2", "T2F")
+        description <- nonEmptyString
+      } yield DeclarationType(code, description)
     }
 
-  implicit lazy val arbitrarySecurityDetailsType: Arbitrary[SecurityDetailsType] =
+  lazy val arbitraryTIRDeclarationType: Arbitrary[DeclarationType] =
     Arbitrary {
-      Gen.oneOf(SecurityDetailsType.values)
+      for {
+        description <- nonEmptyString
+      } yield DeclarationType("TIR", description)
     }
 
-  lazy val arbitrarySomeSecurityDetailsType: Arbitrary[SecurityDetailsType] =
+  implicit lazy val arbitrarySecurityDetailsType: Arbitrary[SecurityType] =
     Arbitrary {
-      Gen.oneOf(SecurityDetailsType.values.filterNot(_ == SecurityDetailsType.NoSecurityDetails))
+      for {
+        code        <- Gen.oneOf("0", "1", "2", "3")
+        description <- nonEmptyString
+      } yield SecurityType(code, description)
+    }
+
+  lazy val arbitrarySomeSecurityDetailsType: Arbitrary[SecurityType] =
+    Arbitrary {
+      for {
+        code        <- Gen.oneOf("1", "2", "3")
+        description <- nonEmptyString
+      } yield SecurityType(code, description)
     }
 
   implicit lazy val arbitraryLocalReferenceNumber: Arbitrary[LocalReferenceNumber] =

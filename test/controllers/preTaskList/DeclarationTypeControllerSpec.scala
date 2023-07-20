@@ -19,36 +19,60 @@ package controllers.preTaskList
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.EnumerableFormProvider
-import models.{DeclarationType, NormalMode}
+import generators.Generators
+import models.reference.{CustomsOffice, DeclarationType}
+import models.{NormalMode, ProcedureType}
 import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
-import pages.preTaskList.DeclarationTypePage
+import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.DeclarationTypesService
 import views.html.preTaskList.DeclarationTypeView
 
 import scala.concurrent.Future
 
-class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   private lazy val declarationTypeRoute = routes.DeclarationTypeController.onPageLoad(lrn, NormalMode).url
 
+  private val dt1 = arbitrary[DeclarationType].sample.value
+  private val dt2 = arbitrary[DeclarationType].sample.value
+  private val dts = Seq(dt1, dt2)
+
   private val formProvider = new EnumerableFormProvider()
-  private val form         = formProvider[DeclarationType]("declarationType")
+  private val form         = formProvider[DeclarationType]("declarationType", dts)
   private val mode         = NormalMode
+
+  private val mockDeclarationTypesService: DeclarationTypesService = mock[DeclarationTypesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
+      .overrides(bind(classOf[DeclarationTypesService]).toInstance(mockDeclarationTypesService))
+
+  private val officeOfDeparture = arbitrary[CustomsOffice].sample.value
+  private val procedureType     = arbitrary[ProcedureType].sample.value
+
+  private val baseAnswers = emptyUserAnswers
+    .setValue(OfficeOfDeparturePage, officeOfDeparture)
+    .setValue(ProcedureTypePage, procedureType)
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockDeclarationTypesService)
+    when(mockDeclarationTypesService.getDeclarationTypes(any(), any())(any())).thenReturn(Future.successful(dts))
+  }
 
   "DeclarationType Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(baseAnswers)
 
       val request = FakeRequest(GET, declarationTypeRoute)
       val view    = injector.instanceOf[DeclarationTypeView]
@@ -57,11 +81,11 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, DeclarationType.values(emptyUserAnswers), lrn, mode)(request, messages).toString
+        view(form, dts, lrn, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, DeclarationType.values.head)
+      val userAnswers = baseAnswers.setValue(DeclarationTypePage, dt1)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, declarationTypeRoute)
@@ -70,23 +94,21 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       status(result) mustEqual OK
 
-      val filledForm = form.bind(Map("value" -> DeclarationType.values.head.toString))
+      val filledForm = form.bind(Map("value" -> dt1.toString))
 
       val view = injector.instanceOf[DeclarationTypeView]
 
       contentAsString(result) mustEqual
-        view(filledForm, DeclarationType.values(emptyUserAnswers), lrn, mode)(request, messages).toString
+        view(filledForm, dts, lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(baseAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      val selectedValue = DeclarationType.values.head
-
       val request = FakeRequest(POST, declarationTypeRoute)
-        .withFormUrlEncodedBody(("value", selectedValue.toString))
+        .withFormUrlEncodedBody(("value", dt1.toString))
 
       val result = route(app, request).value
 
@@ -96,7 +118,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(baseAnswers)
 
       val request   = FakeRequest(POST, declarationTypeRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
@@ -107,7 +129,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val view = injector.instanceOf[DeclarationTypeView]
 
       contentAsString(result) mustEqual
-        view(boundForm, DeclarationType.values(emptyUserAnswers), lrn, mode)(request, messages).toString
+        view(boundForm, dts, lrn, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
@@ -125,7 +147,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, declarationTypeRoute)
-        .withFormUrlEncodedBody(("value", DeclarationType.values.head.toString))
+        .withFormUrlEncodedBody(("value", dt1.toString))
 
       val result = route(app, request).value
 

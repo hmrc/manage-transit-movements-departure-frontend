@@ -17,12 +17,11 @@
 package models.journeyDomain
 
 import cats.implicits._
-import config.Constants.XI
-import models.DeclarationType.Option4
+import config.Constants._
 import models.ProcedureType.Normal
 import models.domain._
-import models.reference.CustomsOffice
-import models.{DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType, UserAnswers}
+import models.reference.{CustomsOffice, DeclarationType, SecurityType}
+import models.{LocalReferenceNumber, Mode, ProcedureType, UserAnswers}
 import pages.preTaskList._
 import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Call
@@ -33,7 +32,7 @@ case class PreTaskListDomain(
   procedureType: ProcedureType,
   declarationType: DeclarationType,
   tirCarnetReference: Option[String],
-  securityDetailsType: SecurityDetailsType,
+  securityDetailsType: SecurityType,
   detailsConfirmed: Boolean
 ) extends JourneyDomainModel {
 
@@ -53,13 +52,13 @@ object PreTaskListDomain {
       case XI =>
         ProcedureTypePage
           .filterOptionalDependent(_ == Normal) {
-            DeclarationTypePage.filterOptionalDependent(_ == Option4) {
+            DeclarationTypePage.filterOptionalDependent(_.isTIR) {
               TIRCarnetReferencePage.reader
             }
           }
           .map(_.flatten)
       case _ =>
-        DeclarationTypePage.filterMandatoryDependent(_ != Option4) {
+        DeclarationTypePage.filterMandatoryDependent(!_.isTIR) {
           none[String].pure[UserAnswersReader]
         }
     }

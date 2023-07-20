@@ -17,26 +17,30 @@
 package views.preTaskList
 
 import forms.EnumerableFormProvider
-import models.{NormalMode, SecurityDetailsType}
+import models.NormalMode
+import models.reference.SecurityType
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.behaviours.RadioViewBehaviours
 import views.html.preTaskList.SecurityDetailsTypeView
 
-class SecurityDetailsTypeViewSpec extends RadioViewBehaviours[SecurityDetailsType] {
+class SecurityDetailsTypeViewSpec extends RadioViewBehaviours[SecurityType] {
 
-  override def form: Form[SecurityDetailsType] = new EnumerableFormProvider()(prefix)
+  override def form: Form[SecurityType] = new EnumerableFormProvider()(prefix, values)
 
-  override def applyView(form: Form[SecurityDetailsType]): HtmlFormat.Appendable =
+  override def applyView(form: Form[SecurityType]): HtmlFormat.Appendable =
     injector.instanceOf[SecurityDetailsTypeView].apply(form, values, lrn, NormalMode)(fakeRequest, messages)
 
   override val prefix: String = "securityDetailsType"
 
-  override def radioItems(fieldId: String, checkedValue: Option[SecurityDetailsType] = None): Seq[RadioItem] =
+  override def radioItems(fieldId: String, checkedValue: Option[SecurityType] = None): Seq[RadioItem] =
     values.toRadioItems(fieldId, checkedValue)
 
-  override def values: Seq[SecurityDetailsType] = SecurityDetailsType.values
+  override def values: Seq[SecurityType] = Seq(
+    SecurityType("0", "Not used for safety and security purposes"),
+    SecurityType("1", "ENS")
+  )
 
   override val urlContainsLrn: Boolean = true
 

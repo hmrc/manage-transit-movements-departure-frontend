@@ -16,13 +16,14 @@
 
 package pages.preTaskList
 
-import models.{Mode, SecurityDetailsType, UserAnswers}
+import models.reference.SecurityType
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.PreTaskListSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object SecurityDetailsTypePage extends QuestionPage[SecurityDetailsType] {
+case object SecurityDetailsTypePage extends QuestionPage[SecurityType] {
 
   override def path: JsPath = PreTaskListSection.path \ toString
 

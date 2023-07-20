@@ -22,6 +22,8 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 
 trait Radioable[T] {
 
+  val code: String
+
   val messageKeyPrefix: String
 
   def toRadioItem(index: Int, formKey: String, checked: Boolean)(implicit messages: Messages): RadioItem = {

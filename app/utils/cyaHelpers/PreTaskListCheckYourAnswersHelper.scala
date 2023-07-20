@@ -17,8 +17,8 @@
 package utils.cyaHelpers
 
 import controllers.preTaskList.routes._
-import models.reference.CustomsOffice
-import models.{DeclarationType, Mode, ProcedureType, SecurityDetailsType, UserAnswers}
+import models.reference.{CustomsOffice, DeclarationType, SecurityType}
+import models.{Mode, ProcedureType, UserAnswers}
 import pages.preTaskList._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
@@ -48,7 +48,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def declarationType: Option[SummaryListRow] = getAnswerAndBuildRow[DeclarationType](
     page = DeclarationTypePage,
-    formatAnswer = formatEnumAsText(DeclarationType.messageKeyPrefix),
+    formatAnswer = formatAsText,
     prefix = "declarationType",
     id = None
   )
@@ -60,9 +60,9 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
     id = None
   )
 
-  def securityType: Option[SummaryListRow] = getAnswerAndBuildRow[SecurityDetailsType](
+  def securityType: Option[SummaryListRow] = getAnswerAndBuildRow[SecurityType](
     page = SecurityDetailsTypePage,
-    formatAnswer = formatEnumAsText(SecurityDetailsType.messageKeyPrefix),
+    formatAnswer = formatAsText,
     prefix = "securityDetailsType",
     id = None
   )

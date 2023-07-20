@@ -22,8 +22,13 @@ sealed trait ProcedureType extends Radioable[ProcedureType] {
 
 object ProcedureType extends EnumerableType[ProcedureType] {
 
-  case object Normal extends WithName("normal") with ProcedureType
-  case object Simplified extends WithName("simplified") with ProcedureType
+  case object Normal extends WithName("normal") with ProcedureType {
+    override val code: String = "0"
+  }
+
+  case object Simplified extends WithName("simplified") with ProcedureType {
+    override val code: String = "1"
+  }
 
   val messageKeyPrefix: String = "procedureType"
 

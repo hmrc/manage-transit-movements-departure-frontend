@@ -16,7 +16,6 @@
 
 package pages.preTaskList
 
-import models.DeclarationType.Option4
 import models.ProcedureType._
 import models.{Mode, ProcedureType, UserAnswers}
 import pages.QuestionPage
@@ -34,8 +33,10 @@ case object ProcedureTypePage extends QuestionPage[ProcedureType] {
 
   override def cleanup(value: Option[ProcedureType], userAnswers: UserAnswers): Try[UserAnswers] =
     (value, userAnswers.get(DeclarationTypePage)) match {
-      case (Some(Simplified), Some(Option4)) => userAnswers.remove(DeclarationTypePage).flatMap(_.remove(TIRCarnetReferencePage))
-      case _                                 => super.cleanup(value, userAnswers)
+      case (Some(Simplified), Some(declarationType)) if declarationType.isTIR =>
+        userAnswers.remove(DeclarationTypePage).flatMap(_.remove(TIRCarnetReferencePage))
+      case _ =>
+        super.cleanup(value, userAnswers)
     }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =

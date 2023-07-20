@@ -41,7 +41,7 @@ class DeclarationTypesService @Inject() (referenceDataConnector: ReferenceDataCo
   ): Seq[DeclarationType] =
     (officeOfDeparture.countryCode.startsWith(XI), procedureType) match {
       case (true, ProcedureType.Normal) => declarationTypes
-      case _                            => declarationTypes.filterNot(_.code == TIR)
+      case _                            => declarationTypes.filterNot(_.isTIR)
     }
 
   private def sort(declarationTypes: Seq[DeclarationType]): Seq[DeclarationType] =

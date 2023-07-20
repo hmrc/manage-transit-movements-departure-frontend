@@ -19,8 +19,8 @@ package utils.cyaHelpers
 import base.SpecBase
 import controllers.preTaskList.routes
 import generators.Generators
-import models.reference.CustomsOffice
-import models.{DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType}
+import models.reference.{CustomsOffice, DeclarationType, SecurityType}
+import models.{LocalReferenceNumber, Mode, ProcedureType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -174,7 +174,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Type of declaration".toText),
-                  value = Value(messages(s"declarationType.$declarationType").toText),
+                  value = Value(declarationType.toString.toText),
                   actions = Some(
                     Actions(
                       items = List(
@@ -252,7 +252,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
       "must return Some(Row)" - {
         s"when $SecurityDetailsTypePage defined" in {
-          forAll(arbitrary[SecurityDetailsType], arbitrary[Mode]) {
+          forAll(arbitrary[SecurityType], arbitrary[Mode]) {
             (securityDetailsType, mode) =>
               val answers = emptyUserAnswers.setValue(SecurityDetailsTypePage, securityDetailsType)
 
@@ -262,7 +262,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Safety and security details added".toText),
-                  value = Value(messages(s"securityDetailsType.$securityDetailsType").toText),
+                  value = Value(securityDetailsType.toString.toText),
                   actions = Some(
                     Actions(
                       items = List(
