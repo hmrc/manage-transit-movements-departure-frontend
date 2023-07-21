@@ -14,26 +14,10 @@
  * limitations under the License.
  */
 
-package models
+package views.behaviours
 
-sealed trait ProcedureType extends Radioable[ProcedureType] {
-  override val messageKeyPrefix: String = ProcedureType.messageKeyPrefix
-}
+import models.Radioable
 
-object ProcedureType extends EnumerableType[ProcedureType] {
-
-  case object Normal extends WithName("normal") with ProcedureType {
-    override val code: String = this.toString
-  }
-
-  case object Simplified extends WithName("simplified") with ProcedureType {
-    override val code: String = this.toString
-  }
-
-  val messageKeyPrefix: String = "procedureType"
-
-  override val values: Seq[ProcedureType] = Seq(
-    Normal,
-    Simplified
-  )
+trait EnumerableViewBehaviours[T <: Radioable[T]] extends RadioViewBehaviours[T] {
+  override val getValue: T => String = _.code
 }

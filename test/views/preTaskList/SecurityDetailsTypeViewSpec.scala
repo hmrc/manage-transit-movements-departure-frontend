@@ -22,10 +22,10 @@ import models.reference.SecurityType
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-import views.behaviours.RadioViewBehaviours
+import views.behaviours.EnumerableViewBehaviours
 import views.html.preTaskList.SecurityDetailsTypeView
 
-class SecurityDetailsTypeViewSpec extends RadioViewBehaviours[SecurityType] {
+class SecurityDetailsTypeViewSpec extends EnumerableViewBehaviours[SecurityType] {
 
   override def form: Form[SecurityType] = new EnumerableFormProvider()(prefix, values)
 

@@ -31,7 +31,7 @@ trait Radioable[T] {
     RadioItem(
       content = Text(if (messages.isDefinedAt(contentKey)) messages(contentKey) else this.toString),
       id = Some(if (index == 0) formKey else s"${formKey}_$index"),
-      value = Some(this.toString),
+      value = Some(code),
       checked = checked,
       hint = {
         val hintKey = s"$messageKeyPrefix.$this.hint"
