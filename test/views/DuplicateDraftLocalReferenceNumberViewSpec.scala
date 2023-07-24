@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.preTaskList
+package views
 
 import forms.preTaskList.LocalReferenceNumberFormProvider
 import models.LocalReferenceNumber
@@ -23,16 +23,16 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewModels.InputSize
 import views.behaviours.InputTextViewBehaviours
-import views.html.preTaskList.LocalReferenceNumberView
+import views.html.DuplicateDraftLocalReferenceNumberView
 
-class LocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalReferenceNumber] {
+class DuplicateDraftLocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalReferenceNumber] {
 
-  override def form: Form[LocalReferenceNumber] = new LocalReferenceNumberFormProvider().apply(alreadyExists = false, "localReferenceNumber")
+  override def form: Form[LocalReferenceNumber] = new LocalReferenceNumberFormProvider().apply(alreadyExists = false, "duplicateDraftLocalReferenceNumber")
 
   override def applyView(form: Form[LocalReferenceNumber]): HtmlFormat.Appendable =
-    injector.instanceOf[LocalReferenceNumberView].apply(form)(fakeRequest, messages)
+    injector.instanceOf[DuplicateDraftLocalReferenceNumberView].apply(form, lrn)(fakeRequest, messages)
 
-  override val prefix: String = "localReferenceNumber"
+  override val prefix: String = "duplicateDraftLocalReferenceNumber"
 
   implicit override val arbitraryT: Arbitrary[LocalReferenceNumber] = arbitraryLocalReferenceNumber
 
@@ -44,9 +44,9 @@ class LocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalReferenc
 
   behave like pageWithHeading()
 
-  behave like pageWithContent("p", "This is a unique reference number you create that is used to identify the declaration.")
+  behave like pageWithContent("p", "You have already used this Local Reference Number (LRN). To continue with this declaration, you need to enter a new one.")
 
-  behave like pageWithHint("It can be up to 22 characters long and include letters, numbers, hyphens and underscores. For example, ABCD123456EF-789.")
+  behave like pageWithHint("This can be up to 22 characters long and include letters, numbers, hyphens and underscores. For example, ABCD123456EF-789.")
 
   behave like pageWithInputText(Some(InputSize.Width20))
 

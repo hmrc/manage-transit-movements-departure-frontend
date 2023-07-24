@@ -17,25 +17,23 @@
 package services
 
 import connectors.CacheConnector
-import forms.NewLocalReferenceNumberFormProvider
-import models.SubmissionState.RejectedPendingChanges
-import models.{LocalReferenceNumber, UserAnswers}
+import models.{LocalReferenceNumber, SubmissionState, UserAnswers}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DuplicateService @Inject() (
-  cacheConnector: CacheConnector,
-  formProvider: NewLocalReferenceNumberFormProvider
+  cacheConnector: CacheConnector
 )(implicit ec: ExecutionContext) {
 
   def copyUserAnswers(
     oldLocalReferenceNumber: LocalReferenceNumber,
-    newLocalReferenceNumber: LocalReferenceNumber
+    newLocalReferenceNumber: LocalReferenceNumber,
+    isSubmitted: SubmissionState
   )(implicit hc: HeaderCarrier): Future[Boolean] = cacheConnector.get(oldLocalReferenceNumber) flatMap {
     case Some(userAnswers) =>
-      val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, isSubmitted = Some(RejectedPendingChanges))
+      val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, isSubmitted = Some(isSubmitted))
       cacheConnector.post(
         updatedUserAnswers
       ) // TODO CTCP-3469 Will have to keep any draft declaration with same LRN, can probably handle this when the doesDraftOrSubmissionExistForLrn is called in the backend
@@ -48,7 +46,13 @@ class DuplicateService @Inject() (
   def doesSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
     cacheConnector.doesSubmissionExistForLrn(lrn)
 
-  def alreadyExists(submittedValue: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Boolean] =
+  def alreadySubmitted(submittedValue: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Boolean] =
+    submittedValue match {
+      case Some(newLocalReferenceNumber) => doesSubmissionExistForLrn(newLocalReferenceNumber)
+      case None                          => Future.successful(false)
+    }
+
+  def alreadyExistsInSubmissionOrCache(submittedValue: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Boolean] =
     submittedValue match {
       case Some(newLocalReferenceNumber) => doesDraftOrSubmissionExistForLrn(newLocalReferenceNumber)
       case None                          => Future.successful(false)

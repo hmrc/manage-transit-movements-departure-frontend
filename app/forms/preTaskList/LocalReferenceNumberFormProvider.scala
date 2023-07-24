@@ -24,13 +24,15 @@ import javax.inject.Inject
 
 class LocalReferenceNumberFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[LocalReferenceNumber] =
+  def apply(alreadyExists: Boolean, prefix: String): Form[LocalReferenceNumber] =
     Form(
       "value" -> lrn(
-        requiredKey = "localReferenceNumber.error.required",
-        lengthKey = "localReferenceNumber.error.length",
-        invalidCharactersKey = "localReferenceNumber.error.invalidCharacters",
-        invalidFormatKey = "localReferenceNumber.error.invalidFormat"
+        requiredKey = s"$prefix.error.required",
+        lengthKey = s"$prefix.error.length",
+        invalidCharactersKey = s"$prefix.error.invalidCharacters",
+        invalidFormatKey = s"$prefix.error.invalidFormat",
+        alreadyExistsKey = s"$prefix.error.alreadyExists",
+        alreadyExists = alreadyExists
       )
     )
 }

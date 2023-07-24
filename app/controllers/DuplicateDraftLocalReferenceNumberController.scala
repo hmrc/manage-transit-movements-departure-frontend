@@ -18,58 +18,71 @@ package controllers
 
 import controllers.actions._
 import forms.preTaskList.LocalReferenceNumberFormProvider
-import models.LocalReferenceNumber
-import models.SubmissionState.RejectedPendingChanges
+import models.SubmissionState.NotSubmitted
+import models.{LocalReferenceNumber, NormalMode}
+import navigation.PreTaskListNavigatorProvider
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import services.DuplicateService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.NewLocalReferenceNumberView
+import views.html.DuplicateDraftLocalReferenceNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class NewLocalReferenceNumberController @Inject() (
+class DuplicateDraftLocalReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
+  duplicateService: DuplicateService,
+  navigatorProvider: PreTaskListNavigatorProvider,
   identify: IdentifierAction,
   formProvider: LocalReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: NewLocalReferenceNumberView,
-  duplicateService: DuplicateService
+  view: DuplicateDraftLocalReferenceNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val prefix: String = "newLocalReferenceNumber"
+  private val prefix = "duplicateDraftLocalReferenceNumber"
 
   private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists, prefix)
 
-  def onPageLoad(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
+  def onPageLoad(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify {
     implicit request =>
-      duplicateService.doesSubmissionExistForLrn(oldLocalReferenceNumber).map {
-        case true  => Ok(view(form(), oldLocalReferenceNumber))
-        case false => Redirect(controllers.routes.ErrorController.badRequest()) //TODO: More generic error page?
-      }
+      Ok(view(form(), oldLocalReferenceNumber))
   }
 
   def onSubmit(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
     implicit request =>
       val submittedValue = form().bindFromRequest().value
-      duplicateService.alreadyExistsInSubmissionOrCache(submittedValue).flatMap {
+      duplicateService.alreadySubmitted(submittedValue).flatMap {
         alreadyExists =>
           form(alreadyExists)
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
               newLocalReferenceNumber =>
-                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, RejectedPendingChanges) map {
-                  case true  => Redirect(controllers.routes.TaskListController.onPageLoad(newLocalReferenceNumber))
-                  case false => Redirect(controllers.routes.ErrorController.technicalDifficulties())
+                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, NotSubmitted).flatMap {
+                  case true =>
+                    handleRedirects(oldLocalReferenceNumber, newLocalReferenceNumber)
+                  case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
                 }
             )
       }
   }
+
+  private def handleRedirects(oldLocalReferenceNumber: LocalReferenceNumber, newLocalReferenceNumber: LocalReferenceNumber)(implicit
+    hc: HeaderCarrier
+  ): Future[Result] =
+    sessionRepository.get(newLocalReferenceNumber).flatMap {
+      case Some(userAnswers) =>
+        sessionRepository.delete(oldLocalReferenceNumber).flatMap {
+          case true  => Future.successful(Redirect(navigatorProvider(NormalMode).nextPage(userAnswers)))
+          case false => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
+        }
+      case None => Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
+    }
 }

@@ -18,7 +18,6 @@ package services
 
 import base.SpecBase
 import connectors.CacheConnector
-import forms.NewLocalReferenceNumberFormProvider
 import generators.Generators
 import models.LocalReferenceNumber
 import models.SubmissionState.RejectedPendingChanges
@@ -34,10 +33,8 @@ import scala.concurrent.Future
 
 class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generators {
 
-  private val formProvider = new NewLocalReferenceNumberFormProvider()
-
   private val mockCacheConnector: CacheConnector = mock[CacheConnector]
-  private val duplicateService: DuplicateService = new DuplicateService(mockCacheConnector, formProvider)
+  private val duplicateService: DuplicateService = new DuplicateService(mockCacheConnector)
 
   override def beforeEach(): Unit = {
     reset(mockCacheConnector)
@@ -58,7 +55,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
           when(mockCacheConnector.get(eqTo(lrn))(any())) thenReturn Future.successful(Some(oldLrnData))
           when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(true)
 
-          duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe true
+          duplicateService.copyUserAnswers(lrn, newLrn, RejectedPendingChanges).futureValue mustBe true
 
           verify(mockCacheConnector).get(eqTo(lrn))(any())
           verify(mockCacheConnector).post(eqTo(newDataToSend))(any())
@@ -72,7 +69,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
           when(mockCacheConnector.get(eqTo(lrn))(any())) thenReturn Future.successful(None)
 
-          duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe false
+          duplicateService.copyUserAnswers(lrn, newLrn, RejectedPendingChanges).futureValue mustBe false
 
           verify(mockCacheConnector).get(eqTo(lrn))(any())
           verifyNoMoreInteractions(mockCacheConnector)
@@ -84,7 +81,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
           when(mockCacheConnector.get(eqTo(lrn))(any())) thenReturn Future.successful(Some(oldLrnData))
           when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(false)
 
-          duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe false
+          duplicateService.copyUserAnswers(lrn, newLrn, RejectedPendingChanges).futureValue mustBe false
 
           verify(mockCacheConnector).get(eqTo(lrn))(any())
           verify(mockCacheConnector).post(eqTo(newDataToSend))(any())
@@ -93,7 +90,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
     }
 
-    "alreadyExists" - {
+    "alreadyExistsInSubmissionOrCache" - {
       "must return correct boolean" - {
 
         "when local reference number" in {
@@ -101,12 +98,32 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
             isDuplicate =>
               when(mockCacheConnector.doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(isDuplicate))
 
-              duplicateService.alreadyExists(Some(lrn)).futureValue mustBe isDuplicate
+              duplicateService.alreadyExistsInSubmissionOrCache(Some(lrn)).futureValue mustBe isDuplicate
           }
         }
 
         "when none" in {
-          duplicateService.alreadyExists(None).futureValue mustBe false
+          duplicateService.alreadyExistsInSubmissionOrCache(None).futureValue mustBe false
+        }
+
+      }
+
+    }
+
+    "alreadySubmitted" - {
+      "must return correct boolean" - {
+
+        "when local reference number" in {
+          forAll(arbitrary[Boolean]) {
+            isDuplicate =>
+              when(mockCacheConnector.doesSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(isDuplicate))
+
+              duplicateService.alreadySubmitted(Some(lrn)).futureValue mustBe isDuplicate
+          }
+        }
+
+        "when none" in {
+          duplicateService.alreadySubmitted(None).futureValue mustBe false
         }
 
       }

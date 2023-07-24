@@ -21,25 +21,36 @@ import models.domain.UserAnswersReader
 import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, NormalMode}
 import navigation.PreTaskListNavigatorProvider
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.DuplicateService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
-class DraftController @Inject() (
-  val controllerComponents: MessagesControllerComponents,
+class DraftIndexController @Inject() (
+  override val messagesApi: MessagesApi,
   actions: Actions,
-  navigatorProvider: PreTaskListNavigatorProvider
-) extends FrontendBaseController {
+  navigatorProvider: PreTaskListNavigatorProvider,
+  val controllerComponents: MessagesControllerComponents,
+  service: DuplicateService
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
-  def draftRedirect(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def index(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
-      UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
-        case Left(value) =>
-          Redirect(navigatorProvider(NormalMode).nextPage(request.userAnswers))
-        case Right(value) =>
-          Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
+      service.doesSubmissionExistForLrn(lrn).map {
+        case true => Redirect(controllers.routes.DuplicateDraftLocalReferenceNumberController.onPageLoad(lrn))
+        case false =>
+          UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
+            case Left(value) =>
+              Redirect(navigatorProvider(NormalMode).nextPage(request.userAnswers))
+            case Right(value) =>
+              Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
+          }
       }
-
   }
+
 }

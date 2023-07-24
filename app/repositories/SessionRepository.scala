@@ -37,4 +37,7 @@ class SessionRepository @Inject() (
   def put(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
     cacheConnector.put(lrn)
 
+  def delete(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
+    cacheConnector.delete(lrn)
+
 }

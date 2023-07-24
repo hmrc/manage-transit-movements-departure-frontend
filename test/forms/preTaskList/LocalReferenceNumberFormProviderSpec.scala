@@ -20,29 +20,33 @@ import forms.behaviours.StringFieldBehaviours
 import models.LocalReferenceNumber
 import models.LocalReferenceNumber.maxLength
 import org.scalacheck.Arbitrary.arbitrary
-import play.api.data.FormError
+import org.scalacheck.Gen
+import play.api.data.{Form, FormError}
 
 class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey          = "localReferenceNumber.error.required"
-  private val lengthKey            = "localReferenceNumber.error.length"
-  private val invalidCharactersKey = "localReferenceNumber.error.invalidCharacters"
-  private val invalidFormatKey     = "localReferenceNumber.error.invalidFormat"
+  private val formProvider = new LocalReferenceNumberFormProvider()
+  private val prefix       = Gen.oneOf(Seq("localReferenceNumber", "newLocalReferenceNumber")).sample.value
 
-  private val form = new LocalReferenceNumberFormProvider()()
+  private val requiredKey                                                      = s"$prefix.error.required"
+  private val lengthKey                                                        = s"$prefix.error.length"
+  private val invalidCharactersKey                                             = s"$prefix.error.invalidCharacters"
+  private val invalidFormatKey                                                 = s"$prefix.error.invalidFormat"
+  private val alreadyExistsKey                                                 = s"$prefix.error.alreadyExists"
+  private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists, prefix)
 
   ".value" - {
 
     val fieldName = "value"
 
     behave like fieldThatBindsValidData(
-      form,
+      form(),
       fieldName,
       arbitrary[LocalReferenceNumber].map(_.toString)
     )
 
     behave like mandatoryField(
-      form,
+      form(),
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
@@ -51,7 +55,7 @@ class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
       forAll(stringsWithMaxLength(maxLength - 1)) {
         value =>
           val valueStartingWithHyphen = s"-$value"
-          val result                  = form.bind(Map(fieldName -> valueStartingWithHyphen))
+          val result                  = form().bind(Map(fieldName -> valueStartingWithHyphen))
           result.errors must contain(FormError(fieldName, invalidFormatKey))
       }
     }
@@ -60,7 +64,7 @@ class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
       forAll(stringsWithMaxLength(maxLength - 1)) {
         value =>
           val valueStartingWithUnderscore = s"_$value"
-          val result                      = form.bind(Map(fieldName -> valueStartingWithUnderscore))
+          val result                      = form().bind(Map(fieldName -> valueStartingWithUnderscore))
           result.errors must contain(FormError(fieldName, invalidFormatKey))
       }
     }
@@ -70,7 +74,7 @@ class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
         value =>
           whenever(value != "" && LocalReferenceNumber(value).isEmpty) {
 
-            val result = form.bind(Map(fieldName -> value))
+            val result = form().bind(Map(fieldName -> value))
             if (value.length > maxLength) {
               result.errors must contain(FormError(fieldName, lengthKey))
             } else {
@@ -78,6 +82,14 @@ class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
             }
           }
       }
+    }
+
+    "must not bind if alreadyExists is true" in {
+      val alreadyExists = true
+      val lrn           = "ABC123"
+
+      val result = form(alreadyExists).bind(Map(fieldName -> lrn))
+      result.errors must contain(FormError(fieldName, alreadyExistsKey))
     }
 
     "must allow spaces but remove them" in {
@@ -88,7 +100,7 @@ class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
               char => s" $char "
             )
             .mkString
-          val result = form.bind(Map(fieldName -> valueWithSpaces))
+          val result = form().bind(Map(fieldName -> valueWithSpaces))
           result.value.value mustBe LocalReferenceNumber(value).get
       }
     }
