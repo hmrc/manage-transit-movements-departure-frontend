@@ -94,7 +94,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       status(result) mustEqual OK
 
-      val filledForm = form.bind(Map("value" -> dt1.toString))
+      val filledForm = form.bind(Map("value" -> dt1.code))
 
       val view = injector.instanceOf[DeclarationTypeView]
 
@@ -108,7 +108,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val request = FakeRequest(POST, declarationTypeRoute)
-        .withFormUrlEncodedBody(("value", dt1.toString))
+        .withFormUrlEncodedBody(("value", dt1.code))
 
       val result = route(app, request).value
 
@@ -147,7 +147,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, declarationTypeRoute)
-        .withFormUrlEncodedBody(("value", dt1.toString))
+        .withFormUrlEncodedBody(("value", dt1.code))
 
       val result = route(app, request).value
 

@@ -16,12 +16,12 @@
 
 package models
 
-trait DynamicEnumerableType[T] extends Enumerable.Implicits {
+trait DynamicEnumerableType[T <: Radioable[T]] extends Enumerable.Implicits {
 
   implicit def enumerable(values: Seq[T]): Enumerable[T] =
     Enumerable(
       values.map(
-        v => v.toString -> v
+        v => v.code -> v
       ): _*
     )
 }
