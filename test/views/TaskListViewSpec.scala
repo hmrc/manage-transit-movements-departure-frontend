@@ -35,7 +35,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
   behave like pageWithoutBackLink()
 
-  behave like pageWithCaption(lrn.toString)
+  behave like pageWithCaption("LRN:" + lrn.toString)
 
   behave like pageWithHeading()
 
@@ -57,7 +57,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
     val doc = parseView(applyViewWithErrors(tasks))
 
-    behave like pageWithContent(doc, "p", "There is a problem with this departure declaration.")
+    behave like pageWithContent(doc, "p", "There is a problem with this declaration.")
     behave like pageWithContent(doc, "p", "Amend the errors in the relevant sections and resend the declaration.")
     behave like pageWithSubmitButton(doc, "Confirm and resend")
 

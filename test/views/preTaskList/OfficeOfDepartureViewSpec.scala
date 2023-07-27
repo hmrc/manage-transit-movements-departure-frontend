@@ -48,7 +48,7 @@ class OfficeOfDepartureViewSpec extends InputSelectViewBehaviours[CustomsOffice]
 
   behave like pageWithContent(
     "p",
-    "This is the customs office where the transit movement starts. Or if you’re using a simplified procedure, this will be your supervising office."
+    "This is the customs office where the transit movement starts. It may not be where the goods began their journey. Or if you’re using a simplified procedure, this will be your supervising office."
   )
 
   behave like pageWithSubmitButton("Continue")

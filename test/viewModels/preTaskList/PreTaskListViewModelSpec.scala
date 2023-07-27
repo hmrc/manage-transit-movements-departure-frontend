@@ -57,7 +57,7 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
         section.rows.length mustBe 6
         section.rows.head.value.content.asHtml.toString() mustBe "1234567890"
         section.rows(1).value.content.asHtml.toString() mustBe "name (XI1)"
-        section.rows(2).value.content.asHtml.toString() mustBe "Normal (customs-approved location)"
+        section.rows(2).value.content.asHtml.toString() mustBe "Normal - customs-approved location"
         section.rows(3).value.content.asHtml.toString() mustBe "TIR - goods moving under the cover of TIR carnet"
         section.rows(4).value.content.asHtml.toString() mustBe "tir carnet reference"
         section

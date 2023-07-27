@@ -59,34 +59,35 @@ technicalDifficulties.contact.link = contact the New Computerised Transit System
 
 localReferenceNumber.title = What is the Local Reference Number (LRN)?
 localReferenceNumber.heading = What is the Local Reference Number (LRN)?
-localReferenceNumber.paragraph = This is the declarant’s unique reference number for this declaration.
-localReferenceNumber.hint = It can be up to 22 characters long and include letters, numbers, hyphens and underscores.
+localReferenceNumber.paragraph = This is a unique reference number you create that is used to identify the declaration.
+localReferenceNumber.hint = It can be up to 22 characters long and include letters, numbers, hyphens and underscores. For example, ABCD123456EF-789.
 localReferenceNumber.error.required = Enter the Local Reference Number
 localReferenceNumber.error.length = The Local Reference Number must be 22 characters or less
 localReferenceNumber.error.invalidCharacters = The Local Reference Number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
 localReferenceNumber.error.invalidFormat = The Local Reference Number must not start with a hyphen or an underscore
 localReferenceNumber.checkYourAnswersLabel = Local Reference Number (LRN)
 localReferenceNumber.change.hidden = local reference number
+localReferenceNumber.change.alreadyExists = The Local Reference Number must be unique
 
 officeOfDeparture.title = Where is the office of departure?
 officeOfDeparture.heading = Where is the office of departure?
 officeOfDeparture.checkYourAnswersLabel = Office of departure
 officeOfDeparture.error.required = Enter the office of departure
 officeOfDeparture.hint = Enter the office location or code, like Dover or GB000060.
-officeOfDeparture.paragraph = This is the customs office where the transit movement starts. Or if you’re using a simplified procedure, this will be your supervising office.
+officeOfDeparture.paragraph = This is the customs office where the transit movement starts. It may not be where the goods began their journey. Or if you’re using a simplified procedure, this will be your supervising office.
 officeOfDeparture.change.hidden = office of departure
 officeOfDeparture.placeholder = Select a customs office
 
-procedureType.title = What type of procedure are you using?
-procedureType.heading = What type of procedure are you using?
+procedureType.title = Which type of procedure are you using?
+procedureType.heading = Which type of procedure are you using?
 procedureType.checkYourAnswersLabel = Type of procedure
-procedureType.normal = Normal (customs-approved location)
-procedureType.simplified = Simplified (authorised consignor’s location)
+procedureType.normal = Normal - customs-approved location
+procedureType.simplified =  Simplified - authorised consignor’s location
 procedureType.error.required = Select the procedure type that you are using
 procedureType.change.hidden = type of procedure
 
-declarationType.title = What declaration do you want to create?
-declarationType.heading = What declaration do you want to create?
+declarationType.title = Which type of declaration do you want to create?
+declarationType.heading = Which type of declaration do you want to create?
 declarationType.T1 = T1 - goods that are not in free circulation within the EU
 declarationType.T2 = T2 - goods that are in free circulation within the EU
 declarationType.T2F = T2F - goods moving to, from or between the European Union special territories
@@ -99,21 +100,23 @@ declarationType.change.hidden = type of declaration
 
 tirCarnetReference.title = What is the TIR carnet reference?
 tirCarnetReference.heading = What is the TIR carnet reference?
+tirCarnetReference.paragraph = You can find this printed on the TIR carnet document.
 tirCarnetReference.checkYourAnswersLabel = TIR carnet reference
 tirCarnetReference.error.required = Enter the TIR carnet reference
 tirCarnetReference.error.length = The TIR carnet reference must be 12 characters or less
 tirCarnetReference.error.invalid = The TIR carnet reference must only include letters a to z and numbers 0 to 9
 tirCarnetReference.change.hidden = TIR carnet reference
 
-securityDetailsType.title = What type of safety and security details do you need to add?
-securityDetailsType.heading = What type of safety and security details do you need to add?
+securityDetailsType.title = Which type of safety and security details do you want to add?
+securityDetailsType.heading = Which type of safety and security details do you want to add?
+securityDetailsType.paragraph = This is used by border authorities to analyse the risk of goods entering their territory. You may also need to provide these details to the territories your goods move through.
 securityDetailsType.noSecurity = No security
 securityDetailsType.entrySummaryDeclaration = Entry summary declaration (ENS) - for importing goods from a non-EU country into Great Britain or Northern Ireland. Or from Great Britain into Northern Ireland
 securityDetailsType.exitSummaryDeclaration = Exit summary declaration (EXS) - for exporting goods from Great Britain to any country. Or from Northern Ireland to a non-EU country
 securityDetailsType.entryAndExitSummaryDeclaration = Both entry and exit summary declarations (ENS and EXS)
-securityDetailsType.checkYourAnswersLabel = Safety and security details added
-securityDetailsType.error.required = Select which type of safety and security details you need to add
-securityDetailsType.change.hidden = safety and security details added
+securityDetailsType.checkYourAnswersLabel = Safety and security details
+securityDetailsType.error.required = Select which type of safety and security details you want to add
+securityDetailsType.change.hidden = safety and security details
 
 preTaskList.checkYourAnswers.heading = Check your answers
 preTaskList.checkYourAnswers.title = Check your answers
@@ -129,7 +132,7 @@ taskList.sendDeclaration = Now send your departure declaration
 taskList.detailsCorrect = By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.
 taskList.backToTransitMovements = Back to transit movements
 
-taskList.paragraph.thereIsAProblem = There is a problem with this departure declaration.
+taskList.paragraph.thereIsAProblem = There is a problem with this declaration.
 taskList.paragraph.amendErrors = Amend the errors in the relevant sections and resend the declaration.
 
 taskStatus.completed = Completed
