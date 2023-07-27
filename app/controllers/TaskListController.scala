@@ -29,6 +29,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
 
+import java.time.{LocalDate, ZoneId, ZoneOffset}
 import scala.concurrent.ExecutionContext
 
 class TaskListController @Inject() (
@@ -51,7 +52,7 @@ class TaskListController @Inject() (
         val tasks                = viewModel(request.userAnswers)
         val isSubmitted: Boolean = request.userAnswers.isSubmitted.getOrElse(NotSubmitted).showErrorContent
 
-        Ok(view(lrn, tasks, isSubmitted))
+        Ok(view(lrn, tasks, isSubmitted, LocalDate.ofInstant(request.userAnswers.createdAt, ZoneOffset.UTC).getDayOfMonth))
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
