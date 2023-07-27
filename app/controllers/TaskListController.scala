@@ -17,6 +17,7 @@
 package controllers
 
 import com.google.inject.Inject
+import config.FrontendAppConfig
 import connectors.SubmissionConnector
 import controllers.actions.{Actions, DependentTaskAction}
 import models.LocalReferenceNumber
@@ -29,7 +30,8 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
 
-import java.time.{LocalDate, ZoneId, ZoneOffset}
+import java.time.temporal.ChronoUnit.DAYS
+import java.time.{Duration, Instant, LocalDate, ZoneOffset}
 import scala.concurrent.ExecutionContext
 
 class TaskListController @Inject() (
@@ -39,7 +41,8 @@ class TaskListController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel,
-  submissionConnector: SubmissionConnector
+  submissionConnector: SubmissionConnector,
+  appConfig: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -52,7 +55,8 @@ class TaskListController @Inject() (
         val tasks                = viewModel(request.userAnswers)
         val isSubmitted: Boolean = request.userAnswers.isSubmitted.getOrElse(NotSubmitted).showErrorContent
 
-        Ok(view(lrn, tasks, isSubmitted, LocalDate.ofInstant(request.userAnswers.createdAt, ZoneOffset.UTC).getDayOfMonth))
+        val expiresInDays = Duration.between(Instant.now(), request.userAnswers.createdAt.plus(appConfig.ttlInDays, DAYS)).toDays + 1
+        Ok(view(lrn, tasks, isSubmitted, expiresInDays.toInt))
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
