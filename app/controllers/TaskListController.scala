@@ -54,7 +54,6 @@ class TaskListController @Inject() (
       implicit request =>
         val tasks                = viewModel(request.userAnswers)
         val isSubmitted: Boolean = request.userAnswers.isSubmitted.getOrElse(NotSubmitted).showErrorContent
-//        val expiresInDays: Period = Period.between(LocalDateTime.now().toLocalDate, request.userAnswers.createdAt.plusDays(appConfig.ttlInDays).toLocalDate)
         val expiresInDays = Duration.between(Instant.now(clock), request.userAnswers.createdAt.plus(appConfig.ttlInDays, DAYS)).toDays + 1
 
         Ok(view(lrn, tasks, isSubmitted, expiresInDays.toInt))
