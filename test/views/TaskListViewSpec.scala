@@ -68,9 +68,9 @@ class TaskListViewSpec extends TaskListViewBehaviours {
     val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
     val doc   = parseView(applyView(tasks))
 
-    behave like pageWithContent(doc, "h2", "Now send your departure declaration")
+    behave like pageWithContent(doc, "h2", "Send your departure declaration")
 
-    behave like pageWithContent(doc, "p", "By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.")
+    behave like pageWithContent(doc, "p", "By sending this, you are confirming that these details are correct to the best of your knowledge.")
 
     behave like pageWithSubmitButton(doc, "Confirm and send")
   }

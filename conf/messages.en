@@ -128,8 +128,8 @@ preTaskList.checkYourAnswers.p = Once you have confirmed these details you will 
 taskList.title = Declaration summary
 taskList.heading = Declaration summary
 taskList.departureDetails = Departure details
-taskList.sendDeclaration = Now send your departure declaration
-taskList.detailsCorrect = By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.
+taskList.sendDeclaration = Send your departure declaration
+taskList.detailsCorrect = By sending this, you are confirming that these details are correct to the best of your knowledge.
 taskList.backToTransitMovements = Back to transit movements
 
 taskList.paragraph.thereIsAProblem = There is a problem with this declaration.
