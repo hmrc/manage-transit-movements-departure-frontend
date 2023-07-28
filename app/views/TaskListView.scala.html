@@ -20,52 +20,51 @@
 @import views.html.components.{Button, Heading, TaskList}
 
 @this(
-mainTemplate: MainTemplate,
-formHelper: FormWithCSRF,
-config: FrontendAppConfig,
-heading: Heading,
-taskList: TaskList,
-button: Button
+    mainTemplate: MainTemplate,
+    formHelper: FormWithCSRF,
+    config: FrontendAppConfig,
+    heading: Heading,
+    taskList: TaskList,
+    button: Button
 )
 
 @(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask], showErrorContent: Boolean, expiryInDays: Int)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-title = messages("taskList.title"),
-lrn = Some(lrn)
+    title = messages("taskList.title"),
+    lrn = Some(lrn)
 ) {
 
-<span class="govuk-caption-xl"> LRN:@lrn.toString</span>
-@heading(heading = messages("taskList.heading"))
+    <span class="govuk-caption-xl"> LRN:@lrn.toString</span>
+    @heading(heading = messages("taskList.heading"))
 
-@if(showErrorContent) {
-<p class="govuk-body">@messages("taskList.paragraph.thereIsAProblem")</p>
-<p class="govuk-body">@messages("taskList.paragraph.amendErrors")</p>
-}
-<p class="govuk-body">@messages("taskList.paragraph1")</p>
-<p class="govuk-body">@messages("taskList.paragraph2", expiryInDays)</p>
+    @if(showErrorContent) {
+        <p class="govuk-body">@messages("taskList.paragraph.thereIsAProblem")</p>
+        <p class="govuk-body">@messages("taskList.paragraph.amendErrors")</p>
+    }
+    <p class="govuk-body">@messages("taskList.paragraph1")</p>
+    <p class="govuk-body">@messages("taskList.paragraph2", expiryInDays)</p>
 
-@taskList("taskList.departureDetails", tasks, lrn)
+    @taskList("taskList.departureDetails", tasks, lrn)
 
-@if(config.declarationEnabled) {
-@* TODO - @if(tasks.forall(_.isCompleted)) { *@
-@formHelper(action = routes.TaskListController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
+    @if(config.declarationEnabled) {
+        @* TODO - @if(tasks.forall(_.isCompleted)) { *@
+            @formHelper(action = routes.TaskListController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
 
-@if(showErrorContent) {
-@button(messageKey = "site.resend", attributes = Map("id" -> "submit"))
-} else {
-<h2 class="govuk-heading-m">@messages("taskList.sendDeclaration")</h2>
+            @if(showErrorContent) {
+                @button(messageKey = "site.resend", attributes = Map("id" -> "submit"))
+            } else {
+                <h2 class="govuk-heading-m">@messages("taskList.sendDeclaration")</h2>
 
-<p class="govuk-body">@messages("taskList.detailsCorrect")</p>
+                <p class="govuk-body">@messages("taskList.detailsCorrect")</p>
 
-@button(messageKey = "site.send", attributes = Map("id" -> "submit"))
-}
-}
-@* } *@
-}
+                @button(messageKey = "site.send", attributes = Map("id" -> "submit"))
+                }
+            }
+        @* } *@
+    }
 
-<p class="govuk-body">
-    <a class="govuk-link" id="transit-movements" href=@config.serviceUrl>@messages("taskList.backToTransitMovements")</a>
-</p>
-
+    <p class="govuk-body">
+        <a class="govuk-link" id="transit-movements" href=@config.serviceUrl>@messages("taskList.backToTransitMovements")</a>
+    </p>
 }

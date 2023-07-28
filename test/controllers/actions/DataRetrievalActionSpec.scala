@@ -35,7 +35,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 
-import java.time.Instant
+import java.time.{Instant, LocalDateTime}
 import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends AnyFreeSpec with Matchers with GuiceOneAppPerSuite with ScalaFutures with MockitoSugar with Generators with OptionValues {
@@ -87,7 +87,7 @@ class DataRetrievalActionSpec extends AnyFreeSpec with Matchers with GuiceOneApp
 
       "when there are existing answers for this LRN" in {
 
-        when(sessionRepository.get(any())(any())) thenReturn Future.successful(Some(UserAnswers(lrn, eoriNumber, Instant.MAX)))
+        when(sessionRepository.get(any())(any())) thenReturn Future.successful(Some(UserAnswers(lrn, eoriNumber, Instant.now)))
 
         harness(lrn, request => request.userAnswers mustBe defined)
       }

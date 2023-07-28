@@ -22,7 +22,7 @@ import models.{EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
-import java.time.Instant
+import java.time.{Instant, LocalDateTime}
 
 trait UserAnswersGenerator extends UserAnswersEntryGenerators with PreTaskListUserAnswersGenerator {
   self: Generators =>

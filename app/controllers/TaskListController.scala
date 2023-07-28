@@ -21,7 +21,7 @@ import config.FrontendAppConfig
 import connectors.SubmissionConnector
 import controllers.actions.{Actions, DependentTaskAction}
 import models.LocalReferenceNumber
-import models.SubmissionState.NotSubmitted
+import models.SubmissionState.{reads, NotSubmitted}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -31,7 +31,7 @@ import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
 
 import java.time.temporal.ChronoUnit.DAYS
-import java.time.{Duration, Instant, LocalDate, ZoneOffset}
+import java.time.{Clock, Duration, Instant, LocalDate, LocalDateTime, Period, ZoneOffset}
 import scala.concurrent.ExecutionContext
 
 class TaskListController @Inject() (
@@ -43,7 +43,7 @@ class TaskListController @Inject() (
   viewModel: TaskListViewModel,
   submissionConnector: SubmissionConnector,
   appConfig: FrontendAppConfig
-)(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext, clock: Clock)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
@@ -54,8 +54,9 @@ class TaskListController @Inject() (
       implicit request =>
         val tasks                = viewModel(request.userAnswers)
         val isSubmitted: Boolean = request.userAnswers.isSubmitted.getOrElse(NotSubmitted).showErrorContent
+//        val expiresInDays: Period = Period.between(LocalDateTime.now().toLocalDate, request.userAnswers.createdAt.plusDays(appConfig.ttlInDays).toLocalDate)
+        val expiresInDays = Duration.between(Instant.now(clock), request.userAnswers.createdAt.plus(appConfig.ttlInDays, DAYS)).toDays + 1
 
-        val expiresInDays = Duration.between(Instant.now(), request.userAnswers.createdAt.plus(appConfig.ttlInDays, DAYS)).toDays + 1
         Ok(view(lrn, tasks, isSubmitted, expiresInDays.toInt))
     }
 
