@@ -49,7 +49,23 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
       |}
       |""".stripMargin
 
-  private val userAnswers = Json.parse(json).as[UserAnswers]
+  private val jsonWithResubmittedLrn: String =
+    """
+      |{
+      |    "_id" : "2e8ede47-dbfb-44ea-a1e3-6c57b1fe6fe2",
+      |    "lrn" : "1234567890",
+      |    "resubmittedLrn" : "1234567890",
+      |    "eoriNumber" : "GB1234567",
+      |    "isSubmitted" : "notSubmitted",
+      |    "data" : {},
+      |    "tasks" : {},
+      |    "createdAt" : "2022-09-05T15:58:44.188Z",
+      |    "lastUpdated" : "2022-09-07T10:33:23.472Z"
+      |}
+      |""".stripMargin
+
+  private val userAnswers                   = Json.parse(json).as[UserAnswers]
+  private val userAnswersWithResubmittedLrn = Json.parse(jsonWithResubmittedLrn).as[UserAnswers]
 
   "CacheConnector" - {
 
@@ -64,6 +80,15 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
         )
 
         connector.get(lrn).futureValue mustBe Some(userAnswers)
+      }
+
+      "must return user answers with resubmittedLrn field when status is Ok" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(jsonWithResubmittedLrn))
+        )
+
+        connector.get(lrn).futureValue mustBe Some(userAnswersWithResubmittedLrn)
       }
 
       "return None when no cached data found for provided LRN" in {
@@ -86,6 +111,14 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
         server.stubFor(post(urlEqualTo(url)) willReturn aResponse().withStatus(OK))
 
         val result: Boolean = await(connector.post(userAnswers))
+
+        result mustBe true
+      }
+
+      "must return true when status is Ok with resubmittedLrn" in {
+        server.stubFor(post(urlEqualTo(url)) willReturn aResponse().withStatus(OK))
+
+        val result: Boolean = await(connector.post(userAnswersWithResubmittedLrn))
 
         result mustBe true
       }
