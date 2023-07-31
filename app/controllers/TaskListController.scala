@@ -55,7 +55,6 @@ class TaskListController @Inject() (
         val tasks                = viewModel(request.userAnswers)
         val isSubmitted: Boolean = request.userAnswers.isSubmitted.getOrElse(NotSubmitted).showErrorContent
 
-        viewModel(request.userAnswers)
         Ok(view(lrn, tasks, isSubmitted, request.userAnswers.expiryInDays.map(_.toInt)))
     }
 
