@@ -25,7 +25,7 @@ import views.html.TaskListView
 class TaskListViewSpec extends TaskListViewBehaviours {
 
   override def view: HtmlFormat.Appendable = applyView(tasks)
-  private val expiryInDays                 = 30
+  private val expiryInDays: Option[Int]                 = arbitrary[Int]
 
   private def applyView(tasks: Seq[TaskListTask]): HtmlFormat.Appendable =
     injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = false, expiryInDays)(fakeRequest, messages)
@@ -36,30 +36,34 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
   behave like pageWithoutBackLink()
 
-  behave like pageWithCaption("LRN:" + lrn.toString)
+    behave like pageWithCaption("LRN:" + lrn.toString)
 
-  behave like pageWithHeading()
+    behave like pageWithHeading()
 
-  behave like pageWithContent("h2", "Departure details")
+    behave like pageWithContent("h2", "Departure details")
+    behave like pageWithContent("p", "You must complete each section before you can send your declaration.")
+    behave like pageWithContent("p", "You can save your declaration and come back later. You have 30 days left to complete it before your answers are deleted.")
 
-  behave like pageWithTaskList(lrn)
+    behave like pageWithTaskList(lrn)
 
-  behave like pageWithLink(
-    "transit-movements",
-    "Back to transit movements",
-    frontendAppConfig.serviceUrl
-  )
+    behave like pageWithLink(
+      "transit-movements",
+      "Back to transit movements",
+      frontendAppConfig.serviceUrl
+    )
 
   "when there are errors" - {
     val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryErrorTask)).sample.value
 
     def applyViewWithErrors(tasks: Seq[TaskListTask]): HtmlFormat.Appendable =
-      injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = true, expiryInDays)(fakeRequest, messages)
+      injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = true, None)(fakeRequest, messages)
 
     val doc = parseView(applyViewWithErrors(tasks))
 
     behave like pageWithContent(doc, "p", "There is a problem with this declaration.")
     behave like pageWithContent(doc, "p", "Amend the errors in the relevant sections and resend the declaration.")
+    behave like pageWithContent(doc, "p", "You must complete each section before you can send your declaration.")
+
     behave like pageWithSubmitButton(doc, "Confirm and resend")
 
   }

@@ -28,7 +28,7 @@
     button: Button
 )
 
-@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask], showErrorContent: Boolean, expiryInDays: Int)(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask], showErrorContent: Boolean, expiryInDays: Option[Int])(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("taskList.title"),
@@ -43,7 +43,11 @@
         <p class="govuk-body">@messages("taskList.paragraph.amendErrors")</p>
     }
     <p class="govuk-body">@messages("taskList.paragraph1")</p>
-    <p class="govuk-body">@messages("taskList.paragraph2", expiryInDays)</p>
+    @if(expiryInDays.isDefined) {
+        <p class="govuk-body">@messages("taskList.paragraph2", expiryInDays.get)</p>
+    } else {
+        <p class="govuk-body">@messages("taskList.paragraph2WithOutDays")</p>
+    }
 
     @taskList("taskList.departureDetails", tasks, lrn)
 
