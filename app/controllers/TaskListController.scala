@@ -54,9 +54,9 @@ class TaskListController @Inject() (
       implicit request =>
         val tasks                = viewModel(request.userAnswers)
         val isSubmitted: Boolean = request.userAnswers.isSubmitted.getOrElse(NotSubmitted).showErrorContent
-        val expiresInDays        = Duration.between(Instant.now(clock), request.userAnswers.createdAt.plus(appConfig.ttlInDays, DAYS)).toDays + 1
+        val expiresInDays        = request.userAnswers.expiryInDays.map(_.toInt)
 
-        Ok(view(lrn, tasks, isSubmitted, expiresInDays.toInt))
+        Ok(view(lrn, tasks, isSubmitted, expiresInDays.getOrElse(30)))
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions

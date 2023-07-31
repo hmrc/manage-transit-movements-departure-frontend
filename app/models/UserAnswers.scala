@@ -30,6 +30,7 @@ final case class UserAnswers(
   lrn: LocalReferenceNumber,
   eoriNumber: EoriNumber,
   createdAt: Instant,
+  expiryInDays: Option[Long] = None,
   data: JsObject = Json.obj(),
   tasks: Map[String, TaskStatus] = Map(),
   isSubmitted: Option[SubmissionState] = Some(NotSubmitted)
@@ -96,11 +97,13 @@ object UserAnswers {
       (__ \ "lrn").read[LocalReferenceNumber] and
         (__ \ "eoriNumber").read[EoriNumber] and
         (__ \ "createdAt").read[Instant] and
+        (__ \ "expiryInDays").readNullable[Long] and
         (__ \ "data").read[JsObject] and
         (__ \ "tasks").read[Map[String, TaskStatus]] and
         (__ \ "isSubmitted").readWithDefault[SubmissionState](NotSubmitted)
     ).apply {
-      (lrn, eoriNumber, createdAt, data, tasks, isSubmitted) => UserAnswers.apply(lrn, eoriNumber, createdAt, data, tasks, Some(isSubmitted))
+      (lrn, eoriNumber, createdAt, expiryInDays, data, tasks, isSubmitted) =>
+        UserAnswers.apply(lrn, eoriNumber, createdAt, expiryInDays, data, tasks, Some(isSubmitted))
     }
 
   implicit lazy val writes: Writes[UserAnswers] =
@@ -108,6 +111,7 @@ object UserAnswers {
       (__ \ "lrn").write[LocalReferenceNumber] and
         (__ \ "eoriNumber").write[EoriNumber] and
         (__ \ "createdAt").write[Instant] and
+        (__ \ "expiryInDays").writeNullable[Long] and
         (__ \ "data").write[JsObject] and
         (__ \ "tasks").write[Map[String, TaskStatus]] and
         (__ \ "isSubmitted").write[Option[SubmissionState]]
