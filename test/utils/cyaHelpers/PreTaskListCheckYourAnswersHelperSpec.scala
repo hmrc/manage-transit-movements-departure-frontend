@@ -261,7 +261,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Safety and security details added".toText),
+                  key = Key("Safety and security details".toText),
                   value = Value(messages(s"securityDetailsType.$securityDetailsType").toText),
                   actions = Some(
                     Actions(
@@ -269,7 +269,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                         ActionItem(
                           content = "Change".toText,
                           href = routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("safety and security details added"),
+                          visuallyHiddenText = Some("safety and security details"),
                           attributes = Map()
                         )
                       )

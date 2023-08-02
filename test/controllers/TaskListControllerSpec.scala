@@ -33,6 +33,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
   private lazy val mockViewModel: TaskListViewModel        = mock[TaskListViewModel]
   private val mockSubmissionConnector: SubmissionConnector = mock[SubmissionConnector]
+  private val expiryInDays                                 = 30
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -65,7 +66,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn, sampleTasks, isErrors)(request, messages).toString
+        view(lrn, sampleTasks, isErrors, Some(expiryInDays))(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

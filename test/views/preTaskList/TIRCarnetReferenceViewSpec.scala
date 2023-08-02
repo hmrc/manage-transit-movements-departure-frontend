@@ -42,6 +42,8 @@ class TIRCarnetReferenceViewSpec extends InputTextViewBehaviours[String] {
 
   behave like pageWithHeading()
 
+  behave like pageWithContent("p", "You can find this printed on the TIR carnet document.")
+
   behave like pageWithInputText(Some(InputSize.Width10))
 
   behave like pageWithSubmitButton("Continue")

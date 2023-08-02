@@ -17,6 +17,7 @@
 package viewModels.taskList
 
 import models.UserAnswers
+import play.api.i18n.Messages
 
 class TaskListViewModel {
 
@@ -42,4 +43,5 @@ class TaskListViewModel {
       case task: TaskListTask => task
     }
   }
+
 }

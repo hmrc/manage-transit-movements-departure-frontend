@@ -25,9 +25,10 @@ import views.html.TaskListView
 class TaskListViewSpec extends TaskListViewBehaviours {
 
   override def view: HtmlFormat.Appendable = applyView(tasks)
+  private val expiryInDays: Option[Int]    = Some(30)
 
   private def applyView(tasks: Seq[TaskListTask]): HtmlFormat.Appendable =
-    injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = false)(fakeRequest, messages)
+    injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = false, expiryInDays)(fakeRequest, messages)
 
   override val prefix: String = "taskList"
 
@@ -35,11 +36,18 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
   behave like pageWithoutBackLink()
 
-  behave like pageWithCaption(lrn.toString)
+  behave like pageWithCaption("LRN:" + lrn.toString)
 
   behave like pageWithHeading()
 
   behave like pageWithContent("h2", "Departure details")
+  behave like pageWithContent("p", "You must complete each section before you can send your declaration.")
+
+  if (expiryInDays.isDefined) {
+    behave like pageWithContent("p", "You can save your declaration and come back later. You have 30 days left to complete it before your answers are deleted.")
+  } else {
+    behave like pageWithContent("p", "You can save your declaration and come back later.")
+  }
 
   behave like pageWithTaskList(lrn)
 
@@ -53,12 +61,14 @@ class TaskListViewSpec extends TaskListViewBehaviours {
     val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryErrorTask)).sample.value
 
     def applyViewWithErrors(tasks: Seq[TaskListTask]): HtmlFormat.Appendable =
-      injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = true)(fakeRequest, messages)
+      injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = true, None)(fakeRequest, messages)
 
     val doc = parseView(applyViewWithErrors(tasks))
 
-    behave like pageWithContent(doc, "p", "There is a problem with this departure declaration.")
+    behave like pageWithContent(doc, "p", "There is a problem with this declaration.")
     behave like pageWithContent(doc, "p", "Amend the errors in the relevant sections and resend the declaration.")
+    behave like pageWithContent(doc, "p", "You must complete each section before you can send your declaration.")
+
     behave like pageWithSubmitButton(doc, "Confirm and resend")
 
   }
@@ -67,9 +77,9 @@ class TaskListViewSpec extends TaskListViewBehaviours {
     val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
     val doc   = parseView(applyView(tasks))
 
-    behave like pageWithContent(doc, "h2", "Now send your departure declaration")
+    behave like pageWithContent(doc, "h2", "Send your departure declaration")
 
-    behave like pageWithContent(doc, "p", "By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.")
+    behave like pageWithContent(doc, "p", "By sending this, you are confirming that these details are correct to the best of your knowledge.")
 
     behave like pageWithSubmitButton(doc, "Confirm and send")
   }
