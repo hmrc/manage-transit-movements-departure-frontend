@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      14.2
+// @version      15
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @author       Tega-Okeremeta
-// @match        http*://*/manage-transit-movements/departures/*/task-list
+// @match        http*://*/manage-transit-movements/departures/*/declaration-summary
 // @match        http*://*/manage-transit-movements/departures/route-details/*
 // @match        http*://*/manage-transit-movements/departures/trader-details/*
 // @match        http*://*/manage-transit-movements/departures/transport-details/*
@@ -289,7 +289,7 @@ function resetStates(journeys) {
 function completeJourney(journey) {
     if (onLandingPage()) {
         GM_setValue(journey._button.id, true)
-        if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/task-list`)) {
+        if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/declaration-summary`)) {
             if (location.hostname === "localhost") {
                 location.href = `http:\/\/localhost:${journey.localHostPort}${journey.journeyStartUrl}${getLRN()}`
             } else {
@@ -394,7 +394,7 @@ function saveLRN() {
 }
 
 function onLandingPage() {
-    return location.href.includes('task-list')
+    return location.href.includes('declaration-summary')
 }
 
 function getLRN() {
@@ -604,7 +604,7 @@ class Button {
 
         button.addEventListener("click", function handleClick() {
             GM_setValue(id, true)
-            if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/task-list`)) {
+            if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/declaration-summary`)) {
                 if (location.hostname === "localhost") {
                     location.href = `http:\/\/localhost:${localHostPort}${journeyStartUrl}${getLRN()}`
                 } else {
@@ -662,7 +662,7 @@ class CompleteAllButton {
             journeys.forEach(journey => GM_setValue(journey._button.id, false))
             GM_setValue(id, true)
             GM_setValue(firstJourneyId, true)
-            if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/task-list`)) {
+            if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/declaration-summary`)) {
                 if (location.hostname === "localhost") {
                     location.href = `http:\/\/localhost:${firstJourneyPort}${firstJourneyUrl}${getLRN()}`
                 } else {
