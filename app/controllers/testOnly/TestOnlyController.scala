@@ -39,8 +39,6 @@ class TestOnlyController @Inject() (
         .copy(authorization = request.headers.get("Authorization").map(Authorization))
         .copy(sessionId = Some(SessionId(sessionId)))
 
-      println("*****")
-
       request.body.validate[UserAnswers] match {
         case JsSuccess(userAnswers, _) =>
           sessionRepository
@@ -49,10 +47,7 @@ class TestOnlyController @Inject() (
               case true  => Ok
               case false => InternalServerError
             }
-        case JsError(errors) =>
-          println("*****")
-          println(errors.toString())
-          Future.successful(BadRequest(errors.toString()))
+        case JsError(errors) => Future.successful(BadRequest(errors.toString()))
       }
   }
 
