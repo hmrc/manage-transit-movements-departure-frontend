@@ -33,7 +33,6 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.{ActionItem, Content, Key, Value}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
-import java.time.{Instant, LocalDateTime}
 import scala.concurrent.Future
 
 trait SpecBase
@@ -52,7 +51,7 @@ trait SpecBase
 
   def fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 
-  val emptyUserAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Instant.now, Some(30L), Json.obj())
+  val emptyUserAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Some(30L), Json.obj())
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 

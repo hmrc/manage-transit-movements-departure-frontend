@@ -22,8 +22,6 @@ import models.{EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
-import java.time.{Instant, LocalDateTime}
-
 trait UserAnswersGenerator extends UserAnswersEntryGenerators with PreTaskListUserAnswersGenerator {
   self: Generators =>
 
@@ -32,8 +30,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with PreTaskListUs
       for {
         lrn        <- arbitrary[LocalReferenceNumber]
         eoriNumber <- arbitrary[EoriNumber]
-        createdAt  <- arbitrary[Instant]
-        initialAnswers = UserAnswers(lrn, eoriNumber, createdAt)
+        initialAnswers = UserAnswers(lrn, eoriNumber)
         answers <- arbitraryPreTaskListAnswers(initialAnswers)
       } yield answers
     }

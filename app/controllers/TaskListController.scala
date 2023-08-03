@@ -17,11 +17,10 @@
 package controllers
 
 import com.google.inject.Inject
-import config.FrontendAppConfig
 import connectors.SubmissionConnector
 import controllers.actions.{Actions, DependentTaskAction}
 import models.LocalReferenceNumber
-import models.SubmissionState.{reads, NotSubmitted}
+import models.SubmissionState.NotSubmitted
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,8 +29,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
 
-import java.time.temporal.ChronoUnit.DAYS
-import java.time.{Clock, Duration, Instant, LocalDate, LocalDateTime, Period, ZoneOffset}
 import scala.concurrent.ExecutionContext
 
 class TaskListController @Inject() (
@@ -41,9 +38,8 @@ class TaskListController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModel: TaskListViewModel,
-  submissionConnector: SubmissionConnector,
-  appConfig: FrontendAppConfig
-)(implicit ec: ExecutionContext, clock: Clock)
+  submissionConnector: SubmissionConnector
+)(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
