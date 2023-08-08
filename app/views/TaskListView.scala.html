@@ -51,10 +51,8 @@
 
     @taskList("taskList.departureDetails", tasks, lrn)
 
-    @if(config.declarationEnabled) {
-        @* TODO - @if(tasks.forall(_.isCompleted)) { *@
-            @formHelper(action = routes.TaskListController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
-
+    @if(tasks.forall(_.isCompleted)) {
+        @formHelper(action = routes.TaskListController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
             @if(showErrorContent) {
                 @button(messageKey = "site.resend", attributes = Map("id" -> "submit"))
             } else {
@@ -63,9 +61,8 @@
                 <p class="govuk-body">@messages("taskList.detailsCorrect")</p>
 
                 @button(messageKey = "site.send", attributes = Map("id" -> "submit"))
-                }
             }
-        @* } *@
+        }
     }
 
     <p class="govuk-body">

@@ -58,30 +58,58 @@ class TaskListViewSpec extends TaskListViewBehaviours {
   )
 
   "when there are errors" - {
-    val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryErrorTask)).sample.value
+    "when all tasks completed" - {
+      val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
 
-    def applyViewWithErrors(tasks: Seq[TaskListTask]): HtmlFormat.Appendable =
-      injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = true, None)(fakeRequest, messages)
+      def applyViewWithErrors(tasks: Seq[TaskListTask]): HtmlFormat.Appendable =
+        injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = true, None)(fakeRequest, messages)
 
-    val doc = parseView(applyViewWithErrors(tasks))
+      val doc = parseView(applyViewWithErrors(tasks))
 
-    behave like pageWithContent(doc, "p", "There is a problem with this declaration.")
-    behave like pageWithContent(doc, "p", "Amend the errors in the relevant sections and resend the declaration.")
-    behave like pageWithContent(doc, "p", "You must complete each section before you can send your declaration.")
+      behave like pageWithContent(doc, "p", "There is a problem with this declaration.")
+      behave like pageWithContent(doc, "p", "Amend the errors in the relevant sections and resend the declaration.")
+      behave like pageWithContent(doc, "p", "You must complete each section before you can send your declaration.")
 
-    behave like pageWithSubmitButton(doc, "Confirm and resend")
+      behave like pageWithSubmitButton(doc, "Confirm and resend")
+    }
 
+    "when not all tasks completed" - {
+      val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryErrorTask)).sample.value
+
+      def applyViewWithErrors(tasks: Seq[TaskListTask]): HtmlFormat.Appendable =
+        injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent = true, None)(fakeRequest, messages)
+
+      val doc = parseView(applyViewWithErrors(tasks))
+
+      behave like pageWithContent(doc, "p", "There is a problem with this declaration.")
+      behave like pageWithContent(doc, "p", "Amend the errors in the relevant sections and resend the declaration.")
+      behave like pageWithContent(doc, "p", "You must complete each section before you can send your declaration.")
+
+      behave like pageWithoutSubmitButton(doc)
+    }
   }
 
-  "when all tasks completed" - {
-    val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
-    val doc   = parseView(applyView(tasks))
+  "when there are not errors" - {
+    "when all tasks completed" - {
+      val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
+      val doc   = parseView(applyView(tasks))
 
-    behave like pageWithContent(doc, "h2", "Send your departure declaration")
+      behave like pageWithContent(doc, "h2", "Send your departure declaration")
 
-    behave like pageWithContent(doc, "p", "By sending this, you are confirming that these details are correct to the best of your knowledge.")
+      behave like pageWithContent(doc, "p", "By sending this, you are confirming that these details are correct to the best of your knowledge.")
 
-    behave like pageWithSubmitButton(doc, "Confirm and send")
+      behave like pageWithSubmitButton(doc, "Confirm and send")
+    }
+
+    "when not all tasks completed" - {
+      val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryIncompleteTask)).sample.value
+      val doc   = parseView(applyView(tasks))
+
+      behave like pageWithoutContent(doc, "h2", "Send your departure declaration")
+
+      behave like pageWithoutContent(doc, "p", "By sending this, you are confirming that these details are correct to the best of your knowledge.")
+
+      behave like pageWithoutSubmitButton(doc)
+    }
   }
-
 }

@@ -161,6 +161,11 @@ trait ViewBehaviours extends SpecBase with ViewSpecAssertions {
       button => assertElementContainsId(button, "submit")
     }
 
+  def pageWithoutSubmitButton(doc: Document): Unit =
+    "must not render submit button" in {
+      assertNotRenderedById(doc, "submit")
+    }
+
   private def pageWithButton(doc: Document, expectedText: String)(additionalAssertions: Element => Assertion*): Unit =
     s"must render $expectedText button" in {
       val button = doc.getElementsByClass("govuk-button").toList.find(_.text() == expectedText).value
