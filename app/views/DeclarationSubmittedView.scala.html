@@ -14,8 +14,10 @@
  * limitations under the License.
  *@
 
-@import views.html.components.Heading
 @import config.FrontendAppConfig
+@import controllers.routes
+@import models.reference.CustomsOffice
+@import views.html.components.Heading
 
 @this(
     mainTemplate: MainTemplate,
@@ -24,17 +26,34 @@
     govukPanel: GovukPanel,
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, officeOfDestination: CustomsOffice)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("declarationSubmitted.title"),
     showBackLink = true
 ) {
-    @govukPanel(Panel(
-        title = Text(messages("declarationSubmitted.heading"))
+    @govukPanel(
+        Panel(
+            title = HtmlContent(messages("declarationSubmitted.heading")),
+            content = HtmlContent(s"""${messages("declarationSubmitted.panel")} <strong>${lrn}</strong>""")
         )
     )
 
-    <p class="govuk-body">@messages("declarationSubmitted.paragraph1")</p>
+    <h2 class="govuk-heading-m">@messages("declarationSubmitted.h2")</h2>
 
+    <p class="govuk-body">
+        <a class="govuk-link" id="departure-declarations" href="@config.manageTransitMovementsViewDeparturesUrl">@messages("declarationSubmitted.departures")</a>
+        @messages("declarationSubmitted.paragraph1")
+    </p>
+
+    @officeOfDestination match {
+        case CustomsOffice(id, name, Some(tel)) => {
+            <p class="govuk-body">@messages("declarationSubmitted.paragraph2.withTelephoneNumber", name, tel)</p>
+        }
+        case CustomsOffice(id, name, None) => {
+            <p class="govuk-body">@messages("declarationSubmitted.paragraph2.withoutTelephoneNumber", name)</p>
+        }
+    }
+
+    <a class="govuk-link" id="new-departure" href="@routes.RedirectController.onPageLoad()">@messages("declarationSubmitted.newDeparture")</a>
 }

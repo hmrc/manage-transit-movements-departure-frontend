@@ -62,7 +62,7 @@ class TaskListController @Inject() (
         submissionConnector.post(lrn.value).map {
           case response if is2xx(response.status) =>
             logger.debug(s"TaskListController:onSubmit: success ${response.status}: ${response.body}")
-            Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad())
+            Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad(lrn))
           case response if is4xx(response.status) =>
             logger.warn(s"TaskListController:onSubmit: bad request: ${response.status}: ${response.body}")
             BadRequest(response.body)

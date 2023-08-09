@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package pages.external
 
-import queries.{Gettable, Settable}
+import models.reference.CustomsOffice
+import pages.ReadOnlyPage
+import play.api.libs.json.JsPath
 
-trait QuestionPage[A] extends ReadOnlyPage[A] with Settable[A]
+case object OfficeOfDestinationPage extends ReadOnlyPage[CustomsOffice] {
 
-trait ReadOnlyPage[A] extends Page with Gettable[A]
+  override def path: JsPath = JsPath \ "routeDetails" \ "routing" \ "officeOfDestination"
+}
