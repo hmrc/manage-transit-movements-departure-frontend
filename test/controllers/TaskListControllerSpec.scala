@@ -18,10 +18,12 @@ package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.SubmissionConnector
-import generators.{Generators, UserAnswersGenerator}
+import generators.Generators
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -29,7 +31,7 @@ import play.api.test.Helpers._
 import viewModels.taskList.{PreTaskListTask, TaskListTask, TaskListViewModel, TaskStatus}
 import views.html.TaskListView
 
-class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with UserAnswersGenerator {
+class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   private lazy val mockViewModel: TaskListViewModel        = mock[TaskListViewModel]
   private val mockSubmissionConnector: SubmissionConnector = mock[SubmissionConnector]
@@ -93,33 +95,25 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.DeclarationSubmittedController.onPageLoad(lrn).url
+      redirectLocation(result).value mustEqual routes.DeclarationSubmittedController.onPageLoad(lrn).url
     }
 
-    "must return a bad request for a 400" in {
-      when(mockSubmissionConnector.post(any())(any()))
-        .thenReturn(response(BAD_REQUEST))
+    "must redirect to technical difficulties for an error" in {
+      forAll(Gen.oneOf(BAD_REQUEST, INTERNAL_SERVER_ERROR)) {
+        errorCode =>
+          when(mockSubmissionConnector.post(any())(any()))
+            .thenReturn(response(errorCode))
 
-      setExistingUserAnswers(emptyUserAnswers)
+          setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+          val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
-      val result = route(app, request).value
+          val result = route(app, request).value
 
-      status(result) mustEqual BAD_REQUEST
-    }
+          status(result) mustEqual SEE_OTHER
 
-    "must return a internal server error for a 500" in {
-      when(mockSubmissionConnector.post(any())(any()))
-        .thenReturn(response(INTERNAL_SERVER_ERROR))
-
-      setExistingUserAnswers(emptyUserAnswers)
-
-      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
-
-      val result = route(app, request).value
-
-      status(result) mustEqual INTERNAL_SERVER_ERROR
+          redirectLocation(result).value mustEqual routes.ErrorController.technicalDifficulties().url
+      }
     }
   }
 }

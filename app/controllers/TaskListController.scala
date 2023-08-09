@@ -24,7 +24,7 @@ import models.SubmissionState.NotSubmitted
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
+import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
@@ -61,14 +61,11 @@ class TaskListController @Inject() (
       implicit request =>
         submissionConnector.post(lrn.value).map {
           case response if is2xx(response.status) =>
-            logger.debug(s"TaskListController:onSubmit: success ${response.status}: ${response.body}")
+            logger.debug(s"TaskListController:onSubmit: ${response.status}: ${response.body}")
             Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad(lrn))
-          case response if is4xx(response.status) =>
-            logger.warn(s"TaskListController:onSubmit: bad request: ${response.status}: ${response.body}")
-            BadRequest(response.body)
           case e =>
-            logger.error(s"TaskListController:onSubmit: something went wrong: ${e.status}-${e.body}")
-            InternalServerError(e.body)
+            logger.error(s"TaskListController:onSubmit: ${e.status}: ${e.body}")
+            Redirect(routes.ErrorController.technicalDifficulties())
         }
     }
 }
