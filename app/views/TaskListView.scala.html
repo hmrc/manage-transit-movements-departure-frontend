@@ -35,7 +35,7 @@
     lrn = Some(lrn)
 ) {
 
-    <span class="govuk-caption-xl"> LRN:@lrn.toString</span>
+    <span class="govuk-caption-xl">@messages("taskList.lrn", lrn.toString)</span>
     @heading(heading = messages("taskList.heading"))
 
     @if(showErrorContent) {

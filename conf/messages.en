@@ -127,6 +127,7 @@ preTaskList.checkYourAnswers.p = Once you have confirmed these details you will 
 
 taskList.title = Declaration summary
 taskList.heading = Declaration summary
+taskList.lrn = LRN: {0}
 taskList.sendDeclaration = Send your departure declaration
 taskList.detailsCorrect = By sending this, you are confirming that these details are correct to the best of your knowledge.
 taskList.backToTransitMovements = Back to transit movements
