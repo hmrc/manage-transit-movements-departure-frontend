@@ -40,16 +40,15 @@
 
     @if(showErrorContent) {
         <p class="govuk-body">@messages("taskList.paragraph.thereIsAProblem")</p>
-        <p class="govuk-body">@messages("taskList.paragraph.amendErrors")</p>
-    }
-    <p class="govuk-body">@messages("taskList.paragraph1")</p>
-    @if(expiryInDays.isDefined) {
-        <p class="govuk-body">@messages("taskList.paragraph2", expiryInDays.get)</p>
     } else {
-        <p class="govuk-body">@messages("taskList.paragraph2WithOutDays")</p>
+        <p class="govuk-body">@messages("taskList.paragraph1")</p>
+        @expiryInDays match {
+            case Some(value) => { <p class="govuk-body">@messages("taskList.paragraph2", value)</p> }
+            case None        => { <p class="govuk-body">@messages("taskList.paragraph2WithOutDays")</p> }
+        }
     }
 
-    @taskList("taskList.departureDetails", tasks, lrn)
+    @taskList(tasks, lrn)
 
     @if(tasks.forall(_.isCompleted)) {
         @formHelper(action = routes.TaskListController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
