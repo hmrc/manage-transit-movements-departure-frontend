@@ -29,13 +29,12 @@ class TaskListSpec extends A11ySpecBase {
     val template  = app.injector.instanceOf[MainTemplate]
     val component = app.injector.instanceOf[TaskList]
 
-    val title      = nonEmptyString.sample.value
-    val sectionKey = nonEmptyString.sample.value
-    val tasks      = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
-    val lrn        = arbitrary[LocalReferenceNumber].sample.value
+    val title = nonEmptyString.sample.value
+    val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
+    val lrn   = arbitrary[LocalReferenceNumber].sample.value
 
     val content = template.apply(title) {
-      component.apply(sectionKey, tasks, lrn).withHeading(title)
+      component.apply(tasks, lrn).withHeading(title)
     }
 
     "pass accessibility checks" in {

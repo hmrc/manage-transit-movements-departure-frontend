@@ -127,13 +127,12 @@ preTaskList.checkYourAnswers.p = Once you have confirmed these details you will 
 
 taskList.title = Declaration summary
 taskList.heading = Declaration summary
-taskList.departureDetails = Departure details
+taskList.lrn = LRN: {0}
 taskList.sendDeclaration = Send your departure declaration
 taskList.detailsCorrect = By sending this, you are confirming that these details are correct to the best of your knowledge.
 taskList.backToTransitMovements = Back to transit movements
 
-taskList.paragraph.thereIsAProblem = There is a problem with this declaration.
-taskList.paragraph.amendErrors = Amend the errors in the relevant sections and resend the declaration.
+taskList.paragraph.thereIsAProblem = There is a problem with this declaration. Amend the errors in the relevant sections and resend the declaration.
 taskList.paragraph1 = You must complete each section before you can send your declaration.
 taskList.paragraph2 = You can save your declaration and come back later. You have {0} days left to complete it before your answers are deleted.
 taskList.paragraph2WithOutDays = You can save your declaration and come back later.
