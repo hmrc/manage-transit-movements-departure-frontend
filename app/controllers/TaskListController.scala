@@ -48,14 +48,14 @@ class TaskListController @Inject() (
     .andThen(checkPreTaskListCompleted)
     .async {
       implicit request =>
-        submissionConnector.getSubmissionStatus(lrn.value).flatMap {
+        request.userAnswers.status match {
           case SubmissionState.Submitted =>
             Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
-          case submissionState =>
+          case status =>
             for {
               expiryInDays <- submissionConnector.getExpiryInDays(lrn.value)
               tasks = viewModel(request.userAnswers)
-            } yield Ok(view(lrn, tasks, submissionState.showErrorContent, expiryInDays))
+            } yield Ok(view(lrn, tasks, status.showErrorContent, expiryInDays))
         }
     }
 
@@ -64,7 +64,7 @@ class TaskListController @Inject() (
     .andThen(checkPreTaskListCompleted)
     .async {
       implicit request =>
-        submissionConnector.getSubmissionStatus(lrn.value).flatMap {
+        request.userAnswers.status match {
           case SubmissionState.Submitted =>
             Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
           case _ =>

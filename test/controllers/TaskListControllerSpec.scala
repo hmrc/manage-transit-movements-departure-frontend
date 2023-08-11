@@ -58,7 +58,6 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       val showErrorContent: Boolean = sampleTasks.exists(_.isError)
 
       when(mockViewModel.apply(any())).thenReturn(sampleTasks)
-      when(mockSubmissionConnector.getSubmissionStatus(any())(any())).thenReturn(Future.successful(SubmissionState.NotSubmitted))
       when(mockSubmissionConnector.getExpiryInDays(any())(any())).thenReturn(Future.successful(expiryInDays))
 
       val userAnswers = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
@@ -80,9 +79,11 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       val sampleTasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
 
       when(mockViewModel.apply(any())).thenReturn(sampleTasks)
-      when(mockSubmissionConnector.getSubmissionStatus(any())(any())).thenReturn(Future.successful(SubmissionState.Submitted))
 
-      val userAnswers = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
+      val userAnswers = emptyUserAnswers.copy(
+        tasks = Map(PreTaskListTask.section -> TaskStatus.Completed),
+        status = SubmissionState.Submitted
+      )
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
@@ -95,9 +96,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     }
 
     "must redirect to Session Expired for a POST if declaration submitted" in {
-      when(mockSubmissionConnector.getSubmissionStatus(any())(any())).thenReturn(Future.successful(SubmissionState.Submitted))
-
-      setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(emptyUserAnswers.copy(status = SubmissionState.Submitted))
 
       val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
@@ -121,7 +120,6 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     }
 
     "must redirect to confirmation page when submission success" in {
-      when(mockSubmissionConnector.getSubmissionStatus(any())(any())).thenReturn(Future.successful(SubmissionState.NotSubmitted))
       when(mockSubmissionConnector.post(any())(any())).thenReturn(response(OK))
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -138,7 +136,6 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     "must redirect to technical difficulties for an error" in {
       forAll(Gen.oneOf(BAD_REQUEST, INTERNAL_SERVER_ERROR)) {
         errorCode =>
-          when(mockSubmissionConnector.getSubmissionStatus(any())(any())).thenReturn(Future.successful(SubmissionState.NotSubmitted))
           when(mockSubmissionConnector.post(any())(any())).thenReturn(response(errorCode))
 
           setExistingUserAnswers(emptyUserAnswers)

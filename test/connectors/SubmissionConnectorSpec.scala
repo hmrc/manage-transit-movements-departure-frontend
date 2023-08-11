@@ -19,10 +19,9 @@ package connectors
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
 import helper.WireMockServerHandler
-import models.SubmissionState
 import org.scalacheck.Gen
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsNumber, JsString}
+import play.api.libs.json.JsNumber
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 
@@ -76,22 +75,6 @@ class SubmissionConnectorSpec extends SpecBase with AppWithDefaultMockFixtures w
         val result: HttpResponse = await(connector.post(lrn.value))
 
         result.status mustBe status
-      }
-    }
-
-    "getSubmissionStatus" - {
-
-      val url = s"/manage-transit-movements-departure-cache/submission-status/$lrn"
-
-      "must return submission status when status is Ok" in {
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(okJson(JsString("submitted").toString()))
-        )
-
-        val result: SubmissionState = await(connector.getSubmissionStatus(lrn.value))
-
-        result mustBe SubmissionState.Submitted
       }
     }
 

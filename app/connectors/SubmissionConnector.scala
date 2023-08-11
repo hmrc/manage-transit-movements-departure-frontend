@@ -17,7 +17,6 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.SubmissionState
 import play.api.Logging
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
@@ -36,11 +35,6 @@ class SubmissionConnector @Inject() (
   def post(lrn: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val url = s"$baseUrl/declaration/submit"
     http.POST[String, HttpResponse](url, lrn)
-  }
-
-  def getSubmissionStatus(lrn: String)(implicit hc: HeaderCarrier): Future[SubmissionState] = {
-    val url = s"$baseUrl/submission-status/$lrn"
-    http.GET[SubmissionState](url)
   }
 
   def getExpiryInDays(lrn: String)(implicit hc: HeaderCarrier): Future[Long] = {
