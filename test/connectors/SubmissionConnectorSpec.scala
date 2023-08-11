@@ -19,8 +19,10 @@ package connectors
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
 import helper.WireMockServerHandler
+import models.SubmissionState
 import org.scalacheck.Gen
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.json.{JsNumber, JsString}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 
@@ -77,6 +79,37 @@ class SubmissionConnectorSpec extends SpecBase with AppWithDefaultMockFixtures w
       }
     }
 
+    "getSubmissionStatus" - {
+
+      val url = s"/manage-transit-movements-departure-cache/submission-status/$lrn"
+
+      "must return submission status when status is Ok" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(JsString("submitted").toString()))
+        )
+
+        val result: SubmissionState = await(connector.getSubmissionStatus(lrn.value))
+
+        result mustBe SubmissionState.Submitted
+      }
+    }
+
+    "getExpiryInDays" - {
+
+      val url = s"/manage-transit-movements-departure-cache/user-answers/expiry/$lrn"
+
+      "must return expiry in days when status is Ok" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(JsNumber(30).toString()))
+        )
+
+        val result: Long = await(connector.getExpiryInDays(lrn.value))
+
+        result mustBe 30
+      }
+    }
   }
 
 }

@@ -16,7 +16,6 @@
 
 package models
 
-import models.SubmissionState.NotSubmitted
 import pages._
 import play.api.libs.json._
 import queries.Gettable
@@ -27,10 +26,8 @@ import scala.util.{Failure, Success, Try}
 final case class UserAnswers(
   lrn: LocalReferenceNumber,
   eoriNumber: EoriNumber,
-  expiryInDays: Option[Long] = None,
   data: JsObject = Json.obj(),
-  tasks: Map[String, TaskStatus] = Map(),
-  isSubmitted: Option[SubmissionState] = Some(NotSubmitted)
+  tasks: Map[String, TaskStatus] = Map()
 ) {
 
   def getOptional[A](page: Gettable[A])(implicit rds: Reads[A]): Either[String, Option[A]] =
@@ -93,22 +90,15 @@ object UserAnswers {
     (
       (__ \ "lrn").read[LocalReferenceNumber] and
         (__ \ "eoriNumber").read[EoriNumber] and
-        (__ \ "expiryInDays").readNullable[Long] and
         (__ \ "data").read[JsObject] and
-        (__ \ "tasks").read[Map[String, TaskStatus]] and
-        (__ \ "isSubmitted").readWithDefault[SubmissionState](NotSubmitted)
-    ).apply {
-      (lrn, eoriNumber, expiryInDays, data, tasks, isSubmitted) =>
-        UserAnswers.apply(lrn, eoriNumber, expiryInDays, data, tasks, Some(isSubmitted))
-    }
+        (__ \ "tasks").read[Map[String, TaskStatus]]
+    )(UserAnswers.apply _)
 
   implicit lazy val writes: Writes[UserAnswers] =
     (
       (__ \ "lrn").write[LocalReferenceNumber] and
         (__ \ "eoriNumber").write[EoriNumber] and
-        (__ \ "expiryInDays").writeNullable[Long] and
         (__ \ "data").write[JsObject] and
-        (__ \ "tasks").write[Map[String, TaskStatus]] and
-        (__ \ "isSubmitted").write[Option[SubmissionState]]
+        (__ \ "tasks").write[Map[String, TaskStatus]]
     )(unlift(UserAnswers.unapply))
 }

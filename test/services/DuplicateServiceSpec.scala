@@ -21,7 +21,6 @@ import connectors.CacheConnector
 import forms.NewLocalReferenceNumberFormProvider
 import generators.Generators
 import models.LocalReferenceNumber
-import models.SubmissionState.RejectedPendingChanges
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, verifyNoMoreInteractions, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -50,7 +49,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
       val newLrn: LocalReferenceNumber = LocalReferenceNumber("DCBA0987654321321").value
       val oldLrnData                   = emptyUserAnswers.copy(lrn = lrn, tasks = Map("task1" -> TaskStatus.Error))
-      val newDataToSend                = oldLrnData.copy(lrn = newLrn, isSubmitted = Some(RejectedPendingChanges))
+      val newDataToSend                = oldLrnData.copy(lrn = newLrn)
 
       "must return true" - {
         "when answers in the cache can be found and data posts to cache" in {
