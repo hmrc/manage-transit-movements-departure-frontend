@@ -28,7 +28,7 @@
     button: Button
 )
 
-@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask], showErrorContent: Boolean, expiryInDays: Option[Int])(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask], showErrorContent: Boolean, expiryInDays: Long)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("taskList.title"),
@@ -42,10 +42,7 @@
         <p class="govuk-body">@messages("taskList.paragraph.thereIsAProblem")</p>
     } else {
         <p class="govuk-body">@messages("taskList.paragraph1")</p>
-        @expiryInDays match {
-            case Some(value) => { <p class="govuk-body">@messages("taskList.paragraph2", value)</p> }
-            case None        => { <p class="govuk-body">@messages("taskList.paragraph2WithOutDays")</p> }
-        }
+        <p class="govuk-body">@messages("taskList.paragraph2", expiryInDays)</p>
     }
 
     @taskList(tasks, lrn)

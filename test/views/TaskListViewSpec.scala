@@ -25,14 +25,14 @@ import views.html.TaskListView
 
 class TaskListViewSpec extends TaskListViewBehaviours {
 
-  private val expiryInDaysGen = Gen.choose(0: Int, 30: Int)
+  private val expiryInDays = Gen.choose(0: Int, 30: Int).sample.value
 
-  override def view: HtmlFormat.Appendable = applyView(tasks, showErrorContent = false, Some(expiryInDaysGen.sample.value))
+  override def view: HtmlFormat.Appendable = applyView(tasks, showErrorContent = false, expiryInDays)
 
   private def applyView(
     tasks: Seq[TaskListTask],
     showErrorContent: Boolean,
-    expiryInDays: Option[Int]
+    expiryInDays: Long
   ): HtmlFormat.Appendable =
     injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent, expiryInDays)(fakeRequest, messages)
 
@@ -56,12 +56,16 @@ class TaskListViewSpec extends TaskListViewBehaviours {
     frontendAppConfig.serviceUrl
   )
 
+  behave like pageWithContent(
+    "p",
+    s"You can save your declaration and come back later. You have $expiryInDays days left to complete it before your answers are deleted."
+  )
+
   "when there are errors" - {
     val showErrorContent = true
 
     "when all tasks completed" - {
-      val tasks        = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
-      val expiryInDays = Gen.option(expiryInDaysGen).sample.value
+      val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
 
       val view = applyView(tasks, showErrorContent, expiryInDays)
       val doc  = parseView(view)
@@ -73,8 +77,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
     }
 
     "when not all tasks completed" - {
-      val tasks        = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryErrorTask)).sample.value
-      val expiryInDays = Gen.option(expiryInDaysGen).sample.value
+      val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryErrorTask)).sample.value
 
       val view = applyView(tasks, showErrorContent, expiryInDays)
       val doc  = parseView(view)
@@ -84,38 +87,13 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
       behave like pageWithoutSubmitButton(doc)
     }
-
-    "when expiry date is defined" - {
-      val expiryInDays = expiryInDaysGen.sample.value
-
-      val view = applyView(tasks, showErrorContent, Some(expiryInDays))
-      val doc  = parseView(view)
-
-      behave like pageWithoutContent(
-        doc,
-        "p",
-        s"You can save your declaration and come back later. You have $expiryInDays days left to complete it before your answers are deleted."
-      )
-    }
-
-    "when expiry date is undefined" - {
-      val view = applyView(tasks, showErrorContent, None)
-      val doc  = parseView(view)
-
-      behave like pageWithoutContent(
-        doc,
-        "p",
-        "You can save your declaration and come back later."
-      )
-    }
   }
 
   "when there are not errors" - {
     val showErrorContent = false
 
     "when all tasks completed" - {
-      val tasks        = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
-      val expiryInDays = Gen.option(expiryInDaysGen).sample.value
+      val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
 
       val view = applyView(tasks, showErrorContent, expiryInDays)
       val doc  = parseView(view)
@@ -128,8 +106,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
     }
 
     "when not all tasks completed" - {
-      val tasks        = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryIncompleteTask)).sample.value
-      val expiryInDays = Gen.option(expiryInDaysGen).sample.value
+      val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryIncompleteTask)).sample.value
 
       val view = applyView(tasks, showErrorContent, expiryInDays)
       val doc  = parseView(view)
@@ -139,30 +116,6 @@ class TaskListViewSpec extends TaskListViewBehaviours {
       behave like pageWithoutContent(doc, "p", "By sending this, you are confirming that these details are correct to the best of your knowledge.")
 
       behave like pageWithoutSubmitButton(doc)
-    }
-
-    "when expiry date is defined" - {
-      val expiryInDays = expiryInDaysGen.sample.value
-
-      val view = applyView(tasks, showErrorContent, Some(expiryInDays))
-      val doc  = parseView(view)
-
-      behave like pageWithContent(
-        doc,
-        "p",
-        s"You can save your declaration and come back later. You have $expiryInDays days left to complete it before your answers are deleted."
-      )
-    }
-
-    "when expiry date is undefined" - {
-      val view = applyView(tasks, showErrorContent, None)
-      val doc  = parseView(view)
-
-      behave like pageWithContent(
-        doc,
-        "p",
-        "You can save your declaration and come back later."
-      )
     }
   }
 }

@@ -55,9 +55,7 @@ class TaskListController @Inject() (
             for {
               expiryInDays <- submissionConnector.getExpiryInDays(lrn.value)
               tasks = viewModel(request.userAnswers)
-            } yield
-            // TODO - refactor so view takes a non-optional
-            Ok(view(lrn, tasks, submissionState.showErrorContent, Some(expiryInDays.toInt)))
+            } yield Ok(view(lrn, tasks, submissionState.showErrorContent, expiryInDays))
         }
     }
 

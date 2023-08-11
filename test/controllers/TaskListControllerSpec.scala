@@ -73,7 +73,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn, sampleTasks, showErrorContent, Some(expiryInDays))(request, messages).toString
+        view(lrn, sampleTasks, showErrorContent, expiryInDays)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if declaration submitted" in {
