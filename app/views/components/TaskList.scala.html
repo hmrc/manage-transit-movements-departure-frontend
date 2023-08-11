@@ -23,15 +23,12 @@
 )
 
 @(
-    sectionKey: String,
     tasks: Seq[TaskListTask],
     lrn: LocalReferenceNumber
 )(implicit messages: Messages)
 
 <ol class="app-task-list">
     <li>
-        <h2 class="app-task-list__section">@messages(sectionKey)</h2>
-
         <ul class="app-task-list__items">
             @for(task <- tasks) {
                 <li class="app-task-list__item">

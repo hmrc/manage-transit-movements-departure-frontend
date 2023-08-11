@@ -35,26 +35,23 @@
     lrn = Some(lrn)
 ) {
 
-    <span class="govuk-caption-xl"> LRN:@lrn.toString</span>
+    <span class="govuk-caption-xl">@messages("taskList.lrn", lrn.toString)</span>
     @heading(heading = messages("taskList.heading"))
 
     @if(showErrorContent) {
         <p class="govuk-body">@messages("taskList.paragraph.thereIsAProblem")</p>
-        <p class="govuk-body">@messages("taskList.paragraph.amendErrors")</p>
-    }
-    <p class="govuk-body">@messages("taskList.paragraph1")</p>
-    @if(expiryInDays.isDefined) {
-        <p class="govuk-body">@messages("taskList.paragraph2", expiryInDays.get)</p>
     } else {
-        <p class="govuk-body">@messages("taskList.paragraph2WithOutDays")</p>
+        <p class="govuk-body">@messages("taskList.paragraph1")</p>
+        @expiryInDays match {
+            case Some(value) => { <p class="govuk-body">@messages("taskList.paragraph2", value)</p> }
+            case None        => { <p class="govuk-body">@messages("taskList.paragraph2WithOutDays")</p> }
+        }
     }
 
-    @taskList("taskList.departureDetails", tasks, lrn)
+    @taskList(tasks, lrn)
 
-    @if(config.declarationEnabled) {
-        @* TODO - @if(tasks.forall(_.isCompleted)) { *@
-            @formHelper(action = routes.TaskListController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
-
+    @if(tasks.forall(_.isCompleted)) {
+        @formHelper(action = routes.TaskListController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
             @if(showErrorContent) {
                 @button(messageKey = "site.resend", attributes = Map("id" -> "submit"))
             } else {
@@ -63,9 +60,8 @@
                 <p class="govuk-body">@messages("taskList.detailsCorrect")</p>
 
                 @button(messageKey = "site.send", attributes = Map("id" -> "submit"))
-                }
             }
-        @* } *@
+        }
     }
 
     <p class="govuk-body">

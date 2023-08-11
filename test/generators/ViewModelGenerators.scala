@@ -149,6 +149,22 @@ trait ViewModelGenerators {
     }
   }
 
+  implicit lazy val arbitraryIncompleteTask: Arbitrary[TaskListTask] = Arbitrary {
+    for {
+      arbitraryTaskStatus <- arbitrary[TaskStatus](arbitraryIncompleteTaskStatus)
+      arbitraryMessageKey <- Gen.alphaNumStr
+      arbitraryId         <- Gen.alphaNumStr
+      arbitraryHref       <- Gen.alphaNumStr
+      arbitrarySection    <- Gen.alphaNumStr
+    } yield new TaskListTask {
+      override val status: TaskStatus                                                          = arbitraryTaskStatus
+      override val messageKey: String                                                          = arbitraryMessageKey
+      override val id: String                                                                  = arbitraryId
+      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = arbitraryHref
+      override val section: String                                                             = arbitrarySection
+    }
+  }
+
   implicit lazy val arbitraryCompletedTask: Arbitrary[TaskListTask] = Arbitrary {
     for {
       arbitraryMessageKey <- Gen.alphaNumStr

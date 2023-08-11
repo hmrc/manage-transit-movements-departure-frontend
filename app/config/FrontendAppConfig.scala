@@ -73,8 +73,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val maxGoodsItemNumbers: Int       = configuration.get[Int]("limits.maxGoodsItemNumbers")
   lazy val maxEquipmentNumbers: Int       = configuration.get[Int]("limits.maxEquipmentNumbers")
 
-  lazy val declarationEnabled: Boolean = configuration.get[Boolean]("declaration.enabled")
-
   def traderDetailsFrontendUrl(lrn: LocalReferenceNumber): String    = frontendUrl(lrn, "traderDetails")
   def routeDetailsFrontendUrl(lrn: LocalReferenceNumber): String     = frontendUrl(lrn, "routeDetails")
   def transportDetailsFrontendUrl(lrn: LocalReferenceNumber): String = frontendUrl(lrn, "transportDetails")
