@@ -20,7 +20,7 @@ import generators.Generators
 import models.LocalReferenceNumber
 import org.scalacheck.Arbitrary.arbitrary
 import viewModels.taskList.TaskListTask
-import viewModels.taskList.TaskStatus.CannotStartYet
+import viewModels.taskList.TaskStatus._
 
 import scala.jdk.CollectionConverters._
 

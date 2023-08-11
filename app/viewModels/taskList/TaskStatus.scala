@@ -22,8 +22,9 @@ sealed trait TaskStatus {
   val messageKey: String
   val tag: String
   val jsonString: String
-  def isCompleted: Boolean = this == TaskStatus.Completed
-  def isError: Boolean     = this == TaskStatus.Error
+  val hiddenMessageKey: Option[String] = None
+  def isCompleted: Boolean             = this == TaskStatus.Completed
+  def isError: Boolean                 = this == TaskStatus.Error
 }
 
 object TaskStatus {
@@ -53,9 +54,10 @@ object TaskStatus {
   }
 
   case object Error extends TaskStatus {
-    override val messageKey: String = "taskStatus.error"
-    override val tag: String        = "govuk-tag--red"
-    override val jsonString: String = "error"
+    override val messageKey: String               = "taskStatus.error"
+    override val tag: String                      = "govuk-tag--red"
+    override val jsonString: String               = "error"
+    override val hiddenMessageKey: Option[String] = Some("taskStatus.error.hidden")
   }
 
   implicit val reads: Reads[TaskStatus] = (json: JsValue) => {

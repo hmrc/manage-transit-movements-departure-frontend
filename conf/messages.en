@@ -138,6 +138,8 @@ taskList.paragraph1 = You must complete each section before you can send your de
 taskList.paragraph2 = You can save your declaration and come back later. You have {0} days left to complete it before your answers are deleted.
 taskList.paragraph2WithOutDays = You can save your declaration and come back later.
 
+taskStatus.error.hidden = to amend the error
+
 taskStatus.completed = Completed
 taskStatus.inProgress = In progress
 taskStatus.notStarted = Not started

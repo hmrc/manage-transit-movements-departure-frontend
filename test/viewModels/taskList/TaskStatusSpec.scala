@@ -65,6 +65,28 @@ class TaskStatusSpec extends SpecBase {
     }
   }
 
+  "hiddenMessageKey" - {
+    "when Completed" in {
+      TaskStatus.Completed.hiddenMessageKey mustBe None
+    }
+
+    "when InProgress" in {
+      TaskStatus.InProgress.hiddenMessageKey mustBe None
+    }
+
+    "when NotStarted" in {
+      TaskStatus.NotStarted.hiddenMessageKey mustBe None
+    }
+
+    "when CannotStartYet" in {
+      TaskStatus.CannotStartYet.hiddenMessageKey mustBe None
+    }
+
+    "when Error" in {
+      TaskStatus.Error.hiddenMessageKey mustBe Some("taskStatus.error.hidden")
+    }
+  }
+
   "must serialise to json" - {
     "when completed" in {
       val result = Json.toJson[TaskStatus](TaskStatus.Completed)

@@ -71,6 +71,12 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
     behave like pageWithSubmitButton(doc, "Confirm and resend")
 
+    tasks.foreach {
+      task =>
+        val hiddenText = getElementById(doc, s"${task.id}-hidden")
+        assertElementContainsText(hiddenText, "to amend the error")
+    }
+
   }
 
   "when all tasks completed" - {
