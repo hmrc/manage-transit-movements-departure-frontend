@@ -50,6 +50,7 @@ class TaskListController @Inject() (
       implicit request =>
         request.userAnswers.status match {
           case SubmissionState.Submitted =>
+            logger.info(s"TaskListController: Departure with LRN $lrn has already been submitted")
             Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
           case status =>
             for {
@@ -66,6 +67,7 @@ class TaskListController @Inject() (
       implicit request =>
         request.userAnswers.status match {
           case SubmissionState.Submitted =>
+            logger.info(s"TaskListController: Departure with LRN $lrn has already been submitted")
             Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
           case _ =>
             submissionConnector.post(lrn.value).map {

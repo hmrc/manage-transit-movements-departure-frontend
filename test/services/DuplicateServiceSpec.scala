@@ -18,7 +18,6 @@ package services
 
 import base.SpecBase
 import connectors.CacheConnector
-import forms.NewLocalReferenceNumberFormProvider
 import generators.Generators
 import models.LocalReferenceNumber
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
@@ -33,10 +32,8 @@ import scala.concurrent.Future
 
 class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generators {
 
-  private val formProvider = new NewLocalReferenceNumberFormProvider()
-
   private val mockCacheConnector: CacheConnector = mock[CacheConnector]
-  private val duplicateService: DuplicateService = new DuplicateService(mockCacheConnector, formProvider)
+  private val duplicateService: DuplicateService = new DuplicateService(mockCacheConnector)
 
   override def beforeEach(): Unit = {
     reset(mockCacheConnector)

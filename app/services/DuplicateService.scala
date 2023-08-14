@@ -17,7 +17,6 @@
 package services
 
 import connectors.CacheConnector
-import forms.NewLocalReferenceNumberFormProvider
 import models.{LocalReferenceNumber, UserAnswers}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -25,8 +24,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DuplicateService @Inject() (
-  cacheConnector: CacheConnector,
-  formProvider: NewLocalReferenceNumberFormProvider
+  cacheConnector: CacheConnector
 )(implicit ec: ExecutionContext) {
 
   def copyUserAnswers(
