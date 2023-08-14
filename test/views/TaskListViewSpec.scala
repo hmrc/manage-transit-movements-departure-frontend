@@ -50,6 +50,12 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
   behave like pageWithTaskList(lrn)
 
+  tasks.foreach {
+    task =>
+      val hiddenText = getElementById(doc, s"${task.id}-hidden")
+      assertElementContainsText(hiddenText, "to amend the error")
+  }
+
   behave like pageWithLink(
     "transit-movements",
     "Back to transit movements",
