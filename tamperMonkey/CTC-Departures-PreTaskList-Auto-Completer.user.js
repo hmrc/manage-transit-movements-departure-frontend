@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         CTC-Departures PreTaskList Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      4.0
+// @version      5.0
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/what-do-you-want-to-do
 // @match        http*://*/manage-transit-movements/departures/local-reference-number
 // @match        http*://*/manage-transit-movements/departures/*/pre-task-list/*
-// @match        http*://*/manage-transit-movements/departures/*/task-list
+// @match        http*://*/manage-transit-movements/departures/*/declaration-summary
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -29,7 +29,7 @@ function isAButtonToggled() {
     if (GM_getValue('preTaskT1NoSecurityToggle', false)) {
         preTaskListT1NoSecurity()
     } else {
-        if (!location.href.includes('task-list')) {
+        if (!location.href.includes('declaration-summary')) {
             document.body.appendChild(setupGUI())
         }
     }
@@ -140,7 +140,7 @@ const preTaskListCYA = (lrn) => {
 }
 
 const taskListPage = (lrn) => {
-    if (currentPageIs(`/manage-transit-movements/departures/${lrn}/task-list`)) {
+    if (currentPageIs(`/manage-transit-movements/departures/${lrn}/declaration-summary`)) {
         toggleButtonsOff()
     }
 }
