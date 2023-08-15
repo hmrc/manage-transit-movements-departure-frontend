@@ -35,11 +35,12 @@
                     <span class="app-task-list__task-name">
                         @task.status match {
                             case CannotStartYet => { @task.name }
-                            case _              => {
+                            case Error              => {
                         <a href="@{task.href(lrn)(config)}" aria-describedby="@task.id-status">@task.name
-                            @task.status.hiddenMessageKey.map { messageKey => <span class="govuk-visually-hidden" id="@task.id-hidden">@messages(messageKey)</span>}
+                            <span class="govuk-visually-hidden" id="@task.id-hidden">@messages("taskStatus.error.hidden")</span>
                         </a>
                         }
+                        case _ => { <a href="@{task.href(lrn)(config)}" aria-describedby="@task.id-status">@task.name</a> }
                         }
                     </span>
                     <span class="govuk-tag app-task-list__tag @task.status.tag" id="@task.id-status">
