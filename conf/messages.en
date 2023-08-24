@@ -57,6 +57,14 @@ technicalDifficulties.contact.link = contact the New Computerised Transit System
 
 # Pre- task list
 
+additionalDeclarationType.title = Is this a standard or pre-lodged declaration?
+additionalDeclarationType.heading = Is this a standard or pre-lodged declaration?
+additionalDeclarationType.standard = Standard - the goods have already boarded at a UK port or airport
+additionalDeclarationType.pre-lodged = Pre-lodged - the goods have yet to board at a UK port or airport
+additionalDeclarationType.checkYourAnswersLabel = Is this a standard or pre-lodged declaration?
+additionalDeclarationType.change.hidden = whether this is a standard or pre-lodged declaration
+additionalDeclarationType.error.required = Select whether this is a standard or pre-lodged declaration
+
 localReferenceNumber.title = What is the Local Reference Number (LRN)?
 localReferenceNumber.heading = What is the Local Reference Number (LRN)?
 localReferenceNumber.paragraph = This is a unique reference number you create that is used to identify the declaration.
