@@ -19,7 +19,7 @@ package viewModels.preTaskList
 import base.SpecBase
 import generators.Generators
 import models.reference.CustomsOffice
-import models.{DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
+import models.{AdditionalDeclarationType, DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
 import pages.preTaskList._
 import viewModels.preTaskList.PreTaskListViewModel.PreTaskListViewModelProvider
 
@@ -44,6 +44,7 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
       "must return row for each answer" in {
         val answers = emptyUserAnswers
           .copy(lrn = LocalReferenceNumber("1234567890").get)
+          .setValue(AdditionalDeclarationTypePage, AdditionalDeclarationType.Standard)
           .setValue(OfficeOfDeparturePage, CustomsOffice("XI1", "name", None))
           .setValue(ProcedureTypePage, ProcedureType.Normal)
           .setValue(DeclarationTypePage, DeclarationType.Option4)
@@ -54,14 +55,15 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
         val section           = viewModelProvider.apply(answers).section
 
         section.sectionTitle mustNot be(defined)
-        section.rows.length mustBe 6
+        section.rows.length mustBe 7
         section.rows.head.value.content.asHtml.toString() mustBe "1234567890"
-        section.rows(1).value.content.asHtml.toString() mustBe "name (XI1)"
-        section.rows(2).value.content.asHtml.toString() mustBe "Normal - customs-approved location"
-        section.rows(3).value.content.asHtml.toString() mustBe "TIR - goods moving under the cover of TIR carnet"
-        section.rows(4).value.content.asHtml.toString() mustBe "tir carnet reference"
+        section.rows(1).value.content.asHtml.toString() mustBe "Standard - the goods have already boarded at a UK port or airport"
+        section.rows(2).value.content.asHtml.toString() mustBe "name (XI1)"
+        section.rows(3).value.content.asHtml.toString() mustBe "Normal - customs-approved location"
+        section.rows(4).value.content.asHtml.toString() mustBe "TIR - goods moving under the cover of TIR carnet"
+        section.rows(5).value.content.asHtml.toString() mustBe "tir carnet reference"
         section
-          .rows(5)
+          .rows(6)
           .value
           .content
           .asHtml

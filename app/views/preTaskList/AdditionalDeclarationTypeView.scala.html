@@ -31,7 +31,7 @@
 @(form: Form[AdditionalDeclarationType], lrn: LocalReferenceNumber, values: Seq[AdditionalDeclarationType], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("preTaskList.additionalDeclarationType.title"),
+    title = messages("additionalDeclarationType.title"),
     showBackLink = true,
     lrn = Some(lrn)
 ) {
@@ -44,7 +44,7 @@
             field = form("value"),
             radioType = Radio(
                 caption = None,
-                heading = messages("preTaskList.additionalDeclarationType.heading")
+                heading = messages("additionalDeclarationType.heading")
             ),
             radioItems = fieldId => values.toRadioItems(fieldId, form.value)
         )
