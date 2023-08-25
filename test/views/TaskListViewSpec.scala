@@ -86,6 +86,12 @@ class TaskListViewSpec extends TaskListViewBehaviours {
       behave like pageWithoutContent(doc, "p", "You must complete each section before you can send your declaration.")
 
       behave like pageWithoutSubmitButton(doc)
+
+      tasks.foreach {
+        task =>
+          val hiddenText = getElementById(doc, s"${task.id}-hidden")
+          assertElementContainsText(hiddenText, "to amend the error")
+      }
     }
   }
 

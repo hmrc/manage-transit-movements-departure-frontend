@@ -69,6 +69,14 @@ localReferenceNumber.checkYourAnswersLabel = Local Reference Number (LRN)
 localReferenceNumber.change.hidden = local reference number
 localReferenceNumber.change.alreadyExists = The Local Reference Number must be unique
 
+additionalDeclarationType.title = Is this a standard or pre-lodged declaration?
+additionalDeclarationType.heading = Is this a standard or pre-lodged declaration?
+additionalDeclarationType.A = Standard - the goods have already boarded at a UK port or airport
+additionalDeclarationType.D = Pre-lodged - the goods have yet to board at a UK port or airport
+additionalDeclarationType.checkYourAnswersLabel = Is this a standard or pre-lodged declaration?
+additionalDeclarationType.change.hidden = whether this is a standard or pre-lodged declaration
+additionalDeclarationType.error.required = Select whether this is a standard or pre-lodged declaration
+
 officeOfDeparture.title = Where is the office of departure?
 officeOfDeparture.heading = Where is the office of departure?
 officeOfDeparture.checkYourAnswersLabel = Office of departure
@@ -136,6 +144,8 @@ taskList.paragraph.thereIsAProblem = There is a problem with this declaration. A
 taskList.paragraph1 = You must complete each section before you can send your declaration.
 taskList.paragraph2 = You can save your declaration and come back later. You have {0} days left to complete it before your answers are deleted.
 taskList.paragraph2WithOutDays = You can save your declaration and come back later.
+
+taskStatus.error.hidden = to amend the error
 
 taskStatus.completed = Completed
 taskStatus.inProgress = In progress
