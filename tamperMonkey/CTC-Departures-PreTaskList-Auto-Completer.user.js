@@ -166,5 +166,3 @@ function preTaskListT1NoSecurity() {
     preTaskListCYA(getLRN())
     taskListPage(getLRN())
 }
-
-
