@@ -105,6 +105,13 @@ const lrnPage = (lrn) => {
     }
 }
 
+const additionalDeclarationTypePage = (lrn, data) => {
+    if (currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/standard-prelodged-declaration`)) {
+        document.getElementById(data).click()
+        document.getElementById('submit').click()
+    }
+}
+
 const officeOfDeparturePage = (lrn, data) => {
     if (currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/office-of-departure`)) {
         document.getElementById('value-select').value = data
@@ -151,6 +158,7 @@ const taskListPage = (lrn) => {
 function preTaskListT1NoSecurity() {
     departureDeclarationPage()
     lrnPage(getLRN())
+    additionalDeclarationTypePage(getLRN(), 'value')
     officeOfDeparturePage(getLRN(), 'GB000068')
     procedureTypePage(getLRN(), 'value')
     declarationTypePage(getLRN(), 'value')

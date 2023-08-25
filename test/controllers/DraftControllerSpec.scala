@@ -17,6 +17,7 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import models.AdditionalDeclarationType.Standard
 import models.DeclarationType.Option1
 import models.NormalMode
 import models.ProcedureType.Normal
@@ -37,13 +38,14 @@ class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       val result = route(app, request).value
 
-      redirectLocation(result).value mustEqual controllers.preTaskList.routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
+      redirectLocation(result).value mustEqual controllers.preTaskList.routes.AdditionalDeclarationTypeController.onPageLoad(lrn, NormalMode).url
 
     }
 
     "preTaskList is complete and the document is incomplete" in {
       setExistingUserAnswers(
         emptyUserAnswers
+          .setValue(AdditionalDeclarationTypePage, Standard)
           .setValue(DeclarationTypePage, Option1)
           .setValue(OfficeOfDeparturePage, CustomsOffice("name", "phone", None))
           .setValue(ProcedureTypePage, Normal)
