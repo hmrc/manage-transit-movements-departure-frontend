@@ -22,14 +22,13 @@ import models.DeclarationType.Option4
 import models.ProcedureType.Normal
 import models.domain._
 import models.reference.CustomsOffice
-import models.{AdditionalDeclarationType, DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType, UserAnswers}
+import models.{DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType, UserAnswers}
 import pages.preTaskList._
 import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Call
 
 case class PreTaskListDomain(
   localReferenceNumber: LocalReferenceNumber,
-  additionalDeclarationType: AdditionalDeclarationType,
   officeOfDeparture: CustomsOffice,
   procedureType: ProcedureType,
   declarationType: DeclarationType,
@@ -68,7 +67,6 @@ object PreTaskListDomain {
   implicit val reader: UserAnswersReader[PreTaskListDomain] =
     (
       localReferenceNumber,
-      AdditionalDeclarationTypePage.reader,
       OfficeOfDeparturePage.reader,
       ProcedureTypePage.reader,
       DeclarationTypePage.reader,

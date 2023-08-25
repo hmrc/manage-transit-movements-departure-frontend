@@ -91,7 +91,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.AdditionalDeclarationTypeController.onPageLoad(userAnswers.lrn, NormalMode).url
+      redirectLocation(result).value mustEqual routes.OfficeOfDepartureController.onPageLoad(userAnswers.lrn, NormalMode).url
     }
 
     "must redirect to task list / declaration summary" in {

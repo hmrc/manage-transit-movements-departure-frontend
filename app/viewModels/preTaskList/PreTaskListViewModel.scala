@@ -34,7 +34,6 @@ object PreTaskListViewModel {
 
       val rows = Seq(
         Some(helper.localReferenceNumber),
-        helper.additionalDeclarationType,
         helper.officeOfDeparture,
         helper.procedureType,
         helper.declarationType,
