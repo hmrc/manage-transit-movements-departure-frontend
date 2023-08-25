@@ -71,8 +71,8 @@ localReferenceNumber.change.alreadyExists = The Local Reference Number must be u
 
 additionalDeclarationType.title = Is this a standard or pre-lodged declaration?
 additionalDeclarationType.heading = Is this a standard or pre-lodged declaration?
-additionalDeclarationType.standard = Standard - the goods have already boarded at a UK port or airport
-additionalDeclarationType.pre-lodged = Pre-lodged - the goods have yet to board at a UK port or airport
+additionalDeclarationType.A = Standard - the goods have already boarded at a UK port or airport
+additionalDeclarationType.D = Pre-lodged - the goods have yet to board at a UK port or airport
 additionalDeclarationType.checkYourAnswersLabel = Is this a standard or pre-lodged declaration?
 additionalDeclarationType.change.hidden = whether this is a standard or pre-lodged declaration
 additionalDeclarationType.error.required = Select whether this is a standard or pre-lodged declaration

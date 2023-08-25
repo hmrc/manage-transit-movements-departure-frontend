@@ -22,8 +22,8 @@ sealed trait AdditionalDeclarationType extends Radioable[AdditionalDeclarationTy
 
 object AdditionalDeclarationType extends EnumerableType[AdditionalDeclarationType] {
 
-  case object Standard extends WithName("standard") with AdditionalDeclarationType
-  case object Prelodged extends WithName("pre-lodged") with AdditionalDeclarationType
+  case object Standard extends WithName("A") with AdditionalDeclarationType
+  case object Prelodged extends WithName("D") with AdditionalDeclarationType
 
   val messageKeyPrefix: String = "additionalDeclarationType"
 
