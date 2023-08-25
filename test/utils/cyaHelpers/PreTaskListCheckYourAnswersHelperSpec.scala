@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.preTaskList.routes
 import generators.Generators
 import models.reference.CustomsOffice
-import models.{AdditionalDeclarationType, DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType}
+import models.{DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -58,50 +58,6 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                 )
               )
             )
-        }
-      }
-    }
-
-    "additionalDeclarationType" - {
-      "must return None" - {
-        s"when $AdditionalDeclarationTypePage undefined" in {
-          forAll(arbitrary[Mode]) {
-            mode =>
-              val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
-              val result = helper.additionalDeclarationType
-              result mustBe None
-          }
-        }
-      }
-
-      "must return Some(Row)" - {
-        s"when $AdditionalDeclarationTypePage defined" in {
-          forAll(arbitrary[AdditionalDeclarationType], arbitrary[Mode]) {
-            (additionalDeclarationType, mode) =>
-              val answers = emptyUserAnswers.setValue(AdditionalDeclarationTypePage, additionalDeclarationType)
-
-              val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
-              val result = helper.additionalDeclarationType
-
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("Is this a standard or pre-lodged declaration?".toText),
-                  value = Value(messages(s"additionalDeclarationType.$additionalDeclarationType").toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = routes.AdditionalDeclarationTypeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("whether this is a standard or pre-lodged declaration"),
-                          attributes = Map()
-                        )
-                      )
-                    )
-                  )
-                )
-              )
-          }
         }
       }
     }

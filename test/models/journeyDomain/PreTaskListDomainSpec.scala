@@ -24,7 +24,7 @@ import models.ProcedureType.Normal
 import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{EitherType, UserAnswersReader}
 import models.reference.CustomsOffice
-import models.{AdditionalDeclarationType, DeclarationType, ProcedureType, SecurityDetailsType}
+import models.{DeclarationType, ProcedureType, SecurityDetailsType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
@@ -38,7 +38,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
     val gbCustomsOffice           = CustomsOffice("GB1", "Dover", None)
     val xiCustomsOffice           = CustomsOffice("XI1", "Belfast", None)
     val carnetRef                 = Gen.alphaNumStr.sample.value
-    val additionalDeclarationType = arbitrary[AdditionalDeclarationType].sample.value
     val procedureType             = arbitrary[ProcedureType].sample.value
     val securityDetails           = arbitrary[SecurityDetailsType].sample.value
     val nonOption4DeclarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
@@ -49,7 +48,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       "when a TIR declaration" in {
 
         val tirUserAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
           .unsafeSetVal(DeclarationTypePage)(Option4)
@@ -59,7 +57,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
         val expectedResult = PreTaskListDomain(
           localReferenceNumber = emptyUserAnswers.lrn,
-          additionalDeclarationType = additionalDeclarationType,
           officeOfDeparture = xiCustomsOffice,
           procedureType = Normal,
           declarationType = Option4,
@@ -76,7 +73,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       "when a non-TIR declaration" in {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(procedureType)
           .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
@@ -85,7 +81,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
         val expectedResult = PreTaskListDomain(
           localReferenceNumber = emptyUserAnswers.lrn,
-          additionalDeclarationType = additionalDeclarationType,
           officeOfDeparture = gbCustomsOffice,
           procedureType = procedureType,
           declarationType = nonOption4DeclarationType,
@@ -106,7 +101,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       "when a TIR declaration without TIRCarnetReferece" in {
 
         val tirUserAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
           .unsafeSetVal(DeclarationTypePage)(Option4)
@@ -121,7 +115,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       "when a TIR with a GB customs office" in {
 
         val tirUserAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
           .unsafeSetVal(DeclarationTypePage)(Option4)
@@ -139,7 +132,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         "when false" in {
 
           val userAnswers = emptyUserAnswers
-            .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
             .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
             .unsafeSetVal(ProcedureTypePage)(procedureType)
             .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
@@ -154,7 +146,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         "when undefined" in {
 
           val userAnswers = emptyUserAnswers
-            .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
             .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
             .unsafeSetVal(ProcedureTypePage)(procedureType)
             .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
@@ -169,7 +160,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       "when any other mandatory page is missing" in {
 
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-          AdditionalDeclarationTypePage,
           OfficeOfDeparturePage,
           ProcedureTypePage,
           DeclarationTypePage,
@@ -178,7 +168,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
         )
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
           .unsafeSetVal(DeclarationTypePage)(Option1)
