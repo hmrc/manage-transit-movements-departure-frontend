@@ -37,6 +37,7 @@ class AdditionalDeclarationTypeController @Inject() (
   implicit val sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
+  checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AdditionalDeclarationTypeView
@@ -46,26 +47,31 @@ class AdditionalDeclarationTypeController @Inject() (
 
   private val form = formProvider[AdditionalDeclarationType]("additionalDeclarationType")
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(AdditionalDeclarationTypePage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfPreTaskListAlreadyCompleted) {
+      implicit request =>
+        val preparedForm = request.userAnswers.get(AdditionalDeclarationTypePage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
 
-      Ok(view(preparedForm, lrn, AdditionalDeclarationType.values, mode))
-  }
+        Ok(view(preparedForm, lrn, AdditionalDeclarationType.values, mode))
+    }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions.requireData(lrn).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, AdditionalDeclarationType.values, mode))),
-          value => {
-            implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-            AdditionalDeclarationTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
-          }
-        )
-  }
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(checkIfPreTaskListAlreadyCompleted)
+    .async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, AdditionalDeclarationType.values, mode))),
+            value => {
+              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+              AdditionalDeclarationTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
+            }
+          )
+    }
 }
