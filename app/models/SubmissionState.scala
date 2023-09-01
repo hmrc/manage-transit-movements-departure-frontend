@@ -16,50 +16,20 @@
 
 package models
 
-import play.api.libs.json.{__, JsString, Reads, Writes}
-
 sealed trait SubmissionState {
-  def toString: String
-  val showErrorContent: Boolean = SubmissionState.showErrorContent(this)
+  def showErrorContent: Boolean = this == SubmissionState.RejectedPendingChanges
 }
 
-object SubmissionState {
+object SubmissionState extends EnumerableType[SubmissionState] {
 
-  case object NotSubmitted extends SubmissionState {
-    override def toString: String = "notSubmitted"
-  }
+  case object NotSubmitted extends WithName("notSubmitted") with SubmissionState
+  case object Submitted extends WithName("submitted") with SubmissionState
+  case object RejectedPendingChanges extends WithName("rejectedPendingChanges") with SubmissionState
 
-  case object Submitted extends SubmissionState {
-    override def toString: String = "submitted"
-  }
-
-  case object RejectedPendingChanges extends SubmissionState {
-    override def toString: String = "rejectedPendingChanges"
-  }
-
-  case object RejectedAndResubmitted extends SubmissionState {
-    override def toString: String = "rejectedAndResubmitted"
-  }
-
-  def showErrorContent(state: SubmissionState): Boolean = state match {
-    case NotSubmitted           => false
-    case RejectedAndResubmitted => false
-    case Submitted              => true
-    case RejectedPendingChanges => true
-  }
-
-  def apply(state: String): SubmissionState = state match {
-    case "submitted"              => Submitted
-    case "rejectedPendingChanges" => RejectedPendingChanges
-    case "rejectedAndResubmitted" => RejectedAndResubmitted
-    case _                        => NotSubmitted
-  }
-
-  implicit def reads: Reads[SubmissionState] =
-    __.readWithDefault[String](NotSubmitted.toString).map(SubmissionState.apply)
-
-  implicit def writes: Writes[SubmissionState] = Writes {
-    state => JsString(state.toString)
-  }
+  override val values: Seq[SubmissionState] = Seq(
+    NotSubmitted,
+    Submitted,
+    RejectedPendingChanges
+  )
 
 }

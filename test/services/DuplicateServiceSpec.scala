@@ -18,10 +18,8 @@ package services
 
 import base.SpecBase
 import connectors.CacheConnector
-import forms.NewLocalReferenceNumberFormProvider
 import generators.Generators
 import models.LocalReferenceNumber
-import models.SubmissionState.RejectedPendingChanges
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, verifyNoMoreInteractions, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -34,10 +32,8 @@ import scala.concurrent.Future
 
 class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generators {
 
-  private val formProvider = new NewLocalReferenceNumberFormProvider()
-
   private val mockCacheConnector: CacheConnector = mock[CacheConnector]
-  private val duplicateService: DuplicateService = new DuplicateService(mockCacheConnector, formProvider)
+  private val duplicateService: DuplicateService = new DuplicateService(mockCacheConnector)
 
   override def beforeEach(): Unit = {
     reset(mockCacheConnector)
@@ -50,7 +46,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
       val newLrn: LocalReferenceNumber = LocalReferenceNumber("DCBA0987654321321").value
       val oldLrnData                   = emptyUserAnswers.copy(lrn = lrn, tasks = Map("task1" -> TaskStatus.Error))
-      val newDataToSend                = oldLrnData.copy(lrn = newLrn, isSubmitted = Some(RejectedPendingChanges))
+      val newDataToSend                = oldLrnData.copy(lrn = newLrn)
 
       "must return true" - {
         "when answers in the cache can be found and data posts to cache" in {
