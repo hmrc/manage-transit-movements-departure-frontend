@@ -32,12 +32,13 @@ trait UserAnswersEntryGenerators {
   private def generatePreTaskListAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
     import pages.preTaskList._
     {
-      case OfficeOfDeparturePage   => arbitrary[CustomsOffice](arbitraryOfficeOfDeparture).map(Json.toJson(_))
-      case ProcedureTypePage       => arbitrary[ProcedureType].map(Json.toJson(_))
-      case DeclarationTypePage     => arbitrary[DeclarationType].map(Json.toJson(_))
-      case TIRCarnetReferencePage  => Gen.alphaNumStr.map(JsString)
-      case SecurityDetailsTypePage => arbitrary[SecurityDetailsType].map(Json.toJson(_))
-      case DetailsConfirmedPage    => Gen.const(true).map(JsBoolean)
+      case AdditionalDeclarationTypePage => arbitrary[AdditionalDeclarationType].map(Json.toJson(_))
+      case OfficeOfDeparturePage         => arbitrary[CustomsOffice](arbitraryOfficeOfDeparture).map(Json.toJson(_))
+      case ProcedureTypePage             => arbitrary[ProcedureType].map(Json.toJson(_))
+      case DeclarationTypePage           => arbitrary[DeclarationType].map(Json.toJson(_))
+      case TIRCarnetReferencePage        => Gen.alphaNumStr.map(JsString)
+      case SecurityDetailsTypePage       => arbitrary[SecurityDetailsType].map(Json.toJson(_))
+      case DetailsConfirmedPage          => Gen.const(true).map(JsBoolean)
     }
   }
 }

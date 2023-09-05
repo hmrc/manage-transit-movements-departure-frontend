@@ -19,17 +19,16 @@ package controllers
 import com.google.inject.Inject
 import connectors.SubmissionConnector
 import controllers.actions.{Actions, DependentTaskAction}
-import models.LocalReferenceNumber
-import models.SubmissionState.NotSubmitted
+import models.{LocalReferenceNumber, SubmissionState}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
+import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel
 import views.html.TaskListView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class TaskListController @Inject() (
   override val messagesApi: MessagesApi,
@@ -46,12 +45,19 @@ class TaskListController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkPreTaskListCompleted) {
+    .andThen(checkPreTaskListCompleted)
+    .async {
       implicit request =>
-        val tasks                = viewModel(request.userAnswers)
-        val isSubmitted: Boolean = request.userAnswers.isSubmitted.getOrElse(NotSubmitted).showErrorContent
-
-        Ok(view(lrn, tasks, isSubmitted))
+        request.userAnswers.status match {
+          case SubmissionState.Submitted =>
+            logger.info(s"TaskListController: Departure with LRN $lrn has already been submitted")
+            Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+          case status =>
+            for {
+              expiryInDays <- submissionConnector.getExpiryInDays(lrn.value)
+              tasks = viewModel(request.userAnswers)
+            } yield Ok(view(lrn, tasks, status.showErrorContent, expiryInDays))
+        }
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions
@@ -59,16 +65,19 @@ class TaskListController @Inject() (
     .andThen(checkPreTaskListCompleted)
     .async {
       implicit request =>
-        submissionConnector.post(lrn.value).map {
-          case response if is2xx(response.status) =>
-            logger.debug(s"TaskListController:onSubmit: success ${response.status}: ${response.body}")
-            Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad())
-          case response if is4xx(response.status) =>
-            logger.warn(s"TaskListController:onSubmit: bad request: ${response.status}: ${response.body}")
-            BadRequest(response.body)
-          case e =>
-            logger.warn(s"TaskListController:onSubmit: something went wrong: ${e.status}-${e.body}")
-            InternalServerError(e.body)
+        request.userAnswers.status match {
+          case SubmissionState.Submitted =>
+            logger.info(s"TaskListController: Departure with LRN $lrn has already been submitted")
+            Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+          case _ =>
+            submissionConnector.post(lrn.value).map {
+              case response if is2xx(response.status) =>
+                logger.debug(s"TaskListController:onSubmit: ${response.status}: ${response.body}")
+                Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad(lrn))
+              case e =>
+                logger.error(s"TaskListController:onSubmit: ${e.status}: ${e.body}")
+                Redirect(routes.ErrorController.technicalDifficulties())
+            }
         }
     }
 }

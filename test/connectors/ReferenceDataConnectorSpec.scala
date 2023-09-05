@@ -29,7 +29,7 @@ import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import play.mvc.Http.MimeTypes.JSON
 import play.mvc.Http.Status._
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -105,14 +105,14 @@ class ReferenceDataConnectorSpec
       |{
       |  "_links": {
       |    "self": {
-      |      "href": "/customs-reference-data/lists/CountryCodesCommonTransit"
+      |      "href": "/customs-reference-data/lists/CountryCodesCTC"
       |    }
       |  },
       |  "meta": {
       |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
       |    "snapshotDate": "2023-01-01"
       |  },
-      |  "id": "CountryCodesCommonTransit",
+      |  "id": "CountryCodesCTC",
       |  "data": [
       |    {
       |      "activeFrom": "2023-01-23",
@@ -252,7 +252,7 @@ class ReferenceDataConnectorSpec
     "getCountryCodesCTC" - {
       "must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/lists/CountryCodesCommonTransit"))
+          get(urlEqualTo(s"/$baseUrl/lists/CountryCodesCTC"))
             .willReturn(okJson(countriesResponseCTJson))
         )
 
@@ -265,7 +265,7 @@ class ReferenceDataConnectorSpec
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$baseUrl/lists/CountryCodesCommonTransit", connector.getCountryCodesCTC())
+        checkErrorResponse(s"/$baseUrl/lists/CountryCodesCTC", connector.getCountryCodesCTC())
       }
     }
 

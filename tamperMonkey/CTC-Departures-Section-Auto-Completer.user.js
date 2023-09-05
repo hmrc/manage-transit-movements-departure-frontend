@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      14.2
+// @version      16
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @author       Tega-Okeremeta
-// @match        http*://*/manage-transit-movements/departures/*/task-list
+// @match        http*://*/manage-transit-movements/departures/*/declaration-summary
 // @match        http*://*/manage-transit-movements/departures/route-details/*
 // @match        http*://*/manage-transit-movements/departures/trader-details/*
 // @match        http*://*/manage-transit-movements/departures/transport-details/*
@@ -30,6 +30,8 @@ function initialiseJourneys() {
         let journey = new Journey("traderDetailsReducedDataSetJourney", "Trader Details (Reduced Data Set)", "/manage-transit-movements/departures/trader-details/", "10130", "trader-details-status")
         journey.addPages(
             [
+                new ButtonPage("/manage-transit-movements/departures/trader-details/transit-holder/add-eori/", "value"),
+                new InputPage("/manage-transit-movements/departures/trader-details/transit-holder/eori/", "eori123"),
                 new ButtonPage("/manage-transit-movements/departures/trader-details/holder-of-transit/is-tir-id-known/", "value-no"),
                 new ButtonPage("/manage-transit-movements/departures/trader-details/transit-holder/add-eori-tin/", "value-no"),
                 new InputPage("/manage-transit-movements/departures/trader-details/transit-holder/name/", "Person"),
@@ -53,6 +55,8 @@ function initialiseJourneys() {
         let journey = new Journey("traderDetailsFullDataSetJourney", "Trader Details (Full Data Set)", "/manage-transit-movements/departures/trader-details/", "10130", "trader-details-status")
         journey.addPages(
             [
+                new ButtonPage("/manage-transit-movements/departures/trader-details/transit-holder/add-eori/", "value-yes"),
+                new InputPage("/manage-transit-movements/departures/trader-details/transit-holder/eori/", "eori123"),
                 new ButtonPage("/manage-transit-movements/departures/trader-details/holder-of-transit/is-tir-id-known/", "value-no"),
                 new ButtonPage("/manage-transit-movements/departures/trader-details/transit-holder/add-eori-tin/", "value-no"),
                 new InputPage("/manage-transit-movements/departures/trader-details/transit-holder/name/", "Person"),
@@ -81,7 +85,7 @@ function initialiseJourneys() {
         let journey = new Journey("routeDetailsJourney", "Route Details (Authorised Place)", "/manage-transit-movements/departures/route-details/", "10129", "route-details-status")
         journey.addPages(
             [
-                new SelectPage("/manage-transit-movements/departures/route-details/transit-route/country-of-destination/", "IT"),
+                new SelectPage("/manage-transit-movements/departures/route-details/transit-route/office-of-destination-country/", "IT"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/add-location-of-goods/", "value"),
                 new SelectPage("/manage-transit-movements/departures/route-details/transit-route/office-of-destination/", "IT034105"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/transit-route/binding-itinerary/", "value-no"),
@@ -94,6 +98,8 @@ function initialiseJourneys() {
                 new ButtonPage("/manage-transit-movements/departures/route-details/office-of-transit/1/add-eta/", "value-no"),
                 new CheckYourAnswersPage("/manage-transit-movements/departures/route-details/office-of-transit/1/check-answers/"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/office-of-transit/add-another/", "value-no"),
+                new ButtonPage("/manage-transit-movements/departures/route-details/place-of-unloading/add-extra-information/", "value-no"),
+                new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/add/", "value"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/type/", "value"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/identification/", "value_1"),
                 new InputPage("/manage-transit-movements/departures/route-details/location-of-goods/eori-tin/", "eori1234"),
@@ -125,9 +131,11 @@ function initialiseJourneys() {
                 new SelectPage("/manage-transit-movements/departures/transport-details/departure-means-of-transport/country/", "GB"),
                 new ButtonPage("/manage-transit-movements/departures/transport-details/border-mode-of-transport/add/", "value-no"),
                 new ButtonPage("/manage-transit-movements/departures/transport-details/border-mode-of-transport/", "value"),
+                new ButtonPage("/manage-transit-movements/departures/transport-details/border-means-of-transport/add-identification/", "value"),
                 new ButtonPage("/manage-transit-movements/departures/transport-details/border-means-of-transport/1/identification/", "value"),
                 new InputPage("/manage-transit-movements/departures/transport-details/border-means-of-transport/1/identification-number/", "1234"),
-                new ButtonPage("/manage-transit-movements/departures/transport-details/border-means-of-transport/1/add-country/", "value-no"),
+                new ButtonPage("/manage-transit-movements/departures/transport-details/border-means-of-transport/1/add-country/", "value"),
+                new SelectPage("/manage-transit-movements/departures/transport-details/border-means-of-transport/1/country/", "FR"),
                 new SelectPage("/manage-transit-movements/departures/transport-details/border-means-of-transport/1/office-of-transit/", "DE004058"),
                 new CheckYourAnswersPage("/manage-transit-movements/departures/transport-details/border-means-of-transport/1/check-your-answers/"),
                 new ButtonPage("/manage-transit-movements/departures/transport-details/border-means-of-transport/add-another/", "value-no"),
@@ -137,6 +145,7 @@ function initialiseJourneys() {
                 new ButtonPage("/manage-transit-movements/departures/transport-details/authorisations/add/", "value-no"),
                 new InputPage("/manage-transit-movements/departures/transport-details/authorisations/1/reference-number/", "TRD123"),
                 new ButtonPage("/manage-transit-movements/departures/transport-details/authorisations/add-another/", "value-no"),
+                new ButtonPage("/manage-transit-movements/departures/transport-details/carrier/add/", "value"),
                 new InputPage("/manage-transit-movements/departures/transport-details/carrier/eori-tcuin/", "GB123456"),
                 new ButtonPage("/manage-transit-movements/departures/transport-details/carrier/add-contact/", "value-no"),
                 new ButtonPage("/manage-transit-movements/departures/transport-details/transport-equipment/add-transport-equipment/", "value"),
@@ -157,11 +166,14 @@ function initialiseJourneys() {
         let journey = new Journey("addDocumentsJourney", "Add Documents", "/manage-transit-movements/departures/documents/", "10132", "documents-status")
         journey.addPages(
             [
-                new SelectPage("/manage-transit-movements/departures/documents/1/type/", "CodeOnly"),
-                new SelectPage("/manage-transit-movements/departures/documents/1/type-previous/", "CodeOnly"),
+                new ButtonPage("/manage-transit-movements/departures/documents/add/", "value"),
+                new SelectPage("/manage-transit-movements/departures/documents/1/type/", "Previous - (N740) Air waybill"),
+                new SelectPage("/manage-transit-movements/departures/documents/1/type-previous/", "Previous - (N740) Air waybill"),
+                new SelectPage("/manage-transit-movements/departures/documents/1/previous/package-type/", "BG"),
                 new InputPage("/manage-transit-movements/departures/documents/1/reference-number/", "9078GH87"),
                 new ButtonPage("/manage-transit-movements/departures/documents/1/previous/goods-item-number/add/", "value"),
                 new InputPage("/manage-transit-movements/departures/documents/1/previous/goods-item-number/", "12345"),
+                new ButtonPage("/manage-transit-movements/departures/documents/1/additional-information/add/", "value-no"),
                 new ButtonPage("/manage-transit-movements/departures/documents/1/previous/add-package/", "value"),
                 new SelectPage("/manage-transit-movements/departures/documents/1/previous/package/", "BG"),
                 new ButtonPage("/manage-transit-movements/departures/documents/1/previous/add-package-quantity/", "value"),
@@ -188,18 +200,22 @@ function initialiseJourneys() {
                 new ButtonPage("/manage-transit-movements/departures/items/1/commodity-code/add/", "value"),
                 new InputPage("/manage-transit-movements/departures/items/1/commodity-code/", "123ABC"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/dangerous-goods/add/", "value"),
+                new ButtonPage("/manage-transit-movements/departures/items/1/consignee/add-eori-tin/", "value"),
+                new InputPage("/manage-transit-movements/departures/items/1/consignee/eori-tin/", "GB123456789000"),
                 new InputPage("/manage-transit-movements/departures/items/1/dangerous-goods/1/un-number/", "AB12"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/dangerous-goods/add-another/", "value-no"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/measurement/add-net-weight/", "value-no"),
                 new InputPage("/manage-transit-movements/departures/items/1/measurement/gross-weight/", "12.345"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/measurement/add-supplementary-units/", "value"),
                 new InputPage("/manage-transit-movements/departures/items/1/measurement/supplementary-units/", "12.345"),
+                new ButtonPage("/manage-transit-movements/departures/items/1/supply-chain-actor/add/", "value-no"),
                 new SelectPage("/manage-transit-movements/departures/items/1/packages/1/type/", "NU"),
                 new InputPage("/manage-transit-movements/departures/items/1/packages/1/type-quantity/", "65"),
                 new SelectPage("/manage-transit-movements/departures/items/1/packages/1/add-shipping-mark/", "value"),
                 new InputPage("/manage-transit-movements/departures/items/1/packages/1/shipping-mark/", "The shipping mark"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/packages/add-another/", "value-no"),
-                new ButtonPage("/manage-transit-movements/departures/items/1/documents/attach/", "value-no"),
+                new SelectPage("/manage-transit-movements/departures/items/1/documents/1/select-document/", "Previous - (N740) Air waybill - 9078GH87"),
+                new CheckYourAnswersPage("/manage-transit-movements/departures/items/1/documents/attach-another/"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/additional-reference/add/", "value-no"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/additional-information/add/", "value-no"),
                 new CheckYourAnswersPage("/manage-transit-movements/departures/items/1/check-answers/"),
@@ -214,6 +230,7 @@ function initialiseJourneys() {
         journey.addPages(
             [
                 new ButtonPage("/manage-transit-movements/departures/guarantee-details/1/guarantee-type/", "value"),
+                new ButtonPage("/manage-transit-movements/departures/guarantee-details/1/add-liability/", "value"),
                 new CheckYourAnswersPage("/manage-transit-movements/departures/guarantee-details/guarantee-added-tir/"),
                 new InputPage("/manage-transit-movements/departures/guarantee-details/1/guarantee-reference-number/", "01GB1234567890120A123456"),
                 new InputPage("/manage-transit-movements/departures/guarantee-details/1/access-code/", "1234"),
@@ -289,7 +306,7 @@ function resetStates(journeys) {
 function completeJourney(journey) {
     if (onLandingPage()) {
         GM_setValue(journey._button.id, true)
-        if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/task-list`)) {
+        if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/declaration-summary`)) {
             if (location.hostname === "localhost") {
                 location.href = `http:\/\/localhost:${journey.localHostPort}${journey.journeyStartUrl}${getLRN()}`
             } else {
@@ -394,7 +411,7 @@ function saveLRN() {
 }
 
 function onLandingPage() {
-    return location.href.includes('task-list')
+    return location.href.includes('declaration-summary')
 }
 
 function getLRN() {
@@ -604,7 +621,7 @@ class Button {
 
         button.addEventListener("click", function handleClick() {
             GM_setValue(id, true)
-            if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/task-list`)) {
+            if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/declaration-summary`)) {
                 if (location.hostname === "localhost") {
                     location.href = `http:\/\/localhost:${localHostPort}${journeyStartUrl}${getLRN()}`
                 } else {
@@ -662,7 +679,7 @@ class CompleteAllButton {
             journeys.forEach(journey => GM_setValue(journey._button.id, false))
             GM_setValue(id, true)
             GM_setValue(firstJourneyId, true)
-            if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/task-list`)) {
+            if (currentPageIs(`/manage-transit-movements/departures/${getLRN()}/declaration-summary`)) {
                 if (location.hostname === "localhost") {
                     location.href = `http:\/\/localhost:${firstJourneyPort}${firstJourneyUrl}${getLRN()}`
                 } else {

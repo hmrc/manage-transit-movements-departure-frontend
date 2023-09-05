@@ -51,7 +51,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   }
 
   def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCodesCommonTransit"
+    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCodesCTC"
     http.GET[Seq[Country]](serviceUrl, headers = version2Header)
   }
 

@@ -33,10 +33,12 @@ class SubmissionConnector @Inject() (
   private val baseUrl = s"${config.cacheUrl}"
 
   def post(lrn: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
-
     val url = s"$baseUrl/declaration/submit"
-
     http.POST[String, HttpResponse](url, lrn)
+  }
 
+  def getExpiryInDays(lrn: String)(implicit hc: HeaderCarrier): Future[Long] = {
+    val url = s"$baseUrl/user-answers/expiry/$lrn"
+    http.GET[Long](url)
   }
 }

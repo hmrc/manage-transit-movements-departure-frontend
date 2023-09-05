@@ -18,10 +18,13 @@ package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.SubmissionConnector
-import generators.{Generators, UserAnswersGenerator}
+import generators.Generators
+import models.SubmissionState
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -29,10 +32,13 @@ import play.api.test.Helpers._
 import viewModels.taskList.{PreTaskListTask, TaskListTask, TaskListViewModel, TaskStatus}
 import views.html.TaskListView
 
-class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators with UserAnswersGenerator {
+import scala.concurrent.Future
+
+class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   private lazy val mockViewModel: TaskListViewModel        = mock[TaskListViewModel]
   private val mockSubmissionConnector: SubmissionConnector = mock[SubmissionConnector]
+  private val expiryInDays                                 = 30
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -48,10 +54,11 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
   "Task List Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val sampleTasks       = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
-      val isErrors: Boolean = sampleTasks.exists(_.isError)
+      val sampleTasks               = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
+      val showErrorContent: Boolean = sampleTasks.exists(_.isError)
 
       when(mockViewModel.apply(any())).thenReturn(sampleTasks)
+      when(mockSubmissionConnector.getExpiryInDays(any())(any())).thenReturn(Future.successful(expiryInDays))
 
       val userAnswers = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
       setExistingUserAnswers(userAnswers)
@@ -65,7 +72,39 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn, sampleTasks, isErrors)(request, messages).toString
+        view(lrn, sampleTasks, showErrorContent, expiryInDays)(request, messages).toString
+    }
+
+    "must redirect to Session Expired for a GET if declaration submitted" in {
+      val sampleTasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
+
+      when(mockViewModel.apply(any())).thenReturn(sampleTasks)
+
+      val userAnswers = emptyUserAnswers.copy(
+        tasks = Map(PreTaskListTask.section -> TaskStatus.Completed),
+        status = SubmissionState.Submitted
+      )
+      setExistingUserAnswers(userAnswers)
+
+      val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+    }
+
+    "must redirect to Session Expired for a POST if declaration submitted" in {
+      setExistingUserAnswers(emptyUserAnswers.copy(status = SubmissionState.Submitted))
+
+      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
@@ -81,8 +120,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     }
 
     "must redirect to confirmation page when submission success" in {
-      when(mockSubmissionConnector.post(any())(any()))
-        .thenReturn(response(OK))
+      when(mockSubmissionConnector.post(any())(any())).thenReturn(response(OK))
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -92,33 +130,24 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.DeclarationSubmittedController.onPageLoad().url
+      redirectLocation(result).value mustEqual routes.DeclarationSubmittedController.onPageLoad(lrn).url
     }
 
-    "must return a bad request for a 400" in {
-      when(mockSubmissionConnector.post(any())(any()))
-        .thenReturn(response(BAD_REQUEST))
+    "must redirect to technical difficulties for an error" in {
+      forAll(Gen.oneOf(BAD_REQUEST, INTERNAL_SERVER_ERROR)) {
+        errorCode =>
+          when(mockSubmissionConnector.post(any())(any())).thenReturn(response(errorCode))
 
-      setExistingUserAnswers(emptyUserAnswers)
+          setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+          val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
-      val result = route(app, request).value
+          val result = route(app, request).value
 
-      status(result) mustEqual BAD_REQUEST
-    }
+          status(result) mustEqual SEE_OTHER
 
-    "must return a internal server error for a 500" in {
-      when(mockSubmissionConnector.post(any())(any()))
-        .thenReturn(response(INTERNAL_SERVER_ERROR))
-
-      setExistingUserAnswers(emptyUserAnswers)
-
-      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
-
-      val result = route(app, request).value
-
-      status(result) mustEqual INTERNAL_SERVER_ERROR
+          redirectLocation(result).value mustEqual routes.ErrorController.technicalDifficulties().url
+      }
     }
   }
 }

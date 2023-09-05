@@ -42,4 +42,5 @@ class TaskListViewModel {
       case task: TaskListTask => task
     }
   }
+
 }

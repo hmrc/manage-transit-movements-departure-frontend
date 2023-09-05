@@ -22,7 +22,6 @@ import models.LocalReferenceNumber
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import services.DuplicateService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.NewLocalReferenceNumberView
@@ -32,7 +31,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class NewLocalReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
   identify: IdentifierAction,
   formProvider: LocalReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,

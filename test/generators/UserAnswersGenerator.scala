@@ -18,7 +18,7 @@ package generators
 
 import models.domain.UserAnswersReader
 import models.journeyDomain.ReaderError
-import models.{EoriNumber, LocalReferenceNumber, RichJsObject, UserAnswers}
+import models.{EoriNumber, LocalReferenceNumber, RichJsObject, SubmissionState, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -30,7 +30,8 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with PreTaskListUs
       for {
         lrn        <- arbitrary[LocalReferenceNumber]
         eoriNumber <- arbitrary[EoriNumber]
-        initialAnswers = UserAnswers(lrn, eoriNumber)
+        status     <- arbitrary[SubmissionState]
+        initialAnswers = UserAnswers(lrn, eoriNumber, status = status)
         answers <- arbitraryPreTaskListAnswers(initialAnswers)
       } yield answers
     }

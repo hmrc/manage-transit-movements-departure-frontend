@@ -14,10 +14,21 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import queries.{Gettable, Settable}
+sealed trait AdditionalDeclarationType extends Radioable[AdditionalDeclarationType] {
+  override val messageKeyPrefix: String = AdditionalDeclarationType.messageKeyPrefix
+}
 
-trait QuestionPage[A] extends ReadOnlyPage[A] with Settable[A]
+object AdditionalDeclarationType extends EnumerableType[AdditionalDeclarationType] {
 
-trait ReadOnlyPage[A] extends Page with Gettable[A]
+  case object Standard extends WithName("A") with AdditionalDeclarationType
+  case object Prelodged extends WithName("D") with AdditionalDeclarationType
+
+  val messageKeyPrefix: String = "additionalDeclarationType"
+
+  override val values: Seq[AdditionalDeclarationType] = Seq(
+    Standard,
+    Prelodged
+  )
+}
