@@ -89,8 +89,8 @@ class CacheConnector @Inject() (
       }
   }
 
-  def doesSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    val url = s"$baseUrl/does-submission-exist-for-lrn/${lrn.toString}"
+  def doesIE028ExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val url = s"$baseUrl/does-ie028-exist-for-lrn/${lrn.toString}"
     http
       .GET[Boolean](url)
       .recoverWith {

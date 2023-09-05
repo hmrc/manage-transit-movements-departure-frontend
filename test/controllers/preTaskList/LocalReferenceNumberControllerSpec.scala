@@ -66,7 +66,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
       val alreadyExists: Boolean = true
 
-      when(mockDuplicateService.doesSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(alreadyExists))
+      when(mockDuplicateService.doesIE028ExistForLrn(any())(any())).thenReturn(Future.successful(alreadyExists))
       when(mockDuplicateService.alreadySubmitted(any())(any())).thenReturn(Future.successful(alreadyExists))
 
       val invalidAnswer = "ABC123"
@@ -90,7 +90,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
       val alreadyExists: Boolean = false
 
-      when(mockDuplicateService.doesSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(alreadyExists))
+      when(mockDuplicateService.doesIE028ExistForLrn(any())(any())).thenReturn(Future.successful(alreadyExists))
       when(mockDuplicateService.alreadySubmitted(any())(any())).thenReturn(Future.successful(alreadyExists))
 
       val invalidAnswer = ""
@@ -114,7 +114,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       "when there are no existing user answers" in {
 
         val alreadyExists: Boolean = false
-        when(mockDuplicateService.doesSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(alreadyExists))
+        when(mockDuplicateService.doesIE028ExistForLrn(any())(any())).thenReturn(Future.successful(alreadyExists))
         when(mockDuplicateService.alreadySubmitted(any())(any())).thenReturn(Future.successful(alreadyExists))
 
         when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None) thenReturn Future.successful(Some(emptyUserAnswers))
@@ -137,7 +137,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       "when there are existing user answers" in {
 
         val alreadyExists: Boolean = false
-        when(mockDuplicateService.doesSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(alreadyExists))
+        when(mockDuplicateService.doesIE028ExistForLrn(any())(any())).thenReturn(Future.successful(alreadyExists))
         when(mockDuplicateService.alreadySubmitted(any())(any())).thenReturn(Future.successful(alreadyExists))
 
         when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(Some(emptyUserAnswers))
@@ -158,7 +158,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       "when both GETs return a None" in {
 
         val alreadyExists: Boolean = false
-        when(mockDuplicateService.doesSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(alreadyExists))
+        when(mockDuplicateService.doesIE028ExistForLrn(any())(any())).thenReturn(Future.successful(alreadyExists))
         when(mockDuplicateService.alreadySubmitted(any())(any())).thenReturn(Future.successful(alreadyExists))
 
         when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None) thenReturn Future.successful(None)

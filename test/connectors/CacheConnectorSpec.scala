@@ -221,7 +221,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
       }
     }
 
-    "doesSubmissionExistForLrn" - {
+    "doesIE028ExistForLrn" - {
       val url = s"/manage-transit-movements-departure-cache/does-submission-exist-for-lrn/${lrn.value}"
 
       "must return false when status is Ok and lrn does not exists in API" in {
@@ -230,7 +230,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
             .willReturn(okJson(Json.stringify(JsBoolean(false))))
         )
 
-        connector.doesSubmissionExistForLrn(lrn).futureValue mustBe false
+        connector.doesIE028ExistForLrn(lrn).futureValue mustBe false
       }
 
       "must return true when status is Ok and lrn does exists in API" in {
@@ -239,7 +239,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
             .willReturn(okJson(Json.stringify(JsBoolean(true))))
         )
 
-        connector.doesSubmissionExistForLrn(lrn).futureValue mustBe true
+        connector.doesIE028ExistForLrn(lrn).futureValue mustBe true
       }
 
       "return an exception for 4xx or 5xx response" in {
@@ -251,7 +251,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
         )
 
         assertThrows[Exception] {
-          await(connector.doesSubmissionExistForLrn(lrn))
+          await(connector.doesIE028ExistForLrn(lrn))
         }
       }
     }

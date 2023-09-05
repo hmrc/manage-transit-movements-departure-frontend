@@ -115,7 +115,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
         "when local reference number" in {
           forAll(arbitrary[Boolean]) {
             isDuplicate =>
-              when(mockCacheConnector.doesSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(isDuplicate))
+              when(mockCacheConnector.doesIE028ExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(isDuplicate))
 
               duplicateService.alreadySubmitted(Some(lrn)).futureValue mustBe isDuplicate
           }
@@ -151,19 +151,19 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
     "doesDraftOrSubmissionExistForLrn" - {
       "must return true if LRN exists in API" in {
 
-        when(mockCacheConnector.doesSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(true))
+        when(mockCacheConnector.doesIE028ExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(true))
 
-        duplicateService.doesSubmissionExistForLrn(lrn).futureValue mustBe true
+        duplicateService.doesIE028ExistForLrn(lrn).futureValue mustBe true
 
-        verify(mockCacheConnector).doesSubmissionExistForLrn(eqTo(lrn))(any())
+        verify(mockCacheConnector).doesIE028ExistForLrn(eqTo(lrn))(any())
       }
 
       "must return false if LRN does not exist in API" in {
-        when(mockCacheConnector.doesSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(false))
+        when(mockCacheConnector.doesIE028ExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(false))
 
-        duplicateService.doesSubmissionExistForLrn(lrn).futureValue mustBe false
+        duplicateService.doesIE028ExistForLrn(lrn).futureValue mustBe false
 
-        verify(mockCacheConnector).doesSubmissionExistForLrn(eqTo(lrn))(any())
+        verify(mockCacheConnector).doesIE028ExistForLrn(eqTo(lrn))(any())
       }
     }
 

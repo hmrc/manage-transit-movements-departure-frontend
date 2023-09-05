@@ -46,7 +46,7 @@ class NewLocalReferenceNumberController @Inject() (
 
   def onPageLoad(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
     implicit request =>
-      duplicateService.doesSubmissionExistForLrn(oldLocalReferenceNumber).map {
+      duplicateService.doesIE028ExistForLrn(oldLocalReferenceNumber).map {
         case true  => Ok(view(form(), oldLocalReferenceNumber))
         case false => Redirect(controllers.routes.ErrorController.badRequest()) //TODO: More generic error page?
       }

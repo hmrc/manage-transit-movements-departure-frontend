@@ -64,8 +64,8 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
 
     "must return OK and the correct view for a GET when old local reference number has been submitted" in {
 
-      when(mockDuplicateService.doesSubmissionExistForLrn(eqTo(oldLrn))(any())).thenReturn(Future.successful(true))
-      when(mockCacheConnector.doesSubmissionExistForLrn(eqTo(oldLrn))(any())).thenReturn(Future.successful(true))
+      when(mockDuplicateService.doesIE028ExistForLrn(eqTo(oldLrn))(any())).thenReturn(Future.successful(true))
+      when(mockCacheConnector.doesIE028ExistForLrn(eqTo(oldLrn))(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(GET, localReferenceNumberOnPageLoad)
 
@@ -81,8 +81,8 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
 
     "must redirect to bad request page when old local reference number is not in the API" in {
 
-      when(mockDuplicateService.doesSubmissionExistForLrn(eqTo(oldLrn))(any())).thenReturn(Future.successful(false))
-      when(mockCacheConnector.doesSubmissionExistForLrn(eqTo(oldLrn))(any())).thenReturn(Future.successful(false))
+      when(mockDuplicateService.doesIE028ExistForLrn(eqTo(oldLrn))(any())).thenReturn(Future.successful(false))
+      when(mockCacheConnector.doesIE028ExistForLrn(eqTo(oldLrn))(any())).thenReturn(Future.successful(false))
 
       val request = FakeRequest(GET, localReferenceNumberOnPageLoad)
 
