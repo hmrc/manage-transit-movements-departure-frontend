@@ -17,49 +17,89 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import connectors.CacheConnector
 import models.AdditionalDeclarationType.Standard
 import models.DeclarationType.Option1
 import models.NormalMode
 import models.ProcedureType.Normal
 import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.CustomsOffice
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, when}
 import pages.preTaskList._
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
+import scala.concurrent.Future
+
 class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
+  private val mockConnector = mock[CacheConnector]
+
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(bind(classOf[CacheConnector]).toInstance(mockConnector))
+
+  override def beforeEach(): Unit =
+    reset(mockConnector)
+
   "draft controller" - {
-    "when the preTaskList is incomplete the next page will be a preTaskList page" in {
 
-      setExistingUserAnswers(emptyUserAnswers.setValue(TIRCarnetReferencePage, ""))
+    "when IE028 does not exit for movement" - {
 
-      val request = FakeRequest(GET, routes.DraftController.draftRedirect(lrn).url)
+      "when the preTaskList is incomplete the next page will be a preTaskList page" in {
 
-      val result = route(app, request).value
+        when(mockConnector.doesIE028ExistForLrn(any())(any())).thenReturn(Future.successful(false))
 
-      redirectLocation(result).value mustEqual controllers.preTaskList.routes.AdditionalDeclarationTypeController.onPageLoad(lrn, NormalMode).url
+        setExistingUserAnswers(emptyUserAnswers.setValue(TIRCarnetReferencePage, ""))
+
+        val request = FakeRequest(GET, routes.DraftController.draftRedirect(lrn).url)
+
+        val result = route(app, request).value
+
+        redirectLocation(result).value mustEqual controllers.preTaskList.routes.AdditionalDeclarationTypeController.onPageLoad(lrn, NormalMode).url
+
+      }
+
+      "preTaskList is complete and the document is incomplete" in {
+
+        when(mockConnector.doesIE028ExistForLrn(any())(any())).thenReturn(Future.successful(false))
+
+        setExistingUserAnswers(
+          emptyUserAnswers
+            .setValue(AdditionalDeclarationTypePage, Standard)
+            .setValue(DeclarationTypePage, Option1)
+            .setValue(OfficeOfDeparturePage, CustomsOffice("name", "phone", None))
+            .setValue(ProcedureTypePage, Normal)
+            .setValue(SecurityDetailsTypePage, NoSecurityDetails)
+            .setValue(DetailsConfirmedPage, true)
+        )
+
+        val request = FakeRequest(GET, routes.DraftController.draftRedirect(lrn).url)
+
+        val result = route(app, request).value
+
+        redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+      }
 
     }
 
-    "preTaskList is complete and the document is incomplete" in {
-      setExistingUserAnswers(
-        emptyUserAnswers
-          .setValue(AdditionalDeclarationTypePage, Standard)
-          .setValue(DeclarationTypePage, Option1)
-          .setValue(OfficeOfDeparturePage, CustomsOffice("name", "phone", None))
-          .setValue(ProcedureTypePage, Normal)
-          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-          .setValue(DetailsConfirmedPage, true)
-      )
+    "when IE028 does exit for movement" - {
 
-      val request = FakeRequest(GET, routes.DraftController.draftRedirect(lrn).url)
+      "must redirect to NewLocalReferenceNumberPage" in {
 
-      val result = route(app, request).value
+        when(mockConnector.doesIE028ExistForLrn(any())(any())).thenReturn(Future.successful(true))
 
-      redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+        val request = FakeRequest(GET, routes.DraftController.draftRedirect(lrn).url)
+
+        val result = route(app, request).value
+
+        redirectLocation(result).value mustEqual controllers.routes.NewLocalReferenceNumberController.onPageLoad(lrn).url
+      }
     }
-
   }
 
 }

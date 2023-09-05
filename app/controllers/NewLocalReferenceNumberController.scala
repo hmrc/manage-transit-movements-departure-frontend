@@ -48,7 +48,7 @@ class NewLocalReferenceNumberController @Inject() (
     implicit request =>
       duplicateService.doesIE028ExistForLrn(oldLocalReferenceNumber).map {
         case true  => Ok(view(form(), oldLocalReferenceNumber))
-        case false => Redirect(controllers.routes.ErrorController.badRequest()) //TODO: More generic error page?
+        case false => Redirect(controllers.routes.ErrorController.badRequest())
       }
   }
 

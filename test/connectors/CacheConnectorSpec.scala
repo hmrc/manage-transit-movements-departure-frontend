@@ -222,7 +222,7 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
     }
 
     "doesIE028ExistForLrn" - {
-      val url = s"/manage-transit-movements-departure-cache/does-submission-exist-for-lrn/${lrn.value}"
+      val url = s"/manage-transit-movements-departure-cache/does-ie028-exist-for-lrn/${lrn.value}"
 
       "must return false when status is Ok and lrn does not exists in API" in {
         server.stubFor(
