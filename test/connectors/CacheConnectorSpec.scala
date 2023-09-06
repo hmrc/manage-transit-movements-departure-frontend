@@ -186,6 +186,37 @@ class CacheConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with W
       }
     }
 
+    "delete" - {
+
+      val url = s"/manage-transit-movements-departure-cache/user-answers/${userAnswers.lrn}"
+
+      "must return true when status is Ok" in {
+        server.stubFor(delete(urlEqualTo(url)) willReturn aResponse().withStatus(OK))
+
+        val result: Boolean = await(connector.delete(userAnswers.lrn))
+
+        result mustBe true
+      }
+
+      "return false for other responses" in {
+
+        val errorResponses: Gen[Int] = Gen
+          .chooseNum(400: Int, 599: Int)
+
+        forAll(errorResponses) {
+          error =>
+            server.stubFor(
+              delete(urlEqualTo(url))
+                .willReturn(aResponse().withStatus(error))
+            )
+
+            val result: Boolean = await(connector.delete(userAnswers.lrn))
+
+            result mustBe false
+        }
+      }
+    }
+
     "doesDraftOrSubmissionExistForLrn" - {
       val url = s"/manage-transit-movements-departure-cache/does-draft-or-submission-exist-for-lrn/${lrn.value}"
 

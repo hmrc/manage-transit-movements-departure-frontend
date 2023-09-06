@@ -78,6 +78,15 @@ class CacheConnector @Inject() (
     }
   }
 
+  def delete(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val url = s"$baseUrl/user-answers/$lrn"
+    http
+      .DELETE[HttpResponse](url)
+      .map {
+        _.status == OK
+      }
+  }
+
   def doesDraftOrSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
     val url = s"$baseUrl/does-draft-or-submission-exist-for-lrn/${lrn.toString}"
     http

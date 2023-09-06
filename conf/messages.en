@@ -204,3 +204,13 @@ newLocalReferenceNumber.error.length = The new Local Reference Number must be 22
 newLocalReferenceNumber.error.invalidCharacters = The new Local Reference Number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
 newLocalReferenceNumber.error.invalidFormat = The new Local Reference Number must not start with a hyphen or an underscore
 newLocalReferenceNumber.error.alreadyExists = The Local Reference Number must be unique
+
+duplicateDraftLocalReferenceNumber.title = Enter a new Local Reference Number (LRN)
+duplicateDraftLocalReferenceNumber.heading = Enter a new Local Reference Number (LRN)
+duplicateDraftLocalReferenceNumber.paragraph = You have already used this Local Reference Number (LRN). To continue with this declaration, you need to enter a new one.
+duplicateDraftLocalReferenceNumber.hint = This can be up to 22 characters long and include letters, numbers, hyphens and underscores. For example, ABCD123456EF-789.
+duplicateDraftLocalReferenceNumber.error.required = Enter the new Local Reference Number
+duplicateDraftLocalReferenceNumber.error.length = The new Local Reference Number must be 22 characters or less
+duplicateDraftLocalReferenceNumber.error.invalidCharacters = The new Local Reference Number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
+duplicateDraftLocalReferenceNumber.error.invalidFormat = The new Local Reference Number must not start with a hyphen or an underscore
+duplicateDraftLocalReferenceNumber.error.alreadyExists = The Local Reference Number must be unique

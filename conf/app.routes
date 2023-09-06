@@ -34,3 +34,6 @@ GET        /cannot-open                                   controllers.LockedCont
 
 GET        /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onPageLoad(oldLrn: LocalReferenceNumber)
 POST       /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onSubmit(oldLrn: LocalReferenceNumber)
+
+GET        /:lrn/local-reference-number-already-used      controllers.DuplicateDraftLocalReferenceNumberController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/local-reference-number-already-used      controllers.DuplicateDraftLocalReferenceNumberController.onSubmit(lrn: LocalReferenceNumber)

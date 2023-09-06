@@ -97,7 +97,7 @@ class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
         val result = route(app, request).value
 
-        redirectLocation(result).value mustEqual controllers.routes.NewLocalReferenceNumberController.onPageLoad(lrn).url
+        redirectLocation(result).value mustEqual controllers.routes.DuplicateDraftLocalReferenceNumberController.onPageLoad(lrn).url
       }
     }
   }

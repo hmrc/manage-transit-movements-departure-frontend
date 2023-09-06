@@ -35,7 +35,7 @@ class DuplicateService @Inject() (
       val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber)
       cacheConnector.post(
         updatedUserAnswers
-      ) // TODO CTCP-3469 Will have to keep any draft declaration with same LRN, can probably handle this when the doesDraftOrSubmissionExistForLrn is called in the backend
+      )
     case None => Future.successful(false)
   }
 

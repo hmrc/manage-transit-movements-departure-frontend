@@ -40,7 +40,7 @@ class DraftController @Inject() (
     implicit request =>
       cacheConnector.doesIE028ExistForLrn(lrn).map {
         case true =>
-          Redirect(controllers.routes.NewLocalReferenceNumberController.onPageLoad(lrn))
+          Redirect(controllers.routes.DuplicateDraftLocalReferenceNumberController.onPageLoad(lrn))
         case false =>
           UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
             case Left(_) =>
