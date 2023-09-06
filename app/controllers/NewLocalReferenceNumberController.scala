@@ -19,6 +19,7 @@ package controllers
 import controllers.actions._
 import forms.preTaskList.LocalReferenceNumberFormProvider
 import models.LocalReferenceNumber
+import models.SubmissionState.RejectedPendingChanges
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -62,7 +63,7 @@ class NewLocalReferenceNumberController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
               newLocalReferenceNumber =>
-                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber) map {
+                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, RejectedPendingChanges) map {
                   case true  => Redirect(controllers.routes.TaskListController.onPageLoad(newLocalReferenceNumber))
                   case false => Redirect(controllers.routes.ErrorController.technicalDifficulties())
                 }

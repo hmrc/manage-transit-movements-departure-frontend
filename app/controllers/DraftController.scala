@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.CacheConnector
 import controllers.actions.Actions
 import models.domain.UserAnswersReader
 import models.journeyDomain.PreTaskListDomain
@@ -26,29 +25,20 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class DraftController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   actions: Actions,
-  navigatorProvider: PreTaskListNavigatorProvider,
-  cacheConnector: CacheConnector
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController {
+  navigatorProvider: PreTaskListNavigatorProvider
+) extends FrontendBaseController {
 
-  def draftRedirect(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
+  def draftRedirect(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      cacheConnector.doesIE028ExistForLrn(lrn).map {
-        case true =>
-          Redirect(controllers.routes.DuplicateDraftLocalReferenceNumberController.onPageLoad(lrn))
-        case false =>
-          UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
-            case Left(_) =>
-              Redirect(navigatorProvider(NormalMode).nextPage(request.userAnswers))
-            case Right(_) =>
-              Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
-          }
+      UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
+        case Left(_) =>
+          Redirect(navigatorProvider(NormalMode).nextPage(request.userAnswers))
+        case Right(_) =>
+          Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
       }
-
   }
 }
