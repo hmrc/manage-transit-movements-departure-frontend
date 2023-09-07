@@ -56,7 +56,7 @@ class LocalReferenceNumberController @Inject() (
   def onSubmit(): Action[AnyContent] = identify.async {
     implicit request =>
       val submittedValue = form().bindFromRequest().value
-      duplicateService.alreadySubmitted(submittedValue).flatMap {
+      duplicateService.alreadyExistsInSubmissionOrCache(submittedValue).flatMap {
         alreadyExists =>
           form(alreadyExists)
             .bindFromRequest()
