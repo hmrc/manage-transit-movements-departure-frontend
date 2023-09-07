@@ -57,7 +57,10 @@ class TaskListController @Inject() (
               expiryInDays <- submissionConnector.getExpiryInDays(lrn.value)
               tasks: Seq[TaskListTask]      = viewModel(request.userAnswers)
               showSubmissionButton: Boolean = viewModel.showSubmissionButton(tasks)
-            } yield Ok(view(lrn, tasks, status.showErrorContent, expiryInDays, showSubmissionButton))
+            } yield {
+              println(s"\n\n\n\n $showSubmissionButton \n\n\n\n")
+              Ok(view(lrn, tasks, status.showErrorContent, expiryInDays, showSubmissionButton))
+            }
         }
     }
 
