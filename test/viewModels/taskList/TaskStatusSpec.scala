@@ -41,6 +41,10 @@ class TaskStatusSpec extends SpecBase {
     "when Error" in {
       TaskStatus.Error.messageKey mustBe "taskStatus.error"
     }
+
+    "when Unavailable" in {
+      TaskStatus.Unavailable.messageKey mustBe "taskStatus.unavailable"
+    }
   }
 
   "tag" - {
@@ -54,6 +58,10 @@ class TaskStatusSpec extends SpecBase {
 
     "when NotStarted" in {
       TaskStatus.NotStarted.tag mustBe "govuk-tag--grey"
+    }
+
+    "when Unavailable" in {
+      TaskStatus.Unavailable.tag mustBe "govuk-tag--grey"
     }
 
     "when CannotStartYet" in {
@@ -89,6 +97,11 @@ class TaskStatusSpec extends SpecBase {
       val result = Json.toJson[TaskStatus](TaskStatus.Error)
       result mustBe JsString("error")
     }
+
+    "when unavailable" in {
+      val result = Json.toJson[TaskStatus](TaskStatus.Unavailable)
+      result mustBe JsString("unavailable")
+    }
   }
 
   "must deserialise from json" - {
@@ -115,6 +128,11 @@ class TaskStatusSpec extends SpecBase {
     "when error" in {
       val result = JsString("error").as[TaskStatus]
       result mustBe TaskStatus.Error
+    }
+
+    "when error" in {
+      val result = JsString("unavailable").as[TaskStatus]
+      result mustBe TaskStatus.Unavailable
     }
 
     "when something else" in {

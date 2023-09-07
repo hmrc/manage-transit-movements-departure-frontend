@@ -152,6 +152,7 @@ taskStatus.inProgress = In progress
 taskStatus.notStarted = Not started
 taskStatus.cannotStartYet = Cannot start yet
 taskStatus.error = Error
+taskStatus.unavailable = Unavailable
 
 task.traderDetails = Trader details
 task.traderDetails.add = Add trader details

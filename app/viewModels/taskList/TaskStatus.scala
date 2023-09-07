@@ -52,6 +52,12 @@ object TaskStatus {
     override val jsonString: String = "cannot-start-yet"
   }
 
+  case object Unavailable extends TaskStatus {
+    override val messageKey: String = "taskStatus.unavailable"
+    override val tag: String        = "govuk-tag--grey"
+    override val jsonString: String = "unavailable"
+  }
+
   case object Error extends TaskStatus {
     override val messageKey: String = "taskStatus.error"
     override val tag: String        = "govuk-tag--red"
@@ -65,6 +71,7 @@ object TaskStatus {
       case NotStarted.jsonString     => JsSuccess(NotStarted)
       case CannotStartYet.jsonString => JsSuccess(CannotStartYet)
       case Error.jsonString          => JsSuccess(Error)
+      case Unavailable.jsonString    => JsSuccess(Unavailable)
       case x                         => JsError(s"$x is not a valid task status")
     }
   }

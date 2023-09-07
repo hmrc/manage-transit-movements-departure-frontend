@@ -17,6 +17,7 @@
 package viewModels.taskList
 
 import models.UserAnswers
+import viewModels.taskList.TaskStatus.Completed
 
 class TaskListViewModel {
 
@@ -42,5 +43,16 @@ class TaskListViewModel {
       case task: TaskListTask => task
     }
   }
+
+  private def guaranteeRejectedState(taskLists: Seq[TaskListTask]): Boolean =
+    taskLists
+      .find(_.section == GuaranteeDetailsTask.section)
+      .exists(
+        guaranteeDetailsSection =>
+          (guaranteeDetailsSection.status == Completed) && taskLists.filter(_.section == GuaranteeDetailsTask.section).forall(_.isCompleted)
+      )
+
+  def showSubmissionButton(taskLists: Seq[TaskListTask]): Boolean =
+    taskLists.forall(_.isCompleted) || guaranteeRejectedState(taskLists)
 
 }

@@ -28,7 +28,7 @@
     button: Button
 )
 
-@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask], showErrorContent: Boolean, expiryInDays: Long)(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, tasks: Seq[TaskListTask], showErrorContent: Boolean, expiryInDays: Long, showSubmissionButton: Boolean)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("taskList.title"),
@@ -47,7 +47,7 @@
 
     @taskList(tasks, lrn)
 
-    @if(tasks.forall(_.isCompleted)) {
+    @if(showSubmissionButton) {
         @formHelper(action = routes.TaskListController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
             @if(showErrorContent) {
                 @button(messageKey = "site.resend", attributes = Map("id" -> "submit"))
