@@ -53,6 +53,13 @@ class DependentTaskActionSpec extends SpecBase with ScalaCheckPropertyChecks wit
       redirectLocation(result) mustBe None
     }
 
+    "return None if pre-task list is unavailable" in {
+      val tasks  = Map(PreTaskListTask.section -> TaskStatus.Unavailable)
+      val result = harness(tasks)
+      status(result) mustBe OK
+      redirectLocation(result) mustBe None
+    }
+
     "return to LRN page if pre- task list is incomplete" in {
       forAll(arbitrary[TaskStatus](arbitraryIncompleteTaskStatus)) {
         taskStatus =>

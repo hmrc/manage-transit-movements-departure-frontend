@@ -17,7 +17,7 @@
 package viewModels.taskList
 
 import models.UserAnswers
-import viewModels.taskList.TaskStatus.{Completed, Unavailable}
+import viewModels.taskList.TaskStatus.Unavailable
 
 class TaskListViewModel {
 
@@ -43,6 +43,9 @@ class TaskListViewModel {
       case task: TaskListTask => task
     }
   }
+}
+
+object TaskListViewModel {
 
   private def guaranteeRejectedState(taskLists: Seq[TaskListTask]): Boolean = {
     val guaranteeDetails = taskLists.find(_.section == GuaranteeDetailsTask.section)

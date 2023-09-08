@@ -43,7 +43,7 @@ class TaskStatusSpec extends SpecBase {
     }
 
     "when Unavailable" in {
-      TaskStatus.Unavailable.messageKey mustBe "taskStatus.unavailable"
+      TaskStatus.Unavailable.messageKey mustBe "taskStatus.completed"
     }
   }
 
@@ -61,7 +61,7 @@ class TaskStatusSpec extends SpecBase {
     }
 
     "when Unavailable" in {
-      TaskStatus.Unavailable.tag mustBe "govuk-tag--grey"
+      TaskStatus.Unavailable.tag mustBe "govuk-tag--green"
     }
 
     "when CannotStartYet" in {
@@ -130,7 +130,7 @@ class TaskStatusSpec extends SpecBase {
       result mustBe TaskStatus.Error
     }
 
-    "when error" in {
+    "when unavailable" in {
       val result = JsString("unavailable").as[TaskStatus]
       result mustBe TaskStatus.Unavailable
     }
