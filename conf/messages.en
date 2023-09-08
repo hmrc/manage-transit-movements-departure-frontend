@@ -65,6 +65,7 @@ localReferenceNumber.error.required = Enter the Local Reference Number
 localReferenceNumber.error.length = The Local Reference Number must be 22 characters or less
 localReferenceNumber.error.invalidCharacters = The Local Reference Number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
 localReferenceNumber.error.invalidFormat = The Local Reference Number must not start with a hyphen or an underscore
+localReferenceNumber.error.alreadyExists = The Local Reference Number must be unique
 localReferenceNumber.checkYourAnswersLabel = Local Reference Number (LRN)
 localReferenceNumber.change.hidden = local reference number
 localReferenceNumber.change.alreadyExists = The Local Reference Number must be unique

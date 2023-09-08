@@ -17,8 +17,9 @@
 package controllers
 
 import controllers.actions._
-import forms.NewLocalReferenceNumberFormProvider
+import forms.preTaskList.LocalReferenceNumberFormProvider
 import models.LocalReferenceNumber
+import models.SubmissionState.RejectedPendingChanges
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -32,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NewLocalReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
-  formProvider: NewLocalReferenceNumberFormProvider,
+  formProvider: LocalReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: NewLocalReferenceNumberView,
   duplicateService: DuplicateService
@@ -40,27 +41,29 @@ class NewLocalReferenceNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists)
+  private val prefix: String = "newLocalReferenceNumber"
+
+  private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists, prefix)
 
   def onPageLoad(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
     implicit request =>
-      duplicateService.doesSubmissionExistForLrn(oldLocalReferenceNumber).map {
+      duplicateService.doesIE028ExistForLrn(oldLocalReferenceNumber).map {
         case true  => Ok(view(form(), oldLocalReferenceNumber))
-        case false => Redirect(controllers.routes.ErrorController.badRequest()) //TODO: More generic error page?
+        case false => Redirect(controllers.routes.ErrorController.badRequest())
       }
   }
 
   def onSubmit(oldLocalReferenceNumber: LocalReferenceNumber): Action[AnyContent] = identify.async {
     implicit request =>
       val submittedValue = form().bindFromRequest().value
-      duplicateService.alreadyExists(submittedValue).flatMap {
+      duplicateService.alreadyExistsInSubmissionOrCache(submittedValue).flatMap {
         alreadyExists =>
           form(alreadyExists)
             .bindFromRequest()
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
               newLocalReferenceNumber =>
-                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber) map {
+                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, RejectedPendingChanges) map {
                   case true  => Redirect(controllers.routes.TaskListController.onPageLoad(newLocalReferenceNumber))
                   case false => Redirect(controllers.routes.ErrorController.technicalDifficulties())
                 }
