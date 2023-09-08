@@ -35,11 +35,10 @@ class DraftController @Inject() (
   def draftRedirect(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
       UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
-        case Left(value) =>
+        case Left(_) =>
           Redirect(navigatorProvider(NormalMode).nextPage(request.userAnswers))
-        case Right(value) =>
+        case Right(_) =>
           Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
       }
-
   }
 }

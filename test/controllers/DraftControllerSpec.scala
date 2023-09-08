@@ -30,6 +30,7 @@ import play.api.test.Helpers._
 class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   "draft controller" - {
+
     "when the preTaskList is incomplete the next page will be a preTaskList page" in {
 
       setExistingUserAnswers(emptyUserAnswers.setValue(TIRCarnetReferencePage, ""))
@@ -43,6 +44,7 @@ class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
     }
 
     "preTaskList is complete and the document is incomplete" in {
+
       setExistingUserAnswers(
         emptyUserAnswers
           .setValue(AdditionalDeclarationTypePage, Standard)
@@ -59,7 +61,6 @@ class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
     }
-
   }
 
 }
