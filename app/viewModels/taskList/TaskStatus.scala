@@ -22,8 +22,9 @@ sealed trait TaskStatus {
   val messageKey: String
   val tag: String
   val jsonString: String
-  def isCompleted: Boolean = this == TaskStatus.Completed
-  def isError: Boolean     = this == TaskStatus.Error
+  def isCompleted: Boolean   = this == TaskStatus.Completed
+  def isUnavailable: Boolean = this == TaskStatus.Unavailable
+  def isError: Boolean       = this == TaskStatus.Error
 }
 
 object TaskStatus {
@@ -53,8 +54,8 @@ object TaskStatus {
   }
 
   case object Unavailable extends TaskStatus {
-    override val messageKey: String = "taskStatus.unavailable"
-    override val tag: String        = "govuk-tag--grey"
+    override val messageKey: String = "taskStatus.completed"
+    override val tag: String        = "govuk-tag--green"
     override val jsonString: String = "unavailable"
   }
 
