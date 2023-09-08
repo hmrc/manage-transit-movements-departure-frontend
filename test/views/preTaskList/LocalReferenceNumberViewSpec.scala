@@ -27,7 +27,7 @@ import views.html.preTaskList.LocalReferenceNumberView
 
 class LocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalReferenceNumber] {
 
-  override def form: Form[LocalReferenceNumber] = new LocalReferenceNumberFormProvider()()
+  override def form: Form[LocalReferenceNumber] = new LocalReferenceNumberFormProvider().apply(alreadyExists = false, "localReferenceNumber")
 
   override def applyView(form: Form[LocalReferenceNumber]): HtmlFormat.Appendable =
     injector.instanceOf[LocalReferenceNumberView].apply(form)(fakeRequest, messages)

@@ -49,7 +49,10 @@ trait Mappings extends Formatters with Constraints {
   protected def boolean(requiredKey: String = "error.required", invalidKey: String = "error.boolean", args: Seq[Any] = Seq.empty): FieldMapping[Boolean] =
     of(booleanFormatter(requiredKey, invalidKey, args))
 
-  protected def isConditionTrue(alreadyExistsKey: String = "error.alreadyExists", condition: Boolean, defaultValue: Boolean): FieldMapping[Boolean] =
+  protected def isConditionTrue(alreadyExistsKey: String = "error.alreadyExistsInSubmissionOrCache",
+                                condition: Boolean,
+                                defaultValue: Boolean
+  ): FieldMapping[Boolean] =
     if (condition) boolean(alreadyExistsKey) else of(ignoredFormat(defaultValue))
 
   protected def enumerable[A <: Radioable[A]](
@@ -59,14 +62,6 @@ trait Mappings extends Formatters with Constraints {
     of(enumerableFormatter[A](requiredKey, invalidKey))
 
   protected def lrn(
-    requiredKey: String,
-    lengthKey: String,
-    invalidCharactersKey: String,
-    invalidFormatKey: String
-  ): FieldMapping[LocalReferenceNumber] =
-    of(lrnFormatter(requiredKey, lengthKey, invalidCharactersKey, invalidFormatKey))
-
-  protected def newLrn(
     requiredKey: String,
     lengthKey: String,
     invalidCharactersKey: String,

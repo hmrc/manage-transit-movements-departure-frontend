@@ -290,66 +290,9 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
 
     val validLrn = LocalReferenceNumber("ABCD1234567890123").value
 
-    val testForm: Form[LocalReferenceNumber] =
-      Form(
-        "value" -> lrn(
-          "requiredKey",
-          "lengthKey",
-          "invalidCharactersKey",
-          "invalidFormatKey"
-        )
-      )
-
-    "must bind a valid lrn" in {
-      val result = testForm.bind(Map("value" -> "ABCD1234567890123"))
-      result.get mustEqual validLrn
-    }
-
-    "must not bind an empty lrn" in {
-      val result = testForm.bind(Map("value" -> ""))
-      result.errors must contain(FormError("value", "requiredKey"))
-    }
-
-    "must not bind an empty map" in {
-      val result = testForm.bind(Map.empty[String, String])
-      result.errors must contain(FormError("value", "requiredKey"))
-    }
-
-    "must not bind an lrn which is too long" in {
-
-      val invalidLengthString = "LOCALREFERENCENUMBER1234567890123456789"
-
-      val result = testForm.bind(Map("value" -> invalidLengthString))
-      result.errors must contain(FormError("value", "lengthKey"))
-    }
-
-    "must not bind an lrn with invalid characters" in {
-      val result = testForm.bind(Map("value" -> "'#ABCD12345/.,;[)23"))
-      result.errors must contain(FormError("value", "invalidCharactersKey"))
-    }
-
-    "must not bind an lrn with the incorrect format" in {
-      val invalidFormats = Seq("-ABCD1234567890", "_ABCD1234567890")
-
-      val invalidString = Gen.oneOf(invalidFormats).sample.value
-
-      val result = testForm.bind(Map("value" -> invalidString))
-      result.errors must contain(FormError("value", "invalidFormatKey"))
-    }
-
-    "must unbind a valid value" in {
-      val result = testForm.fill(validLrn)
-      result.apply("value").value.value mustEqual validLrn.toString
-    }
-  }
-
-  "newLrn" - {
-
-    val validLrn = LocalReferenceNumber("ABCD1234567890123").value
-
     def testForm(alreadyExists: Boolean): Form[LocalReferenceNumber] =
       Form(
-        "value" -> newLrn(
+        "value" -> lrn(
           "requiredKey",
           "lengthKey",
           "invalidCharactersKey",

@@ -18,11 +18,13 @@ package controllers.preTaskList
 
 import controllers.actions._
 import forms.preTaskList.LocalReferenceNumberFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{LocalReferenceNumber, NormalMode, UserAnswers}
 import navigation.PreTaskListNavigatorProvider
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.DuplicateService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.LocalReferenceNumberView
 
@@ -32,6 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LocalReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
+  duplicateService: DuplicateService,
   navigatorProvider: PreTaskListNavigatorProvider,
   identify: IdentifierAction,
   formProvider: LocalReferenceNumberFormProvider,
@@ -41,35 +44,41 @@ class LocalReferenceNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
+  private val prefix = "localReferenceNumber"
+
+  private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists, prefix)
 
   def onPageLoad(): Action[AnyContent] = identify {
     implicit request =>
-      Ok(view(form))
+      Ok(view(form()))
   }
 
   def onSubmit(): Action[AnyContent] = identify.async {
     implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-          value => {
-            def getOrCreateUserAnswers(): Future[Option[UserAnswers]] =
-              sessionRepository.get(value).flatMap {
-                case None =>
-                  sessionRepository.put(value).flatMap {
-                    _ => sessionRepository.get(value)
+      val submittedValue = form().bindFromRequest().value
+      duplicateService.alreadyExistsInSubmissionOrCache(submittedValue).flatMap {
+        alreadyExists =>
+          form(alreadyExists)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+              value => {
+                def getOrCreateUserAnswers(): Future[Option[UserAnswers]] =
+                  sessionRepository.get(value).flatMap {
+                    case None =>
+                      sessionRepository.put(value).flatMap {
+                        _ => sessionRepository.get(value)
+                      }
+                    case someUserAnswers =>
+                      Future.successful(someUserAnswers)
                   }
-                case someUserAnswers =>
-                  Future.successful(someUserAnswers)
-              }
 
-            getOrCreateUserAnswers().map {
-              case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
-              case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
-            }
-          }
-        )
+                getOrCreateUserAnswers().map {
+                  case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
+                  case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
+                }
+              }
+            )
+      }
   }
 }
