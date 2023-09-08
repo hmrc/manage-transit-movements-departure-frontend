@@ -240,6 +240,32 @@ class ReferenceDataConnectorSpec
       |}
       |""".stripMargin
 
+  private val additionalDeclarationTypesResponseJson: String =
+    """
+      |{
+      |  "_links": {
+      |    "self": {
+      |      "href": "/customs-reference-data/lists/DeclarationType"
+      |    }
+      |  },
+      |  "meta": {
+      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+      |    "snapshotDate": "2023-01-01"
+      |  },
+      |  "id": "DeclarationType",
+      |  "data": [
+      |    {
+      |      "code": "A",
+      |      "description": "for a standard customs declaration (under Article 162 of the Code)"
+      |    },
+      |    {
+      |      "code": "D",
+      |      "description": "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code."
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
+
   "Reference Data" - {
 
     "getCustomsOfficesOfDepartureForCountry" - {
@@ -392,7 +418,7 @@ class ReferenceDataConnectorSpec
     "getDeclarationTypes" - {
       val url = s"/$baseUrl/lists/DeclarationType"
 
-      "must return Seq of security types when successful" in {
+      "must return Seq of declaration types when successful" in {
         server.stubFor(
           get(urlEqualTo(url))
             .willReturn(okJson(declarationTypesResponseJson))
@@ -408,6 +434,34 @@ class ReferenceDataConnectorSpec
 
       "must return an exception when an error response is returned" in {
         checkErrorResponse(url, connector.getDeclarationTypes())
+      }
+    }
+
+    "getAdditionalDeclarationTypes" - {
+      val url = s"/$baseUrl/lists/DeclarationTypeAdditional"
+
+      "must return Seq of additional declaration types when successful" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(additionalDeclarationTypesResponseJson))
+        )
+
+        val expectedResult: Seq[AdditionalDeclarationType] = Seq(
+          AdditionalDeclarationType(
+            "A",
+            "for a standard customs declaration (under Article 162 of the Code)"
+          ),
+          AdditionalDeclarationType(
+            "D",
+            "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code."
+          )
+        )
+
+        connector.getAdditionalDeclarationTypes().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(url, connector.getAdditionalDeclarationTypes())
       }
     }
   }

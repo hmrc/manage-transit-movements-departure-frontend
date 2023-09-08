@@ -28,8 +28,6 @@ case class SecurityType(
   override def toString: String = StringEscapeUtils.unescapeXml(description)
 
   override val messageKeyPrefix: String = SecurityType.messageKeyPrefix
-
-  def noSecurity: Boolean = code == "0"
 }
 
 object SecurityType extends DynamicEnumerableType[SecurityType] {
