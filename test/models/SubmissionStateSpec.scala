@@ -49,42 +49,15 @@ class SubmissionStateSpec extends AnyFreeSpec with Generators with Matchers with
         value.showErrorContent mustEqual false
       }
 
-      "when RejectedAndResubmitted must be false" in {
-        val value = SubmissionState.RejectedAndResubmitted
-        value.showErrorContent mustEqual false
-      }
-
-      "when Submitted must be true" in {
+      "when Submitted must be false" in {
         val value = SubmissionState.Submitted
-        value.showErrorContent mustEqual true
+        value.showErrorContent mustEqual false
       }
 
       "when RejectedPendingChanges must be true" in {
         val value = SubmissionState.RejectedPendingChanges
         value.showErrorContent mustEqual true
       }
-
-    }
-
-    "must return correct state" - {
-
-      "when notSubmitted" in {
-        val value = "notSubmitted"
-        SubmissionState(value) mustEqual NotSubmitted
-      }
-      "when submitted" in {
-        val value = "submitted"
-        SubmissionState(value) mustEqual Submitted
-      }
-      "when rejectedPendingChanges" in {
-        val value = "rejectedPendingChanges"
-        SubmissionState(value) mustEqual RejectedPendingChanges
-      }
-      "when rejectedAndResubmitted" in {
-        val value = "rejectedAndResubmitted"
-        SubmissionState(value) mustEqual RejectedAndResubmitted
-      }
-
     }
   }
 }

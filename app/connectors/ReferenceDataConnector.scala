@@ -17,7 +17,7 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.reference.{Country, CustomsOffice, DeclarationType, SecurityType}
+import models.reference.{AdditionalDeclarationType, Country, CustomsOffice, DeclarationType, SecurityType}
 import play.api.Logging
 import play.api.http.Status.{NOT_FOUND, NO_CONTENT, OK}
 import play.api.libs.json.Format.GenericFormat
@@ -51,7 +51,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   }
 
   def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val url = s"${config.customsReferenceDataUrl}/lists/CountryCodesCommonTransit"
+    val url = s"${config.customsReferenceDataUrl}/lists/CountryCodesCTC"
     http.GET[Seq[Country]](url, headers = version2Header)
   }
 
@@ -68,6 +68,11 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   def getDeclarationTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[DeclarationType]] = {
     val url = s"${config.customsReferenceDataUrl}/lists/DeclarationType"
     http.GET[Seq[DeclarationType]](url, headers = version2Header)
+  }
+
+  def getAdditionalDeclarationTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[AdditionalDeclarationType]] = {
+    val url = s"${config.customsReferenceDataUrl}/lists/DeclarationTypeAdditional"
+    http.GET[Seq[AdditionalDeclarationType]](url, headers = version2Header)
   }
 
   private def version2Header: Seq[(String, String)] = Seq(

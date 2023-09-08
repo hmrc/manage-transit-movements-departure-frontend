@@ -55,7 +55,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val manageTransitMovementsUrl: String                = configuration.get[String]("urls.manageTransitMovementsFrontend")
   lazy val serviceUrl: String                               = s"$manageTransitMovementsUrl/what-do-you-want-to-do"
-  lazy val manageTransitMovementsViewDeparturesUrl: String  = s"$manageTransitMovementsUrl/view-departures"
+  lazy val manageTransitMovementsViewDeparturesUrl: String  = s"$manageTransitMovementsUrl/test-only/view-departure-declarations"
   lazy val manageTransitMovementsDraftDeparturesUrl: String = s"$manageTransitMovementsUrl/draft-declarations"
 
   lazy val enrolmentProxyUrl: String = configuration.get[Service]("microservice.services.enrolment-store-proxy").fullServiceUrl
@@ -72,8 +72,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val maxSeals: Int                  = configuration.get[Int]("limits.maxSeals")
   lazy val maxGoodsItemNumbers: Int       = configuration.get[Int]("limits.maxGoodsItemNumbers")
   lazy val maxEquipmentNumbers: Int       = configuration.get[Int]("limits.maxEquipmentNumbers")
-
-  lazy val declarationEnabled: Boolean = configuration.get[Boolean]("declaration.enabled")
 
   def traderDetailsFrontendUrl(lrn: LocalReferenceNumber): String    = frontendUrl(lrn, "traderDetails")
   def routeDetailsFrontendUrl(lrn: LocalReferenceNumber): String     = frontendUrl(lrn, "routeDetails")

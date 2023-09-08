@@ -41,9 +41,11 @@
 
         @inputText(
             field = form("value"),
-            inputTextType = OrdinaryTextInput(
-                heading = messages("tirCarnetReference.heading")
+            inputTextType = TextInputWithHiddenLabel(
+                heading = messages("tirCarnetReference.heading"),
+                additionalHtml = messages("tirCarnetReference.paragraph").toParagraph
             ),
+            hint = None,
             inputClass = InputSize.Width10
         )
 

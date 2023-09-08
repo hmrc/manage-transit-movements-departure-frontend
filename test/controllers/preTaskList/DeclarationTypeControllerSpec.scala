@@ -40,9 +40,8 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
   private lazy val declarationTypeRoute = routes.DeclarationTypeController.onPageLoad(lrn, NormalMode).url
 
-  private val dt1 = arbitrary[DeclarationType].sample.value
-  private val dt2 = arbitrary[DeclarationType].sample.value
-  private val dts = Seq(dt1, dt2)
+  private val dts = arbitrary[Seq[DeclarationType]].sample.value
+  private val dt1 = dts.head
 
   private val formProvider = new EnumerableFormProvider()
   private val form         = formProvider[DeclarationType]("declarationType", dts)

@@ -16,7 +16,9 @@
 
 package controllers
 
-import controllers.actions.IdentifierAction
+import controllers.actions.{Actions, SpecificDataRequiredActionProvider}
+import models.LocalReferenceNumber
+import pages.external.OfficeOfDestinationPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -25,14 +27,17 @@ import views.html.DeclarationSubmittedView
 import javax.inject.Inject
 
 class DeclarationSubmittedController @Inject() (
-  identify: IdentifierAction,
   cc: MessagesControllerComponents,
+  actions: Actions,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   view: DeclarationSubmittedView
 ) extends FrontendController(cc)
     with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (Action andThen identify) {
-    implicit request =>
-      Ok(view())
-  }
+  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
+    .requireData(lrn)
+    .andThen(getMandatoryPage(OfficeOfDestinationPage)) {
+      implicit request =>
+        Ok(view(lrn, request.arg))
+    }
 }

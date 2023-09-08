@@ -19,7 +19,7 @@ package utils.cyaHelpers
 import base.SpecBase
 import controllers.preTaskList.routes
 import generators.Generators
-import models.reference.{CustomsOffice, DeclarationType, SecurityType}
+import models.reference.{AdditionalDeclarationType, CustomsOffice, DeclarationType, SecurityType}
 import models.{LocalReferenceNumber, Mode, ProcedureType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -58,6 +58,50 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                 )
               )
             )
+        }
+      }
+    }
+
+    "additionalDeclarationType" - {
+      "must return None" - {
+        s"when $AdditionalDeclarationTypePage undefined" in {
+          forAll(arbitrary[Mode]) {
+            mode =>
+              val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
+              val result = helper.additionalDeclarationType
+              result mustBe None
+          }
+        }
+      }
+
+      "must return Some(Row)" - {
+        s"when $AdditionalDeclarationTypePage defined" in {
+          forAll(arbitrary[AdditionalDeclarationType], arbitrary[Mode]) {
+            (additionalDeclarationType, mode) =>
+              val answers = emptyUserAnswers.setValue(AdditionalDeclarationTypePage, additionalDeclarationType)
+
+              val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
+              val result = helper.additionalDeclarationType
+
+              result mustBe Some(
+                SummaryListRow(
+                  key = Key("Is this a standard or pre-lodged declaration?".toText),
+                  value = Value(additionalDeclarationType.toString.toText),
+                  actions = Some(
+                    Actions(
+                      items = List(
+                        ActionItem(
+                          content = "Change".toText,
+                          href = routes.AdditionalDeclarationTypeController.onPageLoad(answers.lrn, mode).url,
+                          visuallyHiddenText = Some("whether this is a standard or pre-lodged declaration"),
+                          attributes = Map()
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+          }
         }
       }
     }
@@ -261,7 +305,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
               result mustBe Some(
                 SummaryListRow(
-                  key = Key("Safety and security details added".toText),
+                  key = Key("Safety and security details".toText),
                   value = Value(securityDetailsType.toString.toText),
                   actions = Some(
                     Actions(
@@ -269,7 +313,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                         ActionItem(
                           content = "Change".toText,
                           href = routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("safety and security details added"),
+                          visuallyHiddenText = Some("safety and security details"),
                           attributes = Map()
                         )
                       )

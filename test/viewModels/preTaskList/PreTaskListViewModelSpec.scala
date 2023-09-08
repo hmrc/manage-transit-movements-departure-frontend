@@ -18,7 +18,7 @@ package viewModels.preTaskList
 
 import base.SpecBase
 import generators.Generators
-import models.reference.{CustomsOffice, DeclarationType, SecurityType}
+import models.reference.{AdditionalDeclarationType, CustomsOffice, DeclarationType, SecurityType}
 import models.{LocalReferenceNumber, ProcedureType}
 import pages.preTaskList._
 import viewModels.preTaskList.PreTaskListViewModel.PreTaskListViewModelProvider
@@ -44,6 +44,7 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
       "must return row for each answer" in {
         val answers = emptyUserAnswers
           .copy(lrn = LocalReferenceNumber("1234567890").get)
+          .setValue(AdditionalDeclarationTypePage, AdditionalDeclarationType("A", "for a standard customs declaration (under Article 162 of the Code)"))
           .setValue(OfficeOfDeparturePage, CustomsOffice("XI1", "name", None))
           .setValue(ProcedureTypePage, ProcedureType.Normal)
           .setValue(DeclarationTypePage, DeclarationType("TIR", "TIR carnet"))
@@ -54,13 +55,14 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
         val section           = viewModelProvider.apply(answers).section
 
         section.sectionTitle mustNot be(defined)
-        section.rows.length mustBe 6
-        section.rows.head.value.value mustBe "1234567890"
-        section.rows(1).value.value mustBe "name (XI1)"
-        section.rows(2).value.value mustBe "Normal (customs-approved location)"
-        section.rows(3).value.value mustBe "TIR - TIR carnet"
-        section.rows(4).value.value mustBe "tir carnet reference"
-        section.rows(5).value.value mustBe "Not used for safety and security purposes"
+        section.rows.length mustBe 7
+        section.rows.head.value.content.asHtml.toString() mustBe "1234567890"
+        section.rows(1).value.value mustBe "A - for a standard customs declaration (under Article 162 of the Code)"
+        section.rows(2).value.value mustBe "name (XI1)"
+        section.rows(3).value.value mustBe "Normal - customs-approved location"
+        section.rows(4).value.value mustBe "TIR - TIR carnet"
+        section.rows(5).value.value mustBe "tir carnet reference"
+        section.rows(6).value.value mustBe "Not used for safety and security purposes"
       }
     }
   }

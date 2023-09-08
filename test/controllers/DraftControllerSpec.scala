@@ -33,7 +33,8 @@ class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures with 
 
       val result = route(app, request).value
 
-      redirectLocation(result).value mustEqual controllers.preTaskList.routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
+      redirectLocation(result).value mustEqual controllers.preTaskList.routes.AdditionalDeclarationTypeController.onPageLoad(lrn, NormalMode).url
+
     }
 
     "preTaskList is complete and the document is incomplete" in {

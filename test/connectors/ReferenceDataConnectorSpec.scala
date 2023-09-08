@@ -103,14 +103,14 @@ class ReferenceDataConnectorSpec
       |{
       |  "_links": {
       |    "self": {
-      |      "href": "/customs-reference-data/lists/CountryCodesCommonTransit"
+      |      "href": "/customs-reference-data/lists/CountryCodesCTC"
       |    }
       |  },
       |  "meta": {
       |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
       |    "snapshotDate": "2023-01-01"
       |  },
-      |  "id": "CountryCodesCommonTransit",
+      |  "id": "CountryCodesCTC",
       |  "data": [
       |    {
       |      "activeFrom": "2023-01-23",
@@ -302,7 +302,7 @@ class ReferenceDataConnectorSpec
     }
 
     "getCountryCodesCTC" - {
-      val url = s"/$baseUrl/lists/CountryCodesCommonTransit"
+      val url = s"/$baseUrl/lists/CountryCodesCTC"
 
       "must return Seq of Country when successful" in {
         server.stubFor(

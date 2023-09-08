@@ -16,7 +16,6 @@
 
 package generators
 
-import models.SubmissionState.{NotSubmitted, RejectedAndResubmitted, RejectedPendingChanges, Submitted}
 import models._
 import models.reference._
 import org.scalacheck.{Arbitrary, Gen}
@@ -26,11 +25,16 @@ import uk.gov.hmrc.http.HttpVerbs._
 trait ModelGenerators {
   self: Generators =>
 
-  implicit lazy val arbitrarySubmissionState: Arbitrary[SubmissionState] = Arbitrary {
-    val validStates = Seq(NotSubmitted.toString, Submitted.toString, RejectedPendingChanges.toString, RejectedAndResubmitted.toString)
-    for {
-      state <- Gen.oneOf(validStates)
-    } yield SubmissionState(state)
+  implicit lazy val arbitraryAdditionalDeclarationType: Arbitrary[AdditionalDeclarationType] =
+    Arbitrary {
+      for {
+        code        <- Gen.oneOf("A", "D")
+        description <- nonEmptyString
+      } yield AdditionalDeclarationType(code, description)
+    }
+
+  implicit lazy val arbitrarySubmissionState: Arbitrary[SubmissionState.Value] = Arbitrary {
+    Gen.oneOf(SubmissionState.values.toSeq)
   }
 
   implicit lazy val arbitraryProcedureType: Arbitrary[ProcedureType] =
@@ -127,6 +131,12 @@ trait ModelGenerators {
     for {
       values <- listWithMaxLength[T]()
     } yield SelectableList(values.distinctBy(_.value))
+  }
+
+  implicit def arbitraryRadioableList[T <: Radioable[T]](implicit arbitrary: Arbitrary[T]): Arbitrary[Seq[T]] = Arbitrary {
+    for {
+      values <- listWithMaxLength[T]()
+    } yield values.distinctBy(_.code)
   }
 
   implicit lazy val arbitraryMode: Arbitrary[Mode] = Arbitrary {

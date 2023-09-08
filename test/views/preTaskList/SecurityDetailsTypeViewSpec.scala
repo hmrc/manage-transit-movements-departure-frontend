@@ -50,6 +50,11 @@ class SecurityDetailsTypeViewSpec extends EnumerableViewBehaviours[SecurityType]
 
   behave like pageWithHeading()
 
+  behave like pageWithContent(
+    "p",
+    "This is used by border authorities to analyse the risk of goods entering their territory. You may also need to provide these details to the territories your goods move through."
+  )
+
   behave like pageWithRadioItems()
 
   behave like pageWithSubmitButton("Continue")

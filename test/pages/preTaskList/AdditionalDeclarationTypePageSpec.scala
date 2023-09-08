@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package pages.preTaskList
 
-import queries.{Gettable, Settable}
+import models.reference.AdditionalDeclarationType
+import pages.behaviours.PageBehaviours
 
-trait QuestionPage[A] extends ReadOnlyPage[A] with Settable[A]
+class AdditionalDeclarationTypePageSpec extends PageBehaviours {
 
-trait ReadOnlyPage[A] extends Page with Gettable[A]
+  "AdditionalDeclarationTypePage" - {
+
+    beRetrievable[AdditionalDeclarationType](AdditionalDeclarationTypePage)
+
+    beSettable[AdditionalDeclarationType](AdditionalDeclarationTypePage)
+
+    beRemovable[AdditionalDeclarationType](AdditionalDeclarationTypePage)
+  }
+}
