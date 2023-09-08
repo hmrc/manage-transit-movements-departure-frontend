@@ -86,7 +86,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Is this a standard or pre-lodged declaration?".toText),
-                  value = Value(additionalDeclarationType.toString.toText),
+                  value = Value(additionalDeclarationType.asString.toText),
                   actions = Some(
                     Actions(
                       items = List(
@@ -218,7 +218,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Type of declaration".toText),
-                  value = Value(declarationType.toString.toText),
+                  value = Value(declarationType.asString.toText),
                   actions = Some(
                     Actions(
                       items = List(
@@ -306,7 +306,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Safety and security details".toText),
-                  value = Value(securityDetailsType.toString.toText),
+                  value = Value(securityDetailsType.asString.toText),
                   actions = Some(
                     Actions(
                       items = List(

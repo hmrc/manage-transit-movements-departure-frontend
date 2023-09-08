@@ -74,6 +74,8 @@ additionalDeclarationType.heading = Is this a standard or pre-lodged declaration
 additionalDeclarationType.checkYourAnswersLabel = Is this a standard or pre-lodged declaration?
 additionalDeclarationType.change.hidden = whether this is a standard or pre-lodged declaration
 additionalDeclarationType.error.required = Select whether this is a standard or pre-lodged declaration
+additionalDeclarationType.A = Standard - the goods have already boarded at a UK port or airport
+additionalDeclarationType.D = Pre-lodged - the goods have yet to board at a UK port or airport
 
 officeOfDeparture.title = Where is the office of departure?
 officeOfDeparture.heading = Where is the office of departure?
@@ -98,6 +100,11 @@ declarationType.paragraph = For mixed consignments, you will need to create sepa
 declarationType.checkYourAnswersLabel = Type of declaration
 declarationType.error.required = Select the type of declaration you want to create
 declarationType.change.hidden = type of declaration
+declarationType.T1 = T1 - goods that are not in free circulation within the EU
+declarationType.T2 = T2 - goods that are in free circulation within the EU
+declarationType.T2F = T2F - goods moving to, from or between the European Union special territories
+declarationType.TIR = TIR - goods moving under the cover of TIR carnet
+declarationType.T = T - mixed consignments, for goods originating inside and outside the European Union
 
 tirCarnetReference.title = What is the TIR carnet reference?
 tirCarnetReference.heading = What is the TIR carnet reference?
@@ -114,6 +121,10 @@ securityDetailsType.paragraph = This is used by border authorities to analyse th
 securityDetailsType.checkYourAnswersLabel = Safety and security details
 securityDetailsType.error.required = Select which type of safety and security details you want to add
 securityDetailsType.change.hidden = safety and security details
+securityDetailsType.0 = No security
+securityDetailsType.1 = Entry summary declaration (ENS) - for importing goods from a non-EU country into Great Britain or Northern Ireland. Or from Great Britain into Northern Ireland
+securityDetailsType.2 = Exit summary declaration (EXS) - for exporting goods from Great Britain to any country. Or from Northern Ireland to a non-EU country
+securityDetailsType.3 = Both entry and exit summary declarations (ENS and EXS)
 
 preTaskList.checkYourAnswers.heading = Check your answers
 preTaskList.checkYourAnswers.title = Check your answers

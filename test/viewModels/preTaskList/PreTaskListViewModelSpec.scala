@@ -57,12 +57,12 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
         section.sectionTitle mustNot be(defined)
         section.rows.length mustBe 7
         section.rows.head.value.content.asHtml.toString() mustBe "1234567890"
-        section.rows(1).value.value mustBe "A - for a standard customs declaration (under Article 162 of the Code)"
+        section.rows(1).value.value mustBe "Standard - the goods have already boarded at a UK port or airport"
         section.rows(2).value.value mustBe "name (XI1)"
         section.rows(3).value.value mustBe "Normal - customs-approved location"
-        section.rows(4).value.value mustBe "TIR - TIR carnet"
+        section.rows(4).value.value mustBe "TIR - goods moving under the cover of TIR carnet"
         section.rows(5).value.value mustBe "tir carnet reference"
-        section.rows(6).value.value mustBe "Not used for safety and security purposes"
+        section.rows(6).value.value mustBe "No security"
       }
     }
   }

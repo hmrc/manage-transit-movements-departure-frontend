@@ -34,7 +34,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def additionalDeclarationType: Option[SummaryListRow] = getAnswerAndBuildRow[AdditionalDeclarationType](
     page = AdditionalDeclarationTypePage,
-    formatAnswer = formatAsText,
+    formatAnswer = formatDynamicEnumAsText(_),
     prefix = "additionalDeclarationType",
     id = None
   )
@@ -55,7 +55,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def declarationType: Option[SummaryListRow] = getAnswerAndBuildRow[DeclarationType](
     page = DeclarationTypePage,
-    formatAnswer = formatAsText,
+    formatAnswer = formatDynamicEnumAsText(_),
     prefix = "declarationType",
     id = None
   )
@@ -69,7 +69,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def securityType: Option[SummaryListRow] = getAnswerAndBuildRow[SecurityType](
     page = SecurityDetailsTypePage,
-    formatAnswer = formatAsText,
+    formatAnswer = formatDynamicEnumAsText(_),
     prefix = "securityDetailsType",
     id = None
   )
