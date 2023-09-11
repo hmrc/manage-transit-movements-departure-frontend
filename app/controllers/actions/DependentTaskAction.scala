@@ -32,7 +32,7 @@ class DependentTaskActionImpl @Inject() (implicit val executionContext: Executio
       request.userAnswers.tasks
         .get(task)
         .exists(
-          result => result.isCompleted || result.isUnavailable
+          result => result.isCompleted || result.isUnavailable || result.isError
         )
 
     if (isTaskCompleted(PreTaskListTask.section)) {
