@@ -25,7 +25,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.taskList.TaskListViewModel
+import viewModels.taskList.{TaskListTask, TaskListViewModel}
 import views.html.TaskListView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -55,8 +55,9 @@ class TaskListController @Inject() (
           case status =>
             for {
               expiryInDays <- submissionConnector.getExpiryInDays(lrn.value)
-              tasks = viewModel(request.userAnswers)
-            } yield Ok(view(lrn, tasks, status.showErrorContent, expiryInDays))
+              tasks: Seq[TaskListTask]      = viewModel(request.userAnswers)
+              showSubmissionButton: Boolean = TaskListViewModel.showSubmissionButton(tasks)
+            } yield Ok(view(lrn, tasks, status.showErrorContent, expiryInDays, showSubmissionButton))
         }
     }
 

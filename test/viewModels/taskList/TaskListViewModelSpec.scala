@@ -17,7 +17,9 @@
 package viewModels.taskList
 
 import base.SpecBase
+import config.FrontendAppConfig
 import generators.Generators
+import models.LocalReferenceNumber
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
@@ -102,6 +104,80 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
         result(4).status mustBe TaskStatus.NotStarted
         result(4).href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
       }
+    }
+  }
+
+  "showSubmissionButton" - {
+
+    val guaranteeCompleteTask = new TaskListTask {
+      override val status: TaskStatus = TaskStatus.Completed
+      override val messageKey: String = ""
+      override val id: String         = ""
+
+      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = ""
+
+      override val section: String = GuaranteeDetailsTask.section
+    }
+
+    val preTaskComplete = new TaskListTask {
+      override val status: TaskStatus = TaskStatus.Completed
+      override val messageKey: String = ""
+      override val id: String         = ""
+
+      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = ""
+
+      override val section: String = PreTaskListTask.section
+    }
+
+    val preTaskNotStarted = new TaskListTask {
+      override val status: TaskStatus = TaskStatus.NotStarted
+      override val messageKey: String = ""
+      override val id: String         = ""
+
+      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = ""
+
+      override val section: String = PreTaskListTask.section
+    }
+
+    val preTaskUnavailable = new TaskListTask {
+      override val status: TaskStatus = TaskStatus.Unavailable
+      override val messageKey: String = ""
+      override val id: String         = ""
+
+      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = ""
+
+      override val section: String = PreTaskListTask.section
+    }
+
+    val traderDetailsUnavailable = new TaskListTask {
+      override val status: TaskStatus = TaskStatus.Unavailable
+      override val messageKey: String = ""
+      override val id: String         = ""
+
+      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = ""
+
+      override val section: String = TraderDetailsTask.section
+    }
+
+    "must be true is guarantee is complete and other sections are unavailable" in {
+
+      val tasksLists = Seq(guaranteeCompleteTask, preTaskUnavailable, traderDetailsUnavailable)
+
+      TaskListViewModel.showSubmissionButton(tasksLists) mustBe true
+    }
+
+    "must be true everything is complete" in {
+
+      val tasksLists = Seq(preTaskComplete, guaranteeCompleteTask)
+
+      TaskListViewModel.showSubmissionButton(tasksLists) mustBe true
+    }
+
+    "must be false if everything is not complete" in {
+
+      val tasksLists = Seq(preTaskNotStarted, guaranteeCompleteTask)
+
+      TaskListViewModel.showSubmissionButton(tasksLists) mustBe false
     }
   }
 }
