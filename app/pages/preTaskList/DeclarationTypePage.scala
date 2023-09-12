@@ -16,7 +16,7 @@
 
 package pages.preTaskList
 
-import models.DeclarationType.Option4
+import config.Constants.TIR
 import models.{DeclarationType, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.PreTaskListSection
@@ -33,8 +33,8 @@ case object DeclarationTypePage extends QuestionPage[DeclarationType] {
 
   override def cleanup(value: Option[DeclarationType], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(option) if option != Option4 => userAnswers.remove(TIRCarnetReferencePage)
-      case _                                 => super.cleanup(value, userAnswers)
+      case Some(option) if option.code != TIR => userAnswers.remove(TIRCarnetReferencePage)
+      case _                                  => super.cleanup(value, userAnswers)
     }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =

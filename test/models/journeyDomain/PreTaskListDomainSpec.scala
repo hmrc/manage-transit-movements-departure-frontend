@@ -18,6 +18,7 @@ package models.journeyDomain
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
+import config.Constants.{declarationType1, declarationType4, TIR}
 import generators.Generators
 import models.DeclarationType._
 import models.ProcedureType.Normal
@@ -52,7 +53,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(DeclarationTypePage)(Option4)
+          .unsafeSetVal(DeclarationTypePage)(declarationType4)
           .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DetailsConfirmedPage)(detailsConfirmed)
@@ -62,7 +63,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           additionalDeclarationType = additionalDeclarationType,
           officeOfDeparture = xiCustomsOffice,
           procedureType = Normal,
-          declarationType = Option4,
+          declarationType = declarationType4,
           tirCarnetReference = Some(carnetRef),
           securityDetailsType = securityDetails,
           detailsConfirmed = detailsConfirmed
@@ -109,7 +110,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(DeclarationTypePage)(Option4)
+          .unsafeSetVal(DeclarationTypePage)(declarationType4)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DetailsConfirmedPage)(true)
 
@@ -124,7 +125,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(DeclarationTypePage)(Option4)
+          .unsafeSetVal(DeclarationTypePage)(declarationType4)
           .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DetailsConfirmedPage)(true)
@@ -181,7 +182,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(DeclarationTypePage)(Option1)
+          .unsafeSetVal(DeclarationTypePage)(declarationType1)
           .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
           .unsafeSetVal(DetailsConfirmedPage)(true)
 

@@ -16,40 +16,32 @@
 
 package models
 
-import config.Constants.XI
+import config.Constants.{TIR, XI}
 import models.ProcedureType.Normal
 import pages.preTaskList.{OfficeOfDeparturePage, ProcedureTypePage}
+import play.api.libs.json.{Format, Json}
 
-sealed trait DeclarationType extends Radioable[DeclarationType] {
+case class DeclarationType(
+  code: String,
+  description: String
+) extends Radioable[DeclarationType] {
+  override def toString: String         = s"$code - $description"
   override val messageKeyPrefix: String = DeclarationType.messageKeyPrefix
+  def isTIR: Boolean                    = code == TIR
 }
 
-object DeclarationType extends EnumerableType[DeclarationType] {
+object DeclarationType extends DynamicEnumerableType[DeclarationType] {
+
+  implicit val format: Format[DeclarationType] = Json.format[DeclarationType]
 
   val messageKeyPrefix: String = "declarationType"
 
-  case object Option1 extends WithName("T1") with DeclarationType
-  case object Option2 extends WithName("T2") with DeclarationType
-  case object Option3 extends WithName("T2F") with DeclarationType
-  case object Option4 extends WithName("TIR") with DeclarationType
-  case object Option5 extends WithName("T") with DeclarationType
-
-  val t2Options = Seq(Option2, Option3)
-
-  override val values: Seq[DeclarationType] = Seq(
-    Option1,
-    Option2,
-    Option3,
-    Option4,
-    Option5
-  )
-
-  def values(userAnswers: UserAnswers): Seq[DeclarationType] =
+  def values(userAnswers: UserAnswers, declarationTypes: Seq[DeclarationType]) =
     (
       userAnswers.get(OfficeOfDeparturePage).map(_.countryCode),
       userAnswers.get(ProcedureTypePage)
     ) match {
-      case (Some(XI), Some(Normal)) => values
-      case _                        => values.filterNot(_ == Option4)
+      case (Some(XI), Some(Normal)) => declarationTypes
+      case _                        => declarationTypes.filterNot(_.code == TIR)
     }
 }

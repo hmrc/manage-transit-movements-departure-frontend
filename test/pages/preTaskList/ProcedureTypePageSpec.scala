@@ -16,8 +16,8 @@
 
 package pages.preTaskList
 
-import models.DeclarationType.Option4
-import models.ProcedureType
+import config.Constants.{declarationType4, TIR}
+import models.{DeclarationType, ProcedureType}
 import models.ProcedureType._
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
@@ -41,7 +41,7 @@ class ProcedureTypePageSpec extends PageBehaviours {
               ref =>
                 val preChange = emptyUserAnswers
                   .setValue(ProcedureTypePage, Normal)
-                  .setValue(DeclarationTypePage, Option4)
+                  .setValue(DeclarationTypePage, declarationType4)
                   .setValue(TIRCarnetReferencePage, ref)
 
                 val postChange = preChange.setValue(ProcedureTypePage, Simplified)

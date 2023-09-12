@@ -17,9 +17,9 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import config.Constants.{declarationType1, TIR}
 import models.AdditionalDeclarationType.Standard
-import models.DeclarationType.Option1
-import models.NormalMode
+import models.{DeclarationType, NormalMode}
 import models.ProcedureType.Normal
 import models.SecurityDetailsType.NoSecurityDetails
 import models.reference.CustomsOffice
@@ -48,7 +48,7 @@ class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
       setExistingUserAnswers(
         emptyUserAnswers
           .setValue(AdditionalDeclarationTypePage, Standard)
-          .setValue(DeclarationTypePage, Option1)
+          .setValue(DeclarationTypePage, declarationType1)
           .setValue(OfficeOfDeparturePage, CustomsOffice("name", "phone", None))
           .setValue(ProcedureTypePage, Normal)
           .setValue(SecurityDetailsTypePage, NoSecurityDetails)

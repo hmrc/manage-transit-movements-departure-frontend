@@ -16,6 +16,7 @@
 
 package generators
 
+import config.Constants.{declarationTypeValues, TIR}
 import models._
 import models.reference._
 import org.scalacheck.{Arbitrary, Gen}
@@ -41,12 +42,12 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryDeclarationType: Arbitrary[DeclarationType] =
     Arbitrary {
-      Gen.oneOf(DeclarationType.values)
+      Gen.oneOf(declarationTypeValues)
     }
 
   lazy val arbitraryNonOption4DeclarationType: Arbitrary[DeclarationType] =
     Arbitrary {
-      Gen.oneOf(DeclarationType.values.filterNot(_ == DeclarationType.Option4))
+      Gen.oneOf(declarationTypeValues.filterNot(_.code == TIR))
     }
 
   implicit lazy val arbitrarySecurityDetailsType: Arbitrary[SecurityDetailsType] =

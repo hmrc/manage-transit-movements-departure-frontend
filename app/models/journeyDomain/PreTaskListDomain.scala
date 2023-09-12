@@ -17,8 +17,7 @@
 package models.journeyDomain
 
 import cats.implicits._
-import config.Constants.XI
-import models.DeclarationType.Option4
+import config.Constants.{TIR, XI}
 import models.ProcedureType.Normal
 import models.domain._
 import models.reference.CustomsOffice
@@ -54,13 +53,13 @@ object PreTaskListDomain {
       case XI =>
         ProcedureTypePage
           .filterOptionalDependent(_ == Normal) {
-            DeclarationTypePage.filterOptionalDependent(_ == Option4) {
+            DeclarationTypePage.filterOptionalDependent(_.code == TIR) {
               TIRCarnetReferencePage.reader
             }
           }
           .map(_.flatten)
       case _ =>
-        DeclarationTypePage.filterMandatoryDependent(_ != Option4) {
+        DeclarationTypePage.filterMandatoryDependent(_.code != TIR) {
           none[String].pure[UserAnswersReader]
         }
     }

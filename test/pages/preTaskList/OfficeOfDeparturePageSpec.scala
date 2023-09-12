@@ -16,7 +16,8 @@
 
 package pages.preTaskList
 
-import models.DeclarationType.Option4
+import config.Constants.{declarationType4, TIR}
+import models.DeclarationType
 import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
@@ -42,7 +43,7 @@ class OfficeOfDeparturePageSpec extends PageBehaviours {
               ref =>
                 val preChange = emptyUserAnswers
                   .setValue(OfficeOfDeparturePage, xiCustomsOffice)
-                  .setValue(DeclarationTypePage, Option4)
+                  .setValue(DeclarationTypePage, declarationType4)
                   .setValue(TIRCarnetReferencePage, ref)
 
                 val postChange = preChange.setValue(OfficeOfDeparturePage, gbCustomsOffice)

@@ -16,6 +16,7 @@
 
 package views.preTaskList
 
+import config.Constants.declarationTypeValues
 import forms.EnumerableFormProvider
 import models.{DeclarationType, NormalMode}
 import play.api.data.Form
@@ -26,7 +27,7 @@ import views.html.preTaskList.DeclarationTypeView
 
 class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
 
-  override def form: Form[DeclarationType] = new EnumerableFormProvider()(prefix)
+  override def form: Form[DeclarationType] = new EnumerableFormProvider()(prefix, values)
 
   override def applyView(form: Form[DeclarationType]): HtmlFormat.Appendable =
     injector.instanceOf[DeclarationTypeView].apply(form, values, lrn, NormalMode)(fakeRequest, messages)
@@ -38,7 +39,7 @@ class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
   override def radioItems(fieldId: String, checkedValue: Option[DeclarationType] = None): Seq[RadioItem] =
     values.toRadioItems(fieldId, checkedValue)
 
-  override def values: Seq[DeclarationType] = DeclarationType.values(userAnswers)
+  override def values: Seq[DeclarationType] = DeclarationType.values(userAnswers, declarationTypeValues)
 
   behave like pageWithTitle()
 

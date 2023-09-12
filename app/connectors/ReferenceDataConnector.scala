@@ -17,6 +17,7 @@
 package connectors
 
 import config.FrontendAppConfig
+import models.DeclarationType
 import models.reference.{Country, CustomsOffice}
 import play.api.Logging
 import play.api.http.Status.{NOT_FOUND, NO_CONTENT, OK}
@@ -58,6 +59,11 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   def getCustomsSecurityAgreementAreaCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
     val serviceUrl = s"${config.customsReferenceDataUrl}/lists/CountryCustomsSecurityAgreementArea"
     http.GET[Seq[Country]](serviceUrl, headers = version2Header)
+  }
+
+  def getDeclarationType()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[DeclarationType]] = {
+    val serviceUrl = s"${config.customsReferenceDataUrl}/lists/DeclarationType"
+    http.GET[Seq[DeclarationType]](serviceUrl, headers = version2Header)
   }
 
   private def version2Header: Seq[(String, String)] = Seq(

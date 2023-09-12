@@ -20,6 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.matching.StringValuePattern
 import helper.WireMockServerHandler
+import models.DeclarationType
 import models.reference._
 import org.scalacheck.Gen
 import org.scalatest.{Assertion, BeforeAndAfterEach}
@@ -190,12 +191,57 @@ class ReferenceDataConnectorSpec
       |}
       |""".stripMargin
 
+  private val declarationTypesResponseJson: String =
+    """
+      |{
+      |  "_links": {
+      |    "self": {
+      |      "href": "/customs-reference-data/lists/DeclarationType"
+      |    }
+      |  },
+      |  "meta": {
+      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+      |    "snapshotDate": "2023-01-01"
+      |  },
+      |  "id": "DeclarationType",
+      |  "data": [
+      |    {
+      |      "code": "T2",
+      |      "description": "Goods having the customs status of Union goods, which are placed under the common transit procedure"
+      |    },
+      |    {
+      |      "code": "TIR",
+      |      "description": "TIR carnet"
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
+
   private val queryParams: Seq[(String, StringValuePattern)] = Seq(
     "data.countryId"  -> equalTo("GB"),
     "data.roles.role" -> equalTo("DEP")
   )
 
   "Reference Data" - {
+
+    "getDeclarationType" - {
+      val url = s"/$baseUrl/lists/DeclarationType"
+      "must return Seq of security types when successful" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(declarationTypesResponseJson))
+        )
+
+        val expectedResult: Seq[DeclarationType] = Seq(
+          DeclarationType("T2", "Goods having the customs status of Union goods, which are placed under the common transit procedure"),
+          DeclarationType("TIR", "TIR carnet")
+        )
+
+        val res = connector.getDeclarationType.futureValue
+
+        res mustEqual expectedResult
+      }
+    }
 
     "getCustomsOfficesOfDepartureForCountry" - {
       "must return a successful future response with a sequence of CustomsOffices" in {

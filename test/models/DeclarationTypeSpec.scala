@@ -17,10 +17,11 @@
 package models
 
 import base.SpecBase
+import config.Constants.{declarationType1, declarationType2, declarationType3, declarationType4, declarationType5, declarationTypeValues}
 import generators.Generators
-import models.DeclarationType.{Option1, Option2, Option3, Option4, Option5}
 import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.{OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.libs.json.{JsError, JsString, Json}
@@ -30,26 +31,41 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
   "DeclarationType" - {
 
     "must deserialise valid values" in {
-      forAll(arbitrary[DeclarationType]) {
-        declarationType =>
-          JsString(declarationType.toString).validate[DeclarationType].asOpt.value mustEqual declarationType
+
+      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+        (code, description) =>
+          val declarationType = DeclarationType(code, description)
+          Json
+            .parse(s"""
+             |{
+             |  "code": "$code",
+             |  "description": "$description"
+             |}
+             |""".stripMargin)
+            .as[DeclarationType] mustBe declarationType
       }
     }
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] retryUntil (!DeclarationType.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] suchThat (!Seq(DeclarationType("T", "T description")).map(_.toString).contains(_))
 
       forAll(gen) {
         invalidValue =>
-          JsString(invalidValue).validate[DeclarationType] mustEqual JsError("error.invalid")
+          JsString(invalidValue).validate[DeclarationType] mustEqual JsError("error.expected.jsobject")
       }
     }
 
     "must serialise" in {
-      forAll(arbitrary[DeclarationType]) {
-        declarationType =>
-          Json.toJson(declarationType) mustEqual JsString(declarationType.toString)
+      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+        (code, description) =>
+          val declarationType = DeclarationType(code, description)
+          Json.toJson(declarationType) mustBe Json.parse(s"""
+               |{
+               |  "code": "$code",
+               |  "description": "$description"
+               |}
+               |""".stripMargin)
       }
     }
 
@@ -61,8 +77,8 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
             .setValue(OfficeOfDeparturePage, CustomsOffice("XI343", "name", None))
             .setValue(ProcedureTypePage, ProcedureType.Normal)
 
-          val radios   = DeclarationType.values(answers)
-          val expected = Seq(Option1, Option2, Option3, Option4, Option5)
+          val radios   = DeclarationType.values(answers, declarationTypeValues)
+          val expected = Seq(declarationType1, declarationType2, declarationType3, declarationType4, declarationType5)
           radios mustBe expected
         }
 
@@ -70,8 +86,8 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
           val answers = emptyUserAnswers
             .setValue(OfficeOfDeparturePage, CustomsOffice("GB24R", "name", None))
 
-          val radios   = DeclarationType.values(answers)
-          val expected = Seq(Option1, Option2, Option3, Option5)
+          val radios   = DeclarationType.values(answers, declarationTypeValues)
+          val expected = Seq(declarationType1, declarationType2, declarationType3, declarationType5)
           radios mustBe expected
         }
 
@@ -80,8 +96,8 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
             .setValue(OfficeOfDeparturePage, CustomsOffice("XI93F", "name", None))
             .setValue(ProcedureTypePage, ProcedureType.Simplified)
 
-          val radios   = DeclarationType.values(answers)
-          val expected = Seq(Option1, Option2, Option3, Option5)
+          val radios   = DeclarationType.values(answers, declarationTypeValues)
+          val expected = Seq(declarationType1, declarationType2, declarationType3, declarationType5)
           radios mustBe expected
         }
       }

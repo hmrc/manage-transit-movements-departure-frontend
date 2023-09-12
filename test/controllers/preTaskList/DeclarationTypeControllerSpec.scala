@@ -17,37 +17,53 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import config.Constants.declarationTypeValues
 import controllers.{routes => mainRoutes}
 import forms.EnumerableFormProvider
 import models.{DeclarationType, NormalMode}
 import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, when}
 import pages.preTaskList.DeclarationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.DeclarationTypeService
 import views.html.preTaskList.DeclarationTypeView
 
 import scala.concurrent.Future
+import generators.Generators
 
-class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private lazy val declarationTypeRoute = routes.DeclarationTypeController.onPageLoad(lrn, NormalMode).url
+  private val mode                      = NormalMode
+  private val dts                       = declarationTypeValues
+  private lazy val declarationTypeRoute = routes.DeclarationTypeController.onPageLoad(lrn, mode).url
 
-  private val formProvider = new EnumerableFormProvider()
-  private val form         = formProvider[DeclarationType]("declarationType")
-  private val mode         = NormalMode
+  private val formProvider           = new EnumerableFormProvider()
+  private val form                   = formProvider[DeclarationType]("declarationType")(dts)
+  private val mockDeclarationService = mock[DeclarationTypeService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
+      .overrides(bind(classOf[DeclarationTypeService]).toInstance(mockDeclarationService))
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockDeclarationService)
+
+  }
 
   "DeclarationType Controller" - {
 
     "must return OK and the correct view for a GET" in {
+
+      when(mockDeclarationService.getDeclarationTypeItemLevel(any())(any()))
+        .thenReturn(Future.successful(DeclarationType.values(emptyUserAnswers, dts)))
+
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, declarationTypeRoute)
@@ -56,34 +72,46 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view(form, DeclarationType.values(emptyUserAnswers), lrn, mode)(request, messages).toString
+      val res = contentAsString(result)
+      val ans = view(form, DeclarationType.values(emptyUserAnswers, dts), lrn, mode)(request, messages).toString
+
+      res mustEqual
+        ans
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, DeclarationType.values.head)
+      when(mockDeclarationService.getDeclarationTypeItemLevel(any())(any()))
+        .thenReturn(Future.successful(DeclarationType.values(emptyUserAnswers, dts)))
+
+      val userAnswers = emptyUserAnswers.setValue(DeclarationTypePage, dts.head)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, declarationTypeRoute)
 
       val result = route(app, request).value
 
-      status(result) mustEqual OK
+      val ret = status(result)
+      ret mustEqual OK
 
-      val filledForm = form.bind(Map("value" -> DeclarationType.values.head.toString))
+      val filledForm = form.bind(Map("value" -> dts.head.toString))
 
       val view = injector.instanceOf[DeclarationTypeView]
 
-      contentAsString(result) mustEqual
-        view(filledForm, DeclarationType.values(emptyUserAnswers), lrn, mode)(request, messages).toString
+      val res2 = contentAsString(result)
+      val exp2 = view(filledForm, DeclarationType.values(emptyUserAnswers, dts), lrn, mode)(request, messages).toString
+      res2 mustEqual
+        exp2
     }
 
     "must redirect to the next page when valid data is submitted" in {
+      when(mockDeclarationService.getDeclarationTypeItemLevel(any())(any()))
+        .thenReturn(Future.successful(dts))
+
       setExistingUserAnswers(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
-      val selectedValue = DeclarationType.values.head
+      val selectedValue = dts.head
 
       val request = FakeRequest(POST, declarationTypeRoute)
         .withFormUrlEncodedBody(("value", selectedValue.toString))
@@ -96,6 +124,8 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
+      when(mockDeclarationService.getDeclarationTypeItemLevel(any())(any()))
+        .thenReturn(Future.successful(DeclarationType.values(emptyUserAnswers, dts)))
       setExistingUserAnswers(emptyUserAnswers)
 
       val request   = FakeRequest(POST, declarationTypeRoute).withFormUrlEncodedBody(("value", "invalid value"))
@@ -106,8 +136,11 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       val view = injector.instanceOf[DeclarationTypeView]
 
-      contentAsString(result) mustEqual
-        view(boundForm, DeclarationType.values(emptyUserAnswers), lrn, mode)(request, messages).toString
+      val res = contentAsString(result)
+      val ans = view(boundForm, DeclarationType.values(emptyUserAnswers, dts), lrn, mode)(request, messages).toString
+
+      res mustEqual
+        ans
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
@@ -125,7 +158,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, declarationTypeRoute)
-        .withFormUrlEncodedBody(("value", DeclarationType.values.head.toString))
+        .withFormUrlEncodedBody(("value", dts.head.toString))
 
       val result = route(app, request).value
 

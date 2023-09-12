@@ -218,7 +218,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Type of declaration".toText),
-                  value = Value(messages(s"declarationType.$declarationType").toText),
+                  value = Value(messages(s"$declarationType").toText),
                   actions = Some(
                     Actions(
                       items = List(

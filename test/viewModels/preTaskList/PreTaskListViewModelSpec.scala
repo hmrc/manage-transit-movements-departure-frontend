@@ -17,6 +17,7 @@
 package viewModels.preTaskList
 
 import base.SpecBase
+import config.Constants.{declarationType4, TIR}
 import generators.Generators
 import models.reference.CustomsOffice
 import models.{AdditionalDeclarationType, DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}
@@ -47,7 +48,7 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
           .setValue(AdditionalDeclarationTypePage, AdditionalDeclarationType.Standard)
           .setValue(OfficeOfDeparturePage, CustomsOffice("XI1", "name", None))
           .setValue(ProcedureTypePage, ProcedureType.Normal)
-          .setValue(DeclarationTypePage, DeclarationType.Option4)
+          .setValue(DeclarationTypePage, DeclarationType("TIR", "TIR carnet"))
           .setValue(TIRCarnetReferencePage, "tir carnet reference")
           .setValue(SecurityDetailsTypePage, SecurityDetailsType.EntrySummaryDeclarationSecurityDetails)
 
@@ -60,7 +61,7 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
         section.rows(1).value.content.asHtml.toString() mustBe "Standard - the goods have already boarded at a UK port or airport"
         section.rows(2).value.content.asHtml.toString() mustBe "name (XI1)"
         section.rows(3).value.content.asHtml.toString() mustBe "Normal - customs-approved location"
-        section.rows(4).value.content.asHtml.toString() mustBe "TIR - goods moving under the cover of TIR carnet"
+        section.rows(4).value.content.asHtml.toString() mustBe "TIR - TIR carnet"
         section.rows(5).value.content.asHtml.toString() mustBe "tir carnet reference"
         section
           .rows(6)

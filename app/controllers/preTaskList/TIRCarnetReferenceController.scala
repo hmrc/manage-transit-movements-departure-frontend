@@ -16,13 +16,13 @@
 
 package controllers.preTaskList
 
+import config.Constants.TIR
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.preTaskList.TIRCarnetReferenceFormProvider
-import models.DeclarationType.Option4
 import models.ProcedureType.Normal
 import models.journeyDomain.PreTaskListDomain
-import models.{LocalReferenceNumber, Mode}
+import models.{DeclarationType, LocalReferenceNumber, Mode}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage, TIRCarnetReferencePage}
 import play.api.Logging
@@ -60,7 +60,7 @@ class TIRCarnetReferenceController @Inject() (
       .andThen(getMandatoryPage.getSecond(DeclarationTypePage)) {
         implicit request =>
           request.arg match {
-            case (Normal, Option4) =>
+            case (Normal, DeclarationType(TIR, _)) =>
               val preparedForm = request.userAnswers.get(TIRCarnetReferencePage) match {
                 case None        => form
                 case Some(value) => form.fill(value)

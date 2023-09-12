@@ -55,7 +55,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
 
   def declarationType: Option[SummaryListRow] = getAnswerAndBuildRow[DeclarationType](
     page = DeclarationTypePage,
-    formatAnswer = formatEnumAsText(DeclarationType.messageKeyPrefix),
+    formatAnswer = formatAsText,
     prefix = "declarationType",
     id = None
   )

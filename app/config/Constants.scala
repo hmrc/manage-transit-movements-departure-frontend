@@ -16,8 +16,28 @@
 
 package config
 
+import models.DeclarationType
+
 object Constants {
   val GB = "GB"
   val XI = "XI"
   val AD = "AD"
+
+  val TIR = "TIR"
+  val T2F = "T2F"
+
+  val declarationType1: DeclarationType = DeclarationType("T1", "t1 description")
+  val declarationType2: DeclarationType = DeclarationType("T2", "t2 description")
+  val declarationType3: DeclarationType = DeclarationType(T2F, "t2f description")
+  val declarationType4: DeclarationType = DeclarationType(TIR, "tir description")
+  val declarationType5: DeclarationType = DeclarationType("T", "t description")
+
+  val declarationTypeValues: Seq[DeclarationType] = Seq(
+    declarationType1,
+    declarationType2,
+    declarationType3,
+    declarationType4,
+    declarationType5
+  )
+
 }

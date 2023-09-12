@@ -17,6 +17,7 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import config.Constants.{declarationType4, TIR}
 import forms.preTaskList.TIRCarnetReferenceFormProvider
 import generators.Generators
 import models.{DeclarationType, NormalMode, ProcedureType}
@@ -49,7 +50,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
 
   private val baseAnswers = emptyUserAnswers
     .setValue(ProcedureTypePage, ProcedureType.Normal)
-    .setValue(DeclarationTypePage, DeclarationType.Option4)
+    .setValue(DeclarationTypePage, declarationType4)
 
   "TIRCarnetReference Controller" - {
 
@@ -90,7 +91,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
       "when non-Normal or non-Option4 procedure and declaration types" in {
         forAll(arbitrary[(ProcedureType, DeclarationType)].retryUntil {
           case (procedureType, declarationType) =>
-            procedureType != ProcedureType.Normal || declarationType != DeclarationType.Option4
+            procedureType != ProcedureType.Normal || declarationType.code != TIR
         }) {
           case (procedureType, declarationType) =>
             val userAnswers = emptyUserAnswers
