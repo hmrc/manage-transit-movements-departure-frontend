@@ -16,13 +16,13 @@
 
 package config
 
-import config.Constants.{T2F, TIR}
+import config.Constants.TIR
 import models.DeclarationType
 
 object TestConstants {
   val declarationType1: DeclarationType = DeclarationType("T1", "t1 description")
   val declarationType2: DeclarationType = DeclarationType("T2", "t2 description")
-  val declarationType3: DeclarationType = DeclarationType(T2F, "t2f description")
+  val declarationType3: DeclarationType = DeclarationType("T2F", "t2f description")
   val declarationType4: DeclarationType = DeclarationType(TIR, "tir description")
   val declarationType5: DeclarationType = DeclarationType("T", "t description")
 

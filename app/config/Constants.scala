@@ -23,7 +23,7 @@ object Constants {
   val XI = "XI"
   val AD = "AD"
 
-  val TIR = "TIR"
-  val T2F = "T2F"
+  val TIR  = "TIR"
+  val T2SM = "T2SM"
 
 }

@@ -16,7 +16,7 @@
 
 package services
 
-import config.Constants.T2F
+import config.Constants.T2SM
 import connectors.ReferenceDataConnector
 import models.{DeclarationType, UserAnswers}
 import services.DeclarationTypeService.filterUserAnswers
@@ -44,6 +44,6 @@ object DeclarationTypeService {
 
   def filterUserAnswers(declarationType: Seq[DeclarationType]): Seq[DeclarationType] =
     declarationType.filterNot(
-      decType => decType.code == T2F
+      decType => decType.code == T2SM
     )
 }
