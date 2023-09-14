@@ -27,7 +27,6 @@ case class DeclarationType(
 ) extends Radioable[DeclarationType] {
   override def toString: String         = s"$code - $description"
   override val messageKeyPrefix: String = DeclarationType.messageKeyPrefix
-  def isTIR: Boolean                    = code == TIR
 }
 
 object DeclarationType extends DynamicEnumerableType[DeclarationType] {

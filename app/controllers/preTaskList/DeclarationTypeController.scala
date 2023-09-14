@@ -49,7 +49,6 @@ class DeclarationTypeController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-//  private val form: Form[DeclarationType] = formProvider[DeclarationType]("declarationType")
   private def form(declarationTypes: Seq[DeclarationType]): Form[DeclarationType] =
     formProvider[DeclarationType]("declarationType", declarationTypes)
 
@@ -76,21 +75,21 @@ class DeclarationTypeController @Inject() (
       implicit request: DataRequest[AnyContent] =>
         declarationTypeService.getDeclarationTypeItemLevel(request.userAnswers).flatMap {
           declarationTypes =>
-            val ans = form(declarationTypes)
+            form(declarationTypes)
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, declarationTypes, lrn, mode))),
                 value => {
                   implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                  val ret: Future[Result] = DeclarationTypePage
+                  DeclarationTypePage
                     .writeToUserAnswers(value)
                     .updateTask[PreTaskListDomain]()
                     .writeToSession()
                     .navigate()
-                  ret
+
                 }
               )
-            ans
+
         }
 
     }

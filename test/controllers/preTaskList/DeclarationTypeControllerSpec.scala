@@ -17,7 +17,7 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import config.Constants.declarationTypeValues
+import config.TestConstants.declarationTypeValues
 import controllers.{routes => mainRoutes}
 import forms.EnumerableFormProvider
 import models.{DeclarationType, NormalMode}
@@ -72,11 +72,8 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       status(result) mustEqual OK
 
-      val res = contentAsString(result)
-      val ans = view(form, DeclarationType.values(emptyUserAnswers, dts), lrn, mode)(request, messages).toString
-
-      res mustEqual
-        ans
+      contentAsString(result) mustEqual
+        view(form, DeclarationType.values(emptyUserAnswers, dts), lrn, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
@@ -136,11 +133,8 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       val view = injector.instanceOf[DeclarationTypeView]
 
-      val res = contentAsString(result)
-      val ans = view(boundForm, DeclarationType.values(emptyUserAnswers, dts), lrn, mode)(request, messages).toString
-
-      res mustEqual
-        ans
+      contentAsString(result) mustEqual
+        view(boundForm, DeclarationType.values(emptyUserAnswers, dts), lrn, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {

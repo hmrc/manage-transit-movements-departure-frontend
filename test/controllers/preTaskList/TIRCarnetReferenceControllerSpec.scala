@@ -17,7 +17,8 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import config.Constants.{declarationType4, TIR}
+import config.Constants.TIR
+import config.TestConstants.declarationType4
 import forms.preTaskList.TIRCarnetReferenceFormProvider
 import generators.Generators
 import models.{DeclarationType, NormalMode, ProcedureType}

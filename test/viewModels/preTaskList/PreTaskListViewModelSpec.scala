@@ -17,7 +17,6 @@
 package viewModels.preTaskList
 
 import base.SpecBase
-import config.Constants.{declarationType4, TIR}
 import generators.Generators
 import models.reference.CustomsOffice
 import models.{AdditionalDeclarationType, DeclarationType, LocalReferenceNumber, ProcedureType, SecurityDetailsType}

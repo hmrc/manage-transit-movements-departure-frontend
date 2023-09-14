@@ -16,7 +16,8 @@
 
 package generators
 
-import config.Constants.{declarationTypeValues, TIR}
+import config.Constants.TIR
+import config.TestConstants.declarationTypeValues
 import models._
 import models.reference._
 import org.scalacheck.{Arbitrary, Gen}

@@ -17,7 +17,7 @@
 package models
 
 import base.SpecBase
-import config.Constants.{declarationType1, declarationType2, declarationType3, declarationType4, declarationType5, declarationTypeValues}
+import config.TestConstants.{declarationType1, declarationType2, declarationType3, declarationType4, declarationType5, declarationTypeValues}
 import generators.Generators
 import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary

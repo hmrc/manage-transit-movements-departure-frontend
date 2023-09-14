@@ -16,7 +16,8 @@
 
 package pages.preTaskList
 
-import config.Constants.{declarationType4, TIR}
+import config.Constants.TIR
+import config.TestConstants.declarationType4
 import models.DeclarationType
 import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary

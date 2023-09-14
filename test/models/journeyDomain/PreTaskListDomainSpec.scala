@@ -18,7 +18,8 @@ package models.journeyDomain
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import config.Constants.{declarationType1, declarationType4, TIR}
+import config.Constants.TIR
+import config.TestConstants.{declarationType1, declarationType4}
 import generators.Generators
 import models.DeclarationType._
 import models.ProcedureType.Normal

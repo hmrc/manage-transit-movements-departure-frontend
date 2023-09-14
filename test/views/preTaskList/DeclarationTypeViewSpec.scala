@@ -16,7 +16,7 @@
 
 package views.preTaskList
 
-import config.Constants.declarationTypeValues
+import config.TestConstants.declarationTypeValues
 import forms.EnumerableFormProvider
 import models.{DeclarationType, NormalMode}
 import play.api.data.Form

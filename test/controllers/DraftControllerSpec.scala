@@ -17,7 +17,8 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import config.Constants.{declarationType1, TIR}
+import config.Constants.TIR
+import config.TestConstants.declarationType1
 import models.AdditionalDeclarationType.Standard
 import models.{DeclarationType, NormalMode}
 import models.ProcedureType.Normal

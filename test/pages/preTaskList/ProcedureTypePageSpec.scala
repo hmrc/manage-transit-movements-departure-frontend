@@ -16,8 +16,8 @@
 
 package pages.preTaskList
 
-import config.Constants.{declarationType4, TIR}
-import models.{DeclarationType, ProcedureType}
+import config.TestConstants.declarationType4
+import models.ProcedureType
 import models.ProcedureType._
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
