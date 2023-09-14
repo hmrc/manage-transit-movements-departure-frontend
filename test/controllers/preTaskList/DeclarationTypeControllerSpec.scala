@@ -87,17 +87,14 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       val result = route(app, request).value
 
-      val ret = status(result)
-      ret mustEqual OK
+      status(result) mustEqual OK
 
       val filledForm = form.bind(Map("value" -> dts.head.toString))
 
       val view = injector.instanceOf[DeclarationTypeView]
 
-      val res2 = contentAsString(result)
-      val exp2 = view(filledForm, DeclarationType.values(emptyUserAnswers, dts), lrn, mode)(request, messages).toString
-      res2 mustEqual
-        exp2
+      contentAsString(result) mustEqual
+        view(filledForm, DeclarationType.values(emptyUserAnswers, dts), lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
