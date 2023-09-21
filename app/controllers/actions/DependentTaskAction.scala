@@ -29,7 +29,11 @@ class DependentTaskActionImpl @Inject() (implicit val executionContext: Executio
   override protected def filter[A](request: DataRequest[A]): Future[Option[Result]] = {
 
     def isTaskCompleted(task: String): Boolean =
-      request.userAnswers.tasks.get(task).exists(_.isCompleted)
+      request.userAnswers.tasks
+        .get(task)
+        .exists(
+          result => result.isCompleted || result.isUnavailable || result.isError
+        )
 
     if (isTaskCompleted(PreTaskListTask.section)) {
       Future.successful(None)

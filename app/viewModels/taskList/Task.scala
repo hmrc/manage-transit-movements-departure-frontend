@@ -36,6 +36,7 @@ abstract class TaskListTask extends Task {
       case Completed | InProgress | Error => s"task.$messageKey.edit"
       case NotStarted                     => s"task.$messageKey.add"
       case CannotStartYet                 => s"task.$messageKey"
+      case Unavailable                    => s"task.$messageKey"
     }
   }
 

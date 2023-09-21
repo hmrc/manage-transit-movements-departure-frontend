@@ -17,6 +17,7 @@
 package viewModels.taskList
 
 import models.UserAnswers
+import viewModels.taskList.TaskStatus.Unavailable
 
 class TaskListViewModel {
 
@@ -42,5 +43,24 @@ class TaskListViewModel {
       case task: TaskListTask => task
     }
   }
+}
+
+object TaskListViewModel {
+
+  private def guaranteeRejectedState(taskLists: Seq[TaskListTask]): Boolean = {
+    val guaranteeDetails = taskLists.find(_.section == GuaranteeDetailsTask.section)
+
+    guaranteeDetails.exists {
+      x =>
+        val filter = taskLists.filterNot(
+          tasks => tasks.section == GuaranteeDetailsTask.section
+        )
+
+        x.isCompleted && filter.forall(_.status == Unavailable)
+    }
+  }
+
+  def showSubmissionButton(taskLists: Seq[TaskListTask]): Boolean =
+    guaranteeRejectedState(taskLists) || taskLists.forall(_.isCompleted)
 
 }

@@ -34,7 +34,7 @@
                 <li class="app-task-list__item">
                     <span class="app-task-list__task-name">
                         @task.status match {
-                            case CannotStartYet => { @task.name }
+                            case CannotStartYet | Unavailable => { @task.name }
                             case Error              => {
                         <a href="@{task.href(lrn)(config)}" aria-describedby="@task.id-status">@task.name
                             <span class="govuk-visually-hidden" id="@task.id-hidden">@messages("taskStatus.error.hidden")</span>
