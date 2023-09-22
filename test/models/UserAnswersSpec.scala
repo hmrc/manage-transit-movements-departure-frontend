@@ -17,6 +17,7 @@
 package models
 
 import base.SpecBase
+import models.SubmissionState.RejectedPendingChanges
 import pages.QuestionPage
 import play.api.libs.json.{JsPath, Json}
 import viewModels.taskList._
@@ -119,6 +120,13 @@ class UserAnswersSpec extends SpecBase {
             RouteDetailsTask.section  -> TaskStatus.NotStarted,
             TransportTask.section     -> TaskStatus.CannotStartYet
           )
+        }
+
+        "when task has been amended" in {
+          val tasks       = Map(TraderDetailsTask.section -> TaskStatus.Completed)
+          val updatedTask = TraderDetailsTask(TaskStatus.Amended)
+          val result      = emptyUserAnswers.copy(status = RejectedPendingChanges, tasks = tasks).updateTask(updatedTask)
+          result.tasks mustBe Map(TraderDetailsTask.section -> TaskStatus.Amended)
         }
       }
     }
