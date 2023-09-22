@@ -15,6 +15,7 @@
  */
 
 import cats.data.ReaderT
+import models.SubmissionState.RejectedPendingChanges
 import models.UserAnswers
 import models.domain.UserAnswersReader
 import models.journeyDomain.{JourneyDomainModel, WriterError}
@@ -76,8 +77,9 @@ package object controllers {
           page.path.path.headOption.map(_.toJsonString) match {
             case Some(section) =>
               val status = UserAnswersReader[T].run(userAnswers) match {
-                case Left(_)  => InProgress
-                case Right(_) => Completed
+                case Left(_)                                                  => InProgress
+                case Right(_) if userAnswers.status == RejectedPendingChanges => Amended
+                case Right(_)                                                 => Completed
               }
               Task.apply(section, status) match {
                 case Some(task) => Right((page, userAnswers.updateTask(task)))

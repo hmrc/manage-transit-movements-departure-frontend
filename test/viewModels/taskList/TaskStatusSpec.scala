@@ -42,6 +42,10 @@ class TaskStatusSpec extends SpecBase {
       TaskStatus.Error.messageKey mustBe "taskStatus.error"
     }
 
+    "when Amended" in {
+      TaskStatus.Amended.messageKey mustBe "taskStatus.amended"
+    }
+
     "when Unavailable" in {
       TaskStatus.Unavailable.messageKey mustBe "taskStatus.completed"
     }
