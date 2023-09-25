@@ -16,51 +16,43 @@
 
 package viewModels.taskList
 
-import models.UserAnswers
-import viewModels.taskList.TaskStatus.Unavailable
+import models.{SubmissionState, UserAnswers}
 
-class TaskListViewModel {
+case class TaskListViewModel(tasks: Seq[TaskListTask], submissionState: SubmissionState.Value) {
 
-  def apply(userAnswers: UserAnswers): Seq[TaskListTask] = {
+  def showErrorContent: Boolean = submissionState.showErrorContent
 
-    def task(section: String, dependentSections: Seq[String] = Nil): Option[Task] = {
-      val tasks = userAnswers.tasks
-      val status = tasks.getOrElse(
-        section,
-        if ((PreTaskListTask.section +: dependentSections).allCompleted(tasks)) TaskStatus.NotStarted else TaskStatus.CannotStartYet
-      )
-      Task(section, status)
-    }
-
-    Seq(
-      task(TraderDetailsTask.section),
-      task(RouteDetailsTask.section),
-      task(TransportTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section)),
-      task(DocumentsTask.section),
-      task(ItemsTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section, TransportTask.section, DocumentsTask.section)),
-      task(GuaranteeDetailsTask.section)
-    ).flatten.collect {
-      case task: TaskListTask => task
-    }
-  }
+  def showSubmissionButton: Boolean = tasks.forall(_.isCompleted)
 }
 
 object TaskListViewModel {
 
-  private def guaranteeRejectedState(taskLists: Seq[TaskListTask]): Boolean = {
-    val guaranteeDetails = taskLists.find(_.section == GuaranteeDetailsTask.section)
+  class TaskListViewModelProvider() {
 
-    guaranteeDetails.exists {
-      x =>
-        val filter = taskLists.filterNot(
-          tasks => tasks.section == GuaranteeDetailsTask.section
+    def apply(userAnswers: UserAnswers): TaskListViewModel = {
+
+      def task(section: String, dependentSections: Seq[String] = Nil): Option[Task] = {
+        val tasks = userAnswers.tasks
+        val status = tasks.getOrElse(
+          section,
+          if ((PreTaskListTask.section +: dependentSections).allCompleted(tasks)) TaskStatus.NotStarted else TaskStatus.CannotStartYet
         )
+        Task(section, status)
+      }
 
-        x.isCompleted && filter.forall(_.status == Unavailable)
+      val tasks = Seq(
+        task(TraderDetailsTask.section),
+        task(RouteDetailsTask.section),
+        task(TransportTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section)),
+        task(DocumentsTask.section),
+        task(ItemsTask.section, Seq(TraderDetailsTask.section, RouteDetailsTask.section, TransportTask.section, DocumentsTask.section)),
+        task(GuaranteeDetailsTask.section)
+      ).flatten.collect {
+        case task: TaskListTask => task
+      }
+
+      new TaskListViewModel(tasks, userAnswers.status)
     }
   }
-
-  def showSubmissionButton(taskLists: Seq[TaskListTask]): Boolean =
-    guaranteeRejectedState(taskLists) || taskLists.forall(_.isCompleted)
 
 }

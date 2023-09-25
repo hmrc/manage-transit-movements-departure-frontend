@@ -17,7 +17,7 @@
 package views.behaviours
 
 import generators.Generators
-import models.LocalReferenceNumber
+import models.{LocalReferenceNumber, SubmissionState}
 import org.scalacheck.Arbitrary.arbitrary
 import viewModels.taskList.TaskListTask
 import viewModels.taskList.TaskStatus._
@@ -27,6 +27,8 @@ import scala.jdk.CollectionConverters._
 trait TaskListViewBehaviours extends ViewBehaviours with Generators {
 
   lazy val tasks: Seq[TaskListTask] = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
+
+  val submissionState: SubmissionState.Value = SubmissionState.NotSubmitted
 
   override val urlContainsLrn: Boolean = true
 
@@ -60,7 +62,7 @@ trait TaskListViewBehaviours extends ViewBehaviours with Generators {
 
             "must contain a tag" in {
               val tag = renderedTask.getElementsByClass("app-task-list__tag").first()
-              tag.text() mustBe messages(task.status.messageKey)
+              tag.text() mustBe messages(task.status.messageKey(submissionState))
               tag.id() mustBe s"${task.id}-status"
               assert(tag.hasClass(task.status.tag))
             }

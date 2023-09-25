@@ -154,6 +154,7 @@ taskStatus.notStarted = Not started
 taskStatus.cannotStartYet = Cannot start yet
 taskStatus.error = Error
 taskStatus.unavailable = Unavailable
+taskStatus.amended = Amended
 
 task.traderDetails = Trader details
 task.traderDetails.add = Add trader details

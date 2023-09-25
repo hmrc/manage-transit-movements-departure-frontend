@@ -25,7 +25,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.taskList.{TaskListTask, TaskListViewModel}
+import viewModels.taskList.TaskListViewModel.TaskListViewModelProvider
 import views.html.TaskListView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +36,7 @@ class TaskListController @Inject() (
   checkPreTaskListCompleted: DependentTaskAction,
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
-  viewModel: TaskListViewModel,
+  viewModelProvider: TaskListViewModelProvider,
   submissionConnector: SubmissionConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -52,12 +52,11 @@ class TaskListController @Inject() (
           case SubmissionState.Submitted =>
             logger.info(s"TaskListController: Departure with LRN $lrn has already been submitted")
             Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
-          case status =>
+          case _ =>
             for {
               expiryInDays <- submissionConnector.getExpiryInDays(lrn.value)
-              tasks: Seq[TaskListTask]      = viewModel(request.userAnswers)
-              showSubmissionButton: Boolean = TaskListViewModel.showSubmissionButton(tasks)
-            } yield Ok(view(lrn, tasks, status.showErrorContent, expiryInDays, showSubmissionButton))
+              viewModel = viewModelProvider(request.userAnswers)
+            } yield Ok(view(lrn, viewModel, expiryInDays))
         }
     }
 
