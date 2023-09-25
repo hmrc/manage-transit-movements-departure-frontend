@@ -28,7 +28,7 @@ final case class UserAnswers(
   eoriNumber: EoriNumber,
   data: JsObject = Json.obj(),
   tasks: Map[String, TaskStatus] = Map(),
-  status: SubmissionState
+  status: SubmissionState.Value
 ) {
 
   def getOptional[A](page: Gettable[A])(implicit rds: Reads[A]): Either[String, Option[A]] =
@@ -93,7 +93,7 @@ object UserAnswers {
         (__ \ "eoriNumber").read[EoriNumber] and
         (__ \ "data").read[JsObject] and
         (__ \ "tasks").read[Map[String, TaskStatus]] and
-        (__ \ "isSubmitted").read[SubmissionState]
+        (__ \ "isSubmitted").read[SubmissionState.Value]
     )(UserAnswers.apply _)
 
   implicit lazy val writes: Writes[UserAnswers] =
@@ -102,6 +102,6 @@ object UserAnswers {
         (__ \ "eoriNumber").write[EoriNumber] and
         (__ \ "data").write[JsObject] and
         (__ \ "tasks").write[Map[String, TaskStatus]] and
-        (__ \ "isSubmitted").write[SubmissionState]
+        (__ \ "isSubmitted").write[SubmissionState.Value]
     )(unlift(UserAnswers.unapply))
 }

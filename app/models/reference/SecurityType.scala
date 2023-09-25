@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-package models
+package models.reference
 
-sealed trait AdditionalDeclarationType extends Radioable[AdditionalDeclarationType] {
-  override val messageKeyPrefix: String = AdditionalDeclarationType.messageKeyPrefix
+import models.{DynamicEnumerableType, Radioable}
+import org.apache.commons.text.StringEscapeUtils
+import play.api.libs.json.{Format, Json}
+
+case class SecurityType(
+  code: String,
+  description: String
+) extends Radioable[SecurityType] {
+
+  override def toString: String = StringEscapeUtils.unescapeXml(description)
+
+  override val messageKeyPrefix: String = SecurityType.messageKeyPrefix
 }
 
-object AdditionalDeclarationType extends EnumerableType[AdditionalDeclarationType] {
+object SecurityType extends DynamicEnumerableType[SecurityType] {
+  implicit val format: Format[SecurityType] = Json.format[SecurityType]
 
-  case object Standard extends WithName("A") with AdditionalDeclarationType
-  case object Prelodged extends WithName("D") with AdditionalDeclarationType
-
-  val messageKeyPrefix: String = "additionalDeclarationType"
-
-  override val values: Seq[AdditionalDeclarationType] = Seq(
-    Standard,
-    Prelodged
-  )
+  val messageKeyPrefix = "securityDetailsType"
 }

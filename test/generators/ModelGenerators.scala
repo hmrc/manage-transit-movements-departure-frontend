@@ -28,7 +28,10 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryAdditionalDeclarationType: Arbitrary[AdditionalDeclarationType] =
     Arbitrary {
-      Gen.oneOf(AdditionalDeclarationType.values)
+      for {
+        code        <- Gen.oneOf("A", "D")
+        description <- nonEmptyString
+      } yield AdditionalDeclarationType(code, description)
     }
 
   implicit lazy val arbitraryLockCheck: Arbitrary[LockCheck] =
@@ -36,8 +39,8 @@ trait ModelGenerators {
       Gen.oneOf(Locked, Unlocked, LockCheckFailure)
     }
 
-  implicit lazy val arbitrarySubmissionState: Arbitrary[SubmissionState] = Arbitrary {
-    Gen.oneOf(SubmissionState.values)
+  implicit lazy val arbitrarySubmissionState: Arbitrary[SubmissionState.Value] = Arbitrary {
+    Gen.oneOf(SubmissionState.values.toSeq)
   }
 
   implicit lazy val arbitraryProcedureType: Arbitrary[ProcedureType] =
@@ -47,22 +50,41 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryDeclarationType: Arbitrary[DeclarationType] =
     Arbitrary {
-      Gen.oneOf(DeclarationType.values)
+      for {
+        code        <- Gen.oneOf("T", "T1", "T2", "T2F", "TIR")
+        description <- nonEmptyString
+      } yield DeclarationType(code, description)
     }
 
-  lazy val arbitraryNonOption4DeclarationType: Arbitrary[DeclarationType] =
+  lazy val arbitraryNonTIRDeclarationType: Arbitrary[DeclarationType] =
     Arbitrary {
-      Gen.oneOf(DeclarationType.values.filterNot(_ == DeclarationType.Option4))
+      for {
+        code        <- Gen.oneOf("T", "T1", "T2", "T2F")
+        description <- nonEmptyString
+      } yield DeclarationType(code, description)
     }
 
-  implicit lazy val arbitrarySecurityDetailsType: Arbitrary[SecurityDetailsType] =
+  lazy val arbitraryTIRDeclarationType: Arbitrary[DeclarationType] =
     Arbitrary {
-      Gen.oneOf(SecurityDetailsType.values)
+      for {
+        description <- nonEmptyString
+      } yield DeclarationType("TIR", description)
     }
 
-  lazy val arbitrarySomeSecurityDetailsType: Arbitrary[SecurityDetailsType] =
+  implicit lazy val arbitrarySecurityDetailsType: Arbitrary[SecurityType] =
     Arbitrary {
-      Gen.oneOf(SecurityDetailsType.values.filterNot(_ == SecurityDetailsType.NoSecurityDetails))
+      for {
+        code        <- Gen.oneOf("0", "1", "2", "3")
+        description <- nonEmptyString
+      } yield SecurityType(code, description)
+    }
+
+  lazy val arbitrarySomeSecurityDetailsType: Arbitrary[SecurityType] =
+    Arbitrary {
+      for {
+        code        <- Gen.oneOf("1", "2", "3")
+        description <- nonEmptyString
+      } yield SecurityType(code, description)
     }
 
   implicit lazy val arbitraryLocalReferenceNumber: Arbitrary[LocalReferenceNumber] =
@@ -94,7 +116,7 @@ trait ModelGenerators {
         id          <- stringsWithMaxLength(stringMaxLength)
         name        <- stringsWithMaxLength(stringMaxLength)
         phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
-      } yield CustomsOffice(id, name, phoneNumber)
+      } yield CustomsOffice(s"XI$id", name, phoneNumber)
     }
 
   lazy val arbitraryGbCustomsOffice: Arbitrary[CustomsOffice] =
@@ -103,7 +125,7 @@ trait ModelGenerators {
         id          <- stringsWithMaxLength(stringMaxLength)
         name        <- stringsWithMaxLength(stringMaxLength)
         phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
-      } yield CustomsOffice(id, name, phoneNumber)
+      } yield CustomsOffice(s"GB$id", name, phoneNumber)
     }
 
   lazy val arbitraryOfficeOfDeparture: Arbitrary[CustomsOffice] =
@@ -115,6 +137,12 @@ trait ModelGenerators {
     for {
       values <- listWithMaxLength[T]()
     } yield SelectableList(values.distinctBy(_.value))
+  }
+
+  implicit def arbitraryRadioableList[T <: Radioable[T]](implicit arbitrary: Arbitrary[T]): Arbitrary[Seq[T]] = Arbitrary {
+    for {
+      values <- listWithMaxLength[T]()
+    } yield values.distinctBy(_.code)
   }
 
   implicit lazy val arbitraryMode: Arbitrary[Mode] = Arbitrary {

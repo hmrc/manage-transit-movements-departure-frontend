@@ -18,30 +18,47 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EnumerableFormProvider
-import models.{AdditionalDeclarationType, NormalMode}
+import generators.Generators
+import models.NormalMode
+import models.reference.AdditionalDeclarationType
 import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.preTaskList.AdditionalDeclarationTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.AdditionalDeclarationTypesService
 import views.html.preTaskList.AdditionalDeclarationTypeView
 
 import scala.concurrent.Future
 
-class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private val formProvider                        = new EnumerableFormProvider()
-  private val form                                = formProvider[AdditionalDeclarationType]("preTaskList.additionalDeclarationType")
-  private val mode                                = NormalMode
+  private val adts = arbitrary[Seq[AdditionalDeclarationType]].sample.value
+  private val adt1 = adts.head
+
+  private val formProvider = new EnumerableFormProvider()
+  private val form         = formProvider[AdditionalDeclarationType]("additionalDeclarationType", adts)
+  private val mode         = NormalMode
+
   private lazy val additionalDeclarationTypeRoute = routes.AdditionalDeclarationTypeController.onPageLoad(lrn, mode).url
+
+  private val mockAdditionalDeclarationTypesService: AdditionalDeclarationTypesService = mock[AdditionalDeclarationTypesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
+      .overrides(bind(classOf[AdditionalDeclarationTypesService]).toInstance(mockAdditionalDeclarationTypesService))
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockAdditionalDeclarationTypesService)
+    when(mockAdditionalDeclarationTypesService.getAdditionalDeclarationTypes()(any())).thenReturn(Future.successful(adts))
+  }
 
   "AdditionalDeclarationType Controller" - {
 
@@ -58,26 +75,26 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, lrn, AdditionalDeclarationType.values, mode)(request, messages).toString
+        view(form, lrn, adts, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.setValue(AdditionalDeclarationTypePage, AdditionalDeclarationType.values.head)
+      val userAnswers = emptyUserAnswers.setValue(AdditionalDeclarationTypePage, adt1)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, additionalDeclarationTypeRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> AdditionalDeclarationType.values.head.toString))
+      val filledForm = form.bind(Map("value" -> adt1.code))
 
       val view = injector.instanceOf[AdditionalDeclarationTypeView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, lrn, AdditionalDeclarationType.values, mode)(request, messages).toString
+        view(filledForm, lrn, adts, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -87,7 +104,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(POST, additionalDeclarationTypeRoute)
-        .withFormUrlEncodedBody(("value", AdditionalDeclarationType.values.head.toString))
+        .withFormUrlEncodedBody(("value", adt1.code))
 
       val result = route(app, request).value
 
@@ -110,7 +127,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, lrn, AdditionalDeclarationType.values, mode)(request, messages).toString
+        view(boundForm, lrn, adts, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
@@ -130,7 +147,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, additionalDeclarationTypeRoute)
-        .withFormUrlEncodedBody(("value", AdditionalDeclarationType.values.head.toString))
+        .withFormUrlEncodedBody(("value", adt1.code))
 
       val result = route(app, request).value
 

@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package models
+package models.reference
 
-sealed trait ProcedureType extends Radioable[ProcedureType] {
-  override val messageKeyPrefix: String = ProcedureType.messageKeyPrefix
+import config.Constants.TIR
+import models.{DynamicEnumerableType, Radioable}
+import play.api.libs.json.{Format, Json}
+
+case class DeclarationType(
+  code: String,
+  description: String
+) extends Radioable[DeclarationType] {
+
+  override def toString: String = s"$code - $description"
+
+  override val messageKeyPrefix: String = DeclarationType.messageKeyPrefix
+
+  def isTIR: Boolean = code == TIR
 }
 
-object ProcedureType extends EnumerableType[ProcedureType] {
+object DeclarationType extends DynamicEnumerableType[DeclarationType] {
+  implicit val format: Format[DeclarationType] = Json.format[DeclarationType]
 
-  case object Normal extends WithName("normal") with ProcedureType {
-    override val code: String = this.toString
-  }
-
-  case object Simplified extends WithName("simplified") with ProcedureType {
-    override val code: String = this.toString
-  }
-
-  val messageKeyPrefix: String = "procedureType"
-
-  override val values: Seq[ProcedureType] = Seq(
-    Normal,
-    Simplified
-  )
+  val messageKeyPrefix = "declarationType"
 }

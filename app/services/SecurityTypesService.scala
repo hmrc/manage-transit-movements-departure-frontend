@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package config
+package services
 
-object Constants {
-  val GB = "GB"
-  val XI = "XI"
-  val AD = "AD"
+import connectors.ReferenceDataConnector
+import models.reference.SecurityType
+import uk.gov.hmrc.http.HeaderCarrier
 
-  val TIR  = "TIR"
-  val T2SM = "T2SM"
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+
+class SecurityTypesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
+
+  def getSecurityTypes()(implicit hc: HeaderCarrier): Future[Seq[SecurityType]] =
+    referenceDataConnector.getSecurityTypes().map(sort)
+
+  private def sort(securityTypes: Seq[SecurityType]): Seq[SecurityType] =
+    securityTypes.sortBy(_.code.toLowerCase)
 }

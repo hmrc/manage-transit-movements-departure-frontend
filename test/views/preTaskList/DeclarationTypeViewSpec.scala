@@ -17,28 +17,30 @@
 package views.preTaskList
 
 import forms.EnumerableFormProvider
-import models.{DeclarationType, NormalMode}
+import models.NormalMode
+import models.reference.DeclarationType
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-import views.behaviours.RadioViewBehaviours
+import views.behaviours.EnumerableViewBehaviours
 import views.html.preTaskList.DeclarationTypeView
 
-class DeclarationTypeViewSpec extends RadioViewBehaviours[DeclarationType] {
+class DeclarationTypeViewSpec extends EnumerableViewBehaviours[DeclarationType] {
 
-  override def form: Form[DeclarationType] = new EnumerableFormProvider()(prefix)
+  override def form: Form[DeclarationType] = new EnumerableFormProvider()(prefix, values)
 
   override def applyView(form: Form[DeclarationType]): HtmlFormat.Appendable =
     injector.instanceOf[DeclarationTypeView].apply(form, values, lrn, NormalMode)(fakeRequest, messages)
 
   override val prefix: String = "declarationType"
 
-  private val userAnswers = emptyUserAnswers
-
   override def radioItems(fieldId: String, checkedValue: Option[DeclarationType] = None): Seq[RadioItem] =
     values.toRadioItems(fieldId, checkedValue)
 
-  override def values: Seq[DeclarationType] = DeclarationType.values(userAnswers)
+  override def values: Seq[DeclarationType] = Seq(
+    DeclarationType("T2", "Goods having the customs status of Union goods, which are placed under the common transit procedure"),
+    DeclarationType("TIR", "TIR carnet")
+  )
 
   behave like pageWithTitle()
 

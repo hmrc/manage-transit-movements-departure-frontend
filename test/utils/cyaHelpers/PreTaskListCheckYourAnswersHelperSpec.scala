@@ -19,8 +19,8 @@ package utils.cyaHelpers
 import base.SpecBase
 import controllers.preTaskList.routes
 import generators.Generators
-import models.reference.CustomsOffice
-import models.{AdditionalDeclarationType, DeclarationType, LocalReferenceNumber, Mode, ProcedureType, SecurityDetailsType}
+import models.reference.{AdditionalDeclarationType, CustomsOffice, DeclarationType, SecurityType}
+import models.{LocalReferenceNumber, Mode, ProcedureType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -86,7 +86,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Is this a standard or pre-lodged declaration?".toText),
-                  value = Value(messages(s"additionalDeclarationType.$additionalDeclarationType").toText),
+                  value = Value(additionalDeclarationType.asString.toText),
                   actions = Some(
                     Actions(
                       items = List(
@@ -218,7 +218,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Type of declaration".toText),
-                  value = Value(messages(s"declarationType.$declarationType").toText),
+                  value = Value(declarationType.asString.toText),
                   actions = Some(
                     Actions(
                       items = List(
@@ -296,7 +296,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
 
       "must return Some(Row)" - {
         s"when $SecurityDetailsTypePage defined" in {
-          forAll(arbitrary[SecurityDetailsType], arbitrary[Mode]) {
+          forAll(arbitrary[SecurityType], arbitrary[Mode]) {
             (securityDetailsType, mode) =>
               val answers = emptyUserAnswers.setValue(SecurityDetailsTypePage, securityDetailsType)
 
@@ -306,7 +306,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               result mustBe Some(
                 SummaryListRow(
                   key = Key("Safety and security details".toText),
-                  value = Value(messages(s"securityDetailsType.$securityDetailsType").toText),
+                  value = Value(securityDetailsType.asString.toText),
                   actions = Some(
                     Actions(
                       items = List(

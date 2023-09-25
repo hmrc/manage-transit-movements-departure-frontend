@@ -20,12 +20,15 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
 import models.journeyDomain.PreTaskListDomain
-import models.{AdditionalDeclarationType, LocalReferenceNumber, Mode}
+import models.reference.AdditionalDeclarationType
+import models.{LocalReferenceNumber, Mode}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.preTaskList.AdditionalDeclarationTypePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.AdditionalDeclarationTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.AdditionalDeclarationTypeView
 
@@ -40,23 +43,29 @@ class AdditionalDeclarationTypeController @Inject() (
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: AdditionalDeclarationTypeView
+  view: AdditionalDeclarationTypeView,
+  service: AdditionalDeclarationTypesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider[AdditionalDeclarationType]("additionalDeclarationType")
+  private def form(additionalDeclarationTypes: Seq[AdditionalDeclarationType]): Form[AdditionalDeclarationType] =
+    formProvider[AdditionalDeclarationType]("additionalDeclarationType", additionalDeclarationTypes)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfPreTaskListAlreadyCompleted) {
+    .andThen(checkIfPreTaskListAlreadyCompleted)
+    .async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(AdditionalDeclarationTypePage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
-        }
+        service.getAdditionalDeclarationTypes().map {
+          additionalDeclarationTypes =>
+            val preparedForm = request.userAnswers.get(AdditionalDeclarationTypePage) match {
+              case None        => form(additionalDeclarationTypes)
+              case Some(value) => form(additionalDeclarationTypes).fill(value)
+            }
 
-        Ok(view(preparedForm, lrn, AdditionalDeclarationType.values, mode))
+            Ok(view(preparedForm, lrn, additionalDeclarationTypes, mode))
+        }
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
@@ -64,14 +73,17 @@ class AdditionalDeclarationTypeController @Inject() (
     .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, AdditionalDeclarationType.values, mode))),
-            value => {
-              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              AdditionalDeclarationTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
-            }
-          )
+        service.getAdditionalDeclarationTypes().flatMap {
+          additionalDeclarationTypes =>
+            form(additionalDeclarationTypes)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, additionalDeclarationTypes, mode))),
+                value => {
+                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                  AdditionalDeclarationTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
+                }
+              )
+        }
     }
 }

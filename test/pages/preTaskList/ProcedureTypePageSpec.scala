@@ -16,9 +16,9 @@
 
 package pages.preTaskList
 
-import models.DeclarationType.Option4
 import models.ProcedureType
 import models.ProcedureType._
+import models.reference.DeclarationType
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -37,11 +37,11 @@ class ProcedureTypePageSpec extends PageBehaviours {
       "when changing from Normal to Simplified" - {
         "and declaration type is TIR" - {
           "must clean up DeclarationTypePage and TIRCarnetReferencePage" in {
-            forAll(arbitrary[String]) {
-              ref =>
+            forAll(arbitrary[String], arbitrary[DeclarationType](arbitraryTIRDeclarationType)) {
+              (ref, declarationType) =>
                 val preChange = emptyUserAnswers
                   .setValue(ProcedureTypePage, Normal)
-                  .setValue(DeclarationTypePage, Option4)
+                  .setValue(DeclarationTypePage, declarationType)
                   .setValue(TIRCarnetReferencePage, ref)
 
                 val postChange = preChange.setValue(ProcedureTypePage, Simplified)

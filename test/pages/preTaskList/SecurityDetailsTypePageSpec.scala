@@ -16,17 +16,17 @@
 
 package pages.preTaskList
 
-import models.SecurityDetailsType
+import models.reference.SecurityType
 import pages.behaviours.PageBehaviours
 
 class SecurityDetailsTypePageSpec extends PageBehaviours {
 
   "SecurityDetailsTypePage" - {
 
-    beRetrievable[SecurityDetailsType](SecurityDetailsTypePage)
+    beRetrievable[SecurityType](SecurityDetailsTypePage)
 
-    beSettable[SecurityDetailsType](SecurityDetailsTypePage)
+    beSettable[SecurityType](SecurityDetailsTypePage)
 
-    beRemovable[SecurityDetailsType](SecurityDetailsTypePage)
+    beRemovable[SecurityType](SecurityDetailsTypePage)
   }
 }

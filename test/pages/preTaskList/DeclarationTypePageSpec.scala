@@ -16,7 +16,7 @@
 
 package pages.preTaskList
 
-import models.DeclarationType
+import models.reference.DeclarationType
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -33,7 +33,7 @@ class DeclarationTypePageSpec extends PageBehaviours {
     "cleanup" - {
       "must remove TIRCarnetReferencePage" - {
         "when anything other than Option4 (TIR) selected" in {
-          forAll(arbitrary[String], arbitrary[DeclarationType].suchThat(_ != DeclarationType.Option4)) {
+          forAll(arbitrary[String], arbitrary[DeclarationType](arbitraryNonTIRDeclarationType)) {
             (carnetReference, declarationType) =>
               val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
               val postChange = preChange.setValue(DeclarationTypePage, declarationType)
@@ -45,10 +45,10 @@ class DeclarationTypePageSpec extends PageBehaviours {
 
       "must not remove TIRCarnetReferencePage" - {
         "when Option4 (TIR) selected" in {
-          forAll(arbitrary[String]) {
-            carnetReference =>
+          forAll(arbitrary[String], arbitrary[DeclarationType](arbitraryTIRDeclarationType)) {
+            (carnetReference, declarationType) =>
               val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
-              val postChange = preChange.setValue(DeclarationTypePage, DeclarationType.Option4)
+              val postChange = preChange.setValue(DeclarationTypePage, declarationType)
 
               postChange.get(TIRCarnetReferencePage) must be(defined)
           }

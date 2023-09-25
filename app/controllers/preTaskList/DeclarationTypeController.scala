@@ -20,13 +20,15 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
 import models.journeyDomain.PreTaskListDomain
-import models.requests.DataRequest
-import models.{DeclarationType, LocalReferenceNumber, Mode}
+import models.reference.DeclarationType
+import models.{LocalReferenceNumber, Mode}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
-import pages.preTaskList.DeclarationTypePage
+import pages.preTaskList.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.DeclarationTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.DeclarationTypeView
 
@@ -39,40 +41,54 @@ class DeclarationTypeController @Inject() (
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
+  getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: DeclarationTypeView
+  view: DeclarationTypeView,
+  service: DeclarationTypesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider[DeclarationType]("declarationType")
+  private def form(declarationTypes: Seq[DeclarationType]): Form[DeclarationType] =
+    formProvider[DeclarationType]("declarationType", declarationTypes)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfPreTaskListAlreadyCompleted) {
+    .andThen(checkIfPreTaskListAlreadyCompleted)
+    .andThen(getMandatoryPage.getFirst(OfficeOfDeparturePage))
+    .andThen(getMandatoryPage.getSecond(ProcedureTypePage))
+    .async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(DeclarationTypePage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
-        }
+        service.getDeclarationTypes(request.arg._1, request.arg._2).map {
+          declarationTypes =>
+            val preparedForm = request.userAnswers.get(DeclarationTypePage) match {
+              case None        => form(declarationTypes)
+              case Some(value) => form(declarationTypes).fill(value)
+            }
 
-        Ok(view(preparedForm, DeclarationType.values(request.userAnswers), lrn, mode))
+            Ok(view(preparedForm, declarationTypes, lrn, mode))
+        }
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(checkIfPreTaskListAlreadyCompleted)
+    .andThen(getMandatoryPage.getFirst(OfficeOfDeparturePage))
+    .andThen(getMandatoryPage.getSecond(ProcedureTypePage))
     .async {
-      implicit request: DataRequest[AnyContent] =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, DeclarationType.values(request.userAnswers), lrn, mode))),
-            value => {
-              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              DeclarationTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
-            }
-          )
+      implicit request =>
+        service.getDeclarationTypes(request.arg._1, request.arg._2).flatMap {
+          declarationTypes =>
+            form(declarationTypes)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, declarationTypes, lrn, mode))),
+                value => {
+                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                  DeclarationTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
+                }
+              )
+        }
     }
 }

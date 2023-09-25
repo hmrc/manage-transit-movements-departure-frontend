@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package pages.preTaskList
+package services
 
-import controllers.preTaskList.routes
+import connectors.ReferenceDataConnector
 import models.reference.AdditionalDeclarationType
-import models.{Mode, UserAnswers}
-import pages.QuestionPage
-import pages.sections.PreTaskListSection
-import play.api.libs.json.JsPath
-import play.api.mvc.Call
+import uk.gov.hmrc.http.HeaderCarrier
 
-case object AdditionalDeclarationTypePage extends QuestionPage[AdditionalDeclarationType] {
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
-  override def path: JsPath = PreTaskListSection.path \ toString
+class AdditionalDeclarationTypesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
 
-  override def toString: String = "additionalDeclarationType"
+  def getAdditionalDeclarationTypes()(implicit hc: HeaderCarrier): Future[Seq[AdditionalDeclarationType]] =
+    referenceDataConnector.getAdditionalDeclarationTypes().map(sort)
 
-  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(routes.AdditionalDeclarationTypeController.onPageLoad(userAnswers.lrn, mode))
+  private def sort(additionalDeclarationTypes: Seq[AdditionalDeclarationType]): Seq[AdditionalDeclarationType] =
+    additionalDeclarationTypes.sortBy(_.code.toLowerCase)
 }

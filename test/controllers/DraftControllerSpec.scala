@@ -17,23 +17,17 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import models.AdditionalDeclarationType.Standard
-import models.DeclarationType.Option1
+import generators.Generators
 import models.NormalMode
-import models.ProcedureType.Normal
-import models.SecurityDetailsType.NoSecurityDetails
-import models.reference.CustomsOffice
-import pages.preTaskList._
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   "draft controller" - {
-
     "when the preTaskList is incomplete the next page will be a preTaskList page" in {
-
-      setExistingUserAnswers(emptyUserAnswers.setValue(TIRCarnetReferencePage, ""))
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, routes.DraftController.draftRedirect(lrn).url)
 
@@ -44,23 +38,18 @@ class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
     }
 
     "preTaskList is complete and the document is incomplete" in {
+      forAll(arbitraryPreTaskListAnswers(emptyUserAnswers)) {
+        userAnswers =>
+          setExistingUserAnswers(userAnswers)
 
-      setExistingUserAnswers(
-        emptyUserAnswers
-          .setValue(AdditionalDeclarationTypePage, Standard)
-          .setValue(DeclarationTypePage, Option1)
-          .setValue(OfficeOfDeparturePage, CustomsOffice("name", "phone", None))
-          .setValue(ProcedureTypePage, Normal)
-          .setValue(SecurityDetailsTypePage, NoSecurityDetails)
-          .setValue(DetailsConfirmedPage, true)
-      )
+          val request = FakeRequest(GET, routes.DraftController.draftRedirect(lrn).url)
 
-      val request = FakeRequest(GET, routes.DraftController.draftRedirect(lrn).url)
+          val result = route(app, request).value
 
-      val result = route(app, request).value
-
-      redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+          redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+      }
     }
+
   }
 
 }

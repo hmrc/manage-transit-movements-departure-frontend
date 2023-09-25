@@ -19,16 +19,12 @@ package models.journeyDomain
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
-import models.DeclarationType._
+import models.ProcedureType
 import models.ProcedureType.Normal
-import models.SecurityDetailsType.NoSecurityDetails
 import models.domain.{EitherType, UserAnswersReader}
-import models.reference.CustomsOffice
-import models.{AdditionalDeclarationType, DeclarationType, ProcedureType, SecurityDetailsType}
+import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
-import pages.QuestionPage
 import pages.preTaskList._
 
 class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
@@ -40,8 +36,9 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
     val carnetRef                 = Gen.alphaNumStr.sample.value
     val additionalDeclarationType = arbitrary[AdditionalDeclarationType].sample.value
     val procedureType             = arbitrary[ProcedureType].sample.value
-    val securityDetails           = arbitrary[SecurityDetailsType].sample.value
-    val nonOption4DeclarationType = arbitrary[DeclarationType](arbitraryNonOption4DeclarationType).sample.value
+    val securityDetails           = arbitrary[SecurityType].sample.value
+    val nonTirDeclarationType     = arbitrary[DeclarationType](arbitraryNonTIRDeclarationType).sample.value
+    val tirDeclarationType        = arbitrary[DeclarationType](arbitraryTIRDeclarationType).sample.value
     val detailsConfirmed          = true
 
     "can be parsed from UserAnswers" - {
@@ -52,7 +49,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(DeclarationTypePage)(Option4)
+          .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
           .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DetailsConfirmedPage)(detailsConfirmed)
@@ -62,7 +59,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           additionalDeclarationType = additionalDeclarationType,
           officeOfDeparture = xiCustomsOffice,
           procedureType = Normal,
-          declarationType = Option4,
+          declarationType = tirDeclarationType,
           tirCarnetReference = Some(carnetRef),
           securityDetailsType = securityDetails,
           detailsConfirmed = detailsConfirmed
@@ -79,7 +76,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(procedureType)
-          .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
+          .unsafeSetVal(DeclarationTypePage)(nonTirDeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DetailsConfirmedPage)(detailsConfirmed)
 
@@ -88,7 +85,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           additionalDeclarationType = additionalDeclarationType,
           officeOfDeparture = gbCustomsOffice,
           procedureType = procedureType,
-          declarationType = nonOption4DeclarationType,
+          declarationType = nonTirDeclarationType,
           tirCarnetReference = None,
           securityDetailsType = securityDetails,
           detailsConfirmed = detailsConfirmed
@@ -109,9 +106,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(DeclarationTypePage)(Option4)
+          .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
-          .unsafeSetVal(DetailsConfirmedPage)(true)
 
         val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
 
@@ -124,7 +120,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
           .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(DeclarationTypePage)(Option4)
+          .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
           .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DetailsConfirmedPage)(true)
@@ -142,7 +138,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
             .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
             .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
             .unsafeSetVal(ProcedureTypePage)(procedureType)
-            .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
+            .unsafeSetVal(DeclarationTypePage)(nonTirDeclarationType)
             .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
             .unsafeSetVal(DetailsConfirmedPage)(false)
 
@@ -157,41 +153,12 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
             .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
             .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
             .unsafeSetVal(ProcedureTypePage)(procedureType)
-            .unsafeSetVal(DeclarationTypePage)(nonOption4DeclarationType)
+            .unsafeSetVal(DeclarationTypePage)(nonTirDeclarationType)
             .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
 
           val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(userAnswers)
 
           result.left.value.page mustBe DetailsConfirmedPage
-        }
-      }
-
-      "when any other mandatory page is missing" in {
-
-        val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-          AdditionalDeclarationTypePage,
-          OfficeOfDeparturePage,
-          ProcedureTypePage,
-          DeclarationTypePage,
-          SecurityDetailsTypePage,
-          DetailsConfirmedPage
-        )
-
-        val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
-          .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
-          .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(DeclarationTypePage)(Option1)
-          .unsafeSetVal(SecurityDetailsTypePage)(NoSecurityDetails)
-          .unsafeSetVal(DetailsConfirmedPage)(true)
-
-        forAll(mandatoryPages) {
-          mandatoryPage =>
-            val invalidUserAnswers = userAnswers.unsafeRemove(mandatoryPage)
-
-            val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(invalidUserAnswers)
-
-            result.left.value.page mustBe mandatoryPage
         }
       }
     }

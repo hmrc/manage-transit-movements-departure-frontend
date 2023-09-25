@@ -11,7 +11,8 @@ object AppDependencies {
     "uk.gov.hmrc"                %% "bootstrap-frontend-play-28"      % bootstrapVersion,
     "uk.gov.hmrc"                %% "play-frontend-hmrc"              % "7.19.0-play-28",
     "org.typelevel"              %% "cats-core"                       % "2.9.0",
-    "com.chuusai"                %% "shapeless"                       % "2.3.10"
+    "com.chuusai"                %% "shapeless"                       % "2.3.10",
+    "org.apache.commons"          % "commons-text"                    % "1.10.0"
   )
 
   val test: Seq[ModuleID] = Seq(

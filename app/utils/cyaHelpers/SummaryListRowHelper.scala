@@ -16,6 +16,7 @@
 
 package utils.cyaHelpers
 
+import models.Radioable
 import play.api.i18n.Messages
 import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -31,6 +32,8 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
     }
 
   protected def formatAsText[T](answer: T): Content = s"$answer".toText
+
+  protected def formatDynamicEnumAsText[T <: Radioable[T]](answer: T): Content = answer.asString.toText
 
   protected def formatAsPassword(answer: String): Content = ("•" * answer.length).toText
 
