@@ -18,7 +18,6 @@ package connectors
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
-import com.github.tomakehurst.wiremock.matching.StringValuePattern
 import helper.WireMockServerHandler
 import models.reference._
 import org.scalacheck.Gen
@@ -29,7 +28,6 @@ import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import play.mvc.Http.MimeTypes.JSON
 import play.mvc.Http.Status._
 
-import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -190,18 +188,94 @@ class ReferenceDataConnectorSpec
       |}
       |""".stripMargin
 
-  private val queryParams: Seq[(String, StringValuePattern)] = Seq(
-    "data.countryId"  -> equalTo("GB"),
-    "data.roles.role" -> equalTo("DEP")
-  )
+  private val securityTypesResponseJson: String =
+    """
+      |{
+      |  "_links": {
+      |    "self": {
+      |      "href": "/customs-reference-data/lists/DeclarationTypeSecurity"
+      |    }
+      |  },
+      |  "meta": {
+      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+      |    "snapshotDate": "2023-01-01"
+      |  },
+      |  "id": "DeclarationTypeSecurity",
+      |  "data": [
+      |    {
+      |      "code": "2",
+      |      "description": "EXS"
+      |    },
+      |    {
+      |      "code": "3",
+      |      "description": "ENS &amp; EXS"
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
+
+  private val declarationTypesResponseJson: String =
+    """
+      |{
+      |  "_links": {
+      |    "self": {
+      |      "href": "/customs-reference-data/lists/DeclarationType"
+      |    }
+      |  },
+      |  "meta": {
+      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+      |    "snapshotDate": "2023-01-01"
+      |  },
+      |  "id": "DeclarationType",
+      |  "data": [
+      |    {
+      |      "code": "T2",
+      |      "description": "Goods having the customs status of Union goods, which are placed under the common transit procedure"
+      |    },
+      |    {
+      |      "code": "TIR",
+      |      "description": "TIR carnet"
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
+
+  private val additionalDeclarationTypesResponseJson: String =
+    """
+      |{
+      |  "_links": {
+      |    "self": {
+      |      "href": "/customs-reference-data/lists/DeclarationType"
+      |    }
+      |  },
+      |  "meta": {
+      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+      |    "snapshotDate": "2023-01-01"
+      |  },
+      |  "id": "DeclarationType",
+      |  "data": [
+      |    {
+      |      "code": "A",
+      |      "description": "for a standard customs declaration (under Article 162 of the Code)"
+      |    },
+      |    {
+      |      "code": "D",
+      |      "description": "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code."
+      |    }
+      |  ]
+      |}
+      |""".stripMargin
 
   "Reference Data" - {
 
     "getCustomsOfficesOfDepartureForCountry" - {
+      def url(countryId: String) = s"/$baseUrl/filtered-lists/CustomsOffices?data.countryId=$countryId&data.roles.role=DEP"
+
       "must return a successful future response with a sequence of CustomsOffices" in {
+        val countryId = "GB"
+
         server.stubFor(
-          get(urlPathMatching(s"/$baseUrl/filtered-lists/CustomsOffices"))
-            .withQueryParams(queryParams.toMap.asJava)
+          get(urlEqualTo(url(countryId)))
             .willReturn(okJson(customsOfficeDestinationResponseJson))
         )
 
@@ -210,12 +284,14 @@ class ReferenceDataConnectorSpec
           CustomsOffice("GB2", "testName2", None)
         )
 
-        connector.getCustomsOfficesOfDepartureForCountry("GB").futureValue mustBe expectedResult
+        connector.getCustomsOfficesOfDepartureForCountry(countryId).futureValue mustBe expectedResult
       }
 
       "must return a successful future response when CustomsOffice returns no data" in {
+        val countryId = "AR"
+
         server.stubFor(
-          get(urlPathMatching(s"/$baseUrl/filtered-lists/CustomsOffices"))
+          get(urlEqualTo(url(countryId)))
             .willReturn(
               aResponse()
                 .withStatus(NO_CONTENT)
@@ -225,34 +301,38 @@ class ReferenceDataConnectorSpec
 
         val expectedResult = Nil
 
-        connector.getCustomsOfficesOfDepartureForCountry("AR").futureValue mustBe expectedResult
+        connector.getCustomsOfficesOfDepartureForCountry(countryId).futureValue mustBe expectedResult
       }
 
       "must return an exception when an error response is returned" in {
+        val countryId = "GB"
+
         server.stubFor(
-          get(urlPathMatching(s"/$baseUrl/filtered-lists/CustomsOffices"))
-            .withQueryParams(queryParams.toMap.asJava)
+          get(urlEqualTo(url(countryId)))
             .willReturn(aResponse().withStatus(BAD_REQUEST))
         )
 
-        checkErrorResponse(s"/$baseUrl/filtered-lists/CustomsOffices", connector.getCustomsOfficesOfDepartureForCountry("GB"))
+        checkErrorResponse(s"/$baseUrl/filtered-lists/CustomsOffices", connector.getCustomsOfficesOfDepartureForCountry(countryId))
       }
 
       "must return an exception when NOT_FOUND" in {
+        val countryId = "GB"
+
         server.stubFor(
-          get(urlPathMatching(s"/$baseUrl/filtered-lists/CustomsOffices"))
-            .withQueryParams(queryParams.toMap.asJava)
+          get(urlEqualTo(url(countryId)))
             .willReturn(aResponse().withStatus(NOT_FOUND))
         )
 
-        checkErrorResponse(s"/$baseUrl/filtered-lists/CustomsOffices", connector.getCustomsOfficesOfDepartureForCountry("GB"))
+        checkErrorResponse(s"/$baseUrl/filtered-lists/CustomsOffices", connector.getCustomsOfficesOfDepartureForCountry(countryId))
       }
     }
 
     "getCountryCodesCTC" - {
+      val url = s"/$baseUrl/lists/CountryCodesCTC"
+
       "must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/lists/CountryCodesCTC"))
+          get(urlEqualTo(url))
             .willReturn(okJson(countriesResponseCTJson))
         )
 
@@ -265,14 +345,16 @@ class ReferenceDataConnectorSpec
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$baseUrl/lists/CountryCodesCTC", connector.getCountryCodesCTC())
+        checkErrorResponse(url, connector.getCountryCodesCTC())
       }
     }
 
     "getCustomsSecurityAgreementAreaCountries" - {
+      val url = s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea"
+
       "must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea"))
+          get(urlEqualTo(url))
             .willReturn(okJson(countriesResponseAAJson))
         )
 
@@ -285,14 +367,16 @@ class ReferenceDataConnectorSpec
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea", connector.getCustomsSecurityAgreementAreaCountries())
+        checkErrorResponse(url, connector.getCustomsSecurityAgreementAreaCountries())
       }
     }
 
     "getCountries" - {
+      val url = s"/$baseUrl/lists/CountryCodesCommunity"
+
       "must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$baseUrl/lists/CountryCodesCommunity"))
+          get(urlEqualTo(url))
             .willReturn(okJson(countriesResponseCommunity))
         )
 
@@ -305,7 +389,79 @@ class ReferenceDataConnectorSpec
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$baseUrl/lists/CountryCodesCommunity", connector.getCountries())
+        checkErrorResponse(url, connector.getCountries())
+      }
+    }
+
+    "getSecurityTypes" - {
+      val url = s"/$baseUrl/lists/DeclarationTypeSecurity"
+
+      "must return Seq of security types when successful" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(securityTypesResponseJson))
+        )
+
+        val expectedResult: Seq[SecurityType] = Seq(
+          SecurityType("2", "EXS"),
+          SecurityType("3", "ENS &amp; EXS")
+        )
+
+        connector.getSecurityTypes().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(url, connector.getSecurityTypes())
+      }
+    }
+
+    "getDeclarationTypes" - {
+      val url = s"/$baseUrl/lists/DeclarationType"
+
+      "must return Seq of declaration types when successful" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(declarationTypesResponseJson))
+        )
+
+        val expectedResult: Seq[DeclarationType] = Seq(
+          DeclarationType("T2", "Goods having the customs status of Union goods, which are placed under the common transit procedure"),
+          DeclarationType("TIR", "TIR carnet")
+        )
+
+        connector.getDeclarationTypes().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(url, connector.getDeclarationTypes())
+      }
+    }
+
+    "getAdditionalDeclarationTypes" - {
+      val url = s"/$baseUrl/lists/DeclarationTypeAdditional"
+
+      "must return Seq of additional declaration types when successful" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(additionalDeclarationTypesResponseJson))
+        )
+
+        val expectedResult: Seq[AdditionalDeclarationType] = Seq(
+          AdditionalDeclarationType(
+            "A",
+            "for a standard customs declaration (under Article 162 of the Code)"
+          ),
+          AdditionalDeclarationType(
+            "D",
+            "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code."
+          )
+        )
+
+        connector.getAdditionalDeclarationTypes().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(url, connector.getAdditionalDeclarationTypes())
       }
     }
   }

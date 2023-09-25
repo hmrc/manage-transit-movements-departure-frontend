@@ -16,7 +16,7 @@
 
 package pages.preTaskList
 
-import models.AdditionalDeclarationType
+import models.reference.AdditionalDeclarationType
 import pages.behaviours.PageBehaviours
 
 class AdditionalDeclarationTypePageSpec extends PageBehaviours {

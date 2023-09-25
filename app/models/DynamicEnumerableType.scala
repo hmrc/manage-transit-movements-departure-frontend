@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package config
+package models
 
-object Constants {
-  val GB = "GB"
-  val XI = "XI"
-  val AD = "AD"
+trait DynamicEnumerableType[T <: Radioable[T]] extends Enumerable.Implicits {
 
-  val TIR  = "TIR"
-  val T2SM = "T2SM"
+  implicit def enumerable(values: Seq[T]): Enumerable[T] =
+    Enumerable(
+      values.map(
+        v => v.code -> v
+      ): _*
+    )
 }

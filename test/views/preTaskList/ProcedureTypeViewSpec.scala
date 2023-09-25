@@ -21,10 +21,10 @@ import models.{NormalMode, ProcedureType}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-import views.behaviours.RadioViewBehaviours
+import views.behaviours.EnumerableViewBehaviours
 import views.html.preTaskList.ProcedureTypeView
 
-class ProcedureTypeViewSpec extends RadioViewBehaviours[ProcedureType] {
+class ProcedureTypeViewSpec extends EnumerableViewBehaviours[ProcedureType] {
 
   override def form: Form[ProcedureType] = new EnumerableFormProvider()(prefix)
 

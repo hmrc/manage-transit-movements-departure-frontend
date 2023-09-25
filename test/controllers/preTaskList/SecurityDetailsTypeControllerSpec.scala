@@ -18,31 +18,46 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EnumerableFormProvider
-import models.SecurityDetailsType.NoSecurityDetails
-import models.{NormalMode, SecurityDetailsType}
+import generators.Generators
+import models.NormalMode
+import models.reference.SecurityType
 import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.preTaskList.SecurityDetailsTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.SecurityTypesService
 import views.html.preTaskList.SecurityDetailsTypeView
 
 import scala.concurrent.Future
 
-class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
+
+  private val sts = arbitrary[Seq[SecurityType]].sample.value
+  private val st1 = sts.head
 
   private val formProvider                  = new EnumerableFormProvider()
-  private val form                          = formProvider[SecurityDetailsType]("securityDetailsType")
+  private val form                          = formProvider[SecurityType]("securityDetailsType", sts)
   private val mode                          = NormalMode
   private lazy val securityDetailsTypeRoute = routes.SecurityDetailsTypeController.onPageLoad(lrn, mode).url
+
+  private val mockSecurityTypesService: SecurityTypesService = mock[SecurityTypesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
+      .overrides(bind(classOf[SecurityTypesService]).toInstance(mockSecurityTypesService))
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockSecurityTypesService)
+    when(mockSecurityTypesService.getSecurityTypes()(any())).thenReturn(Future.successful(sts))
+  }
 
   "SecurityDetailsType Controller" - {
 
@@ -57,24 +72,24 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, SecurityDetailsType.values, lrn, mode)(request, messages).toString
+        view(form, sts, lrn, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = emptyUserAnswers.setValue(SecurityDetailsTypePage, NoSecurityDetails)
+      val userAnswers = emptyUserAnswers.setValue(SecurityDetailsTypePage, st1)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, securityDetailsTypeRoute)
 
       val result = route(app, request).value
 
-      val filledForm = form.bind(Map("value" -> NoSecurityDetails.toString))
+      val filledForm = form.bind(Map("value" -> st1.code))
 
       val view = injector.instanceOf[SecurityDetailsTypeView]
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(filledForm, SecurityDetailsType.values, lrn, mode)(request, messages).toString
+        view(filledForm, sts, lrn, mode)(request, messages).toString
     }
 
     "must redirect to the next page when valid data is submitted" in {
@@ -82,7 +97,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
       when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, securityDetailsTypeRoute)
-        .withFormUrlEncodedBody(("value", SecurityDetailsType.values.head.toString))
+        .withFormUrlEncodedBody(("value", st1.code))
 
       val result = route(app, request).value
 
@@ -103,7 +118,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
       val view = injector.instanceOf[SecurityDetailsTypeView]
 
       contentAsString(result) mustEqual
-        view(boundForm, SecurityDetailsType.values, lrn, mode)(request, messages).toString
+        view(boundForm, sts, lrn, mode)(request, messages).toString
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
@@ -122,7 +137,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, securityDetailsTypeRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+        .withFormUrlEncodedBody(("value", st1.code))
 
       val result = route(app, request).value
 

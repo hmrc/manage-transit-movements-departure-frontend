@@ -16,7 +16,7 @@
 
 package forms.mappings
 
-import models.{Enumerable, LocalReferenceNumber, Selectable, SelectableList}
+import models.{Enumerable, LocalReferenceNumber, Radioable, Selectable, SelectableList}
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
 import play.api.data.format.Formats.ignoredFormat
@@ -55,7 +55,10 @@ trait Mappings extends Formatters with Constraints {
   ): FieldMapping[Boolean] =
     if (condition) boolean(alreadyExistsKey) else of(ignoredFormat(defaultValue))
 
-  protected def enumerable[A](requiredKey: String = "error.required", invalidKey: String = "error.invalid")(implicit ev: Enumerable[A]): FieldMapping[A] =
+  protected def enumerable[A <: Radioable[A]](
+    requiredKey: String = "error.required",
+    invalidKey: String = "error.invalid"
+  )(implicit ev: Enumerable[A]): FieldMapping[A] =
     of(enumerableFormatter[A](requiredKey, invalidKey))
 
   protected def lrn(

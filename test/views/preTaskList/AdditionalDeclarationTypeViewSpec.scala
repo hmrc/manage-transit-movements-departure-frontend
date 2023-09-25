@@ -17,16 +17,17 @@
 package views.preTaskList
 
 import forms.EnumerableFormProvider
-import models.{AdditionalDeclarationType, NormalMode}
+import models.NormalMode
+import models.reference.AdditionalDeclarationType
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-import views.behaviours.RadioViewBehaviours
+import views.behaviours.EnumerableViewBehaviours
 import views.html.preTaskList.AdditionalDeclarationTypeView
 
-class AdditionalDeclarationTypeViewSpec extends RadioViewBehaviours[AdditionalDeclarationType] {
+class AdditionalDeclarationTypeViewSpec extends EnumerableViewBehaviours[AdditionalDeclarationType] {
 
-  override def form: Form[AdditionalDeclarationType] = new EnumerableFormProvider()(prefix)
+  override def form: Form[AdditionalDeclarationType] = new EnumerableFormProvider()(prefix, values)
 
   override def applyView(form: Form[AdditionalDeclarationType]): HtmlFormat.Appendable =
     injector.instanceOf[AdditionalDeclarationTypeView].apply(form, lrn, values, NormalMode)(fakeRequest, messages)
@@ -36,7 +37,10 @@ class AdditionalDeclarationTypeViewSpec extends RadioViewBehaviours[AdditionalDe
   override def radioItems(fieldId: String, checkedValue: Option[AdditionalDeclarationType] = None): Seq[RadioItem] =
     values.toRadioItems(fieldId, checkedValue)
 
-  override def values: Seq[AdditionalDeclarationType] = AdditionalDeclarationType.values
+  override def values: Seq[AdditionalDeclarationType] = Seq(
+    AdditionalDeclarationType("A", "for a standard customs declaration (under Article 162 of the Code)"),
+    AdditionalDeclarationType("D", "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code.")
+  )
 
   behave like pageWithTitle()
 

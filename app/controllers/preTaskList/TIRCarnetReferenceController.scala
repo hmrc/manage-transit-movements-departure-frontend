@@ -19,12 +19,10 @@ package controllers.preTaskList
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.preTaskList.TIRCarnetReferenceFormProvider
-import models.DeclarationType.Option4
-import models.ProcedureType.Normal
 import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
-import pages.preTaskList.{DeclarationTypePage, ProcedureTypePage, TIRCarnetReferencePage}
+import pages.preTaskList.TIRCarnetReferencePage
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -55,22 +53,14 @@ class TIRCarnetReferenceController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
     actions
       .requireData(lrn)
-      .andThen(checkIfPreTaskListAlreadyCompleted)
-      .andThen(getMandatoryPage.getFirst(ProcedureTypePage))
-      .andThen(getMandatoryPage.getSecond(DeclarationTypePage)) {
+      .andThen(checkIfPreTaskListAlreadyCompleted) {
         implicit request =>
-          request.arg match {
-            case (Normal, Option4) =>
-              val preparedForm = request.userAnswers.get(TIRCarnetReferencePage) match {
-                case None        => form
-                case Some(value) => form.fill(value)
-              }
-
-              Ok(view(preparedForm, lrn, mode))
-            case _ =>
-              logger.warn(s"[TIRCarnetReferenceController][onPageLoad] Cannot create TIR carnet reference")
-              Redirect(routes.LocalReferenceNumberController.onPageLoad())
+          val preparedForm = request.userAnswers.get(TIRCarnetReferencePage) match {
+            case None        => form
+            case Some(value) => form.fill(value)
           }
+
+          Ok(view(preparedForm, lrn, mode))
       }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions

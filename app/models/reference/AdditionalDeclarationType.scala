@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package models
+package models.reference
 
+import models.{DynamicEnumerableType, Radioable}
 import play.api.libs.json.{Format, Json}
 
-sealed trait SubmissionState
+case class AdditionalDeclarationType(
+  code: String,
+  description: String
+) extends Radioable[AdditionalDeclarationType] {
 
-object SubmissionState extends Enumeration {
+  override def toString: String = s"$code - $description"
 
-  type SubmissionState = Value
+  override val messageKeyPrefix: String = AdditionalDeclarationType.messageKeyPrefix
+}
 
-  val NotSubmitted: SubmissionState.Value           = Value("notSubmitted")
-  val Submitted: SubmissionState.Value              = Value("submitted")
-  val RejectedPendingChanges: SubmissionState.Value = Value("rejectedPendingChanges")
+object AdditionalDeclarationType extends DynamicEnumerableType[AdditionalDeclarationType] {
+  implicit val format: Format[AdditionalDeclarationType] = Json.format[AdditionalDeclarationType]
 
-  implicit val format: Format[SubmissionState.Value] = Json.formatEnum(SubmissionState)
-
-  implicit class RichSubmissionState(value: Value) {
-
-    def showErrorContent: Boolean = value == RejectedPendingChanges
-  }
+  val messageKeyPrefix = "additionalDeclarationType"
 }

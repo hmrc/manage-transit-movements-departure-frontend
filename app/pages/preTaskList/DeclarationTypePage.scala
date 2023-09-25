@@ -16,8 +16,9 @@
 
 package pages.preTaskList
 
-import models.DeclarationType.Option4
-import models.{DeclarationType, Mode, UserAnswers}
+import config.Constants.TIR
+import models.reference.DeclarationType
+import models.{Mode, UserAnswers}
 import pages.QuestionPage
 import pages.sections.PreTaskListSection
 import play.api.libs.json.JsPath
@@ -32,9 +33,9 @@ case object DeclarationTypePage extends QuestionPage[DeclarationType] {
   override def toString: String = "declarationType"
 
   override def cleanup(value: Option[DeclarationType], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(option) if option != Option4 => userAnswers.remove(TIRCarnetReferencePage)
-      case _                                 => super.cleanup(value, userAnswers)
+    value.map(_.code) match {
+      case Some(declarationType) if declarationType != TIR => userAnswers.remove(TIRCarnetReferencePage)
+      case _                                               => super.cleanup(value, userAnswers)
     }
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =

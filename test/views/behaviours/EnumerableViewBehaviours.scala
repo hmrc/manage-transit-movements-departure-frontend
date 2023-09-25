@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package config
+package views.behaviours
 
-object Constants {
-  val GB = "GB"
-  val XI = "XI"
-  val AD = "AD"
+import models.Radioable
 
-  val TIR  = "TIR"
-  val T2SM = "T2SM"
+trait EnumerableViewBehaviours[T <: Radioable[T]] extends RadioViewBehaviours[T] {
+  override val getValue: T => String = _.code
 }

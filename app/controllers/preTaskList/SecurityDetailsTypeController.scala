@@ -20,12 +20,15 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
 import models.journeyDomain.PreTaskListDomain
-import models.{LocalReferenceNumber, Mode, SecurityDetailsType}
+import models.reference.SecurityType
+import models.{LocalReferenceNumber, Mode}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.preTaskList.SecurityDetailsTypePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.SecurityTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.SecurityDetailsTypeView
 
@@ -40,23 +43,29 @@ class SecurityDetailsTypeController @Inject() (
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: SecurityDetailsTypeView
+  view: SecurityDetailsTypeView,
+  service: SecurityTypesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider[SecurityDetailsType]("securityDetailsType")
+  private def form(securityTypes: Seq[SecurityType]): Form[SecurityType] =
+    formProvider[SecurityType]("securityDetailsType", securityTypes)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfPreTaskListAlreadyCompleted) {
+    .andThen(checkIfPreTaskListAlreadyCompleted)
+    .async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(SecurityDetailsTypePage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
-        }
+        service.getSecurityTypes().map {
+          securityTypes =>
+            val preparedForm = request.userAnswers.get(SecurityDetailsTypePage) match {
+              case None        => form(securityTypes)
+              case Some(value) => form(securityTypes).fill(value)
+            }
 
-        Ok(view(preparedForm, SecurityDetailsType.values, lrn, mode))
+            Ok(view(preparedForm, securityTypes, lrn, mode))
+        }
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
@@ -64,14 +73,17 @@ class SecurityDetailsTypeController @Inject() (
     .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, SecurityDetailsType.values, lrn, mode))),
-            value => {
-              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              SecurityDetailsTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
-            }
-          )
+        service.getSecurityTypes().flatMap {
+          securityTypes =>
+            form(securityTypes)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, securityTypes, lrn, mode))),
+                value => {
+                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                  SecurityDetailsTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
+                }
+              )
+        }
     }
 }
