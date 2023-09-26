@@ -17,8 +17,8 @@
 package controllers.actions
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import models.EoriNumber
 import models.requests.DataRequest
+import models.{EoriNumber, LockCheck}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.mvc.{AnyContent, Request, Result, Results}
@@ -47,7 +47,7 @@ class LockActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
     "must return Ok when lock is open" in {
 
-      when(mockLockService.checkLock(any())(any())).thenReturn(Future(true))
+      when(mockLockService.checkLock(any())(any())).thenReturn(Future(LockCheck.Unlocked))
 
       val lockActionProvider = new LockActionProvider(mockLockService)
 
@@ -56,11 +56,20 @@ class LockActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
     "must redirect to lock page when lock is not open" in {
 
-      when(mockLockService.checkLock(any())(any())).thenReturn(Future(false))
+      when(mockLockService.checkLock(any())(any())).thenReturn(Future(LockCheck.Locked))
 
       val lockActionProvider = new LockActionProvider(mockLockService)
 
       harness(lockActionProvider) mustBe Results.SeeOther(controllers.routes.LockedController.onPageLoad().url)
+    }
+
+    "must redirect to technical difficulties when lock check fails" in {
+
+      when(mockLockService.checkLock(any())(any())).thenReturn(Future(LockCheck.LockCheckFailure))
+
+      val lockActionProvider = new LockActionProvider(mockLockService)
+
+      harness(lockActionProvider) mustBe Results.SeeOther(controllers.routes.ErrorController.technicalDifficulties().url)
     }
   }
 

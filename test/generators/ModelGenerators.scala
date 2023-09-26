@@ -16,6 +16,7 @@
 
 package generators
 
+import models.LockCheck._
 import models._
 import models.reference._
 import org.scalacheck.{Arbitrary, Gen}
@@ -31,6 +32,11 @@ trait ModelGenerators {
         code        <- Gen.oneOf("A", "D")
         description <- nonEmptyString
       } yield AdditionalDeclarationType(code, description)
+    }
+
+  implicit lazy val arbitraryLockCheck: Arbitrary[LockCheck] =
+    Arbitrary {
+      Gen.oneOf(Locked, Unlocked, LockCheckFailure)
     }
 
   implicit lazy val arbitrarySubmissionState: Arbitrary[SubmissionState.Value] = Arbitrary {
