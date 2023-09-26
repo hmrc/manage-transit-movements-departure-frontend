@@ -32,7 +32,7 @@ class TaskListSpec extends A11ySpecBase {
 
     val title                        = nonEmptyString.sample.value
     val tasks                        = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
-    val submissionState              = Gen.oneOf(Seq(SubmissionState.RejectedPendingChanges, SubmissionState.NotSubmitted)).sample.value
+    val submissionState              = arbitrary[SubmissionState.Value].sample.value
     val viewModel: TaskListViewModel = TaskListViewModel(tasks, submissionState)
     val lrn                          = arbitrary[LocalReferenceNumber].sample.value
 
