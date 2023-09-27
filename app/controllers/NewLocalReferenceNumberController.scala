@@ -19,7 +19,6 @@ package controllers
 import controllers.actions._
 import forms.preTaskList.LocalReferenceNumberFormProvider
 import models.LocalReferenceNumber
-import models.SubmissionState.RejectedPendingChanges
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
