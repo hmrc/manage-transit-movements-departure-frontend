@@ -17,7 +17,7 @@
 package services
 
 import connectors.CacheConnector
-import models.SubmissionState.RejectedPendingChanges
+import models.SubmissionState.{Amendment, GuaranteeAmendment, RejectedPendingChanges}
 import models.{LocalReferenceNumber, SubmissionState, UserAnswers}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -28,13 +28,19 @@ class DuplicateService @Inject() (
   cacheConnector: CacheConnector
 )(implicit ec: ExecutionContext) {
 
+  private def statusToCopy(status: SubmissionState.Value): SubmissionState.Value = status match {
+    case Amendment          => Amendment
+    case GuaranteeAmendment => GuaranteeAmendment
+    case _                  => RejectedPendingChanges
+  } // TODO: Better way to handle the changing states?
+
   def copyUserAnswers(
     oldLocalReferenceNumber: LocalReferenceNumber,
     newLocalReferenceNumber: LocalReferenceNumber,
     status: SubmissionState.Value = RejectedPendingChanges
   )(implicit hc: HeaderCarrier): Future[Boolean] = cacheConnector.get(oldLocalReferenceNumber) flatMap {
     case Some(userAnswers) =>
-      val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, status = status)
+      val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, status = statusToCopy(userAnswers.status))
       cacheConnector.post(
         updatedUserAnswers
       )
