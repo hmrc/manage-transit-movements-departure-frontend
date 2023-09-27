@@ -36,8 +36,7 @@ class DuplicateService @Inject() (
 
   def copyUserAnswers(
     oldLocalReferenceNumber: LocalReferenceNumber,
-    newLocalReferenceNumber: LocalReferenceNumber,
-    status: SubmissionState.Value = RejectedPendingChanges
+    newLocalReferenceNumber: LocalReferenceNumber
   )(implicit hc: HeaderCarrier): Future[Boolean] = cacheConnector.get(oldLocalReferenceNumber) flatMap {
     case Some(userAnswers) =>
       val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, status = statusToCopy(userAnswers.status))
