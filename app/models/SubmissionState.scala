@@ -27,11 +27,14 @@ object SubmissionState extends Enumeration {
   val NotSubmitted: SubmissionState.Value           = Value("notSubmitted")
   val Submitted: SubmissionState.Value              = Value("submitted")
   val RejectedPendingChanges: SubmissionState.Value = Value("rejectedPendingChanges")
+  val Amendment: SubmissionState.Value              = Value("amendment")
+  val GuaranteeAmendment: SubmissionState.Value     = Value("guaranteeAmendment")
 
   implicit val format: Format[SubmissionState.Value] = Json.formatEnum(SubmissionState)
 
   implicit class RichSubmissionState(value: Value) {
 
-    def showErrorContent: Boolean = value == RejectedPendingChanges
+    private val errorStates       = Seq(RejectedPendingChanges, Amendment, GuaranteeAmendment)
+    def showErrorContent: Boolean = errorStates.contains(value)
   }
 }
