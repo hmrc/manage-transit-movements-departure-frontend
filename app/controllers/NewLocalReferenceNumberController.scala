@@ -63,7 +63,7 @@ class NewLocalReferenceNumberController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber))),
               newLocalReferenceNumber =>
-                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, RejectedPendingChanges) map {
+                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber) map {
                   case true  => Redirect(controllers.routes.TaskListController.onPageLoad(newLocalReferenceNumber))
                   case false => Redirect(controllers.routes.ErrorController.technicalDifficulties())
                 }
