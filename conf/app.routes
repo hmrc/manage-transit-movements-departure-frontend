@@ -31,6 +31,7 @@ GET        /departure-declaration-sent/:lrn               controllers.Declaratio
 GET        /:lrn/delete-lock                              controllers.DeleteLockController.delete(lrn: LocalReferenceNumber)
 
 GET        /cannot-open                                   controllers.LockedController.onPageLoad()
+GET        /:lrn/amend-declaration/:departureId           controllers.AmendController.onPageLoad(lrn: LocalReferenceNumber, departureId: String)
 
 GET        /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onPageLoad(oldLrn: LocalReferenceNumber)
 POST       /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onSubmit(oldLrn: LocalReferenceNumber)
