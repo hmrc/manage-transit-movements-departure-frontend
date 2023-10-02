@@ -17,12 +17,14 @@
 package controllers
 
 import controllers.actions.{Actions, SpecificDataRequiredActionProvider}
-import models.LocalReferenceNumber
+import models.{EoriNumber, LocalReferenceNumber}
 import pages.external.OfficeOfDestinationPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import viewModels.taskList.TaskStatus
+import viewModels.taskList.TaskStatus.Completed
 import views.html.DeclarationSubmittedView
 
 import javax.inject.Inject
@@ -40,7 +42,10 @@ class AmendController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        val userAnswers = request.userAnswers.copy(departureId = Some(departureId))
+        val userAnswers =
+          request.userAnswers
+            .copy(departureId = Some(departureId))
+            .copy(tasks = request.userAnswers.tasks ++ Map("lookherejoe" -> Completed))
         sessionRepository.set(userAnswers).map {
           case true =>
             Redirect(controllers.routes.TaskListController.onPageLoad(lrn).url)
