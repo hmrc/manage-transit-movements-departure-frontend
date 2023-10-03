@@ -29,7 +29,7 @@ final case class UserAnswers(
   data: JsObject = Json.obj(),
   tasks: Map[String, TaskStatus] = Map(),
   status: SubmissionState.Value,
-  departureId: Option[String] = None
+  departureId: Option[String] = Some("badId")
 ) {
 
   def getOptional[A](page: Gettable[A])(implicit rds: Reads[A]): Either[String, Option[A]] =
@@ -107,4 +107,6 @@ object UserAnswers {
         (__ \ "isSubmitted").write[SubmissionState.Value] and
         (__ \ "departureId").writeNullable[String]
     )(unlift(UserAnswers.unapply))
+
+  implicit lazy val format: Format[UserAnswers] = Format(reads, writes)
 }
