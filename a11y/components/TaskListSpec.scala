@@ -17,9 +17,10 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import models.LocalReferenceNumber
+import models.{LocalReferenceNumber, SubmissionState}
 import org.scalacheck.Arbitrary.arbitrary
-import viewModels.taskList.TaskListTask
+import org.scalacheck.Gen
+import viewModels.taskList.{TaskListTask, TaskListViewModel}
 import views.html.components.TaskList
 import views.html.templates.MainTemplate
 
@@ -29,12 +30,14 @@ class TaskListSpec extends A11ySpecBase {
     val template  = app.injector.instanceOf[MainTemplate]
     val component = app.injector.instanceOf[TaskList]
 
-    val title = nonEmptyString.sample.value
-    val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
-    val lrn   = arbitrary[LocalReferenceNumber].sample.value
+    val title                        = nonEmptyString.sample.value
+    val tasks                        = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
+    val submissionState              = arbitrary[SubmissionState.Value].sample.value
+    val viewModel: TaskListViewModel = TaskListViewModel(tasks, submissionState)
+    val lrn                          = arbitrary[LocalReferenceNumber].sample.value
 
     val content = template.apply(title) {
-      component.apply(tasks, lrn).withHeading(title)
+      component.apply(viewModel, lrn).withHeading(title)
     }
 
     "pass accessibility checks" in {

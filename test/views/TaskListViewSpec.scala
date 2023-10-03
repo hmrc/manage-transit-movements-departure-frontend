@@ -16,10 +16,11 @@
 
 package views
 
+import models.SubmissionState
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.twirl.api.HtmlFormat
-import viewModels.taskList.TaskListTask
+import viewModels.taskList.{TaskListTask, TaskListViewModel}
 import views.behaviours.TaskListViewBehaviours
 import views.html.TaskListView
 
@@ -27,15 +28,16 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
   private val expiryInDays = Gen.choose(0: Int, 30: Int).sample.value
 
-  override def view: HtmlFormat.Appendable = applyView(tasks, showErrorContent = false, expiryInDays, showSubmissionButton = false)
+  override def view: HtmlFormat.Appendable = applyView(tasks, submissionState, expiryInDays)
 
   private def applyView(
     tasks: Seq[TaskListTask],
-    showErrorContent: Boolean,
-    expiryInDays: Long,
-    showSubmissionButton: Boolean
-  ): HtmlFormat.Appendable =
-    injector.instanceOf[TaskListView].apply(lrn, tasks, showErrorContent, expiryInDays, showSubmissionButton)(fakeRequest, messages)
+    submissionState: SubmissionState.Value,
+    expiryInDays: Long
+  ): HtmlFormat.Appendable = {
+    val viewModel = TaskListViewModel(tasks, submissionState)
+    injector.instanceOf[TaskListView].apply(lrn, viewModel, expiryInDays)(fakeRequest, messages)
+  }
 
   override val prefix: String = "taskList"
 
@@ -63,12 +65,11 @@ class TaskListViewSpec extends TaskListViewBehaviours {
   )
 
   "when there are errors" - {
-    val showErrorContent = true
 
     "when all tasks completed" - {
       val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
 
-      val view = applyView(tasks, showErrorContent, expiryInDays, true)
+      val view = applyView(tasks, SubmissionState.RejectedPendingChanges, expiryInDays)
       val doc  = parseView(view)
 
       behave like pageWithContent(doc, "p", "There is a problem with this declaration. Amend the errors in the relevant sections and resend the declaration.")
@@ -80,7 +81,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
     "when not all tasks completed" - {
       val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryErrorTask)).sample.value
 
-      val view = applyView(tasks, showErrorContent, expiryInDays, false)
+      val view = applyView(tasks, SubmissionState.RejectedPendingChanges, expiryInDays)
       val doc  = parseView(view)
 
       behave like pageWithContent(doc, "p", "There is a problem with this declaration. Amend the errors in the relevant sections and resend the declaration.")
@@ -97,12 +98,11 @@ class TaskListViewSpec extends TaskListViewBehaviours {
   }
 
   "when there are not errors" - {
-    val showErrorContent = false
 
     "when all tasks completed" - {
       val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryCompletedTask)).sample.value
 
-      val view = applyView(tasks, showErrorContent, expiryInDays, true)
+      val view = applyView(tasks, SubmissionState.NotSubmitted, expiryInDays)
       val doc  = parseView(view)
 
       behave like pageWithContent(doc, "h2", "Send your departure declaration")
@@ -115,7 +115,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
     "when not all tasks completed" - {
       val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryIncompleteTask)).sample.value
 
-      val view = applyView(tasks, showErrorContent, expiryInDays, false)
+      val view = applyView(tasks, SubmissionState.NotSubmitted, expiryInDays)
       val doc  = parseView(view)
 
       behave like pageWithoutContent(doc, "h2", "Send your departure declaration")

@@ -17,11 +17,10 @@
 package viewModels.taskList
 
 import base.SpecBase
-import config.FrontendAppConfig
 import generators.Generators
-import models.LocalReferenceNumber
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import viewModels.taskList.TaskListViewModel.TaskListViewModelProvider
 
 class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -30,7 +29,8 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
       "must create tasks" in {
         val answers = emptyUserAnswers.copy(tasks = Map(PreTaskListTask.section -> TaskStatus.Completed))
 
-        val tasks = new TaskListViewModel().apply(answers)
+        val viewModel = new TaskListViewModelProvider().apply(answers)
+        val tasks     = viewModel.tasks
 
         tasks.size mustBe 6
 
@@ -66,8 +66,8 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
           taskStatus =>
             val tasks   = Map(PreTaskListTask.section -> taskStatus)
             val answers = emptyUserAnswers.copy(tasks = tasks)
-            val result  = new TaskListViewModel().apply(answers)
-            result.foreach(_.status mustBe TaskStatus.CannotStartYet)
+            val result  = new TaskListViewModelProvider().apply(answers)
+            result.tasks.foreach(_.status mustBe TaskStatus.CannotStartYet)
         }
       }
     }
@@ -80,11 +80,12 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
           RouteDetailsTask.section  -> TaskStatus.Completed
         )
         val answers = emptyUserAnswers.copy(tasks = tasks)
-        val result  = new TaskListViewModel().apply(answers)
+        val result  = new TaskListViewModelProvider().apply(answers)
 
-        result(2).name mustBe "Add transport details"
-        result(2).status mustBe TaskStatus.NotStarted
-        result(2).href(answers.lrn)(frontendAppConfig) must endWith(s"/transport-details/$lrn")
+        val transportTask = result.tasks(2)
+        transportTask.name mustBe "Add transport details"
+        transportTask.status mustBe TaskStatus.NotStarted
+        transportTask.href(answers.lrn)(frontendAppConfig) must endWith(s"/transport-details/$lrn")
       }
     }
 
@@ -98,86 +99,64 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
           DocumentsTask.section     -> TaskStatus.Completed
         )
         val answers = emptyUserAnswers.copy(tasks = tasks)
-        val result  = new TaskListViewModel().apply(answers)
+        val result  = new TaskListViewModelProvider().apply(answers)
 
-        result(4).name mustBe "Add items"
-        result(4).status mustBe TaskStatus.NotStarted
-        result(4).href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
+        val itemsTask = result.tasks(4: Int)
+
+        itemsTask.name mustBe "Add items"
+        itemsTask.status mustBe TaskStatus.NotStarted
+        itemsTask.href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
       }
     }
   }
 
   "showSubmissionButton" - {
 
-    val guaranteeCompleteTask = new TaskListTask {
-      override val status: TaskStatus = TaskStatus.Completed
-      override val messageKey: String = ""
-      override val id: String         = ""
+    "must be true if guarantee is complete and other sections are unavailable" in {
+      val tasks = Map(
+        PreTaskListTask.section      -> TaskStatus.Unavailable,
+        TraderDetailsTask.section    -> TaskStatus.Unavailable,
+        RouteDetailsTask.section     -> TaskStatus.Unavailable,
+        TransportTask.section        -> TaskStatus.Unavailable,
+        DocumentsTask.section        -> TaskStatus.Unavailable,
+        ItemsTask.section            -> TaskStatus.Unavailable,
+        GuaranteeDetailsTask.section -> TaskStatus.Completed
+      )
+      val answers = emptyUserAnswers.copy(tasks = tasks)
+      val result  = new TaskListViewModelProvider().apply(answers)
 
-      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = ""
-
-      override val section: String = GuaranteeDetailsTask.section
+      result.showSubmissionButton mustBe true
     }
 
-    val preTaskComplete = new TaskListTask {
-      override val status: TaskStatus = TaskStatus.Completed
-      override val messageKey: String = ""
-      override val id: String         = ""
+    "must be true if everything is complete" in {
+      val tasks = Map(
+        PreTaskListTask.section      -> TaskStatus.Completed,
+        TraderDetailsTask.section    -> TaskStatus.Completed,
+        RouteDetailsTask.section     -> TaskStatus.Completed,
+        TransportTask.section        -> TaskStatus.Completed,
+        DocumentsTask.section        -> TaskStatus.Completed,
+        ItemsTask.section            -> TaskStatus.Completed,
+        GuaranteeDetailsTask.section -> TaskStatus.Completed
+      )
+      val answers = emptyUserAnswers.copy(tasks = tasks)
+      val result  = new TaskListViewModelProvider().apply(answers)
 
-      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = ""
-
-      override val section: String = PreTaskListTask.section
-    }
-
-    val preTaskNotStarted = new TaskListTask {
-      override val status: TaskStatus = TaskStatus.NotStarted
-      override val messageKey: String = ""
-      override val id: String         = ""
-
-      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = ""
-
-      override val section: String = PreTaskListTask.section
-    }
-
-    val preTaskUnavailable = new TaskListTask {
-      override val status: TaskStatus = TaskStatus.Unavailable
-      override val messageKey: String = ""
-      override val id: String         = ""
-
-      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = ""
-
-      override val section: String = PreTaskListTask.section
-    }
-
-    val traderDetailsUnavailable = new TaskListTask {
-      override val status: TaskStatus = TaskStatus.Unavailable
-      override val messageKey: String = ""
-      override val id: String         = ""
-
-      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = ""
-
-      override val section: String = TraderDetailsTask.section
-    }
-
-    "must be true is guarantee is complete and other sections are unavailable" in {
-
-      val tasksLists = Seq(guaranteeCompleteTask, preTaskUnavailable, traderDetailsUnavailable)
-
-      TaskListViewModel.showSubmissionButton(tasksLists) mustBe true
-    }
-
-    "must be true everything is complete" in {
-
-      val tasksLists = Seq(preTaskComplete, guaranteeCompleteTask)
-
-      TaskListViewModel.showSubmissionButton(tasksLists) mustBe true
+      result.showSubmissionButton mustBe true
     }
 
     "must be false if everything is not complete" in {
+      val tasks = Map(
+        PreTaskListTask.section      -> TaskStatus.Completed,
+        TraderDetailsTask.section    -> TaskStatus.NotStarted,
+        RouteDetailsTask.section     -> TaskStatus.NotStarted,
+        TransportTask.section        -> TaskStatus.NotStarted,
+        DocumentsTask.section        -> TaskStatus.NotStarted,
+        GuaranteeDetailsTask.section -> TaskStatus.Completed
+      )
+      val answers = emptyUserAnswers.copy(tasks = tasks)
+      val result  = new TaskListViewModelProvider().apply(answers)
 
-      val tasksLists = Seq(preTaskNotStarted, guaranteeCompleteTask)
-
-      TaskListViewModel.showSubmissionButton(tasksLists) mustBe false
+      result.showSubmissionButton mustBe false
     }
   }
 }
