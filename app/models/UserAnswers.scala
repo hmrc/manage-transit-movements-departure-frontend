@@ -29,7 +29,7 @@ final case class UserAnswers(
   data: JsObject = Json.obj(),
   tasks: Map[String, TaskStatus] = Map(),
   status: SubmissionState.Value,
-  departureId: Option[String] = Some("badId")
+  departureId: Option[String] = None
 ) {
 
   def getOptional[A](page: Gettable[A])(implicit rds: Reads[A]): Either[String, Option[A]] =
