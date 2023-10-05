@@ -48,6 +48,8 @@ trait SpecBase
 
   val eoriNumber: EoriNumber    = EoriNumber("GB1234567891234")
   val lrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").get
+  val departureId               = "departureId123"
+  val uuid                      = "2e8ede47-dbfb-44ea-a1e3-6c57b1fe6fe2"
 
   def fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 
