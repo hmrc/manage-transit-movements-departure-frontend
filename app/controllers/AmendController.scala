@@ -45,7 +45,6 @@ class AmendController @Inject() (
         val userAnswers =
           request.userAnswers
             .copy(departureId = Some(departureId))
-            .copy(tasks = request.userAnswers.tasks ++ Map("lookherejoe" -> Completed))
         sessionRepository.set(userAnswers).map {
           case true =>
             Redirect(controllers.routes.TaskListController.onPageLoad(lrn).url)
