@@ -42,14 +42,16 @@ class AmendController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        val userAnswers =
-          request.userAnswers
-            .copy(departureId = Some(departureId))
-        sessionRepository.set(userAnswers).map {
-          case true =>
-            Redirect(controllers.routes.TaskListController.onPageLoad(lrn).url)
-          case false => Redirect(controllers.routes.ErrorController.technicalDifficulties().url)
-        }
+        sessionRepository
+          .set(
+            request.userAnswers
+              .copy(departureId = Some(departureId))
+          )
+          .map {
+            case true =>
+              Redirect(controllers.routes.TaskListController.onPageLoad(lrn).url)
+            case false => Redirect(controllers.routes.ErrorController.technicalDifficulties().url)
+          }
 
     }
 
