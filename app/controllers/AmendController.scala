@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.{Actions, SpecificDataRequiredActionProvider}
-import models.{EoriNumber, LocalReferenceNumber}
+import models.{EoriNumber, LocalReferenceNumber, SubmissionState}
 import pages.external.OfficeOfDestinationPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -46,6 +46,7 @@ class AmendController @Inject() (
           .set(
             request.userAnswers
               .copy(departureId = Some(departureId))
+              .copy(status = SubmissionState.Amendment)
           )
           .map {
             case true =>
