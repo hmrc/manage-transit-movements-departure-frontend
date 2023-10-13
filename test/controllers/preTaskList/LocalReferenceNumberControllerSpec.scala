@@ -18,10 +18,12 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.preTaskList.LocalReferenceNumberFormProvider
+import generators.Generators
 import models.LocalReferenceNumber
-import navigation.PreTaskListNavigatorProvider
+import models.SubmissionState.SubmissionState
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito._
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -32,20 +34,25 @@ import views.html.preTaskList.LocalReferenceNumberView
 
 import scala.concurrent.Future
 
-class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
-  private val formProvider                                                     = new LocalReferenceNumberFormProvider()
-  private val prefix                                                           = "localReferenceNumber"
-  private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists, prefix)
+  private val formProvider = new LocalReferenceNumberFormProvider()
+  private val prefix       = "localReferenceNumber"
+
+  private val form: Form[LocalReferenceNumber] = formProvider(prefix)
 
   private lazy val localReferenceNumberRoute: String      = routes.LocalReferenceNumberController.onPageLoad().url
   private lazy val mockDuplicateService: DuplicateService = mock[DuplicateService]
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockDuplicateService)
+  }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[DuplicateService]).toInstance(mockDuplicateService))
-      .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
 
   "LocalReferenceNumber Controller" - {
 
@@ -59,46 +66,59 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form())(request, messages).toString
+        view(form)(request, messages).toString
     }
 
-    "must return a Bad Request and errors when a duplicate local reference number is submitted" in {
+    "must return a Bad Request and errors when a duplicate local reference number is submitted" - {
+      "when user answers found" in {
+        when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(true))
 
-      val alreadyExists: Boolean = true
+        val submissionState = arbitrary[SubmissionState](arbitrarySubmittedSubmissionState).sample.value
+        when(mockSessionRepository.get(any())(any())) thenReturn
+          Future.successful(Some(emptyUserAnswers.copy(status = submissionState)))
 
-      when(mockDuplicateService.alreadyExistsInSubmissionOrCache(any())(any())).thenReturn(Future.successful(alreadyExists))
-      when(mockDuplicateService.alreadySubmitted(any())(any())).thenReturn(Future.successful(alreadyExists))
+        val invalidAnswer = "ABC123"
 
-      val invalidAnswer = "ABC123"
+        val request = FakeRequest(POST, localReferenceNumberRoute)
+          .withFormUrlEncodedBody(("value", invalidAnswer))
 
-      val request = FakeRequest(POST, localReferenceNumberRoute)
-        .withFormUrlEncodedBody(("value", invalidAnswer))
+        val result = route(app, request).value
 
-      val filledForm = form(alreadyExists).bind(Map("value" -> invalidAnswer))
+        status(result) mustEqual BAD_REQUEST
 
-      val result = route(app, request).value
+        contentAsString(result) must include(
+          "The Local Reference Number must be unique"
+        )
+      }
 
-      val view = injector.instanceOf[LocalReferenceNumberView]
+      "when user answers not found" in {
+        when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(true))
 
-      status(result) mustEqual BAD_REQUEST
+        when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None)
 
-      contentAsString(result) mustEqual
-        view(filledForm)(request, messages).toString
+        val invalidAnswer = "ABC123"
+
+        val request = FakeRequest(POST, localReferenceNumberRoute)
+          .withFormUrlEncodedBody(("value", invalidAnswer))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) must include(
+          "The Local Reference Number must be unique"
+        )
+      }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
-      val alreadyExists: Boolean = false
-
-      when(mockDuplicateService.alreadyExistsInSubmissionOrCache(any())(any())).thenReturn(Future.successful(alreadyExists))
-      when(mockDuplicateService.alreadySubmitted(any())(any())).thenReturn(Future.successful(alreadyExists))
 
       val invalidAnswer = ""
 
       val request = FakeRequest(POST, localReferenceNumberRoute)
         .withFormUrlEncodedBody(("value", invalidAnswer))
 
-      val filledForm = form().bind(Map("value" -> invalidAnswer))
+      val filledForm = form.bind(Map("value" -> invalidAnswer))
 
       val result = route(app, request).value
 
@@ -108,14 +128,14 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
       contentAsString(result) mustEqual
         view(filledForm)(request, messages).toString
+
+      verifyNoInteractions(mockDuplicateService)
     }
 
-    "must create new user answers" - {
+    "must create new user answers and redirect with NormalMode" - {
       "when there are no existing user answers" in {
 
-        val alreadyExists: Boolean = false
-        when(mockDuplicateService.alreadyExistsInSubmissionOrCache(any())(any())).thenReturn(Future.successful(alreadyExists))
-        when(mockDuplicateService.alreadySubmitted(any())(any())).thenReturn(Future.successful(alreadyExists))
+        when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(false))
 
         when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None) thenReturn Future.successful(Some(emptyUserAnswers))
         when(mockSessionRepository.put(any())(any())) thenReturn Future.successful(true)
@@ -126,19 +146,18 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         val result = route(app, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual
+          s"/manage-transit-movements/departures/$lrn/pre-task-list/standard-prelodged-declaration"
 
         verify(mockSessionRepository, times(2)).get(eqTo(lrn))(any())
-        verify(mockSessionRepository, times(1)).put(eqTo(lrn))(any())
+        verify(mockSessionRepository).put(eqTo(lrn))(any())
       }
     }
 
-    "must not create user answers" - {
+    "must not create user answers and redirect with CheckMode" - {
       "when there are existing user answers" in {
 
-        val alreadyExists: Boolean = false
-        when(mockDuplicateService.alreadyExistsInSubmissionOrCache(any())(any())).thenReturn(Future.successful(alreadyExists))
-        when(mockDuplicateService.alreadySubmitted(any())(any())).thenReturn(Future.successful(alreadyExists))
+        when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(true))
 
         when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(Some(emptyUserAnswers))
 
@@ -148,18 +167,18 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         val result = route(app, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual
+          s"/manage-transit-movements/departures/$lrn/pre-task-list/change-standard-prelodged-declaration"
 
-        verify(mockSessionRepository, times(1)).get(eqTo(lrn))(any())
+        verify(mockSessionRepository).get(eqTo(lrn))(any())
+        verify(mockSessionRepository, never()).put(any())(any())
       }
     }
 
     "must redirect to technical difficulties" - {
       "when both GETs return a None" in {
 
-        val alreadyExists: Boolean = false
-        when(mockDuplicateService.alreadyExistsInSubmissionOrCache(any())(any())).thenReturn(Future.successful(alreadyExists))
-        when(mockDuplicateService.alreadySubmitted(any())(any())).thenReturn(Future.successful(alreadyExists))
+        when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(false))
 
         when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None) thenReturn Future.successful(None)
         when(mockSessionRepository.put(any())(any())) thenReturn Future.successful(true)
@@ -173,7 +192,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
 
         verify(mockSessionRepository, times(2)).get(eqTo(lrn))(any())
-        verify(mockSessionRepository, times(1)).put(eqTo(lrn))(any())
+        verify(mockSessionRepository).put(eqTo(lrn))(any())
       }
     }
   }

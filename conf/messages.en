@@ -68,7 +68,6 @@ localReferenceNumber.error.invalidFormat = The Local Reference Number must not s
 localReferenceNumber.error.alreadyExists = The Local Reference Number must be unique
 localReferenceNumber.checkYourAnswersLabel = Local Reference Number (LRN)
 localReferenceNumber.change.hidden = local reference number
-localReferenceNumber.change.alreadyExists = The Local Reference Number must be unique
 
 additionalDeclarationType.title = Is this a standard or pre-lodged declaration?
 additionalDeclarationType.heading = Is this a standard or pre-lodged declaration?
