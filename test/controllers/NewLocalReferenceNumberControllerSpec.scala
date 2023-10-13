@@ -147,23 +147,6 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
     }
 
     "must redirect to technical difficulties when" - {
-      "GET of userAnswers returns None" in {
-
-        val isDuplicate = false
-
-        when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(isDuplicate))
-        when(mockDuplicateService.copyUserAnswers(any(), any())(any())).thenReturn(Future.successful(false))
-
-        val request = FakeRequest(POST, localReferenceNumberOnSubmit)
-          .withFormUrlEncodedBody(("value", newLrn.toString))
-
-        val result = route(app, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
-
-      }
       "POST of userAnswers returns false" in {
         when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(false))
         when(mockDuplicateService.copyUserAnswers(any(), any())(any())).thenReturn(Future.successful(false))
