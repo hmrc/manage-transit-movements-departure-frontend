@@ -29,7 +29,7 @@ class PreTaskListCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode)(im
     prefix = "localReferenceNumber",
     answer = formatAsText(lrn),
     id = None,
-    call = LocalReferenceNumberController.onPageLoad()
+    call = LocalReferenceNumberController.onPageReload(lrn)
   )
 
   def additionalDeclarationType: Option[SummaryListRow] = getAnswerAndBuildRow[AdditionalDeclarationType](

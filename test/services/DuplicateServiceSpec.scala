@@ -90,26 +90,6 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
     }
 
-    "alreadyExistsInSubmissionOrCache" - {
-      "must return correct boolean" - {
-
-        "when local reference number" in {
-          forAll(arbitrary[Boolean]) {
-            isDuplicate =>
-              when(mockCacheConnector.doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(isDuplicate))
-
-              duplicateService.alreadyExistsInSubmissionOrCache(Some(lrn)).futureValue mustBe isDuplicate
-          }
-        }
-
-        "when none" in {
-          duplicateService.alreadyExistsInSubmissionOrCache(None).futureValue mustBe false
-        }
-
-      }
-
-    }
-
     "alreadySubmitted" - {
       "must return correct boolean" - {
 

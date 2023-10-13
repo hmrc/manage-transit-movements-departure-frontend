@@ -30,9 +30,19 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
       "and declaration rejected pending changes" in {
         TaskStatus.Completed.messageKey(SubmissionState.RejectedPendingChanges) mustBe "taskStatus.amended"
       }
-
+      "and declaration status is amendment" in {
+        TaskStatus.Completed.messageKey(SubmissionState.Amendment) mustBe "taskStatus.amended"
+      }
+      "and declaration status is guarantee amendment" in {
+        TaskStatus.Completed.messageKey(SubmissionState.GuaranteeAmendment) mustBe "taskStatus.amended"
+      }
+      val amendmentStatus = Set(SubmissionState.RejectedPendingChanges, SubmissionState.Amendment, SubmissionState.GuaranteeAmendment)
       "and declaration not rejected pending changes" in {
-        forAll(arbitrary[SubmissionState.Value].retryUntil(_ != SubmissionState.RejectedPendingChanges)) {
+        forAll(
+          arbitrary[SubmissionState.Value].retryUntil(
+            state => !amendmentStatus.contains(state)
+          )
+        ) {
           submissionState =>
             TaskStatus.Completed.messageKey(submissionState) mustBe "taskStatus.completed"
         }

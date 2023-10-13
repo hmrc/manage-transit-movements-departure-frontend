@@ -43,6 +43,10 @@ trait ModelGenerators {
     Gen.oneOf(SubmissionState.values.toSeq)
   }
 
+  lazy val arbitrarySubmittedSubmissionState: Arbitrary[SubmissionState.Value] = Arbitrary {
+    Gen.oneOf(SubmissionState.values.filterNot(_ == SubmissionState.NotSubmitted).toSeq)
+  }
+
   implicit lazy val arbitraryProcedureType: Arbitrary[ProcedureType] =
     Arbitrary {
       Gen.oneOf(ProcedureType.values)
