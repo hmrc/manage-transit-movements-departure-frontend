@@ -36,7 +36,7 @@ class DeclarationSubmittedViewSpec extends PanelViewBehaviours with Generators {
 
   behave like pageWithTitle()
 
-  behave like pageWithBackLink()
+  behave like pageWithoutBackLink()
 
   behave like pageWithHeading()
 
