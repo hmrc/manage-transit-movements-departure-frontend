@@ -106,6 +106,35 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
+    "must redirect to declaration submit for a POST if declaration guaranteeAmendment" in {
+      setExistingUserAnswers(emptyUserAnswers.copy(status = SubmissionState.GuaranteeAmendment, departureId = Some(departureId)))
+
+      when(mockSubmissionConnector.postAmendment(any())(any())).thenReturn(response(OK))
+
+      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.DeclarationSubmittedController.onPageLoad(lrn).url
+    }
+
+    "must redirect to technical difficulties for a POST if declaration guaranteeAmendment response is not 2xx" in {
+      setExistingUserAnswers(emptyUserAnswers.copy(status = SubmissionState.GuaranteeAmendment, departureId = Some(departureId)))
+
+      val errorCode: Int = Gen.choose(400, 599).sample.value
+      when(mockSubmissionConnector.postAmendment(any())(any())).thenReturn(response(errorCode))
+
+      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual routes.ErrorController.technicalDifficulties().url
+    }
+
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 

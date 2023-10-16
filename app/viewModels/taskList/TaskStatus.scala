@@ -34,6 +34,8 @@ object TaskStatus {
 
     override def messageKey(submissionState: SubmissionState.Value): String = submissionState match {
       case SubmissionState.RejectedPendingChanges => "taskStatus.amended"
+      case SubmissionState.GuaranteeAmendment     => "taskStatus.amended"
+      case SubmissionState.Amendment              => "taskStatus.amended"
       case _                                      => "taskStatus.completed"
     }
     override val tag: String        = "govuk-tag--green"

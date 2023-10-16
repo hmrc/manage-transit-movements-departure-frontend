@@ -92,7 +92,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
       "and redirect to taskList" in {
 
         when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(eqTo(newLrn))(any())).thenReturn(Future.successful(false))
-        when(mockDuplicateService.copyUserAnswers(eqTo(oldLrn), eqTo(newLrn), any())(any())).thenReturn(Future.successful(true))
+        when(mockDuplicateService.copyUserAnswers(eqTo(oldLrn), eqTo(newLrn))(any())).thenReturn(Future.successful(true))
 
         val request = FakeRequest(POST, localReferenceNumberOnSubmit)
           .withFormUrlEncodedBody(("value", newLrn.toString))
@@ -102,7 +102,7 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(newLrn).url
 
-        verify(mockDuplicateService).copyUserAnswers(eqTo(oldLrn), eqTo(newLrn), any())(any())
+        verify(mockDuplicateService).copyUserAnswers(eqTo(oldLrn), eqTo(newLrn))(any())
       }
     }
 
@@ -143,13 +143,13 @@ class NewLocalReferenceNumberControllerSpec extends SpecBase with AppWithDefault
       )
 
       verify(mockDuplicateService).doesDraftOrSubmissionExistForLrn(eqTo(oldLrn))(any())
-      verify(mockDuplicateService, never()).copyUserAnswers(any(), any(), any())(any())
+      verify(mockDuplicateService, never()).copyUserAnswers(any(), any())(any())
     }
 
     "must redirect to technical difficulties when" - {
       "POST of userAnswers returns false" in {
         when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(false))
-        when(mockDuplicateService.copyUserAnswers(any(), any(), any())(any())).thenReturn(Future.successful(false))
+        when(mockDuplicateService.copyUserAnswers(any(), any())(any())).thenReturn(Future.successful(false))
 
         val request = FakeRequest(POST, localReferenceNumberOnSubmit)
           .withFormUrlEncodedBody(("value", newLrn.toString))

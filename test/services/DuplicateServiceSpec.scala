@@ -55,7 +55,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
           when(mockCacheConnector.get(eqTo(lrn))(any())) thenReturn Future.successful(Some(oldLrnData))
           when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(true)
 
-          duplicateService.copyUserAnswers(lrn, newLrn, RejectedPendingChanges).futureValue mustBe true
+          duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe true
 
           verify(mockCacheConnector).get(eqTo(lrn))(any())
           verify(mockCacheConnector).post(eqTo(newDataToSend))(any())

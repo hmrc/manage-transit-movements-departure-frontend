@@ -19,7 +19,6 @@ package controllers
 import controllers.actions._
 import forms.preTaskList.LocalReferenceNumberFormProvider
 import models.LocalReferenceNumber
-import models.SubmissionState.RejectedPendingChanges
 import play.api.data.{Form, FormError}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -65,7 +64,7 @@ class NewLocalReferenceNumberController @Inject() (
                 val formWithErrors = form.withError(FormError("value", s"$prefix.error.alreadyExists"))
                 Future.successful(BadRequest(view(formWithErrors, oldLocalReferenceNumber)))
               case false =>
-                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber, RejectedPendingChanges) map {
+                duplicateService.copyUserAnswers(oldLocalReferenceNumber, newLocalReferenceNumber) map {
                   case true  => Redirect(controllers.routes.TaskListController.onPageLoad(newLocalReferenceNumber))
                   case false => Redirect(controllers.routes.ErrorController.technicalDifficulties())
                 }

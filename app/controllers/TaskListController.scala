@@ -69,6 +69,15 @@ class TaskListController @Inject() (
           case SubmissionState.Submitted =>
             logger.info(s"TaskListController: Departure with LRN $lrn has already been submitted")
             Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+          case SubmissionState.GuaranteeAmendment =>
+            submissionConnector.postAmendment(lrn.value).map {
+              case response if is2xx(response.status) =>
+                logger.debug(s"TaskListController:onSubmit: ${response.status}: ${response.body}")
+                Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad(lrn))
+              case e =>
+                logger.error(s"TaskListController:onSubmit: ${e.status}: ${e.body}")
+                Redirect(routes.ErrorController.technicalDifficulties())
+            }
           case _ =>
             submissionConnector.post(lrn.value).map {
               case response if is2xx(response.status) =>

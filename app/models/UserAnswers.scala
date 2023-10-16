@@ -28,7 +28,8 @@ final case class UserAnswers(
   eoriNumber: EoriNumber,
   data: JsObject = Json.obj(),
   tasks: Map[String, TaskStatus] = Map(),
-  status: SubmissionState.Value
+  status: SubmissionState.Value,
+  departureId: Option[String] = None
 ) {
 
   def getOptional[A](page: Gettable[A])(implicit rds: Reads[A]): Either[String, Option[A]] =
@@ -93,7 +94,8 @@ object UserAnswers {
         (__ \ "eoriNumber").read[EoriNumber] and
         (__ \ "data").read[JsObject] and
         (__ \ "tasks").read[Map[String, TaskStatus]] and
-        (__ \ "isSubmitted").read[SubmissionState.Value]
+        (__ \ "isSubmitted").read[SubmissionState.Value] and
+        (__ \ "departureId").readNullable[String]
     )(UserAnswers.apply _)
 
   implicit lazy val writes: Writes[UserAnswers] =
@@ -102,6 +104,9 @@ object UserAnswers {
         (__ \ "eoriNumber").write[EoriNumber] and
         (__ \ "data").write[JsObject] and
         (__ \ "tasks").write[Map[String, TaskStatus]] and
-        (__ \ "isSubmitted").write[SubmissionState.Value]
+        (__ \ "isSubmitted").write[SubmissionState.Value] and
+        (__ \ "departureId").writeNullable[String]
     )(unlift(UserAnswers.unapply))
+
+  implicit lazy val format: Format[UserAnswers] = Format(reads, writes)
 }
