@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures PreTaskList Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      5.0
+// @version      5.1
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/what-do-you-want-to-do
@@ -105,6 +105,13 @@ const lrnPage = (lrn) => {
     }
 }
 
+const standardPrelodgedDeclarationPage = (lrn, data) => {
+    if (currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/standard-prelodged-declaration`)) {
+        document.getElementById(data).click()
+        document.getElementById('submit').click()
+    }
+}
+
 const additionalDeclarationTypePage = (lrn, data) => {
     if (currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/standard-prelodged-declaration`)) {
         document.getElementById(data).click()
@@ -158,6 +165,7 @@ const taskListPage = (lrn) => {
 function preTaskListT1NoSecurity() {
     departureDeclarationPage()
     lrnPage(getLRN())
+    standardPrelodgedDeclarationPage(getLRN(), 'value')
     additionalDeclarationTypePage(getLRN(), 'value')
     officeOfDeparturePage(getLRN(), 'GB000068')
     procedureTypePage(getLRN(), 'value')
