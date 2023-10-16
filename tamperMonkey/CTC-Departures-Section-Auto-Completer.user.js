@@ -104,7 +104,7 @@ function initialiseJourneys() {
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/add/", "value"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/type/", "value"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/identification/", "value_1"),
-                new SelectPage("/manage-transit-movements/departures/route-details/location-of-goods/customs-office-identifier/", "GB000068"),
+                new SelectPage("/manage-transit-movements/departures/route-details/location-of-goods/customs-office-identifier/", "GB000011"),
                 new InputPage("/manage-transit-movements/departures/route-details/location-of-goods/eori-tin/", "eori1234"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/add-identifier/", "value-no"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/add-contact/", "value-no"),

@@ -167,7 +167,7 @@ function preTaskListT1NoSecurity() {
     lrnPage(getLRN())
     standardPrelodgedDeclarationPage(getLRN(), 'value')
     additionalDeclarationTypePage(getLRN(), 'value')
-    officeOfDeparturePage(getLRN(), 'GB000068')
+    officeOfDeparturePage(getLRN(), 'GB000011')
     procedureTypePage(getLRN(), 'value')
     declarationTypePage(getLRN(), 'value')
     securityDetails(getLRN(), 'value')
