@@ -123,7 +123,8 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
     "must redirect to technical difficulties for a POST if declaration guaranteeAmendment response is not 2xx" in {
       setExistingUserAnswers(emptyUserAnswers.copy(status = SubmissionState.GuaranteeAmendment, departureId = Some(departureId)))
 
-      when(mockSubmissionConnector.postAmendment(any())(any())).thenReturn(response(SEE_OTHER))
+      val errorCode: Int = Gen.choose(400, 599).sample.value
+      when(mockSubmissionConnector.postAmendment(any())(any())).thenReturn(response(errorCode))
 
       val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
