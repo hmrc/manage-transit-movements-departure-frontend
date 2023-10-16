@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures PreTaskList Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      5.1
+// @version      5.2
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/what-do-you-want-to-do
