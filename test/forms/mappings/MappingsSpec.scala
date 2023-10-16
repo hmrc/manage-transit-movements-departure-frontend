@@ -296,9 +296,7 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
           "requiredKey",
           "lengthKey",
           "invalidCharactersKey",
-          "invalidFormatKey",
-          "alreadyExistsKey",
-          alreadyExists
+          "invalidFormatKey"
         )
       )
 
@@ -337,12 +335,6 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
 
       val result = testForm(alreadyExists = false).bind(Map("value" -> invalidString))
       result.errors must contain(FormError("value", "invalidFormatKey"))
-    }
-
-    "must not bind an lrn which already exists" in {
-
-      val result = testForm(alreadyExists = true).bind(Map("value" -> validLrn.toString))
-      result.errors must contain(FormError("value", "alreadyExistsKey"))
     }
 
     "must unbind a valid value" in {

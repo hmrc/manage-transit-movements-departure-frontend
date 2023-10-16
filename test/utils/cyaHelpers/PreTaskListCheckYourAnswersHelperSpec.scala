@@ -50,7 +50,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
                   items = List(
                     ActionItem(
                       content = "Change".toText,
-                      href = routes.LocalReferenceNumberController.onPageLoad().url,
+                      href = routes.LocalReferenceNumberController.onPageReload(lrn).url,
                       visuallyHiddenText = Some("local reference number"),
                       attributes = Map()
                     )

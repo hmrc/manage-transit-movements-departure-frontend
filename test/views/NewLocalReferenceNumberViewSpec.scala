@@ -27,7 +27,7 @@ import views.html.NewLocalReferenceNumberView
 
 class NewLocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalReferenceNumber] {
 
-  override def form: Form[LocalReferenceNumber] = new LocalReferenceNumberFormProvider().apply(alreadyExists = false, prefix = "newLocalReferenceNumber")
+  override def form: Form[LocalReferenceNumber] = new LocalReferenceNumberFormProvider().apply(prefix)
 
   override def applyView(form: Form[LocalReferenceNumber]): HtmlFormat.Appendable =
     injector.instanceOf[NewLocalReferenceNumberView].apply(form, LocalReferenceNumber("ABC123").value)(fakeRequest, messages)
@@ -44,8 +44,9 @@ class NewLocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalRefer
 
   behave like pageWithHeading()
 
-  behave like pageWithContent("p",
-                              "You cannot use the same Local Reference Number (LRN) more than once. To amend this declaration, you need to enter a new one."
+  behave like pageWithContent(
+    "p",
+    "You cannot use the same Local Reference Number (LRN) more than once. To amend this declaration, you need to enter a new one."
   )
 
   behave like pageWithHint("This can be up to 22 characters long and include letters, numbers, hyphens and underscores. For example, ABCD123456EF-789.")

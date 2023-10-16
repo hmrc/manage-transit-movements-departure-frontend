@@ -169,32 +169,6 @@ trait Formatters {
         Map(key -> value.toString)
     }
 
-  private[mappings] def newLrnFormatter(
-    requiredKey: String,
-    lengthKey: String,
-    invalidCharactersKey: String,
-    invalidFormatKey: String,
-    alreadyExistsKey: String,
-    alreadyExists: Boolean
-  ): Formatter[LocalReferenceNumber] =
-    new Formatter[LocalReferenceNumber] {
-
-      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalReferenceNumber] =
-        lrnFormatter(requiredKey, lengthKey, invalidCharactersKey, invalidFormatKey)
-          .bind(key, data)
-          .flatMap {
-            lrn =>
-              if (alreadyExists) {
-                Left(Seq(FormError(key, alreadyExistsKey)))
-              } else {
-                Right(lrn)
-              }
-          }
-
-      override def unbind(key: String, value: LocalReferenceNumber): Map[String, String] =
-        Map(key -> value.toString)
-    }
-
   private[mappings] def selectableFormatter[T <: Selectable](
     selectableList: SelectableList[T],
     errorKey: String,

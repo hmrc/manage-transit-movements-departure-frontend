@@ -18,9 +18,10 @@ package controllers.preTaskList
 
 import controllers.actions._
 import forms.preTaskList.LocalReferenceNumberFormProvider
-import models.{LocalReferenceNumber, NormalMode, UserAnswers}
+import models.{CheckMode, LocalReferenceNumber, NormalMode, SubmissionState}
 import navigation.PreTaskListNavigatorProvider
-import play.api.data.Form
+import play.api.Logging
+import play.api.data.{Form, FormError}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -42,43 +43,54 @@ class LocalReferenceNumberController @Inject() (
   view: LocalReferenceNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
   private val prefix = "localReferenceNumber"
 
-  private def form(alreadyExists: Boolean = false): Form[LocalReferenceNumber] = formProvider(alreadyExists, prefix)
+  private val form: Form[LocalReferenceNumber] = formProvider(prefix)
 
   def onPageLoad(): Action[AnyContent] = identify {
     implicit request =>
-      Ok(view(form()))
+      Ok(view(form))
+  }
+
+  def onPageReload(lrn: LocalReferenceNumber): Action[AnyContent] = identify {
+    implicit request =>
+      Ok(view(form.fill(lrn)))
   }
 
   def onSubmit(): Action[AnyContent] = identify.async {
     implicit request =>
-      val submittedValue = form().bindFromRequest().value
-      duplicateService.alreadyExistsInSubmissionOrCache(submittedValue).flatMap {
-        alreadyExists =>
-          form(alreadyExists)
-            .bindFromRequest()
-            .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-              value => {
-                def getOrCreateUserAnswers(): Future[Option[UserAnswers]] =
-                  sessionRepository.get(value).flatMap {
-                    case None =>
-                      sessionRepository.put(value).flatMap {
-                        _ => sessionRepository.get(value)
-                      }
-                    case someUserAnswers =>
-                      Future.successful(someUserAnswers)
-                  }
-
-                getOrCreateUserAnswers().map {
-                  case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
-                  case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
-                }
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+          lrn =>
+            for {
+              alreadyExists <- duplicateService.doesDraftOrSubmissionExistForLrn(lrn)
+              userAnswers   <- sessionRepository.get(lrn)
+              result <- (alreadyExists, userAnswers) match {
+                case (true, Some(userAnswers)) if userAnswers.status == SubmissionState.NotSubmitted =>
+                  Future.successful(Redirect(navigatorProvider(CheckMode).nextPage(userAnswers)))
+                case (true, _) =>
+                  val formWithErrors = form.withError(FormError("value", s"$prefix.error.alreadyExists"))
+                  Future.successful(BadRequest(view(formWithErrors)))
+                case (false, None) =>
+                  sessionRepository
+                    .put(lrn)
+                    .flatMap {
+                      _ => sessionRepository.get(lrn)
+                    }
+                    .map {
+                      case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
+                      case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
+                    }
+                case _ =>
+                  logger.warn(s"Unexpected result: No draft or submission exists for LRN $lrn but some user answers were found")
+                  Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
               }
-            )
-      }
+            } yield result
+        )
   }
 }

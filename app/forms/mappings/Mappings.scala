@@ -65,11 +65,9 @@ trait Mappings extends Formatters with Constraints {
     requiredKey: String,
     lengthKey: String,
     invalidCharactersKey: String,
-    invalidFormatKey: String,
-    alreadyExistsKey: String,
-    alreadyExists: Boolean
+    invalidFormatKey: String
   ): FieldMapping[LocalReferenceNumber] =
-    of(newLrnFormatter(requiredKey, lengthKey, invalidCharactersKey, invalidFormatKey, alreadyExistsKey, alreadyExists))
+    of(lrnFormatter(requiredKey, lengthKey, invalidCharactersKey, invalidFormatKey))
 
   protected def selectable[T <: Selectable](
     selectableList: SelectableList[T],
