@@ -55,7 +55,7 @@ function initialiseJourneys() {
         let journey = new Journey("traderDetailsFullDataSetJourney", "Trader Details (Full Data Set)", "/manage-transit-movements/departures/trader-details/", "10130", "trader-details-status")
         journey.addPages(
             [
-                new ButtonPage("/manage-transit-movements/departures/trader-details/transit-holder/add-eori/", "value-yes"),
+                new ButtonPage("/manage-transit-movements/departures/trader-details/transit-holder/add-eori/", "value"),
                 new InputPage("/manage-transit-movements/departures/trader-details/transit-holder/eori/", "eori123"),
                 new ButtonPage("/manage-transit-movements/departures/trader-details/holder-of-transit/is-tir-id-known/", "value-no"),
                 new ButtonPage("/manage-transit-movements/departures/trader-details/transit-holder/add-eori-tin/", "value-no"),
