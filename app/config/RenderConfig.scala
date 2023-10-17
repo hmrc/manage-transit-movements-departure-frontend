@@ -20,18 +20,9 @@ import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import models.LocalReferenceNumber
 import play.api.Configuration
-import play.api.mvc.RequestHeader
-import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 @Singleton
 class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderConfig {
-
-  private val contactHost: String                  = configuration.get[String]("contact-frontend.host")
-  private val contactFormServiceIdentifier: String = "CTCTraders"
-  private val host: String                         = configuration.get[String]("host")
-
-  def feedbackUrl(implicit request: RequestHeader): String =
-    s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${RedirectUrl(host + request.uri)}"
 
   override val signOutUrl: String = configuration.get[String]("urls.logoutContinue") + configuration.get[String]("urls.feedback")
 
@@ -46,7 +37,6 @@ class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderCo
 }
 
 trait RenderConfig {
-  def feedbackUrl(implicit request: RequestHeader): String
   def signOutAndUnlockUrl(lrn: Option[LocalReferenceNumber]): String
   val signOutUrl: String
   val timeoutSeconds: Int
