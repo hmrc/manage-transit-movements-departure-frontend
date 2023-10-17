@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures Section Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      16.1
+// @version      16.2
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @author       Tega-Okeremeta
@@ -104,7 +104,7 @@ function initialiseJourneys() {
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/add/", "value"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/type/", "value"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/identification/", "value_1"),
-                new SelectPage("/manage-transit-movements/departures/route-details/location-of-goods/customs-office-identifier/", "GB000068"),
+                new SelectPage("/manage-transit-movements/departures/route-details/location-of-goods/customs-office-identifier/", "GB000011"),
                 new InputPage("/manage-transit-movements/departures/route-details/location-of-goods/eori-tin/", "eori1234"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/add-identifier/", "value-no"),
                 new ButtonPage("/manage-transit-movements/departures/route-details/location-of-goods/add-contact/", "value-no"),
@@ -201,7 +201,9 @@ function initialiseJourneys() {
             [
                 new InputPage("/manage-transit-movements/departures/items/1/description/", "Item description"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/declaration-type/", "value"),
+                new ButtonPage("/manage-transit-movements/departures/items/1/payment-method/add/", "value-no"),
                 new SelectPage("/manage-transit-movements/departures/items/1/country-of-destination/", "IT"),
+                new ButtonPage("/manage-transit-movements/departures/items/1/add-ucr/", "value"),
                 new InputPage("/manage-transit-movements/departures/items/1/ucr/", "UCR"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/cus-code/add/", "value"),
                 new InputPage("/manage-transit-movements/departures/items/1/cus-code/", "123ABC789"),
