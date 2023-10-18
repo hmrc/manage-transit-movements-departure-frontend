@@ -34,8 +34,6 @@ object TaskStatus {
 
     override def messageKey(submissionState: SubmissionState.Value): String = submissionState match {
       case SubmissionState.RejectedPendingChanges => "taskStatus.amended"
-      case SubmissionState.GuaranteeAmendment     => "taskStatus.amended"
-      case SubmissionState.Amendment              => "taskStatus.amended"
       case _                                      => "taskStatus.completed"
     }
     override val tag: String        = "govuk-tag--green"
@@ -52,6 +50,13 @@ object TaskStatus {
     override def messageKey(submissionState: SubmissionState.Value): String = "taskStatus.notStarted"
     override val tag: String                                                = "govuk-tag--grey"
     override val jsonString: String                                         = "not-started"
+  }
+
+  case object Amended extends TaskStatus {
+    override def messageKey(submissionState: SubmissionState.Value): String = "taskStatus.amended"
+
+    override val tag: String        = "govuk-tag--green"
+    override val jsonString: String = "amended"
   }
 
   case object CannotStartYet extends TaskStatus {
@@ -80,6 +85,7 @@ object TaskStatus {
       case CannotStartYet.jsonString => JsSuccess(CannotStartYet)
       case Error.jsonString          => JsSuccess(Error)
       case Unavailable.jsonString    => JsSuccess(Unavailable)
+      case Amended.jsonString        => JsSuccess(Amended)
       case x                         => JsError(s"$x is not a valid task status")
     }
   }

@@ -36,10 +36,11 @@ abstract class TaskListTask extends Task {
       case Completed | InProgress | Error => s"task.$messageKey.edit"
       case NotStarted                     => s"task.$messageKey.add"
       case CannotStartYet | Unavailable   => s"task.$messageKey"
+      case TaskStatus.Amended             => s"task.$messageKey"
     }
   }
 
-  def isCompleted: Boolean = status == Completed || status == Unavailable
+  def isCompleted: Boolean = status == Completed || status == Unavailable || status == Amended
   def isError: Boolean     = status == Error
 }
 
