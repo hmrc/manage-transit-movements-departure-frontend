@@ -16,16 +16,12 @@
 
 package controllers
 
-import controllers.actions.{Actions, SpecificDataRequiredActionProvider}
-import models.{EoriNumber, LocalReferenceNumber, SubmissionState}
-import pages.external.OfficeOfDestinationPage
+import controllers.actions.Actions
+import models.{LocalReferenceNumber, SubmissionState}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import viewModels.taskList.TaskStatus
-import viewModels.taskList.TaskStatus.Completed
-import views.html.DeclarationSubmittedView
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext

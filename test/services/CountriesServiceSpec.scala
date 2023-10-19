@@ -19,9 +19,8 @@ package services
 import base.SpecBase
 import connectors.ReferenceDataConnector
 import generators.Generators
-import models.SelectableList
 import models.reference.Country
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
