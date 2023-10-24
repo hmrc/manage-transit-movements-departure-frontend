@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.Actions
-import models.LocalReferenceNumber
+import models.{LocalReferenceNumber, SubmissionState}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -42,6 +42,7 @@ class AmendController @Inject() (
           .set(
             request.userAnswers
               .copy(departureId = Some(departureId))
+              .copy(status = SubmissionState.Amendment)
           )
           .map {
             case true =>
