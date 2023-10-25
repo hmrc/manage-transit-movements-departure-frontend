@@ -45,7 +45,7 @@ class DeclarationSubmittedViewSpec extends PanelViewBehaviours with Generators {
   behave like pageWithLink(
     "departure-declarations",
     "Check the status of departure declarations",
-    "http://localhost:9485/manage-transit-movements/test-only/view-departure-declarations"
+    "http://localhost:9485/manage-transit-movements/view-departure-declarations"
   )
 
   behave like pageWithPartialContent("p", " to find out when goods have been released.")
