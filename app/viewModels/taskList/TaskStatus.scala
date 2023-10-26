@@ -32,10 +32,8 @@ object TaskStatus {
 
   case object Completed extends TaskStatus {
 
-    override def messageKey(submissionState: SubmissionState.Value): String = submissionState match {
-      case SubmissionState.RejectedPendingChanges => "taskStatus.amended"
-      case _                                      => "taskStatus.completed"
-    }
+    override def messageKey(submissionState: SubmissionState.Value): String = "taskStatus.completed"
+
     override val tag: String        = "govuk-tag--green"
     override val jsonString: String = "completed"
   }

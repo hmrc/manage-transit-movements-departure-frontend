@@ -28,7 +28,7 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
   "messageKey" - {
     "when Completed" - {
       "and declaration rejected pending changes" in {
-        TaskStatus.Completed.messageKey(SubmissionState.RejectedPendingChanges) mustBe "taskStatus.amended"
+        TaskStatus.Completed.messageKey(SubmissionState.RejectedPendingChanges) mustBe "taskStatus.completed"
       }
 
       "and declaration not rejected pending changes" in {
