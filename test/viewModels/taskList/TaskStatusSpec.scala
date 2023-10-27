@@ -46,6 +46,13 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
       }
     }
 
+    "when Amended" in {
+      forAll(arbitrary[SubmissionState.Value]) {
+        amended =>
+          TaskStatus.Amended.messageKey(amended) mustBe "taskStatus.amended"
+      }
+    }
+
     "when NotStarted" in {
       forAll(arbitrary[SubmissionState.Value]) {
         submissionState =>

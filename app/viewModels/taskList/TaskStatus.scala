@@ -52,7 +52,6 @@ object TaskStatus {
 
   case object Amended extends TaskStatus {
     override def messageKey(submissionState: SubmissionState.Value): String = "taskStatus.amended"
-
     override val tag: String        = "govuk-tag--green"
     override val jsonString: String = "amended"
   }
