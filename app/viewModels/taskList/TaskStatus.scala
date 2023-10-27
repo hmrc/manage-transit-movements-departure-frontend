@@ -26,6 +26,7 @@ sealed trait TaskStatus {
   def isCompleted: Boolean   = this == TaskStatus.Completed
   def isUnavailable: Boolean = this == TaskStatus.Unavailable
   def isError: Boolean       = this == TaskStatus.Error
+  def amended: Boolean       = this == TaskStatus.Amended
 }
 
 object TaskStatus {
