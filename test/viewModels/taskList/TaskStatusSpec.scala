@@ -106,6 +106,10 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when Error" in {
       TaskStatus.Error.tag mustBe "govuk-tag--red"
     }
+
+    "when Amended" in {
+      TaskStatus.Amended.tag mustBe "govuk-tag--green"
+    }
   }
 
   "must serialise to json" - {
@@ -131,6 +135,11 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when error" in {
       val result = Json.toJson[TaskStatus](TaskStatus.Error)
       result mustBe JsString("error")
+    }
+
+    "when amended" in {
+      val result = Json.toJson[TaskStatus](TaskStatus.Amended)
+      result mustBe JsString("amended")
     }
 
     "when unavailable" in {
@@ -163,6 +172,11 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when error" in {
       val result = JsString("error").as[TaskStatus]
       result mustBe TaskStatus.Error
+    }
+
+    "when amended" in {
+      val result = JsString("amended").as[TaskStatus]
+      result mustBe TaskStatus.Amended
     }
 
     "when unavailable" in {
