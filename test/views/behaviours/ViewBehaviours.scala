@@ -136,6 +136,12 @@ trait ViewBehaviours extends SpecBase with ViewSpecAssertions {
       assertElementContainsText(caption, s"This section is $expectedText")
     }
 
+  def pageWithCaption(expectedText: String, expectedHiddenText: String): Unit =
+    "must render caption" in {
+      val caption = getElementByClass(doc, "govuk-caption-xl")
+      assertElementContainsText(caption, s"$expectedHiddenText $expectedText")
+    }
+
   def pageWithSectionCaption(expectedText: String): Unit =
     "must render section caption" in {
       val caption = getElementByClass(doc, "govuk-caption-xl")

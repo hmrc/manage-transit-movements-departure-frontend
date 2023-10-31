@@ -45,7 +45,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
 
   behave like pageWithoutBackLink()
 
-  behave like pageWithCaption(s"LRN: $lrn")
+  behave like pageWithCaption(s"LRN: $lrn", "This declaration is")
 
   behave like pageWithHeading()
 

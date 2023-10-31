@@ -21,7 +21,8 @@
 @(
     heading: String,
     caption: Option[String] = None,
-    classes: Option[String] = None
+    classes: Option[String] = None,
+    captionKeyHidden: String = "site.section"
 )(implicit messages: Messages)
 
 @headingClasses = @{
@@ -32,7 +33,7 @@
     @heading
     @caption.map { caption =>
         <span class="hmrc-caption govuk-caption-xl">
-            <span class="govuk-visually-hidden">@messages("site.section")</span>
+            <span class="govuk-visually-hidden">@messages(captionKeyHidden)</span>
             @caption
         </span>
     }

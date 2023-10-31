@@ -35,7 +35,11 @@
     lrn = Some(lrn)
 ) {
 
-    @heading(heading = messages("taskList.heading"), caption = Some(messages("taskList.lrn", lrn.toString)))
+    @heading(
+        heading = messages("taskList.heading"),
+        caption = Some(messages("taskList.lrn", lrn.toString)),
+        captionKeyHidden = "site.declaration"
+    )
 
     @if(viewModel.showErrorContent) {
         <p class="govuk-body">@messages("taskList.paragraph.thereIsAProblem")</p>
