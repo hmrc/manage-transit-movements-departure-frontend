@@ -12,6 +12,7 @@ site.send = Confirm and send
 site.resend = Confirm and resend
 site.service_name = Manage your transit movements
 site.section = This section is
+site.declaration = This declaration is
 
 error.title.prefix = Error:
 error.summary.title = There is a problem
