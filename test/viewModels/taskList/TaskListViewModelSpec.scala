@@ -18,6 +18,7 @@ package viewModels.taskList
 
 import base.SpecBase
 import generators.Generators
+import models.SubmissionState
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.taskList.TaskListViewModel.TaskListViewModelProvider
@@ -154,6 +155,38 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
         GuaranteeDetailsTask.section -> TaskStatus.Completed
       )
       val answers = emptyUserAnswers.copy(tasks = tasks)
+      val result  = new TaskListViewModelProvider().apply(answers)
+
+      result.showSubmissionButton mustBe false
+    }
+  }
+
+  "showSubmissionButton on amendment journey" - {
+    "must be false if all complete but on amendment" in {
+      val tasks = Map(
+        PreTaskListTask.section      -> TaskStatus.Completed,
+        TraderDetailsTask.section    -> TaskStatus.Completed,
+        RouteDetailsTask.section     -> TaskStatus.Completed,
+        TransportTask.section        -> TaskStatus.Completed,
+        DocumentsTask.section        -> TaskStatus.Completed,
+        GuaranteeDetailsTask.section -> TaskStatus.Completed
+      )
+      val answers = emptyUserAnswers.copy(tasks = tasks, status = SubmissionState.Amendment)
+      val result  = new TaskListViewModelProvider().apply(answers)
+
+      result.showSubmissionButton mustBe false
+    }
+
+    "must be true if all complete or  but on amendment" in {
+      val tasks = Map(
+        PreTaskListTask.section      -> TaskStatus.Completed,
+        TraderDetailsTask.section    -> TaskStatus.Completed,
+        RouteDetailsTask.section     -> TaskStatus.Completed,
+        TransportTask.section        -> TaskStatus.Completed,
+        DocumentsTask.section        -> TaskStatus.Completed,
+        GuaranteeDetailsTask.section -> TaskStatus.Completed
+      )
+      val answers = emptyUserAnswers.copy(tasks = tasks, status = SubmissionState.Amendment)
       val result  = new TaskListViewModelProvider().apply(answers)
 
       result.showSubmissionButton mustBe false

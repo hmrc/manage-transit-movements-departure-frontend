@@ -72,7 +72,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
       val view = applyView(tasks, SubmissionState.RejectedPendingChanges, expiryInDays)
       val doc  = parseView(view)
 
-      behave like pageWithContent(doc, "p", "There is a problem with this declaration. Amend the errors in the relevant sections and resend the declaration.")
+      behave like pageWithContent(doc, "p", "Amend the relevant sections and resend the declaration.")
       behave like pageWithoutContent(doc, "p", "You must complete each section before you can send your declaration.")
 
       behave like pageWithSubmitButton(doc, "Confirm and resend")
@@ -84,7 +84,7 @@ class TaskListViewSpec extends TaskListViewBehaviours {
       val view = applyView(tasks, SubmissionState.RejectedPendingChanges, expiryInDays)
       val doc  = parseView(view)
 
-      behave like pageWithContent(doc, "p", "There is a problem with this declaration. Amend the errors in the relevant sections and resend the declaration.")
+      behave like pageWithContent(doc, "p", "Amend the relevant sections and resend the declaration.")
       behave like pageWithoutContent(doc, "p", "You must complete each section before you can send your declaration.")
 
       behave like pageWithoutSubmitButton(doc)
@@ -94,6 +94,19 @@ class TaskListViewSpec extends TaskListViewBehaviours {
           val hiddenText = getElementById(doc, s"${task.id}-hidden")
           assertElementContainsText(hiddenText, "to amend the error")
       }
+    }
+
+    "when a task is amended" - {
+      val tasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryAmendedTask)).sample.value
+
+      val view = applyView(tasks, SubmissionState.Amendment, expiryInDays)
+      val doc  = parseView(view)
+      behave like pageWithContent(doc, "p", "Amend the relevant sections and resend the declaration.")
+      behave like pageWithContent(doc, "h2", "Send your amended departure declaration")
+      behave like pageWithContent(doc, "p", "By sending this, you are confirming that these details are correct to the best of your knowledge.")
+
+      behave like pageWithSubmitButton(doc, "Confirm and resend")
+
     }
   }
 

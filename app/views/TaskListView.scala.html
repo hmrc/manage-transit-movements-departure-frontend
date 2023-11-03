@@ -53,6 +53,9 @@
     @if(viewModel.showSubmissionButton) {
         @formHelper(action = routes.TaskListController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
             @if(viewModel.showErrorContent) {
+                <h2 class="govuk-heading-m">@messages("taskList.sendAmendedDeclaration")</h2>
+
+                <p class="govuk-body">@messages("taskList.detailsCorrect")</p>
                 @button(messageKey = "site.resend", attributes = Map("id" -> "submit"))
             } else {
                 <h2 class="govuk-heading-m">@messages("taskList.sendDeclaration")</h2>
