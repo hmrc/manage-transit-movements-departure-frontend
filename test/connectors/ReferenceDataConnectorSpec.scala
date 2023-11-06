@@ -18,15 +18,13 @@ package connectors
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
+import connectors.ReferenceDataConnector.NoReferenceDataFoundException
 import helper.WireMockServerHandler
 import models.reference._
 import org.scalacheck.Gen
 import org.scalatest.{Assertion, BeforeAndAfterEach}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.mvc.Http.HeaderNames.CONTENT_TYPE
-import play.mvc.Http.MimeTypes.JSON
-import play.mvc.Http.Status._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -266,6 +264,13 @@ class ReferenceDataConnectorSpec
       |}
       |""".stripMargin
 
+  private val emptyResponseJson: String =
+    """
+      |{
+      |  "data": []
+      |}
+      |""".stripMargin
+
   "Reference Data" - {
 
     "getCustomsOfficesOfDepartureForCountry" - {
@@ -287,43 +292,14 @@ class ReferenceDataConnectorSpec
         connector.getCustomsOfficesOfDepartureForCountry(countryId).futureValue mustBe expectedResult
       }
 
-      "must return a successful future response when CustomsOffice returns no data" in {
+      "must throw a NoReferenceDataFoundException for an empty response" in {
         val countryId = "AR"
-
-        server.stubFor(
-          get(urlEqualTo(url(countryId)))
-            .willReturn(
-              aResponse()
-                .withStatus(NO_CONTENT)
-                .withHeader(CONTENT_TYPE, JSON)
-            )
-        )
-
-        val expectedResult = Nil
-
-        connector.getCustomsOfficesOfDepartureForCountry(countryId).futureValue mustBe expectedResult
+        checkNoReferenceDataFoundResponse(url(countryId), connector.getCustomsOfficesOfDepartureForCountry(countryId))
       }
 
       "must return an exception when an error response is returned" in {
         val countryId = "GB"
-
-        server.stubFor(
-          get(urlEqualTo(url(countryId)))
-            .willReturn(aResponse().withStatus(BAD_REQUEST))
-        )
-
-        checkErrorResponse(s"/$baseUrl/filtered-lists/CustomsOffices", connector.getCustomsOfficesOfDepartureForCountry(countryId))
-      }
-
-      "must return an exception when NOT_FOUND" in {
-        val countryId = "GB"
-
-        server.stubFor(
-          get(urlEqualTo(url(countryId)))
-            .willReturn(aResponse().withStatus(NOT_FOUND))
-        )
-
-        checkErrorResponse(s"/$baseUrl/filtered-lists/CustomsOffices", connector.getCustomsOfficesOfDepartureForCountry(countryId))
+        checkErrorResponse(url(countryId), connector.getCustomsOfficesOfDepartureForCountry(countryId))
       }
     }
 
@@ -342,6 +318,10 @@ class ReferenceDataConnectorSpec
         )
 
         connector.getCountryCodesCTC().futureValue mustEqual expectedResult
+      }
+
+      "must throw a NoReferenceDataFoundException for an empty response" in {
+        checkNoReferenceDataFoundResponse(url, connector.getCountryCodesCTC())
       }
 
       "must return an exception when an error response is returned" in {
@@ -366,6 +346,10 @@ class ReferenceDataConnectorSpec
         connector.getCustomsSecurityAgreementAreaCountries().futureValue mustEqual expectedResult
       }
 
+      "must throw a NoReferenceDataFoundException for an empty response" in {
+        checkNoReferenceDataFoundResponse(url, connector.getCustomsSecurityAgreementAreaCountries())
+      }
+
       "must return an exception when an error response is returned" in {
         checkErrorResponse(url, connector.getCustomsSecurityAgreementAreaCountries())
       }
@@ -386,6 +370,10 @@ class ReferenceDataConnectorSpec
         )
 
         connector.getCountries().futureValue mustEqual expectedResult
+      }
+
+      "must throw a NoReferenceDataFoundException for an empty response" in {
+        checkNoReferenceDataFoundResponse(url, connector.getCountries())
       }
 
       "must return an exception when an error response is returned" in {
@@ -410,6 +398,10 @@ class ReferenceDataConnectorSpec
         connector.getSecurityTypes().futureValue mustEqual expectedResult
       }
 
+      "must throw a NoReferenceDataFoundException for an empty response" in {
+        checkNoReferenceDataFoundResponse(url, connector.getSecurityTypes())
+      }
+
       "must return an exception when an error response is returned" in {
         checkErrorResponse(url, connector.getSecurityTypes())
       }
@@ -430,6 +422,10 @@ class ReferenceDataConnectorSpec
         )
 
         connector.getDeclarationTypes().futureValue mustEqual expectedResult
+      }
+
+      "must throw a NoReferenceDataFoundException for an empty response" in {
+        checkNoReferenceDataFoundResponse(url, connector.getDeclarationTypes())
       }
 
       "must return an exception when an error response is returned" in {
@@ -460,16 +456,29 @@ class ReferenceDataConnectorSpec
         connector.getAdditionalDeclarationTypes().futureValue mustEqual expectedResult
       }
 
+      "must throw a NoReferenceDataFoundException for an empty response" in {
+        checkNoReferenceDataFoundResponse(url, connector.getAdditionalDeclarationTypes())
+      }
+
       "must return an exception when an error response is returned" in {
         checkErrorResponse(url, connector.getAdditionalDeclarationTypes())
       }
     }
   }
 
+  private def checkNoReferenceDataFoundResponse(url: String, result: => Future[_]): Assertion = {
+    server.stubFor(
+      get(urlEqualTo(url))
+        .willReturn(okJson(emptyResponseJson))
+    )
+
+    whenReady[Throwable, Assertion](result.failed) {
+      _ mustBe a[NoReferenceDataFoundException]
+    }
+  }
+
   private def checkErrorResponse(url: String, result: => Future[_]): Assertion = {
-    val errorResponses: Gen[Int] = Gen
-      .chooseNum(400: Int, 599: Int)
-      .suchThat(_ != 404)
+    val errorResponses: Gen[Int] = Gen.chooseNum(400: Int, 599: Int)
 
     forAll(errorResponses) {
       errorResponse =>
@@ -481,7 +490,7 @@ class ReferenceDataConnectorSpec
             )
         )
 
-        whenReady(result.failed) {
+        whenReady[Throwable, Assertion](result.failed) {
           _ mustBe an[Exception]
         }
     }
