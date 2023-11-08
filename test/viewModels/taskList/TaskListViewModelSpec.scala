@@ -169,6 +169,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
         RouteDetailsTask.section     -> TaskStatus.Completed,
         TransportTask.section        -> TaskStatus.Completed,
         DocumentsTask.section        -> TaskStatus.Completed,
+        ItemsTask.section            -> TaskStatus.Completed,
         GuaranteeDetailsTask.section -> TaskStatus.Completed
       )
       val answers = emptyUserAnswers.copy(tasks = tasks, status = SubmissionState.Amendment)
@@ -177,19 +178,20 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
       result.showSubmissionButton mustBe false
     }
 
-    "must be true if all complete or  but on amendment" in {
+    "must be true if one amendment and the rest completed" in {
       val tasks = Map(
         PreTaskListTask.section      -> TaskStatus.Completed,
         TraderDetailsTask.section    -> TaskStatus.Completed,
         RouteDetailsTask.section     -> TaskStatus.Completed,
-        TransportTask.section        -> TaskStatus.Completed,
+        TransportTask.section        -> TaskStatus.Amended,
         DocumentsTask.section        -> TaskStatus.Completed,
+        ItemsTask.section            -> TaskStatus.Completed,
         GuaranteeDetailsTask.section -> TaskStatus.Completed
       )
       val answers = emptyUserAnswers.copy(tasks = tasks, status = SubmissionState.Amendment)
       val result  = new TaskListViewModelProvider().apply(answers)
 
-      result.showSubmissionButton mustBe false
+      result.showSubmissionButton mustBe true
     }
   }
 }
