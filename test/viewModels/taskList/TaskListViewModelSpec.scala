@@ -180,13 +180,13 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
     }
 
     "must be true if at least one amended" in {
-      val listGenerator = for {
+      val listTaskStatus = for {
         amendedCount <- Gen.choose(1, 7)
         amendedList  <- Gen.listOfN(amendedCount, TaskStatus.Amended) // Ensure at least one 'Amended'
         randomList   <- Gen.listOfN(7 - amendedCount, arbitraryAmendedOrCompleteTaskStatus.arbitrary)
       } yield amendedList ++ randomList
 
-      forAll(listGenerator) {
+      forAll(listTaskStatus) {
         taskStatus =>
           val sectionKeys = List(
             PreTaskListTask.section,
