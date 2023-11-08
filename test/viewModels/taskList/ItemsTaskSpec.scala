@@ -49,6 +49,11 @@ class ItemsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
         val task = ItemsTask(InProgress)
         task.name mustBe "Edit items"
       }
+
+      "when status is Amended" in {
+        val task = ItemsTask(Amended)
+        task.name mustBe "Edit items"
+      }
     }
   }
 
