@@ -28,7 +28,7 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
   "messageKey" - {
     "when Completed" - {
       "and declaration rejected pending changes" in {
-        TaskStatus.Completed.messageKey(SubmissionState.RejectedPendingChanges) mustBe "taskStatus.amended"
+        TaskStatus.Completed.messageKey(SubmissionState.RejectedPendingChanges) mustBe "taskStatus.completed"
       }
 
       "and declaration not rejected pending changes" in {
@@ -43,6 +43,13 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
       forAll(arbitrary[SubmissionState.Value]) {
         submissionState =>
           TaskStatus.InProgress.messageKey(submissionState) mustBe "taskStatus.inProgress"
+      }
+    }
+
+    "when Amended" in {
+      forAll(arbitrary[SubmissionState.Value]) {
+        amended =>
+          TaskStatus.Amended.messageKey(amended) mustBe "taskStatus.amended"
       }
     }
 
@@ -99,6 +106,10 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when Error" in {
       TaskStatus.Error.tag mustBe "govuk-tag--red"
     }
+
+    "when Amended" in {
+      TaskStatus.Amended.tag mustBe "govuk-tag--green"
+    }
   }
 
   "must serialise to json" - {
@@ -124,6 +135,11 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when error" in {
       val result = Json.toJson[TaskStatus](TaskStatus.Error)
       result mustBe JsString("error")
+    }
+
+    "when amended" in {
+      val result = Json.toJson[TaskStatus](TaskStatus.Amended)
+      result mustBe JsString("amended")
     }
 
     "when unavailable" in {
@@ -156,6 +172,11 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when error" in {
       val result = JsString("error").as[TaskStatus]
       result mustBe TaskStatus.Error
+    }
+
+    "when amended" in {
+      val result = JsString("amended").as[TaskStatus]
+      result mustBe TaskStatus.Amended
     }
 
     "when unavailable" in {

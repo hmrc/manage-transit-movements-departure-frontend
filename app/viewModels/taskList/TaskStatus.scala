@@ -26,16 +26,15 @@ sealed trait TaskStatus {
   def isCompleted: Boolean   = this == TaskStatus.Completed
   def isUnavailable: Boolean = this == TaskStatus.Unavailable
   def isError: Boolean       = this == TaskStatus.Error
+  def amended: Boolean       = this == TaskStatus.Amended
 }
 
 object TaskStatus {
 
   case object Completed extends TaskStatus {
 
-    override def messageKey(submissionState: SubmissionState.Value): String = submissionState match {
-      case SubmissionState.RejectedPendingChanges => "taskStatus.amended"
-      case _                                      => "taskStatus.completed"
-    }
+    override def messageKey(submissionState: SubmissionState.Value): String = "taskStatus.completed"
+
     override val tag: String        = "govuk-tag--green"
     override val jsonString: String = "completed"
   }
@@ -54,9 +53,8 @@ object TaskStatus {
 
   case object Amended extends TaskStatus {
     override def messageKey(submissionState: SubmissionState.Value): String = "taskStatus.amended"
-
-    override val tag: String        = "govuk-tag--green"
-    override val jsonString: String = "amended"
+    override val tag: String                                                = "govuk-tag--green"
+    override val jsonString: String                                         = "amended"
   }
 
   case object CannotStartYet extends TaskStatus {

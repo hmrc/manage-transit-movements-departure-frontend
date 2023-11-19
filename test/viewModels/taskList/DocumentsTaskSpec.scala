@@ -49,6 +49,21 @@ class DocumentsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
         val task = DocumentsTask(InProgress)
         task.name mustBe "Edit documents"
       }
+
+      "when status is Amended" in {
+        val task = DocumentsTask(Amended)
+        task.name mustBe "Edit documents"
+      }
+
+      "when status is Error" in {
+        val task = DocumentsTask(Error)
+        task.name mustBe "Edit documents"
+      }
+
+      "when status is Unavailable" in {
+        val task = DocumentsTask(Unavailable)
+        task.name mustBe "Documents"
+      }
     }
   }
 
