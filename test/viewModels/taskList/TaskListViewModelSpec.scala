@@ -146,6 +146,22 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
       result.showSubmissionButton mustBe true
     }
 
+    "must be true if everything is amended" in {
+      val tasks = Map(
+        PreTaskListTask.section      -> TaskStatus.Amended,
+        TraderDetailsTask.section    -> TaskStatus.Amended,
+        RouteDetailsTask.section     -> TaskStatus.Amended,
+        TransportTask.section        -> TaskStatus.Amended,
+        DocumentsTask.section        -> TaskStatus.Amended,
+        ItemsTask.section            -> TaskStatus.Amended,
+        GuaranteeDetailsTask.section -> TaskStatus.Amended
+      )
+      val answers = emptyUserAnswers.copy(tasks = tasks)
+      val result  = new TaskListViewModelProvider().apply(answers)
+
+      result.showSubmissionButton mustBe true
+    }
+
     "must be false if everything is not complete" in {
       val tasks = Map(
         PreTaskListTask.section      -> TaskStatus.Completed,
