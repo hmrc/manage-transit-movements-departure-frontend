@@ -49,6 +49,11 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
         val task = GuaranteeDetailsTask(InProgress)
         task.name mustBe "Edit guarantee details"
       }
+
+      "when status is Amended" in {
+        val task = GuaranteeDetailsTask(Amended)
+        task.name mustBe "Edit guarantee details"
+      }
     }
   }
 

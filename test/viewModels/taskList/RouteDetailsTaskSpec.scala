@@ -49,6 +49,11 @@ class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with G
         val task = RouteDetailsTask(InProgress)
         task.name mustBe "Edit route details"
       }
+
+      "when status is Amended" in {
+        val task = RouteDetailsTask(Amended)
+        task.name mustBe "Edit route details"
+      }
     }
   }
 

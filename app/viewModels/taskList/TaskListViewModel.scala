@@ -16,13 +16,24 @@
 
 package viewModels.taskList
 
+import models.SubmissionState.{Amendment, GuaranteeAmendment}
 import models.{SubmissionState, UserAnswers}
 
 case class TaskListViewModel(tasks: Seq[TaskListTask], submissionState: SubmissionState.Value) {
 
   def showErrorContent: Boolean = submissionState.showErrorContent
 
-  def showSubmissionButton: Boolean = tasks.forall(_.isCompleted)
+  def showSubmissionButton: Boolean =
+    submissionState match {
+      case Amendment | GuaranteeAmendment => containsAmended && allCompletedOrAmended
+      case _                              => allCompletedOrAmended
+    }
+
+  private def containsAmended: Boolean = tasks.exists(_.isAmended)
+
+  private def allCompletedOrAmended: Boolean = tasks.forall(
+    taskList => taskList.isCompleted || taskList.isAmended
+  )
 }
 
 object TaskListViewModel {

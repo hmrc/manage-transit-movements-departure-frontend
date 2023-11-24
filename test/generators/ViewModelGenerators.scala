@@ -116,6 +116,10 @@ trait ViewModelGenerators {
     Gen.oneOf(TaskStatus.InProgress, TaskStatus.NotStarted, TaskStatus.CannotStartYet)
   }
 
+  lazy val arbitraryAmendedOrCompleteTaskStatus: Arbitrary[TaskStatus] = Arbitrary {
+    Gen.oneOf(TaskStatus.Completed, TaskStatus.Amended)
+  }
+
   implicit lazy val arbitraryTask: Arbitrary[TaskListTask] = Arbitrary {
     for {
       arbitraryStatus     <- arbitrary[TaskStatus]
@@ -140,6 +144,23 @@ trait ViewModelGenerators {
       arbitrarySection    <- Gen.alphaNumStr
     } yield new TaskListTask {
       override val status: TaskStatus = TaskStatus.Error
+      override val messageKey: String = arbitraryMessageKey
+      override val id: String         = arbitraryId
+
+      override def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String = arbitraryHref
+
+      override val section: String = arbitrarySection
+    }
+  }
+
+  implicit lazy val arbitraryAmendedTask: Arbitrary[TaskListTask] = Arbitrary {
+    for {
+      arbitraryMessageKey <- Gen.alphaNumStr
+      arbitraryId         <- Gen.alphaNumStr
+      arbitraryHref       <- Gen.alphaNumStr
+      arbitrarySection    <- Gen.alphaNumStr
+    } yield new TaskListTask {
+      override val status: TaskStatus = TaskStatus.Amended
       override val messageKey: String = arbitraryMessageKey
       override val id: String         = arbitraryId
 
