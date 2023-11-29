@@ -25,5 +25,3 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
 addSbtPlugin("uk.gov.hmrc" % "sbt-accessibility-linter" % "0.37.0")
 
 addSbtPlugin("io.github.irundaia" % "sbt-sassify" % "1.5.2")
-
-//libraryDependencySchemes ++= Seq("org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always)
