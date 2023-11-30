@@ -8,8 +8,6 @@ lazy val appName: String = "manage-transit-movements-departure-frontend"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-ThisBuild / scalaVersion := "2.13.12"
-
 lazy val root = (project in file("."))
   .enablePlugins(
     PlayScala,
