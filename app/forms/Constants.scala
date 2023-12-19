@@ -17,24 +17,5 @@
 package forms
 
 object Constants {
-  lazy val tirCarnetReferenceMaxLength: Int     = 12
-  lazy val maxEoriNumberLength: Int             = 17
-  lazy val maxUCRLength: Int                    = 35
-  lazy val minEoriNumberLength: Int             = 14
-  lazy val maxNameLength: Int                   = 70
-  lazy val maxTelephoneNumberLength: Int        = 35
-  lazy val minTelephoneNumberLength: Int        = 6
-  lazy val maxRefNumberLength: Int              = 24
-  lazy val maxOtherRefLength: Int               = 35
-  lazy val accessCodeLength: Int                = 4
-  lazy val addiationalIdentifierMaxLength: Int  = 4
-  lazy val maxAuthorisationNumberLength: Int    = 35
-  lazy val locationMaxLength: Int               = 35
-  lazy val identificationNumberLength: Int      = 35
-  lazy val conveyanceRefNumberLength: Int       = 17
-  lazy val maxAuthorisationRefNumberLength: Int = 35
-  lazy val maxContainerIdNumberLength: Int      = 17
-  lazy val maxSealIdNumberLength: Int           = 20
-  lazy val itemNumberLength: Int                = 4
-  lazy val itemNumberMax: Int                   = 1999
+  lazy val tirCarnetReferenceMaxLength: Int = 11
 }

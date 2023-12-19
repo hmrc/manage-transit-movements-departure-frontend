@@ -112,8 +112,9 @@ tirCarnetReference.heading = What is the TIR carnet reference?
 tirCarnetReference.paragraph = You can find this printed on the TIR carnet document.
 tirCarnetReference.checkYourAnswersLabel = TIR carnet reference
 tirCarnetReference.error.required = Enter the TIR carnet reference
-tirCarnetReference.error.length = The TIR carnet reference must be 12 characters or less
-tirCarnetReference.error.invalid = The TIR carnet reference must only include letters a to z and numbers 0 to 9
+tirCarnetReference.error.length = The TIR carnet reference must be {0} characters or less
+tirCarnetReference.error.invalidCharacters = The TIR carnet reference must only include letters a to z and numbers 0 to 9
+tirCarnetReference.error.invalidFormat = Enter a real TIR carnet reference
 tirCarnetReference.change.hidden = TIR carnet reference
 
 securityDetailsType.title = Which type of safety and security details do you want to add?

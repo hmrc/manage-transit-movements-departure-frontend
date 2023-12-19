@@ -18,16 +18,17 @@ package forms.preTaskList
 
 import forms.Constants.tirCarnetReferenceMaxLength
 import forms.behaviours.StringFieldBehaviours
-import models.domain.StringFieldRegex.alphaNumericRegex
-import play.api.data.FormError
+import models.domain.StringFieldRegex._
+import play.api.data.{Field, FormError}
 
 class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey  = "tirCarnetReference.error.required"
-  private val maxLengthKey = "tirCarnetReference.error.length"
-  private val invalidKey   = "tirCarnetReference.error.invalid"
-  private val maxLength    = tirCarnetReferenceMaxLength
-  private val form         = new TIRCarnetReferenceFormProvider()()
+  private val requiredKey          = "tirCarnetReference.error.required"
+  private val maxLengthKey         = "tirCarnetReference.error.length"
+  private val invalidCharactersKey = "tirCarnetReference.error.invalidCharacters"
+  private val invalidFormatKey     = "tirCarnetReference.error.invalidFormat"
+  private val maxLength            = tirCarnetReferenceMaxLength
+  private val form                 = new TIRCarnetReferenceFormProvider()()
 
   ".value" - {
 
@@ -55,9 +56,77 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithInvalidCharacters(
       form,
       fieldName,
-      error = FormError(fieldName, invalidKey, Seq(alphaNumericRegex.regex)),
+      error = FormError(fieldName, invalidCharactersKey, Seq(alphaNumericRegex.regex)),
       maxLength
     )
 
+    "must not bind strings with an invalid format" in {
+      val str               = "TIRREF"
+      val result: Field     = form.bind(Map(fieldName -> str)).apply(fieldName)
+      val expectedFormError = FormError(fieldName, invalidFormatKey, Seq(tirCarnetNumberRegex.regex))
+      result.errors must contain(expectedFormError)
+    }
+
+    "must bind valid strings that match" - {
+
+      "[1-9][0-9]{0,6}" in {
+        val strs = Seq(
+          "3",
+          "55",
+          "956",
+          "4009",
+          "50677",
+          "748516",
+          "2085451"
+        )
+
+        strs.foreach {
+          str =>
+            val result = form.bind(Map(fieldName -> str)).apply(fieldName)
+            result.value.value mustBe str
+        }
+      }
+
+      "(1[0-9]|2[0-4])[0-9]{0,6}" in {
+        val strs = Seq(
+          "24",
+          "239",
+          "1859",
+          "20170",
+          "109623",
+          "1215631",
+          "23357415"
+        )
+
+        strs.foreach {
+          str =>
+            val result = form.bind(Map(fieldName -> str)).apply(fieldName)
+            result.value.value mustBe str
+        }
+      }
+
+      "25000000" in {
+        val str    = "25000000"
+        val result = form.bind(Map(fieldName -> str)).apply(fieldName)
+        result.value.value mustBe str
+      }
+
+      "(X[A-Z]|[A-Z]X)(2[5-9]|[3-9][0-9]|[1-9][0-9][0-9])[0-9]{6}" in {
+        val strs = Seq(
+          "XE28707033",
+          "XX959792193",
+          "UX943976499",
+          "FX97370960",
+          "XF28702846",
+          "HX877242599"
+        )
+
+        strs.foreach {
+          str =>
+            val result = form.bind(Map(fieldName -> str)).apply(fieldName)
+            result.value.value mustBe str
+        }
+      }
+    }
   }
 }
