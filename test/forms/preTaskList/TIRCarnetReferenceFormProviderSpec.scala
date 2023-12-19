@@ -34,12 +34,6 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
 
     val fieldName = "value"
 
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
     behave like fieldWithMaxLength(
       form,
       fieldName,
@@ -77,7 +71,8 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
           "4009",
           "50677",
           "748516",
-          "2085451"
+          "2085451",
+          "2085451   "
         )
 
         strs.foreach {
@@ -95,7 +90,8 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
           "20170",
           "109623",
           "1215631",
-          "23357415"
+          "23357415",
+          "23357415   "
         )
 
         strs.foreach {
@@ -106,9 +102,16 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
       }
 
       "25000000" in {
-        val str    = "25000000"
-        val result = form.bind(Map(fieldName -> str)).apply(fieldName)
-        result.value.value mustBe str
+        val strs = Seq(
+          "25000000",
+          "25000000   "
+        )
+
+        strs.foreach {
+          str =>
+            val result = form.bind(Map(fieldName -> str)).apply(fieldName)
+            result.value.value mustBe str
+        }
       }
 
       "(X[A-Z]|[A-Z]X)(2[5-9]|[3-9][0-9]|[1-9][0-9][0-9])[0-9]{6}" in {
@@ -118,7 +121,8 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
           "UX943976499",
           "FX97370960",
           "XF28702846",
-          "HX877242599"
+          "HX877242599",
+          "HX877242599   "
         )
 
         strs.foreach {

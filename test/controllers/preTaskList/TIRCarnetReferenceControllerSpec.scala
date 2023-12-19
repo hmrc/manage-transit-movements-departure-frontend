@@ -46,6 +46,8 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
       .guiceApplicationBuilder()
       .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
 
+  private val validAnswer = "XE28707033"
+
   "TIRCarnetReference Controller" - {
 
     "must return OK and the correct view for a GET" in {
@@ -64,7 +66,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = emptyUserAnswers.setValue(TIRCarnetReferencePage, "1234567890")
+      val userAnswers = emptyUserAnswers.setValue(TIRCarnetReferencePage, validAnswer)
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, tirCarnetReferenceRoute)
@@ -73,7 +75,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
 
       status(result) mustEqual OK
 
-      val filledForm = form.bind(Map("value" -> "1234567890"))
+      val filledForm = form.bind(Map("value" -> validAnswer))
 
       val view = injector.instanceOf[TirCarnetReferenceView]
 
@@ -87,7 +89,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       val request = FakeRequest(POST, tirCarnetReferenceRoute)
-        .withFormUrlEncodedBody(("value", "1234567890"))
+        .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 
@@ -127,7 +129,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with AppWithDefaultMockF
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, tirCarnetReferenceRoute)
-        .withFormUrlEncodedBody(("value", "1234567890"))
+        .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(app, request).value
 
