@@ -19,24 +19,14 @@ package forms.mappings
 import models.{Enumerable, LocalReferenceNumber, Radioable, Selectable, SelectableList}
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
-import play.api.data.format.Formats.ignoredFormat
 
 trait Mappings extends Formatters with Constraints {
 
-  protected def text(errorKey: String = "error.required", args: Seq[Any] = Seq.empty): FieldMapping[String] =
-    of(stringFormatter(errorKey, args))
-
-  protected def trimmedText(errorKey: String = "error.required", args: Seq[Any] = Seq.empty): FieldMapping[String] =
-    of(trimmedStringFormatter(errorKey, args))
-
-  protected def textWithSpacesRemoved(errorKey: String = "error.required"): FieldMapping[String] =
-    of(spacelessStringFormatter(errorKey))
+  protected def text(errorKey: String = "error.required", args: Seq[Any] = Seq.empty)(f: String => String): FieldMapping[String] =
+    of(stringFormatter(errorKey, args)(f))
 
   protected def formattedPostcode(errorKey: String = "error.required", args: Seq[Any] = Seq.empty): FieldMapping[String] =
     of(postcodeFormatter(errorKey, args))
-
-  protected def mandatoryIfBoolean(errorKey: String = "error.required", condition: Boolean, defaultValue: Boolean): FieldMapping[Boolean] =
-    if (condition) boolean(errorKey) else of(ignoredFormat(defaultValue))
 
   protected def int(
     requiredKey: String = "error.required",
@@ -48,12 +38,6 @@ trait Mappings extends Formatters with Constraints {
 
   protected def boolean(requiredKey: String = "error.required", invalidKey: String = "error.boolean", args: Seq[Any] = Seq.empty): FieldMapping[Boolean] =
     of(booleanFormatter(requiredKey, invalidKey, args))
-
-  protected def isConditionTrue(alreadyExistsKey: String = "error.alreadyExistsInSubmissionOrCache",
-                                condition: Boolean,
-                                defaultValue: Boolean
-  ): FieldMapping[Boolean] =
-    if (condition) boolean(alreadyExistsKey) else of(ignoredFormat(defaultValue))
 
   protected def enumerable[A <: Radioable[A]](
     requiredKey: String = "error.required",

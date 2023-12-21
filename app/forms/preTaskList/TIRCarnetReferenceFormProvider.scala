@@ -18,7 +18,7 @@ package forms.preTaskList
 
 import forms.Constants.tirCarnetReferenceMaxLength
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.alphaNumericRegex
+import models.domain.StringFieldRegex.{alphaNumericRegex, tirCarnetNumberRegex}
 import play.api.data.Form
 
 import javax.inject.Inject
@@ -27,11 +27,12 @@ class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> trimmedText("tirCarnetReference.error.required")
+      "value" -> text("tirCarnetReference.error.required")(_.toUpperCase)
         .verifying(
           forms.StopOnFirstFail[String](
             maxLength(tirCarnetReferenceMaxLength, "tirCarnetReference.error.length"),
-            regexp(alphaNumericRegex, "tirCarnetReference.error.invalid")
+            regexp(alphaNumericRegex, "tirCarnetReference.error.invalidCharacters"),
+            regexp(tirCarnetNumberRegex, "tirCarnetReference.error.invalidFormat")
           )
         )
     )
