@@ -16,7 +16,6 @@
 
 package models.journeyDomain
 
-import cats.implicits._
 import config.Constants._
 import models.ProcedureType.Normal
 import models.reference.{AdditionalDeclarationType, CustomsOffice, DeclarationType, SecurityType}
@@ -42,38 +41,41 @@ case class PreTaskListDomain(
 
 object PreTaskListDomain {
 
-  private val localReferenceNumber: UserAnswersReader[LocalReferenceNumber] = {
-    val fn: UserAnswers => EitherType[LocalReferenceNumber] = ua => Right(ua.lrn)
-    UserAnswersReader(fn)
-  }
-
-  private val tirCarnetReference: UserAnswersReader[Option[String]] =
-    OfficeOfDeparturePage.reader.map(_.countryCode).flatMap {
-      case XI =>
-        ProcedureTypePage
-          .filterOptionalDependent(_ == Normal) {
-            DeclarationTypePage.filterOptionalDependent(_.isTIR) {
-              TIRCarnetReferencePage.reader
-            }
-          }
-          .map(_.flatten)
-      case _ =>
-        DeclarationTypePage.filterMandatoryDependent(!_.isTIR) {
-          none[String].pure[UserAnswersReader]
-        }
+  private val localReferenceNumberReader: Read[LocalReferenceNumber] =
+    UserAnswersReader.success {
+      (ua: UserAnswers) => ua.lrn
     }
+
+  private val tirCarnetReferenceReader: Read[Option[String]] =
+    OfficeOfDeparturePage.reader
+      .to {
+        _.countryCode match {
+          case XI =>
+            ProcedureTypePage
+              .filterOptionalDependent(_ == Normal) {
+                DeclarationTypePage.filterOptionalDependent(_.isTIR) {
+                  TIRCarnetReferencePage.reader
+                }
+              }
+              .flatten
+          case _ =>
+            DeclarationTypePage.filterMandatoryDependent(!_.isTIR) {
+              UserAnswersReader.none
+            }
+        }
+      }
 
   implicit val reader: UserAnswersReader[PreTaskListDomain] =
     (
-      localReferenceNumber,
+      localReferenceNumberReader,
       AdditionalDeclarationTypePage.reader,
       OfficeOfDeparturePage.reader,
       ProcedureTypePage.reader,
       DeclarationTypePage.reader,
-      tirCarnetReference,
+      tirCarnetReferenceReader,
       SecurityDetailsTypePage.reader,
       DetailsConfirmedPage.mandatoryReader(identity)
-    ).tupled.map((PreTaskListDomain.apply _).tupled)
+    ).map(PreTaskListDomain.apply).apply(Nil)
 
   implicit val format: OFormat[PreTaskListDomain] = Json.format[PreTaskListDomain]
 

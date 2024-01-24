@@ -16,12 +16,13 @@
 
 package models.journeyDomain
 
-import queries.{Gettable, Query, Settable}
+import pages.Page
+import queries.{Gettable, Settable}
 
 sealed trait OpsError {
-  val page: Query
+  val page: Page
   val message: Option[String]
 }
 
-case class ReaderError(page: Gettable[_], message: Option[String] = None) extends OpsError
+case class ReaderError(page: Gettable[_], pages: Pages, message: Option[String] = None) extends OpsError
 case class WriterError(page: Settable[_], message: Option[String] = None) extends OpsError
