@@ -50,7 +50,7 @@ class CheckYourAnswersController @Inject() (
     .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
         UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
-          case Left(ReaderError(page, _, _)) =>
+          case Left(ReaderError(page, _, _)) if page != DetailsConfirmedPage =>
             logger.warn(s"[preTaskList.CheckYourAnswersController][$lrn] Shouldn't be here yet. Redirecting to ${page.path}")
             Redirect(page.route(request.userAnswers, NormalMode).getOrElse(controllers.routes.SessionExpiredController.onPageLoad()))
           case _ =>
