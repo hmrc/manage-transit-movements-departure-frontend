@@ -20,7 +20,6 @@ import controllers.actions._
 import forms.preTaskList.LocalReferenceNumberFormProvider
 import models.{CheckMode, LocalReferenceNumber, NormalMode, SubmissionState}
 import navigation.PreTaskListNavigatorProvider
-import pages.sections.PreTaskListSection
 import play.api.Logging
 import play.api.data.{Form, FormError}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -73,7 +72,7 @@ class LocalReferenceNumberController @Inject() (
               userAnswers   <- sessionRepository.get(lrn)
               result <- (alreadyExists, userAnswers) match {
                 case (true, Some(userAnswers)) if userAnswers.status == SubmissionState.NotSubmitted =>
-                  Future.successful(Redirect(navigatorProvider(CheckMode).nextPage(userAnswers, Some(PreTaskListSection))))
+                  Future.successful(Redirect(navigatorProvider(CheckMode).nextPage(userAnswers, None)))
                 case (true, _) =>
                   val formWithErrors = form.withError(FormError("value", s"$prefix.error.alreadyExists"))
                   Future.successful(BadRequest(view(formWithErrors)))
