@@ -19,8 +19,7 @@ package controllers.preTaskList
 import com.google.inject.Inject
 import controllers.actions.{Actions, PreTaskListCompletedAction}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import models.journeyDomain.UserAnswersReader
-import models.journeyDomain.{PreTaskListDomain, ReaderError}
+import models.journeyDomain.{PreTaskListDomain, ReaderError, UserAnswersReader}
 import models.{LocalReferenceNumber, NormalMode}
 import pages.preTaskList.DetailsConfirmedPage
 import play.api.Logging
@@ -51,7 +50,7 @@ class CheckYourAnswersController @Inject() (
     .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
         UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
-          case Left(ReaderError(page, _, _)) if page != DetailsConfirmedPage =>
+          case Left(ReaderError(page, _, _)) =>
             logger.warn(s"[preTaskList.CheckYourAnswersController][$lrn] Shouldn't be here yet. Redirecting to ${page.path}")
             Redirect(page.route(request.userAnswers, NormalMode).getOrElse(controllers.routes.SessionExpiredController.onPageLoad()))
           case _ =>

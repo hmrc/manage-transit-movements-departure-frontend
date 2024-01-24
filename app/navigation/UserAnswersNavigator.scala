@@ -16,12 +16,14 @@
 
 package navigation
 
-import models.journeyDomain.UserAnswersReader
 import models.journeyDomain.Stage.CompletingJourney
-import models.journeyDomain.{JourneyDomainModel, ReaderError, Stage}
-import models.{Mode, UserAnswers}
+import models.journeyDomain.{EitherType, JourneyDomainModel, ReaderError, ReaderSuccess, Stage, UserAnswersReader}
+import models.{CheckMode, Mode, UserAnswers}
+import pages.Page
 import play.api.Logging
 import play.api.mvc.Call
+
+import scala.annotation.tailrec
 
 trait UserAnswersNavigator extends Navigator {
 
@@ -31,29 +33,55 @@ trait UserAnswersNavigator extends Navigator {
 
   val mode: Mode
 
-  override def nextPage(userAnswers: UserAnswers): Call =
-    UserAnswersNavigator.nextPage[T](userAnswers, mode)
+  override def nextPage(userAnswers: UserAnswers, currentPage: Option[Page]): Call =
+    UserAnswersNavigator.nextPage[T](userAnswers, currentPage, mode)
 }
 
 object UserAnswersNavigator extends Logging {
 
   def nextPage[T <: JourneyDomainModel](
     userAnswers: UserAnswers,
+    currentPage: Option[Page],
     mode: Mode,
     stage: Stage = CompletingJourney
-  )(implicit userAnswersReader: UserAnswersReader[T]): Call = {
-    lazy val errorCall = controllers.routes.ErrorController.notFound()
+  )(implicit userAnswersReader: UserAnswersReader[T]): Call =
+    nextPage(
+      currentPage,
+      userAnswersReader.run(userAnswers),
+      mode
+    ).apply(userAnswers, stage).getOrElse {
+      controllers.routes.ErrorController.notFound()
+    }
 
-    userAnswersReader.run(userAnswers) match {
-      case Left(ReaderError(page, _)) =>
-        page.route(userAnswers, mode).getOrElse {
-          logger.debug(s"Route not defined for page ${page.path}")
-          errorCall
+  def nextPage[T <: JourneyDomainModel](
+    currentPage: Option[Page],
+    userAnswersReaderResult: EitherType[ReaderSuccess[T]],
+    mode: Mode
+  ): (UserAnswers, Stage) => Option[Call] = {
+    @tailrec
+    def rec(
+      answeredPages: List[Page],
+      exit: Boolean
+    )(
+      userAnswersReaderResult: (UserAnswers, Stage) => Option[Call]
+    ): (UserAnswers, Stage) => Option[Call] =
+      answeredPages match {
+        case head :: _ if exit                          => (userAnswers, _) => head.route(userAnswers, mode)
+        case head :: tail if currentPage.contains(head) => rec(tail, exit = true)(userAnswersReaderResult)
+        case _ :: tail                                  => rec(tail, exit)(userAnswersReaderResult)
+        case Nil                                        => userAnswersReaderResult
+      }
+
+    userAnswersReaderResult match {
+      case Right(ReaderSuccess(t, _)) if mode == CheckMode =>
+        t.routeIfCompleted(_, mode, _)
+      case Right(ReaderSuccess(t, answeredPages)) =>
+        rec(answeredPages.toList, exit = false) {
+          t.routeIfCompleted(_, mode, _)
         }
-      case Right(x) =>
-        x.routeIfCompleted(userAnswers, mode, stage).getOrElse {
-          logger.debug(s"Completed route not defined for model $x")
-          errorCall
+      case Left(ReaderError(unansweredPage, answeredPages, _)) =>
+        rec(answeredPages.toList, exit = false) {
+          (userAnswers, _) => unansweredPage.route(userAnswers, mode)
         }
     }
   }

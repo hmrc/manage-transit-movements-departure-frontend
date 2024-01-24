@@ -19,10 +19,10 @@ package models.journeyDomain
 import config.Constants._
 import models.ProcedureType.Normal
 import models.reference.{AdditionalDeclarationType, CustomsOffice, DeclarationType, SecurityType}
-import models.{LocalReferenceNumber, Mode, ProcedureType, UserAnswers}
+import models.{LocalReferenceNumber, ProcedureType, UserAnswers}
 import pages.preTaskList._
+import pages.sections.{PreTaskListSection, Section}
 import play.api.libs.json.{Json, OFormat}
-import play.api.mvc.Call
 
 case class PreTaskListDomain(
   localReferenceNumber: LocalReferenceNumber,
@@ -31,12 +31,10 @@ case class PreTaskListDomain(
   procedureType: ProcedureType,
   declarationType: DeclarationType,
   tirCarnetReference: Option[String],
-  securityDetailsType: SecurityType,
-  detailsConfirmed: Boolean
+  securityDetailsType: SecurityType
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
-    Some(controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+  override def page: Option[Section[_]] = Some(PreTaskListSection)
 }
 
 object PreTaskListDomain {
@@ -73,8 +71,7 @@ object PreTaskListDomain {
       ProcedureTypePage.reader,
       DeclarationTypePage.reader,
       tirCarnetReferenceReader,
-      SecurityDetailsTypePage.reader,
-      DetailsConfirmedPage.mandatoryReader(identity)
+      SecurityDetailsTypePage.reader
     ).map(PreTaskListDomain.apply).apply(Nil)
 
   implicit val format: OFormat[PreTaskListDomain] = Json.format[PreTaskListDomain]

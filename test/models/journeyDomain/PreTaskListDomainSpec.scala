@@ -25,6 +25,7 @@ import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.preTaskList._
+import pages.sections.PreTaskListSection
 
 class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
@@ -38,7 +39,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
     val securityDetails           = arbitrary[SecurityType].sample.value
     val nonTirDeclarationType     = arbitrary[DeclarationType](arbitraryNonTIRDeclarationType).sample.value
     val tirDeclarationType        = arbitrary[DeclarationType](arbitraryTIRDeclarationType).sample.value
-    val detailsConfirmed          = true
 
     "can be parsed from UserAnswers" - {
 
@@ -51,7 +51,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
           .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
-          .unsafeSetVal(DetailsConfirmedPage)(detailsConfirmed)
 
         val expectedResult = PreTaskListDomain(
           localReferenceNumber = emptyUserAnswers.lrn,
@@ -60,13 +59,21 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           procedureType = Normal,
           declarationType = tirDeclarationType,
           tirCarnetReference = Some(carnetRef),
-          securityDetailsType = securityDetails,
-          detailsConfirmed = detailsConfirmed
+          securityDetailsType = securityDetails
         )
 
-        val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
+        val result = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
 
-        result.value mustBe expectedResult
+        result.value.value mustBe expectedResult
+        result.value.pages mustBe Seq(
+          AdditionalDeclarationTypePage,
+          OfficeOfDeparturePage,
+          ProcedureTypePage,
+          DeclarationTypePage,
+          TIRCarnetReferencePage,
+          SecurityDetailsTypePage,
+          PreTaskListSection
+        )
       }
 
       "when a non-TIR declaration" in {
@@ -77,7 +84,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(ProcedureTypePage)(procedureType)
           .unsafeSetVal(DeclarationTypePage)(nonTirDeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
-          .unsafeSetVal(DetailsConfirmedPage)(detailsConfirmed)
 
         val expectedResult = PreTaskListDomain(
           localReferenceNumber = emptyUserAnswers.lrn,
@@ -86,14 +92,20 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           procedureType = procedureType,
           declarationType = nonTirDeclarationType,
           tirCarnetReference = None,
-          securityDetailsType = securityDetails,
-          detailsConfirmed = detailsConfirmed
+          securityDetailsType = securityDetails
         )
 
-        val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(userAnswers)
+        val result = UserAnswersReader[PreTaskListDomain].run(userAnswers)
 
-        result.value mustBe expectedResult
-
+        result.value.value mustBe expectedResult
+        result.value.pages mustBe Seq(
+          AdditionalDeclarationTypePage,
+          OfficeOfDeparturePage,
+          ProcedureTypePage,
+          DeclarationTypePage,
+          SecurityDetailsTypePage,
+          PreTaskListSection
+        )
       }
     }
 
@@ -108,9 +120,16 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
 
-        val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
+        val result = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
 
         result.left.value.page mustBe TIRCarnetReferencePage
+        result.left.value.pages mustBe Seq(
+          AdditionalDeclarationTypePage,
+          OfficeOfDeparturePage,
+          ProcedureTypePage,
+          DeclarationTypePage,
+          TIRCarnetReferencePage
+        )
       }
 
       "when a TIR with a GB customs office" in {
@@ -124,41 +143,15 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
           .unsafeSetVal(DetailsConfirmedPage)(true)
 
-        val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
+        val result = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
 
         result.left.value.page mustBe DeclarationTypePage
-      }
-
-      "when details not confirmed" - {
-
-        "when false" in {
-
-          val userAnswers = emptyUserAnswers
-            .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
-            .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
-            .unsafeSetVal(ProcedureTypePage)(procedureType)
-            .unsafeSetVal(DeclarationTypePage)(nonTirDeclarationType)
-            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
-            .unsafeSetVal(DetailsConfirmedPage)(false)
-
-          val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(userAnswers)
-
-          result.left.value.page mustBe DetailsConfirmedPage
-        }
-
-        "when undefined" in {
-
-          val userAnswers = emptyUserAnswers
-            .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
-            .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
-            .unsafeSetVal(ProcedureTypePage)(procedureType)
-            .unsafeSetVal(DeclarationTypePage)(nonTirDeclarationType)
-            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
-
-          val result: EitherType[PreTaskListDomain] = UserAnswersReader[PreTaskListDomain].run(userAnswers)
-
-          result.left.value.page mustBe DetailsConfirmedPage
-        }
+        result.left.value.pages mustBe Seq(
+          AdditionalDeclarationTypePage,
+          OfficeOfDeparturePage,
+          ProcedureTypePage,
+          DeclarationTypePage
+        )
       }
     }
   }

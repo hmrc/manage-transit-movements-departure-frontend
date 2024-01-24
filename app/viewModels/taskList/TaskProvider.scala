@@ -16,9 +16,8 @@
 
 package viewModels.taskList
 
-import models.journeyDomain.UserAnswersReader
 import models.journeyDomain.Stage.AccessingJourney
-import models.journeyDomain.{JourneyDomainModel, ReaderError}
+import models.journeyDomain.{JourneyDomainModel, ReaderError, ReaderSuccess, UserAnswersReader}
 import models.{CheckMode, NormalMode, UserAnswers}
 import pages.sections.Section
 import play.api.libs.json.{JsValue, Reads}
@@ -51,13 +50,13 @@ private[viewModels] class TaskProvider(userAnswers: UserAnswers) {
       inProgressRoute: Option[Call] = None
     )(implicit rds: Reads[U], userAnswersReader: UserAnswersReader[T]): (TaskStatus, Option[String]) = {
       lazy val (status, onwardRoute) = userAnswersReader.run(userAnswers) match {
-        case Left(ReaderError(page, _)) =>
+        case Left(ReaderError(page, _, _)) =>
           val route = page.route(userAnswers, NormalMode).map(_.url)
           userAnswers.get(section) match {
             case Some(_) => (InProgress, inProgressRoute.map(_.url).orElse(route))
             case None    => (NotStarted, route)
           }
-        case Right(value) => (Completed, value.routeIfCompleted(userAnswers, CheckMode, AccessingJourney).map(_.url))
+        case Right(ReaderSuccess(value, _)) => (Completed, value.routeIfCompleted(userAnswers, CheckMode, AccessingJourney).map(_.url))
       }
 
       readerIfDependentTaskCompleted match {

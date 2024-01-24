@@ -200,22 +200,23 @@ package object journeyDomain {
     def toSeq: Read[Seq[A]]       = value(_).map(_.toSeq)
   }
 
-  implicit class RichOptionRead[A](value: Read[Option[A]]) {
-    def flatten: Read[A] = value.apply(_).flatMap {
-      case ReaderSuccess(value, pages) => ReaderSuccess(value.map(_.flatten))
+  implicit class RichOptionOptionRead[A](value: Read[Option[Option[A]]]) {
+
+    def flatten: Read[Option[A]] = value.apply(_).flatMap {
+      case ReaderSuccess(value, pages) => ReaderSuccess(value.flatten, pages).toUserAnswersReader
     }
   }
 
-  implicit class RichTuple8[A, B, C, D, E, F, G, H](value: (Read[A], Read[B], Read[C], Read[D], Read[E], Read[F], Read[G], Read[H])) {
+  implicit class RichTuple8[A, B, C, D, E, F, G](value: (Read[A], Read[B], Read[C], Read[D], Read[E], Read[F], Read[G])) {
 
-    def map[T <: JourneyDomainModel](fun: (A, B, C, D, E, F, G, H) => T): Read[T] =
+    def map[T <: JourneyDomainModel](fun: (A, B, C, D, E, F, G) => T): Read[T] =
       to {
-        case (a, b, c, d, e, f, g, h) =>
-          val t = fun(a, b, c, d, e, f, g, h)
+        case (a, b, c, d, e, f, g) =>
+          val t = fun(a, b, c, d, e, f, g)
           pages => ReaderSuccess(t, pages.append(t.page)).toUserAnswersReader
       }
 
-    def to[T](fun: (A, B, C, D, E, F, G, H) => Read[T]): Read[T] = pages =>
+    def to[T](fun: (A, B, C, D, E, F, G) => Read[T]): Read[T] = pages =>
       for {
         a      <- value._1(pages)
         b      <- value._2(a.pages)
@@ -224,8 +225,7 @@ package object journeyDomain {
         e      <- value._5(d.pages)
         f      <- value._6(e.pages)
         g      <- value._7(f.pages)
-        h      <- value._8(g.pages)
-        reader <- fun(a.value, b.value, c.value, d.value, e.value, f.value, g.value, h.value)(h.pages)
+        reader <- fun(a.value, b.value, c.value, d.value, e.value, f.value, g.value)(g.pages)
       } yield reader
   }
 }
