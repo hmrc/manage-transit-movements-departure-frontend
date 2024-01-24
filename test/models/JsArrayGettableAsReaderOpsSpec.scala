@@ -17,7 +17,7 @@
 package models
 
 import base.SpecBase
-import models.domain.JsArrayGettableAsReaderOps
+import models.journeyDomain.JsArrayGettableAsReaderOps
 import play.api.libs.json._
 import queries.Gettable
 

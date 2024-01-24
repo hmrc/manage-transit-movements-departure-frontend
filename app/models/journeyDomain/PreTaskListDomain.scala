@@ -19,7 +19,6 @@ package models.journeyDomain
 import cats.implicits._
 import config.Constants._
 import models.ProcedureType.Normal
-import models.domain._
 import models.reference.{AdditionalDeclarationType, CustomsOffice, DeclarationType, SecurityType}
 import models.{LocalReferenceNumber, Mode, ProcedureType, UserAnswers}
 import pages.preTaskList._

@@ -16,7 +16,7 @@
 
 import cats.data.ReaderT
 import models.UserAnswers
-import models.domain.UserAnswersReader
+import models.journeyDomain.UserAnswersReader
 import models.journeyDomain.{JourneyDomainModel, WriterError}
 import models.requests.MandatoryDataRequest
 import navigation.UserAnswersNavigator

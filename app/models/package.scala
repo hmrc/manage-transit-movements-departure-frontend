@@ -15,7 +15,7 @@
  */
 
 import cats.implicits._
-import models.domain.UserAnswersReader
+import models.journeyDomain.UserAnswersReader
 import play.api.libs.json._
 
 import scala.annotation.nowarn

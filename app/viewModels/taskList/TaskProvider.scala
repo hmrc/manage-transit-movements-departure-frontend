@@ -16,7 +16,7 @@
 
 package viewModels.taskList
 
-import models.domain.UserAnswersReader
+import models.journeyDomain.UserAnswersReader
 import models.journeyDomain.Stage.AccessingJourney
 import models.journeyDomain.{JourneyDomainModel, ReaderError}
 import models.{CheckMode, NormalMode, UserAnswers}

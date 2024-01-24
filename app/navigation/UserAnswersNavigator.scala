@@ -16,7 +16,7 @@
 
 package navigation
 
-import models.domain.UserAnswersReader
+import models.journeyDomain.UserAnswersReader
 import models.journeyDomain.Stage.CompletingJourney
 import models.journeyDomain.{JourneyDomainModel, ReaderError, Stage}
 import models.{Mode, UserAnswers}

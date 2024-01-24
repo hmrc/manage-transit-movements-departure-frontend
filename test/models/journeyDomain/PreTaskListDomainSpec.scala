@@ -21,7 +21,6 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.Generators
 import models.ProcedureType
 import models.ProcedureType.Normal
-import models.domain.{EitherType, UserAnswersReader}
 import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen

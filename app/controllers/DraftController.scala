@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.Actions
-import models.domain.UserAnswersReader
+import models.journeyDomain.UserAnswersReader
 import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, NormalMode}
 import navigation.PreTaskListNavigatorProvider

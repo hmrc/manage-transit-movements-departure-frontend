@@ -19,7 +19,7 @@ package controllers.preTaskList
 import com.google.inject.Inject
 import controllers.actions.{Actions, PreTaskListCompletedAction}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import models.domain.UserAnswersReader
+import models.journeyDomain.UserAnswersReader
 import models.journeyDomain.{PreTaskListDomain, ReaderError}
 import models.{LocalReferenceNumber, NormalMode}
 import pages.preTaskList.DetailsConfirmedPage
