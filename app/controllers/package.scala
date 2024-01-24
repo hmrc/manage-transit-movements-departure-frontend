@@ -16,8 +16,7 @@
 
 import cats.data.ReaderT
 import models.UserAnswers
-import models.domain.UserAnswersReader
-import models.journeyDomain.{JourneyDomainModel, WriterError}
+import models.journeyDomain.{PreTaskListDomain, WriterError}
 import models.requests.MandatoryDataRequest
 import navigation.UserAnswersNavigator
 import pages.QuestionPage
@@ -26,7 +25,6 @@ import play.api.mvc.Results.Redirect
 import play.api.mvc.{Call, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
-import viewModels.taskList.Task
 import viewModels.taskList.TaskStatus._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,7 +36,33 @@ package object controllers {
   type UserAnswersWriter[A] = ReaderT[EitherType, UserAnswers, A]
   type Write[A]             = (QuestionPage[A], UserAnswers)
 
+  private object UserAnswersWriter {
+
+    def updateTask[A](page: QuestionPage[A])(f: String => EitherType[Write[A]]): EitherType[Write[A]] =
+      page.path.path.headOption.map(_.toJsonString) match {
+        case Some(section) => f(section)
+        case None          => Left(WriterError(page, Some(s"Failed to find section in JSON path ${page.path}")))
+      }
+
+    def updateTask[A](page: QuestionPage[A], section: String, userAnswers: UserAnswers): EitherType[Write[A]] = {
+      val status = PreTaskListDomain.reader.run(userAnswers) match {
+        case Left(_)  => InProgress
+        case Right(_) => Completed
+      }
+      Right((page, userAnswers.updateTask(section, status)))
+    }
+  }
+
   implicit class SettableOps[A](page: QuestionPage[A]) {
+
+    def updateTask(): UserAnswersWriter[Write[A]] =
+      ReaderT[EitherType, UserAnswers, Write[A]] {
+        userAnswers =>
+          UserAnswersWriter.updateTask(page) {
+            section =>
+              UserAnswersWriter.updateTask(page, section, userAnswers)
+          }
+      }
 
     def writeToUserAnswers(value: A)(implicit format: Format[A]): UserAnswersWriter[Write[A]] =
       ReaderT[EitherType, UserAnswers, Write[A]](
@@ -70,21 +94,11 @@ package object controllers {
           }
       }
 
-    def updateTask[T <: JourneyDomainModel]()(implicit reads: UserAnswersReader[T]): UserAnswersWriter[Write[A]] =
+    def updateTask(): UserAnswersWriter[Write[A]] =
       userAnswersWriter.flatMapF {
         case (page, userAnswers) =>
-          page.path.path.headOption.map(_.toJsonString) match {
-            case Some(section) =>
-              val status = UserAnswersReader[T].run(userAnswers) match {
-                case Left(_)  => InProgress
-                case Right(_) => Completed
-              }
-              Task.apply(section, status) match {
-                case Some(task) => Right((page, userAnswers.updateTask(task)))
-                case None       => Left(WriterError(page, Some(s"Failed to find task for section $section")))
-              }
-            case None =>
-              Left(WriterError(page, Some(s"Failed to find section in JSON path ${page.path}")))
+          UserAnswersWriter.updateTask(page) {
+            section => UserAnswersWriter.updateTask(page, section, userAnswers)
           }
       }
 
@@ -114,7 +128,7 @@ package object controllers {
 
     def navigate()(implicit navigator: UserAnswersNavigator, executionContext: ExecutionContext): Future[Result] =
       navigate {
-        case (_, userAnswers) => navigator.nextPage(userAnswers)
+        case (page, userAnswers) => navigator.nextPage(userAnswers, Some(page))
       }
 
     def navigateTo(call: Call)(implicit executionContext: ExecutionContext): Future[Result] =

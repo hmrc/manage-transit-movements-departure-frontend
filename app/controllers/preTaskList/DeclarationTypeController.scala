@@ -19,7 +19,6 @@ package controllers.preTaskList
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
-import models.journeyDomain.PreTaskListDomain
 import models.reference.DeclarationType
 import models.{LocalReferenceNumber, Mode}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
@@ -86,7 +85,7 @@ class DeclarationTypeController @Inject() (
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, declarationTypes, lrn, mode))),
                 value => {
                   implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                  DeclarationTypePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
+                  DeclarationTypePage.writeToUserAnswers(value).writeToSession().navigate()
                 }
               )
         }

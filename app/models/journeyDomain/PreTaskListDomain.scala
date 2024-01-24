@@ -16,15 +16,13 @@
 
 package models.journeyDomain
 
-import cats.implicits._
 import config.Constants._
 import models.ProcedureType.Normal
-import models.domain._
 import models.reference.{AdditionalDeclarationType, CustomsOffice, DeclarationType, SecurityType}
-import models.{LocalReferenceNumber, Mode, ProcedureType, UserAnswers}
+import models.{LocalReferenceNumber, ProcedureType, UserAnswers}
 import pages.preTaskList._
+import pages.sections.{PreTaskListSection, Section}
 import play.api.libs.json.{Json, OFormat}
-import play.api.mvc.Call
 
 case class PreTaskListDomain(
   localReferenceNumber: LocalReferenceNumber,
@@ -33,48 +31,48 @@ case class PreTaskListDomain(
   procedureType: ProcedureType,
   declarationType: DeclarationType,
   tirCarnetReference: Option[String],
-  securityDetailsType: SecurityType,
-  detailsConfirmed: Boolean
+  securityDetailsType: SecurityType
 ) extends JourneyDomainModel {
 
-  override def routeIfCompleted(userAnswers: UserAnswers, mode: Mode, stage: Stage): Option[Call] =
-    Some(controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+  override def page: Option[Section[_]] = Some(PreTaskListSection)
 }
 
 object PreTaskListDomain {
 
-  private val localReferenceNumber: UserAnswersReader[LocalReferenceNumber] = {
-    val fn: UserAnswers => EitherType[LocalReferenceNumber] = ua => Right(ua.lrn)
-    UserAnswersReader(fn)
-  }
-
-  private val tirCarnetReference: UserAnswersReader[Option[String]] =
-    OfficeOfDeparturePage.reader.map(_.countryCode).flatMap {
-      case XI =>
-        ProcedureTypePage
-          .filterOptionalDependent(_ == Normal) {
-            DeclarationTypePage.filterOptionalDependent(_.isTIR) {
-              TIRCarnetReferencePage.reader
-            }
-          }
-          .map(_.flatten)
-      case _ =>
-        DeclarationTypePage.filterMandatoryDependent(!_.isTIR) {
-          none[String].pure[UserAnswersReader]
-        }
+  private val localReferenceNumberReader: Read[LocalReferenceNumber] =
+    UserAnswersReader.success {
+      (ua: UserAnswers) => ua.lrn
     }
+
+  private val tirCarnetReferenceReader: Read[Option[String]] =
+    OfficeOfDeparturePage.reader
+      .to {
+        _.countryCode match {
+          case XI =>
+            ProcedureTypePage
+              .filterOptionalDependent(_ == Normal) {
+                DeclarationTypePage.filterOptionalDependent(_.isTIR) {
+                  TIRCarnetReferencePage.reader
+                }
+              }
+              .flatten
+          case _ =>
+            DeclarationTypePage.filterMandatoryDependent(!_.isTIR) {
+              UserAnswersReader.none
+            }
+        }
+      }
 
   implicit val reader: UserAnswersReader[PreTaskListDomain] =
     (
-      localReferenceNumber,
+      localReferenceNumberReader,
       AdditionalDeclarationTypePage.reader,
       OfficeOfDeparturePage.reader,
       ProcedureTypePage.reader,
       DeclarationTypePage.reader,
-      tirCarnetReference,
-      SecurityDetailsTypePage.reader,
-      DetailsConfirmedPage.mandatoryReader(identity)
-    ).tupled.map((PreTaskListDomain.apply _).tupled)
+      tirCarnetReferenceReader,
+      SecurityDetailsTypePage.reader
+    ).map(PreTaskListDomain.apply).apply(Nil)
 
   implicit val format: OFormat[PreTaskListDomain] = Json.format[PreTaskListDomain]
 

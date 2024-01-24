@@ -72,7 +72,7 @@ class LocalReferenceNumberController @Inject() (
               userAnswers   <- sessionRepository.get(lrn)
               result <- (alreadyExists, userAnswers) match {
                 case (true, Some(userAnswers)) if userAnswers.status == SubmissionState.NotSubmitted =>
-                  Future.successful(Redirect(navigatorProvider(CheckMode).nextPage(userAnswers)))
+                  Future.successful(Redirect(navigatorProvider(CheckMode).nextPage(userAnswers, None)))
                 case (true, _) =>
                   val formWithErrors = form.withError(FormError("value", s"$prefix.error.alreadyExists"))
                   Future.successful(BadRequest(view(formWithErrors)))
@@ -83,7 +83,7 @@ class LocalReferenceNumberController @Inject() (
                       _ => sessionRepository.get(lrn)
                     }
                     .map {
-                      case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers))
+                      case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers, None))
                       case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
                     }
                 case _ =>

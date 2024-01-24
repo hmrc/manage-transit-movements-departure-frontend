@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package pages.preTaskList
+package models.journeyDomain
 
-import pages.behaviours.PageBehaviours
+case class ReaderSuccess[A](value: A, pages: Pages) {
 
-class DetailsConfirmedPageSpec extends PageBehaviours {
+  def to[T](f: A => T): ReaderSuccess[T] =
+    ReaderSuccess(f(value), pages)
 
-  "DetailsConfirmedPage" - {
+  def toSeq: ReaderSuccess[Seq[A]] =
+    to(Seq(_))
 
-    beRetrievable[Boolean](DetailsConfirmedPage)
+  def toOption: ReaderSuccess[Option[A]] =
+    to(Option(_))
 
-    beSettable[Boolean](DetailsConfirmedPage)
-
-    beRemovable[Boolean](DetailsConfirmedPage)
-  }
+  def toUserAnswersReader: UserAnswersReader[A] =
+    UserAnswersReader.success(value).apply(pages)
 }

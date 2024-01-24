@@ -35,7 +35,7 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             val navigator         = navigatorProvider.apply(mode)
 
             navigator
-              .nextPage(answers)
+              .nextPage(answers, None)
               .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }

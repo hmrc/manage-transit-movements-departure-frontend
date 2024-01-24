@@ -19,7 +19,6 @@ package controllers.preTaskList
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.preTaskList.TIRCarnetReferenceFormProvider
-import models.journeyDomain.PreTaskListDomain
 import models.{LocalReferenceNumber, Mode}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.preTaskList.TIRCarnetReferencePage
@@ -74,7 +73,7 @@ class TIRCarnetReferenceController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
             value => {
               implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              TIRCarnetReferencePage.writeToUserAnswers(value).updateTask[PreTaskListDomain]().writeToSession().navigate()
+              TIRCarnetReferencePage.writeToUserAnswers(value).writeToSession().navigate()
             }
           )
     }

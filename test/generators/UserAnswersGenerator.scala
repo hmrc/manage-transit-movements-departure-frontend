@@ -16,8 +16,7 @@
 
 package generators
 
-import models.domain.UserAnswersReader
-import models.journeyDomain.ReaderError
+import models.journeyDomain.{ReaderError, UserAnswersReader}
 import models.{EoriNumber, LocalReferenceNumber, RichJsObject, SubmissionState, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -42,7 +41,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with PreTaskListUs
 
     def rec(userAnswers: UserAnswers): Gen[UserAnswers] =
       userAnswersReader.run(userAnswers) match {
-        case Left(ReaderError(page, _)) =>
+        case Left(ReaderError(page, _, _)) =>
           generateAnswer
             .apply(page)
             .map {

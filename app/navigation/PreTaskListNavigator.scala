@@ -17,7 +17,7 @@
 package navigation
 
 import models.Mode
-import models.domain.UserAnswersReader
+import models.journeyDomain.UserAnswersReader
 import models.journeyDomain.PreTaskListDomain
 
 import javax.inject.{Inject, Singleton}

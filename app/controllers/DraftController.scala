@@ -17,8 +17,7 @@
 package controllers
 
 import controllers.actions.Actions
-import models.domain.UserAnswersReader
-import models.journeyDomain.PreTaskListDomain
+import models.journeyDomain.{PreTaskListDomain, UserAnswersReader}
 import models.{LocalReferenceNumber, NormalMode}
 import navigation.PreTaskListNavigatorProvider
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,7 +35,7 @@ class DraftController @Inject() (
     implicit request =>
       UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
         case Left(_) =>
-          Redirect(navigatorProvider(NormalMode).nextPage(request.userAnswers))
+          Redirect(navigatorProvider(NormalMode).nextPage(request.userAnswers, None))
         case Right(_) =>
           Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
       }
