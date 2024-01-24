@@ -19,7 +19,7 @@ package models
 import pages._
 import play.api.libs.json._
 import queries.Gettable
-import viewModels.taskList.{Task, TaskStatus}
+import viewModels.taskList.TaskStatus
 
 import scala.util.{Failure, Success, Try}
 
@@ -78,8 +78,8 @@ final case class UserAnswers(
     page.cleanup(None, updatedAnswers)
   }
 
-  def updateTask(task: Task): UserAnswers = {
-    val tasks = this.tasks.updated(task.section, task.status)
+  def updateTask(section: String, status: TaskStatus): UserAnswers = {
+    val tasks = this.tasks.updated(section, status)
     this.copy(tasks = tasks)
   }
 }

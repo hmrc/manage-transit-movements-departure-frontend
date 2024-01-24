@@ -24,7 +24,6 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.preTaskList.DetailsConfirmedPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
@@ -32,6 +31,7 @@ import play.api.test.Helpers._
 import viewModels.preTaskList.PreTaskListViewModel
 import viewModels.preTaskList.PreTaskListViewModel.PreTaskListViewModelProvider
 import viewModels.sections.Section
+import viewModels.taskList.TaskStatus
 import views.html.preTaskList.CheckYourAnswersView
 
 import scala.concurrent.Future
@@ -49,8 +49,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
     "must return OK and the correct view for a GET" in {
       forAll(arbitraryPreTaskListAnswers(emptyUserAnswers), arbitrary[Section]) {
-        (answers, section) =>
-          val userAnswers = answers.removeValue(DetailsConfirmedPage)
+        (userAnswers, section) =>
           setExistingUserAnswers(userAnswers)
 
           when(mockViewModelProvider.apply(any())(any()))
@@ -95,21 +94,26 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     }
 
     "must redirect to task list / declaration summary" in {
-      setExistingUserAnswers(emptyUserAnswers)
+      forAll(arbitraryPreTaskListAnswers(emptyUserAnswers)) {
+        userAnswers =>
+          beforeEach()
 
-      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
+          setExistingUserAnswers(userAnswers)
 
-      val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn).url)
+          when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
-      val result = route(app, request).value
+          val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit(lrn).url)
 
-      status(result) mustEqual SEE_OTHER
+          val result = route(app, request).value
 
-      redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+          status(result) mustEqual SEE_OTHER
 
-      val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
-      userAnswersCaptor.getValue.get(DetailsConfirmedPage).get mustBe true
+          redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(lrn).url
+
+          val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
+          userAnswersCaptor.getValue.tasks.apply(".preTaskList") mustBe TaskStatus.Completed
+      }
     }
   }
 }

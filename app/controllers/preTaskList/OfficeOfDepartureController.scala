@@ -19,7 +19,6 @@ package controllers.preTaskList
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.SelectableFormProvider
-import models.journeyDomain.PreTaskListDomain
 import models.reference.CustomsOffice
 import models.{LocalReferenceNumber, Mode, SelectableList}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
@@ -93,7 +92,6 @@ class OfficeOfDepartureController @Inject() (
                       .appendValue(OfficeOfDepartureInCL112Page, isInCL112)
                       .appendValue(OfficeOfDepartureInCL147Page, isInCL147)
                       .appendValue(OfficeOfDepartureInCL010Page, isInCL010)
-                      .updateTask[PreTaskListDomain]()
                       .writeToSession()
                       .navigate()
                   } yield result

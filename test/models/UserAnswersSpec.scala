@@ -95,14 +95,14 @@ class UserAnswersSpec extends SpecBase {
       "must set task status" - {
         "when task has not previously been set" in {
           val task   = TraderDetailsTask(TaskStatus.InProgress)
-          val result = emptyUserAnswers.updateTask(task)
+          val result = emptyUserAnswers.updateTask(task.section, task.status)
           result.tasks mustBe Map(TraderDetailsTask.section -> TaskStatus.InProgress)
         }
 
         "when task has previously been set" in {
           val tasks       = Map(TraderDetailsTask.section -> TaskStatus.InProgress)
           val updatedTask = TraderDetailsTask(TaskStatus.Completed)
-          val result      = emptyUserAnswers.copy(tasks = tasks).updateTask(updatedTask)
+          val result      = emptyUserAnswers.copy(tasks = tasks).updateTask(updatedTask.section, updatedTask.status)
           result.tasks mustBe Map(TraderDetailsTask.section -> TaskStatus.Completed)
         }
 
@@ -113,7 +113,7 @@ class UserAnswersSpec extends SpecBase {
             TransportTask.section     -> TaskStatus.CannotStartYet
           )
           val updatedTask = TraderDetailsTask(TaskStatus.Completed)
-          val result      = emptyUserAnswers.copy(tasks = tasks).updateTask(updatedTask)
+          val result      = emptyUserAnswers.copy(tasks = tasks).updateTask(updatedTask.section, updatedTask.status)
           result.tasks mustBe Map(
             TraderDetailsTask.section -> TaskStatus.Completed,
             RouteDetailsTask.section  -> TaskStatus.NotStarted,

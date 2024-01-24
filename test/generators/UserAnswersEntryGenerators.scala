@@ -38,7 +38,6 @@ trait UserAnswersEntryGenerators {
       case DeclarationTypePage           => arbitrary[DeclarationType].map(Json.toJson(_))
       case TIRCarnetReferencePage        => Gen.alphaNumStr.map(JsString)
       case SecurityDetailsTypePage       => arbitrary[SecurityType].map(Json.toJson(_))
-      case DetailsConfirmedPage          => Gen.const(true).map(JsBoolean)
     }
   }
 }
