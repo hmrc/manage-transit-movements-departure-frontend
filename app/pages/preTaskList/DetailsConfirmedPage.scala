@@ -29,5 +29,5 @@ case object DetailsConfirmedPage extends QuestionPage[Boolean] {
   override def toString: String = "detailsConfirmed"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
-    Some(controllers.preTaskList.routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn))
+    PreTaskListSection.route(userAnswers, mode)
 }

@@ -39,6 +39,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
     val securityDetails           = arbitrary[SecurityType].sample.value
     val nonTirDeclarationType     = arbitrary[DeclarationType](arbitraryNonTIRDeclarationType).sample.value
     val tirDeclarationType        = arbitrary[DeclarationType](arbitraryTIRDeclarationType).sample.value
+    val detailsConfirmed          = true
 
     "can be parsed from UserAnswers" - {
 
@@ -51,6 +52,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
           .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+          .unsafeSetVal(DetailsConfirmedPage)(detailsConfirmed)
 
         val expectedResult = PreTaskListDomain(
           localReferenceNumber = emptyUserAnswers.lrn,
@@ -59,7 +61,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           procedureType = Normal,
           declarationType = tirDeclarationType,
           tirCarnetReference = Some(carnetRef),
-          securityDetailsType = securityDetails
+          securityDetailsType = securityDetails,
+          detailsConfirmed = detailsConfirmed
         )
 
         val result = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
@@ -84,6 +87,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           .unsafeSetVal(ProcedureTypePage)(procedureType)
           .unsafeSetVal(DeclarationTypePage)(nonTirDeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+          .unsafeSetVal(DetailsConfirmedPage)(detailsConfirmed)
 
         val expectedResult = PreTaskListDomain(
           localReferenceNumber = emptyUserAnswers.lrn,
@@ -92,7 +96,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           procedureType = procedureType,
           declarationType = nonTirDeclarationType,
           tirCarnetReference = None,
-          securityDetailsType = securityDetails
+          securityDetailsType = securityDetails,
+          detailsConfirmed = detailsConfirmed
         )
 
         val result = UserAnswersReader[PreTaskListDomain].run(userAnswers)

@@ -31,7 +31,8 @@ case class PreTaskListDomain(
   procedureType: ProcedureType,
   declarationType: DeclarationType,
   tirCarnetReference: Option[String],
-  securityDetailsType: SecurityType
+  securityDetailsType: SecurityType,
+  detailsConfirmed: Boolean
 ) extends JourneyDomainModel {
 
   override def page: Option[Section[_]] = Some(PreTaskListSection)
@@ -71,7 +72,8 @@ object PreTaskListDomain {
       ProcedureTypePage.reader,
       DeclarationTypePage.reader,
       tirCarnetReferenceReader,
-      SecurityDetailsTypePage.reader
+      SecurityDetailsTypePage.reader,
+      DetailsConfirmedPage.mandatoryReader(identity)
     ).map(PreTaskListDomain.apply).apply(Nil)
 
   implicit val format: OFormat[PreTaskListDomain] = Json.format[PreTaskListDomain]

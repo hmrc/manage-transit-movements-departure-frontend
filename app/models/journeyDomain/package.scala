@@ -123,8 +123,8 @@ package object journeyDomain {
 
     def mandatoryReader(predicate: A => Boolean)(implicit reads: Reads[A]): Read[A] = pages => {
       val fn: UserAnswers => EitherType[ReaderSuccess[A]] = _.get(a) match {
-        case Some(value) if predicate(value) => Right(ReaderSuccess(value, pages.append(a)))
-        case _                               => Left(ReaderError(a, pages.append(a)))
+        case Some(value) if predicate(value) => Right(ReaderSuccess(value, pages))
+        case _                               => Left(ReaderError(a, pages))
       }
       UserAnswersReader(fn)
     }
@@ -207,16 +207,16 @@ package object journeyDomain {
     }
   }
 
-  implicit class RichTuple8[A, B, C, D, E, F, G](value: (Read[A], Read[B], Read[C], Read[D], Read[E], Read[F], Read[G])) {
+  implicit class RichTuple8[A, B, C, D, E, F, G, H](value: (Read[A], Read[B], Read[C], Read[D], Read[E], Read[F], Read[G], Read[H])) {
 
-    def map[T <: JourneyDomainModel](fun: (A, B, C, D, E, F, G) => T): Read[T] =
+    def map[T <: JourneyDomainModel](fun: (A, B, C, D, E, F, G, H) => T): Read[T] =
       to {
-        case (a, b, c, d, e, f, g) =>
-          val t = fun(a, b, c, d, e, f, g)
+        case (a, b, c, d, e, f, g, h) =>
+          val t = fun(a, b, c, d, e, f, g, h)
           pages => ReaderSuccess(t, pages.append(t.page)).toUserAnswersReader
       }
 
-    def to[T](fun: (A, B, C, D, E, F, G) => Read[T]): Read[T] = pages =>
+    def to[T](fun: (A, B, C, D, E, F, G, H) => Read[T]): Read[T] = pages =>
       for {
         a      <- value._1(pages)
         b      <- value._2(a.pages)
@@ -225,7 +225,8 @@ package object journeyDomain {
         e      <- value._5(d.pages)
         f      <- value._6(e.pages)
         g      <- value._7(f.pages)
-        reader <- fun(a.value, b.value, c.value, d.value, e.value, f.value, g.value)(g.pages)
+        h      <- value._8(g.pages)
+        reader <- fun(a.value, b.value, c.value, d.value, e.value, f.value, g.value, h.value)(h.pages)
       } yield reader
   }
 }

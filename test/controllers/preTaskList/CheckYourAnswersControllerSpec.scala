@@ -49,7 +49,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
     "must return OK and the correct view for a GET" in {
       forAll(arbitraryPreTaskListAnswers(emptyUserAnswers), arbitrary[Section]) {
-        (userAnswers, section) =>
+        (answers, section) =>
+          val userAnswers = answers.removeValue(DetailsConfirmedPage)
           setExistingUserAnswers(userAnswers)
 
           when(mockViewModelProvider.apply(any())(any()))

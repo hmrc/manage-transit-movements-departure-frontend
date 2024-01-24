@@ -18,13 +18,12 @@ package controllers.actions
 
 import base.SpecBase
 import generators.Generators
-import models.UserAnswers
 import models.requests.DataRequest
-import org.scalacheck.Gen
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.preTaskList.DetailsConfirmedPage
 import play.api.mvc.Result
 import play.api.test.Helpers._
+import viewModels.taskList.{PreTaskListTask, TaskStatus}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -33,31 +32,28 @@ class PreTaskListCompletedActionSpec extends SpecBase with ScalaCheckPropertyChe
 
   private class Harness() extends PreTaskListCompletedActionImpl() {
 
-    def callFilter(userAnswers: UserAnswers): Future[Option[Result]] = {
-      val request = DataRequest(fakeRequest, eoriNumber, userAnswers)
+    def callFilter(tasks: Map[String, TaskStatus]): Future[Option[Result]] = {
+      val request = DataRequest(fakeRequest, eoriNumber, emptyUserAnswers.copy(tasks = tasks))
       filter(request)
     }
   }
 
-  "PreTaskListCompletedAction" - {
+  "CheckTaskAlreadyCompletedAction" - {
 
-    "return None if details not yet confirmed" in {
-      val userAnswersGen = Gen.oneOf(
-        emptyUserAnswers,
-        emptyUserAnswers.setValue(DetailsConfirmedPage, false)
-      )
-      forAll(userAnswersGen) {
-        userAnswers =>
+    "return None if dependent section is incomplete" in {
+      forAll(arbitrary[TaskStatus](arbitraryIncompleteTaskStatus)) {
+        taskStatus =>
           val action = new Harness()
-          val result = action.callFilter(userAnswers).futureValue
+          val tasks  = Map(PreTaskListTask.section -> taskStatus)
+          val result = action.callFilter(tasks).futureValue
           result mustBe None
       }
     }
 
-    "return to task list page if details have been confirmed" in {
-      val action      = new Harness()
-      val userAnswers = emptyUserAnswers.setValue(DetailsConfirmedPage, true)
-      val result      = action.callFilter(userAnswers).map(_.value)
+    "return to task list page if section has already been completed" in {
+      val action = new Harness()
+      val tasks  = Map(PreTaskListTask.section -> TaskStatus.Completed)
+      val result = action.callFilter(tasks).map(_.value)
       redirectLocation(result).value mustBe controllers.routes.TaskListController.onPageLoad(emptyUserAnswers.lrn).url
     }
   }
