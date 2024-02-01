@@ -14,11 +14,10 @@
  * limitations under the License.
  *@
 
-@import config.{FrontendAppConfig, RenderConfig}
+@import config.{FrontendAppConfig, RenderConfig, MyBetaBanner}
 @import models.LocalReferenceNumber
 @import resources._
 @import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
-@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.timeoutdialog.TimeoutDialog
 @import views.utils.ViewUtils._
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
@@ -30,7 +29,7 @@
     hmrcStandardPage: HmrcStandardPage,
     hmrcInternalHead: HmrcInternalHead,
     hmrcTimeoutDialog: HmrcTimeoutDialog,
-    standardBetaBanner: StandardBetaBanner,
+    betaBanner: MyBetaBanner,
     stylesheets: Stylesheets,
     javascripts: Javascripts,
     govukBackLink: GovukBackLink,
@@ -62,8 +61,15 @@
 
 @mainContentWithGetHelp = {
     @mainContent
-    @hmrcReportTechnicalIssueHelper()
+    @if(renderConfig.isTraderTest) {
+        <a class="govuk-link hmrc-report-technical-issue govuk-!-display-none-print" href="@renderConfig.mailto">
+            @messages("site.email.link", renderConfig.feedbackEmail)
+        </a>
+    } else {
+        @hmrcReportTechnicalIssueHelper()
+    }
 }
+
 @hmrcStandardPage(
     HmrcStandardPageParams(
         serviceURLs = ServiceURLs(
@@ -71,7 +77,7 @@
             signOutUrl = if (canSignOut) Some(renderConfig.signOutAndUnlockUrl(lrn)) else None,
         ),
         banners = Banners(
-            phaseBanner = Some(standardBetaBanner()),
+            phaseBanner = Some(betaBanner()),
             userResearchBanner = if (renderConfig.showUserResearchBanner) Some(UserResearchBanner(url = renderConfig.userResearchUrl)) else None
         ),
         templateOverrides = TemplateOverrides(
