@@ -20,6 +20,8 @@ import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import models.LocalReferenceNumber
 import play.api.Configuration
+import play.api.i18n.Messages
+import play.api.mvc.Request
 
 @Singleton
 class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderConfig {
@@ -34,6 +36,29 @@ class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderCo
   override val userResearchUrl: String         = configuration.get[String]("urls.userResearch")
 
   override def signOutAndUnlockUrl(lrn: Option[LocalReferenceNumber]): String = lrn.map(routes.DeleteLockController.delete(_).url).getOrElse(signOutUrl)
+
+  override val isTraderTest: Boolean = configuration.get[Boolean]("trader-test.enabled")
+  override val feedbackEmail: String = configuration.get[String]("trader-test.feedback.email")
+  override val feedbackForm: String  = configuration.get[String]("trader-test.feedback.link")
+
+  override def mailto(implicit request: Request[_], messages: Messages): String = {
+    val subject = messages("site.email.subject")
+    val body = {
+      val newLine      = "%0D%0A"
+      val newParagraph = s"$newLine$newLine"
+      s"""
+         |URL: ${request.uri}$newParagraph
+         |Tell us how we can help you here.$newParagraph
+         |Give us a brief description of the issue or question, including detail like…$newLine
+         | - The screens where you experienced the issue$newLine
+         | - What you were trying to do at the time$newLine
+         | - The information you entered$newParagraph
+         |Please include your name and phone number and we’ll get in touch.
+         |""".stripMargin
+    }
+
+    s"mailto:$feedbackEmail?subject=$subject&body=$body"
+  }
 }
 
 trait RenderConfig {
@@ -43,4 +68,8 @@ trait RenderConfig {
   val countdownSeconds: Int
   val showUserResearchBanner: Boolean
   val userResearchUrl: String
+  val isTraderTest: Boolean
+  val feedbackEmail: String
+  val feedbackForm: String
+  def mailto(implicit request: Request[_], messages: Messages): String
 }
