@@ -61,16 +61,20 @@ class UserAnswersNavigatorSpec extends SpecBase {
       "when in normal mode" - {
         val mode = NormalMode
 
-        "and no pages answered" in {
-          val currentPage             = None
-          val answeredPages           = Nil
-          val userAnswersReaderResult = Left(ReaderError(FooPage, answeredPages))
+        "and currentPage is None" - {
+          "and userAnswersReaderResult is a Left" - {
+            "must redirect to first answered page" in {
+              val currentPage             = None
+              val answeredPages           = Seq(FooPage, BarPage)
+              val userAnswersReaderResult = Left(ReaderError(BazPage, answeredPages))
 
-          val result = UserAnswersNavigator
-            .nextPage(currentPage, userAnswersReaderResult, mode)
-            .apply(userAnswers, stage)
+              val result = UserAnswersNavigator
+                .nextPage(currentPage, userAnswersReaderResult, mode)
+                .apply(userAnswers, stage)
 
-          result.value.url mustBe "/foo"
+              result.value.url mustBe "/foo"
+            }
+          }
         }
 
         "and on FooPage" - {
@@ -132,6 +136,22 @@ class UserAnswersNavigatorSpec extends SpecBase {
 
       "when in check mode" - {
         val mode = CheckMode
+
+        "and currentPage is None" - {
+          "and userAnswersReaderResult is a Left" - {
+            "must redirect to first answered page" in {
+              val currentPage             = None
+              val answeredPages           = Seq(FooPage, BarPage)
+              val userAnswersReaderResult = Left(ReaderError(BazPage, answeredPages))
+
+              val result = UserAnswersNavigator
+                .nextPage(currentPage, userAnswersReaderResult, mode)
+                .apply(userAnswers, stage)
+
+              result.value.url mustBe "/foo"
+            }
+          }
+        }
 
         "and on FooPage" - {
           val currentPage = Some(FooPage)

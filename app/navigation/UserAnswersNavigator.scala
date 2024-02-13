@@ -80,7 +80,7 @@ object UserAnswersNavigator extends Logging {
           t.routeIfCompleted(_, mode, _)
         }
       case Left(ReaderError(unansweredPage, answeredPages, _)) =>
-        rec(answeredPages.toList, exit = false) {
+        rec(answeredPages.toList, exit = currentPage.isEmpty) {
           (userAnswers, _) => unansweredPage.route(userAnswers, mode)
         }
     }
