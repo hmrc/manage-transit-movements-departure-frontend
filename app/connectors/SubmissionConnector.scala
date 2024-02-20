@@ -18,6 +18,7 @@ package connectors
 
 import config.FrontendAppConfig
 import play.api.Logging
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
@@ -37,16 +38,16 @@ class SubmissionConnector @Inject() (
     val url = url"$baseUrl/declaration/submit"
     http
       .post(url)
-      .withBody[String](lrn)
-      .stream
+      .withBody(Json.toJson(lrn))
+      .execute[HttpResponse]
   }
 
   def postAmendment(lrn: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val url = url"$baseUrl/declaration/submit-amendment"
     http
       .post(url)
-      .withBody[String](lrn)
-      .stream
+      .withBody(Json.toJson(lrn))
+      .execute[HttpResponse]
   }
 
   def getExpiryInDays(lrn: String)(implicit hc: HeaderCarrier): Future[Long] = {

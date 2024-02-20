@@ -24,7 +24,7 @@ import play.api.http.Status._
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -53,7 +53,7 @@ class CacheConnector @Inject() (
     http
       .post(url)
       .withBody(Json.toJson(userAnswers))
-      .stream
+      .execute[HttpResponse]
       .map(_.status == OK)
   }
 
@@ -61,7 +61,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/user-answers/${userAnswers.lrn}/lock"
     http
       .get(url)
-      .stream
+      .execute[HttpResponse]
       .map {
         _.status match {
           case OK     => Unlocked
@@ -75,7 +75,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/user-answers/${userAnswers.lrn}/lock"
     http
       .delete(url)
-      .stream
+      .execute[HttpResponse]
       .map(_.status == OK)
   }
 
@@ -83,8 +83,8 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/user-answers"
     http
       .put(url)
-      .withBody[String](lrn.toString)
-      .stream
+      .withBody(Json.toJson(lrn.toString))
+      .execute[HttpResponse]
       .map(_.status == OK)
   }
 
@@ -92,7 +92,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/user-answers/$lrn"
     http
       .delete(url)
-      .stream
+      .execute[HttpResponse]
       .map(_.status == OK)
   }
 

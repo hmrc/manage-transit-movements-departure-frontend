@@ -277,7 +277,7 @@ class ReferenceDataConnectorSpec
     "getCustomsOfficesOfDepartureForCountry" - {
       "must return a successful future response with a sequence of CustomsOffices" in {
         val countryIds = Seq("GB", "XI")
-        val url        = s"/$baseUrl/lists/CustomsOffices?data.countryId=GB%26data.countryId=XI&data.roles.role=DEP"
+        val url        = s"/$baseUrl/lists/CustomsOffices?data.countryId=XI&data.countryId=GB&data.roles.role=DEP"
 
         server.stubFor(
           get(urlEqualTo(url))

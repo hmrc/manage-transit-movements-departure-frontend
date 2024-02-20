@@ -45,15 +45,16 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   def getCustomsOfficesOfDepartureForCountry(
     countryCodes: String*
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[CustomsOffice]] = {
-    lazy val countryQuery = countryCodes.toSeq
+    val countryQuery = countryCodes
       .map {
-        countryId => s"data.countryId=$countryId"
+        countryId => "data.countryId" -> countryId
       }
-      .mkString("&")
-    val url = url"${config.customsReferenceDataUrl}/lists/CustomsOffices?$countryQuery&data.roles.role=DEP"
+    val query = countryQuery :+ ("data.roles.role" -> "DEP")
+    val url   = url"${config.customsReferenceDataUrl}/lists/CustomsOffices"
     http
       .get(url)
       .setHeader(version2Header)
+      .transform(_.withQueryStringParameters(query: _*))
       .execute[NonEmptySet[CustomsOffice]]
   }
 
