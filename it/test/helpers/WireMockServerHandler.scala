@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package helper
+package helpers
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
