@@ -17,7 +17,7 @@ or
 ### Running manually or for journey tests
 
 <pre>
-sm2 --start CTC_TRADERS_P5_ACCEPTANCE -r OR
+sm2 --start CTC_TRADERS_P5_ACCEPTANCE
 sm2 --stop MANAGE_TRANSIT_MOVEMENTS_DEPARTURE_FRONTEND
 sbt run
 </pre>
