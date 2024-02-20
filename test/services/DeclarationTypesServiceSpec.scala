@@ -17,6 +17,7 @@
 package services
 
 import base.SpecBase
+import cats.data.NonEmptySet
 import connectors.ReferenceDataConnector
 import generators.Generators
 import models.ProcedureType
@@ -42,7 +43,7 @@ class DeclarationTypesServiceSpec extends SpecBase with BeforeAndAfterEach with 
   private val declarationType5 = DeclarationType("T1", "T1 description")
   private val declarationType6 = DeclarationType("T", "T description")
 
-  private val declarationTypes = Seq(
+  private val declarationTypes = NonEmptySet.of(
     declarationType1,
     declarationType2,
     declarationType3,

@@ -17,9 +17,8 @@ or
 ### Running manually or for journey tests
 
 <pre>
-sm --start CTC_TRADERS_DEPARTURE_P5_ACCEPTANCE -r OR
-sm --start CTC_TRADERS_DEPARTURE_P5_ACCEPTANCE CTC_TRADERS_API -r // with API running
-sm --stop MANAGE_TRANSIT_MOVEMENTS_DEPARTURE_FRONTEND
+sm2 --start CTC_TRADERS_P5_ACCEPTANCE -r OR
+sm2 --stop MANAGE_TRANSIT_MOVEMENTS_DEPARTURE_FRONTEND
 sbt run
 </pre>
 

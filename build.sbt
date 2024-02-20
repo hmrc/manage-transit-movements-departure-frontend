@@ -1,14 +1,15 @@
 import play.sbt.routes.RoutesKeys
-import sbt.Def
 import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "manage-transit-movements-departure-frontend"
 
-Global / onChangedBuildSource := ReloadOnSourceChanges
+ThisBuild / majorVersion := 0
+ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalafmtOnCompile := true
 
-lazy val root = (project in file("."))
+lazy val microservice = (project in file("."))
   .enablePlugins(
     PlayScala,
     SbtAutoBuildPlugin,
@@ -19,9 +20,6 @@ lazy val root = (project in file("."))
   .settings(inConfig(A11yTest)(org.scalafmt.sbt.ScalafmtPlugin.scalafmtConfigSettings): _*)
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
-  .settings(inConfig(Test)(testSettings): _*)
-  .settings(majorVersion := 0)
-  .settings(scalaVersion := "2.13.12")
   .settings(headerSettings(A11yTest): _*)
   .settings(automateHeaderSettings(A11yTest))
   .settings(
@@ -68,14 +66,18 @@ lazy val root = (project in file("."))
     uglifyCompressOptions := Seq("unused=false", "dead_code=false", "warnings=false"),
     Assets / pipelineStages := Seq(digest, concat, uglify),
     ThisBuild / useSuperShell := false,
-    uglify / includeFilter := GlobFilter("application.js"),
-    ThisBuild / scalafmtOnCompile := true
+    uglify / includeFilter := GlobFilter("application.js")
   )
 
-lazy val testSettings: Seq[Def.Setting[_]] = Seq(
-  fork := true,
-  unmanagedResourceDirectories += baseDirectory.value / "test" / "resources",
-  javaOptions ++= Seq(
-    "-Dconfig.resource=test.application.conf"
+lazy val test = project
+  .settings(
+    fork := true
   )
-)
+
+lazy val it = project
+  .enablePlugins(PlayScala)
+  .dependsOn(microservice % "test->test") // the "test->test" allows reusing test code and test dependencies
+  .settings(
+    libraryDependencies ++= AppDependencies.test,
+    DefaultBuildSettings.itSettings()
+  )

@@ -17,6 +17,7 @@
 package services
 
 import base.SpecBase
+import cats.data.NonEmptySet
 import connectors.ReferenceDataConnector
 import generators.Generators
 import models.reference.Country
@@ -36,7 +37,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
   private val country1: Country = Country("GB")
   private val country2: Country = Country("FR")
   private val country3: Country = Country("ES")
-  private val countries         = Seq(country1, country2, country3)
+  private val countries         = NonEmptySet.of(country1, country2, country3)
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
@@ -51,7 +52,8 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
         when(mockRefDataConnector.getCountries())
           .thenReturn(Future.successful(countries))
 
-        service.getCommunityCountries().futureValue mustBe countries
+        service.getCommunityCountries().futureValue mustBe
+          Seq(country3, country2, country1)
 
         verify(mockRefDataConnector).getCountries()(any(), any())
       }
@@ -63,7 +65,8 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
         when(mockRefDataConnector.getCustomsSecurityAgreementAreaCountries()(any(), any()))
           .thenReturn(Future.successful(countries))
 
-        service.getCustomsSecurityAgreementAreaCountries().futureValue mustBe countries
+        service.getCustomsSecurityAgreementAreaCountries().futureValue mustBe
+          Seq(country3, country2, country1)
 
         verify(mockRefDataConnector).getCustomsSecurityAgreementAreaCountries()(any(), any())
       }
@@ -75,7 +78,8 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
         when(mockRefDataConnector.getCountryCodesCTC()(any(), any()))
           .thenReturn(Future.successful(countries))
 
-        service.getCountryCodesCTC().futureValue mustBe countries
+        service.getCountryCodesCTC().futureValue mustBe
+          Seq(country3, country2, country1)
 
         verify(mockRefDataConnector).getCountryCodesCTC()(any(), any())
       }

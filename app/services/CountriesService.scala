@@ -26,12 +26,12 @@ import scala.concurrent.{ExecutionContext, Future}
 class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
 
   def getCountryCodesCTC()(implicit hc: HeaderCarrier): Future[Seq[Country]] =
-    referenceDataConnector.getCountryCodesCTC()
+    referenceDataConnector.getCountryCodesCTC().map(_.toSeq)
 
   def getCustomsSecurityAgreementAreaCountries()(implicit hc: HeaderCarrier): Future[Seq[Country]] =
-    referenceDataConnector.getCustomsSecurityAgreementAreaCountries()
+    referenceDataConnector.getCustomsSecurityAgreementAreaCountries().map(_.toSeq)
 
   def getCommunityCountries()(implicit hc: HeaderCarrier): Future[Seq[Country]] =
-    referenceDataConnector.getCountries()
+    referenceDataConnector.getCountries().map(_.toSeq)
 
 }

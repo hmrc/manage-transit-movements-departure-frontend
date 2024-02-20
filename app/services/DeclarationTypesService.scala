@@ -31,8 +31,8 @@ class DeclarationTypesService @Inject() (referenceDataConnector: ReferenceDataCo
     referenceDataConnector
       .getDeclarationTypes()
       .map(_.filterNot(_.code == T2SM))
+      .map(_.toSeq)
       .map(filter(_, officeOfDeparture, procedureType))
-      .map(sort)
 
   private def filter(
     declarationTypes: Seq[DeclarationType],
@@ -43,7 +43,4 @@ class DeclarationTypesService @Inject() (referenceDataConnector: ReferenceDataCo
       case (true, ProcedureType.Normal) => declarationTypes
       case _                            => declarationTypes.filterNot(_.isTIR)
     }
-
-  private def sort(declarationTypes: Seq[DeclarationType]): Seq[DeclarationType] =
-    declarationTypes.sortBy(_.code.toLowerCase)
 }

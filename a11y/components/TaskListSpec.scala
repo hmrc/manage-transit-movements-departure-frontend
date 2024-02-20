@@ -19,7 +19,6 @@ package components
 import a11ySpecBase.A11ySpecBase
 import models.{LocalReferenceNumber, SubmissionState}
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import viewModels.taskList.{TaskListTask, TaskListViewModel}
 import views.html.components.TaskList
 import views.html.templates.MainTemplate

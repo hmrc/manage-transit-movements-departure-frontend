@@ -17,6 +17,7 @@
 package services
 
 import base.SpecBase
+import cats.data.NonEmptySet
 import connectors.ReferenceDataConnector
 import models.reference.SecurityType
 import org.mockito.ArgumentMatchers.any
@@ -36,6 +37,8 @@ class SecurityTypesServiceSpec extends SpecBase with BeforeAndAfterEach {
   private val securityType3 = SecurityType("1", "ENS")
   private val securityType4 = SecurityType("0", "Not used for safety and security purposes")
 
+  private val securityTypes = NonEmptySet.of(securityType1, securityType2, securityType3, securityType4)
+
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
     super.beforeEach()
@@ -46,7 +49,7 @@ class SecurityTypesServiceSpec extends SpecBase with BeforeAndAfterEach {
     "getSecurityTypes" - {
       "must return a list of sorted security types" in {
         when(mockRefDataConnector.getSecurityTypes()(any(), any()))
-          .thenReturn(Future.successful(Seq(securityType1, securityType2, securityType3, securityType4)))
+          .thenReturn(Future.successful(securityTypes))
 
         service.getSecurityTypes().futureValue mustBe
           Seq(securityType4, securityType3, securityType2, securityType1)
