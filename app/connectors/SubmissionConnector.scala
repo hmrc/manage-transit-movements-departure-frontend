@@ -19,31 +19,40 @@ package connectors
 import config.FrontendAppConfig
 import play.api.Logging
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SubmissionConnector @Inject() (
   config: FrontendAppConfig,
-  http: HttpClient
+  http: HttpClientV2
 )(implicit ec: ExecutionContext)
     extends Logging {
 
   private val baseUrl = s"${config.cacheUrl}"
 
   def post(lrn: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    val url = s"$baseUrl/declaration/submit"
-    http.POST[String, HttpResponse](url, lrn)
+    val url = url"$baseUrl/declaration/submit"
+    http
+      .post(url)
+      .withBody[String](lrn)
+      .stream
   }
 
   def postAmendment(lrn: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    val url = s"$baseUrl/declaration/submit-amendment"
-    http.POST[String, HttpResponse](url, lrn)
+    val url = url"$baseUrl/declaration/submit-amendment"
+    http
+      .post(url)
+      .withBody[String](lrn)
+      .stream
   }
 
   def getExpiryInDays(lrn: String)(implicit hc: HeaderCarrier): Future[Long] = {
-    val url = s"$baseUrl/user-answers/expiry/$lrn"
-    http.GET[Long](url)
+    val url = url"$baseUrl/user-answers/expiry/$lrn"
+    http
+      .get(url)
+      .execute[Long]
   }
 }
