@@ -16,6 +16,7 @@
 
 package models.reference
 
+import cats.Order
 import config.Constants.TIR
 import models.{DynamicEnumerableType, Radioable}
 import play.api.libs.json.{Format, Json}
@@ -27,7 +28,7 @@ case class DeclarationType(
 
   override def toString: String = s"$code - $description"
 
-  override val messageKeyPrefix: String = DeclarationType.messageKeyPrefix
+  override val messageKeyPrefix: String = "declarationType"
 
   def isTIR: Boolean = code == TIR
 }
@@ -35,5 +36,5 @@ case class DeclarationType(
 object DeclarationType extends DynamicEnumerableType[DeclarationType] {
   implicit val format: Format[DeclarationType] = Json.format[DeclarationType]
 
-  val messageKeyPrefix = "declarationType"
+  implicit val order: Order[DeclarationType] = (x: DeclarationType, y: DeclarationType) => x.code.compareToIgnoreCase(y.code)
 }

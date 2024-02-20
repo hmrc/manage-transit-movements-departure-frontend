@@ -29,19 +29,6 @@ class CustomsOfficesService @Inject() (
   referenceDataConnector: ReferenceDataConnector
 )(implicit ec: ExecutionContext) {
 
-  def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[SelectableList[CustomsOffice]] = {
-
-    def getCustomsOffices(countryCode: String): Future[Seq[CustomsOffice]] =
-      referenceDataConnector.getCustomsOfficesOfDepartureForCountry(countryCode)
-
-    for {
-      gbOffices <- getCustomsOffices(GB)
-      niOffices <- getCustomsOffices(XI)
-      offices = sort(gbOffices ++ niOffices)
-    } yield offices
-  }
-
-  private def sort(customsOffices: Seq[CustomsOffice]): SelectableList[CustomsOffice] =
-    SelectableList(customsOffices.sortBy(_.name.toLowerCase))
-
+  def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[SelectableList[CustomsOffice]] =
+    referenceDataConnector.getCustomsOfficesOfDepartureForCountry(GB, XI).map(SelectableList(_))
 }

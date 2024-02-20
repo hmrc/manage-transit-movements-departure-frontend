@@ -17,10 +17,12 @@
 package services
 
 import base.SpecBase
+import cats.data.NonEmptySet
 import connectors.ReferenceDataConnector
 import models.SelectableList
 import models.reference.CustomsOffice
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.ArgumentCaptor
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 
@@ -32,11 +34,10 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
   val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   val service                                      = new CustomsOfficesService(mockRefDataConnector)
 
-  val gbCustomsOffice1: CustomsOffice      = CustomsOffice("GB1", "BOSTON", None)
-  val gbCustomsOffice2: CustomsOffice      = CustomsOffice("GB2", "Appledore", None)
-  val xiCustomsOffice1: CustomsOffice      = CustomsOffice("XI1", "Belfast", None)
-  val gbCustomsOffices: Seq[CustomsOffice] = Seq(gbCustomsOffice1, gbCustomsOffice2)
-  val xiCustomsOffices: Seq[CustomsOffice] = Seq(xiCustomsOffice1)
+  val gbCustomsOffice1: CustomsOffice            = CustomsOffice("GB1", "BOSTON", None)
+  val gbCustomsOffice2: CustomsOffice            = CustomsOffice("GB2", "Appledore", None)
+  val xiCustomsOffice1: CustomsOffice            = CustomsOffice("XI1", "Belfast", None)
+  val customsOffices: NonEmptySet[CustomsOffice] = NonEmptySet.of(gbCustomsOffice1, gbCustomsOffice2, xiCustomsOffice1)
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
@@ -48,17 +49,15 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
     "getCustomsOfficesOfDeparture" - {
       "must return a list of sorted GB and NI customs offices" in {
 
-        when(mockRefDataConnector.getCustomsOfficesOfDepartureForCountry(eqTo("XI"))(any(), any()))
-          .thenReturn(Future.successful(xiCustomsOffices))
-
-        when(mockRefDataConnector.getCustomsOfficesOfDepartureForCountry(eqTo("GB"))(any(), any()))
-          .thenReturn(Future.successful(gbCustomsOffices))
+        when(mockRefDataConnector.getCustomsOfficesOfDepartureForCountry(any())(any(), any()))
+          .thenReturn(Future.successful(customsOffices))
 
         service.getCustomsOfficesOfDeparture.futureValue mustBe
           SelectableList(Seq(gbCustomsOffice2, xiCustomsOffice1, gbCustomsOffice1))
 
-        verify(mockRefDataConnector).getCustomsOfficesOfDepartureForCountry(eqTo("XI"))(any(), any())
-        verify(mockRefDataConnector).getCustomsOfficesOfDepartureForCountry(eqTo("GB"))(any(), any())
+        val varargsCaptor: ArgumentCaptor[Seq[String]] = ArgumentCaptor.forClass(classOf[Seq[String]])
+        verify(mockRefDataConnector).getCustomsOfficesOfDepartureForCountry(varargsCaptor.capture(): _*)(any(), any())
+        varargsCaptor.getValue mustBe Seq("GB", "XI")
       }
     }
   }

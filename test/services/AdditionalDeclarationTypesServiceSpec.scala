@@ -17,6 +17,7 @@
 package services
 
 import base.SpecBase
+import cats.data.NonEmptySet
 import connectors.ReferenceDataConnector
 import models.reference.AdditionalDeclarationType
 import org.mockito.ArgumentMatchers.any
@@ -41,7 +42,7 @@ class AdditionalDeclarationTypesServiceSpec extends SpecBase with BeforeAndAfter
     "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code."
   )
 
-  private val adts = Seq(adt2, adt1)
+  private val adts = NonEmptySet.of(adt2, adt1)
 
   override def beforeEach(): Unit = {
     super.beforeEach()

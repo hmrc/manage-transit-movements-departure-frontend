@@ -16,6 +16,7 @@
 
 package models.reference
 
+import cats.Order
 import models.{DynamicEnumerableType, Radioable}
 import org.apache.commons.text.StringEscapeUtils
 import play.api.libs.json.{Format, Json}
@@ -27,11 +28,11 @@ case class SecurityType(
 
   override def toString: String = StringEscapeUtils.unescapeXml(description)
 
-  override val messageKeyPrefix: String = SecurityType.messageKeyPrefix
+  override val messageKeyPrefix: String = "securityDetailsType"
 }
 
 object SecurityType extends DynamicEnumerableType[SecurityType] {
   implicit val format: Format[SecurityType] = Json.format[SecurityType]
 
-  val messageKeyPrefix = "securityDetailsType"
+  implicit val order: Order[SecurityType] = (x: SecurityType, y: SecurityType) => x.code.compareToIgnoreCase(y.code)
 }

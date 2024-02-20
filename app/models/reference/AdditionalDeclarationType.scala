@@ -16,6 +16,7 @@
 
 package models.reference
 
+import cats.Order
 import models.{DynamicEnumerableType, Radioable}
 import play.api.libs.json.{Format, Json}
 
@@ -26,11 +27,12 @@ case class AdditionalDeclarationType(
 
   override def toString: String = s"$code - $description"
 
-  override val messageKeyPrefix: String = AdditionalDeclarationType.messageKeyPrefix
+  override val messageKeyPrefix: String = "additionalDeclarationType"
 }
 
 object AdditionalDeclarationType extends DynamicEnumerableType[AdditionalDeclarationType] {
   implicit val format: Format[AdditionalDeclarationType] = Json.format[AdditionalDeclarationType]
 
-  val messageKeyPrefix = "additionalDeclarationType"
+  implicit val order: Order[AdditionalDeclarationType] =
+    (x: AdditionalDeclarationType, y: AdditionalDeclarationType) => x.code.compareToIgnoreCase(y.code)
 }

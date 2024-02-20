@@ -16,6 +16,8 @@
 
 package connectors
 
+import cats.Order
+import cats.data.NonEmptySet
 import config.FrontendAppConfig
 import connectors.ReferenceDataConnector.NoReferenceDataFoundException
 import models.reference._
@@ -32,76 +34,81 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpClientV2) extends Logging {
 
-  def getCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+  def getCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[Country]] = {
     val url = url"${config.customsReferenceDataUrl}/lists/CountryCodesCommunity"
     http
       .get(url)
       .setHeader(version2Header)
-      .execute[Seq[Country]]
+      .execute[NonEmptySet[Country]]
   }
 
   def getCustomsOfficesOfDepartureForCountry(
-    countryCode: String
-  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[CustomsOffice]] = {
-    val url = url"${config.customsReferenceDataUrl}/filtered-lists/CustomsOffices?data.countryId=$countryCode&data.roles.role=DEP"
+    countryCodes: String*
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[CustomsOffice]] = {
+    lazy val countryQuery = countryCodes.toSeq
+      .map {
+        countryId => s"data.countryId=$countryId"
+      }
+      .mkString("&")
+    val url = url"${config.customsReferenceDataUrl}/lists/CustomsOffices?$countryQuery&data.roles.role=DEP"
     http
       .get(url)
       .setHeader(version2Header)
-      .execute[Seq[CustomsOffice]]
+      .execute[NonEmptySet[CustomsOffice]]
   }
 
-  def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+  def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[Country]] = {
     val url = url"${config.customsReferenceDataUrl}/lists/CountryCodesCTC"
     http
       .get(url)
       .setHeader(version2Header)
-      .execute[Seq[Country]]
+      .execute[NonEmptySet[Country]]
   }
 
-  def getCustomsSecurityAgreementAreaCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+  def getCustomsSecurityAgreementAreaCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[Country]] = {
     val url = url"${config.customsReferenceDataUrl}/lists/CountryCustomsSecurityAgreementArea"
     http
       .get(url)
       .setHeader(version2Header)
-      .execute[Seq[Country]]
+      .execute[NonEmptySet[Country]]
   }
 
-  def getSecurityTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[SecurityType]] = {
+  def getSecurityTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[SecurityType]] = {
     val url = url"${config.customsReferenceDataUrl}/lists/DeclarationTypeSecurity"
     http
       .get(url)
       .setHeader(version2Header)
-      .execute[Seq[SecurityType]]
+      .execute[NonEmptySet[SecurityType]]
   }
 
-  def getDeclarationTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[DeclarationType]] = {
+  def getDeclarationTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[DeclarationType]] = {
     val url = url"${config.customsReferenceDataUrl}/lists/DeclarationType"
     http
       .get(url)
       .setHeader(version2Header)
-      .execute[Seq[DeclarationType]]
+      .execute[NonEmptySet[DeclarationType]]
   }
 
-  def getAdditionalDeclarationTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[AdditionalDeclarationType]] = {
+  def getAdditionalDeclarationTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[AdditionalDeclarationType]] = {
     val url = url"${config.customsReferenceDataUrl}/lists/DeclarationTypeAdditional"
     http
       .get(url)
       .setHeader(version2Header)
-      .execute[Seq[AdditionalDeclarationType]]
+      .execute[NonEmptySet[AdditionalDeclarationType]]
   }
 
   private def version2Header: (String, String) =
     HeaderNames.Accept -> "application/vnd.hmrc.2.0+json"
 
-  implicit def responseHandlerGeneric[A](implicit reads: Reads[A]): HttpReads[Seq[A]] =
+  implicit def responseHandlerGeneric[A](implicit reads: Reads[A], order: Order[A]): HttpReads[NonEmptySet[A]] =
     (_: String, _: String, response: HttpResponse) => {
       response.status match {
         case OK =>
-          (response.json \ "data").validate[Seq[A]] match {
+          (response.json \ "data").validate[List[A]] match {
             case JsSuccess(Nil, _) =>
               throw new NoReferenceDataFoundException
-            case JsSuccess(value, _) =>
-              value
+            case JsSuccess(head :: tail, _) =>
+              NonEmptySet.of(head, tail: _*)
             case JsError(errors) =>
               throw JsResultException(errors)
           }

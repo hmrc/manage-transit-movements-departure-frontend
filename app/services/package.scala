@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package services
+import cats.data.NonEmptySet
 
-import connectors.ReferenceDataConnector
-import models.reference.SecurityType
-import uk.gov.hmrc.http.HeaderCarrier
+package object services {
 
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
-
-class SecurityTypesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
-
-  def getSecurityTypes()(implicit hc: HeaderCarrier): Future[Seq[SecurityType]] =
-    referenceDataConnector.getSecurityTypes().map(_.toSeq)
+  implicit class RichNonEmptySet[T](value: NonEmptySet[T]) {
+    def toSeq: Seq[T] = value.toNonEmptyList.toList
+  }
 }

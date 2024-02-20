@@ -16,11 +16,13 @@
 
 package models.reference
 
+import cats.Order
 import play.api.libs.json.{Format, Json}
 
 case class Country(code: String)
 
 object Country {
-
   implicit val format: Format[Country] = Json.format[Country]
+
+  implicit val order: Order[Country] = (x: Country, y: Country) => x.code.compareToIgnoreCase(y.code)
 }

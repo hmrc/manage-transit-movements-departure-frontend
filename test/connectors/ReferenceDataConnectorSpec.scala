@@ -17,6 +17,7 @@
 package connectors
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import cats.data.NonEmptySet
 import com.github.tomakehurst.wiremock.client.WireMock._
 import connectors.ReferenceDataConnector.NoReferenceDataFoundException
 import helper.WireMockServerHandler
@@ -274,32 +275,33 @@ class ReferenceDataConnectorSpec
   "Reference Data" - {
 
     "getCustomsOfficesOfDepartureForCountry" - {
-      def url(countryId: String) = s"/$baseUrl/filtered-lists/CustomsOffices?data.countryId=$countryId&data.roles.role=DEP"
-
       "must return a successful future response with a sequence of CustomsOffices" in {
-        val countryId = "GB"
+        val countryIds = Seq("GB", "XI")
+        val url        = s"/$baseUrl/lists/CustomsOffices?data.countryId=GB%26data.countryId=XI&data.roles.role=DEP"
 
         server.stubFor(
-          get(urlEqualTo(url(countryId)))
+          get(urlEqualTo(url))
             .willReturn(okJson(customsOfficeDestinationResponseJson))
         )
 
-        val expectedResult = Seq(
+        val expectedResult = NonEmptySet.of(
           CustomsOffice("GB1", "testName1", None),
           CustomsOffice("GB2", "testName2", None)
         )
 
-        connector.getCustomsOfficesOfDepartureForCountry(countryId).futureValue mustBe expectedResult
+        connector.getCustomsOfficesOfDepartureForCountry(countryIds: _*).futureValue mustBe expectedResult
       }
 
       "must throw a NoReferenceDataFoundException for an empty response" in {
         val countryId = "AR"
-        checkNoReferenceDataFoundResponse(url(countryId), connector.getCustomsOfficesOfDepartureForCountry(countryId))
+        val url       = s"/$baseUrl/lists/CustomsOffices?data.countryId=AR&data.roles.role=DEP"
+        checkNoReferenceDataFoundResponse(url, connector.getCustomsOfficesOfDepartureForCountry(countryId))
       }
 
       "must return an exception when an error response is returned" in {
         val countryId = "GB"
-        checkErrorResponse(url(countryId), connector.getCustomsOfficesOfDepartureForCountry(countryId))
+        val url       = s"/$baseUrl/lists/CustomsOffices?data.countryId=GB&data.roles.role=DEP"
+        checkErrorResponse(url, connector.getCustomsOfficesOfDepartureForCountry(countryId))
       }
     }
 
@@ -312,7 +314,7 @@ class ReferenceDataConnectorSpec
             .willReturn(okJson(countriesResponseCTJson))
         )
 
-        val expectedResult: Seq[Country] = Seq(
+        val expectedResult = NonEmptySet.of(
           Country("GB"),
           Country("AD")
         )
@@ -338,7 +340,7 @@ class ReferenceDataConnectorSpec
             .willReturn(okJson(countriesResponseAAJson))
         )
 
-        val expectedResult: Seq[Country] = Seq(
+        val expectedResult = NonEmptySet.of(
           Country("GB"),
           Country("AD")
         )
@@ -364,7 +366,7 @@ class ReferenceDataConnectorSpec
             .willReturn(okJson(countriesResponseCommunity))
         )
 
-        val expectedResult: Seq[Country] = Seq(
+        val expectedResult = NonEmptySet.of(
           Country("GB"),
           Country("AD")
         )
@@ -390,7 +392,7 @@ class ReferenceDataConnectorSpec
             .willReturn(okJson(securityTypesResponseJson))
         )
 
-        val expectedResult: Seq[SecurityType] = Seq(
+        val expectedResult = NonEmptySet.of(
           SecurityType("2", "EXS"),
           SecurityType("3", "ENS &amp; EXS")
         )
@@ -416,7 +418,7 @@ class ReferenceDataConnectorSpec
             .willReturn(okJson(declarationTypesResponseJson))
         )
 
-        val expectedResult: Seq[DeclarationType] = Seq(
+        val expectedResult = NonEmptySet.of(
           DeclarationType("T2", "Goods having the customs status of Union goods, which are placed under the common transit procedure"),
           DeclarationType("TIR", "TIR carnet")
         )
@@ -442,7 +444,7 @@ class ReferenceDataConnectorSpec
             .willReturn(okJson(additionalDeclarationTypesResponseJson))
         )
 
-        val expectedResult: Seq[AdditionalDeclarationType] = Seq(
+        val expectedResult = NonEmptySet.of(
           AdditionalDeclarationType(
             "A",
             "for a standard customs declaration (under Article 162 of the Code)"
