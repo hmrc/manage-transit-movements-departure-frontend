@@ -10,14 +10,12 @@ Service manager port: 10120
 Run unit tests:
 <pre>sbt test</pre>  
 Run integration tests:  
-<pre>sbt it:test</pre>  
-or
-<pre>sbt IntegrationTest/test</pre>  
+<pre>sbt it/test</pre> 
 
 ### Running manually or for journey tests
 
 <pre>
-sm2 --start CTC_TRADERS_P5_ACCEPTANCE -r OR
+sm2 --start CTC_TRADERS_P5_ACCEPTANCE
 sm2 --stop MANAGE_TRANSIT_MOVEMENTS_DEPARTURE_FRONTEND
 sbt run
 </pre>
