@@ -17,14 +17,14 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import helpers.ItSpecBase
+import helpers.{ItSpecBase, WireMockServerHandler}
 import org.scalacheck.Gen
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.JsNumber
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 
-class SubmissionConnectorSpec extends ItSpecBase {
+class SubmissionConnectorSpec extends ItSpecBase with WireMockServerHandler {
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
