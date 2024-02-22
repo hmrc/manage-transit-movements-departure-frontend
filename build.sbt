@@ -69,11 +69,6 @@ lazy val microservice = (project in file("."))
     uglify / includeFilter := GlobFilter("application.js")
   )
 
-lazy val test = project
-  .settings(
-    fork := true
-  )
-
 lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test") // the "test->test" allows reusing test code and test dependencies
