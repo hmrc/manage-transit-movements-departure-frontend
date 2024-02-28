@@ -34,7 +34,9 @@
     @formHelper(action = routes.SessionExpiredController.onSubmit(), Symbol("autoComplete") -> "off") {
         @heading(messages("session_expired.heading"))
 
-        <p class="govuk-body">@messages("session_expired.guidance")</p>
+        <p class="govuk-body">@messages("session_expired.paragraph1")</p>
+
+        <p class="govuk-body">@messages("session_expired.paragraph2")</p>
 
         @button(messageKey = "session_expired.button", attributes = Map("id" -> "submit"))
     }
