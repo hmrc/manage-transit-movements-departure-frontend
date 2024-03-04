@@ -17,6 +17,7 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
+import config.{PostTransitionModule, TransitionModule}
 import helpers.{ItSpecBase, WireMockServerHandler}
 import org.scalacheck.Gen
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -24,12 +25,14 @@ import play.api.libs.json.JsNumber
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 
-class SubmissionConnectorSpec extends ItSpecBase with WireMockServerHandler {
+class TransitionSubmissionConnectorSpec extends ItSpecBase with WireMockServerHandler {
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .configure(conf = "microservice.services.manage-transit-movements-departure-cache.port" -> server.port())
+      .disable[PostTransitionModule]
+      .bindings(new TransitionModule)
 
   private lazy val connector: SubmissionConnector = app.injector.instanceOf[SubmissionConnector]
 
@@ -42,6 +45,7 @@ class SubmissionConnectorSpec extends ItSpecBase with WireMockServerHandler {
       "must return true when status is Ok" in {
         server.stubFor(
           post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
             .willReturn(aResponse().withStatus(OK))
         )
 
@@ -55,6 +59,7 @@ class SubmissionConnectorSpec extends ItSpecBase with WireMockServerHandler {
 
         server.stubFor(
           post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -68,10 +73,56 @@ class SubmissionConnectorSpec extends ItSpecBase with WireMockServerHandler {
 
         server.stubFor(
           post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
             .willReturn(aResponse().withStatus(status))
         )
 
         val result: HttpResponse = await(connector.post(lrn.value))
+
+        result.status mustBe status
+      }
+    }
+
+    "postAmendment" - {
+
+      val url = s"/manage-transit-movements-departure-cache/declaration/submit-amendment"
+
+      "must return true when status is Ok" in {
+        server.stubFor(
+          post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .willReturn(aResponse().withStatus(OK))
+        )
+
+        val result: HttpResponse = await(connector.postAmendment(lrn.value))
+
+        result.status mustBe OK
+      }
+
+      "return false for 4xx response" in {
+        val status = Gen.choose(400: Int, 499: Int).sample.value
+
+        server.stubFor(
+          post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .willReturn(aResponse().withStatus(status))
+        )
+
+        val result: HttpResponse = await(connector.postAmendment(lrn.value))
+
+        result.status mustBe status
+      }
+
+      "return false for 5xx response" in {
+        val status = Gen.choose(500: Int, 599: Int).sample.value
+
+        server.stubFor(
+          post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .willReturn(aResponse().withStatus(status))
+        )
+
+        val result: HttpResponse = await(connector.postAmendment(lrn.value))
 
         result.status mustBe status
       }
@@ -93,5 +144,4 @@ class SubmissionConnectorSpec extends ItSpecBase with WireMockServerHandler {
       }
     }
   }
-
 }
