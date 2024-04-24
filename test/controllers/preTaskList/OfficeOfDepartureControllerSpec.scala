@@ -39,8 +39,8 @@ import scala.concurrent.Future
 
 class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private val customsOffice1: CustomsOffice                 = CustomsOffice("GB1", "someName", None)
-  private val customsOffice2: CustomsOffice                 = CustomsOffice("GB2", "name", None)
+  private val customsOffice1: CustomsOffice                 = CustomsOffice("GB1", "someName", None, "GB")
+  private val customsOffice2: CustomsOffice                 = CustomsOffice("GB2", "name", None, "GB")
   private val customsOffices: SelectableList[CustomsOffice] = SelectableList(Seq(customsOffice1, customsOffice2))
 
   private val gbForm = new SelectableFormProvider()("officeOfDeparture", customsOffices)
@@ -125,6 +125,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
             |    "officeOfDeparture" : {
             |      "id" : "GB1",
             |      "name" : "someName",
+            |      "countryId" : "GB",
             |      "isInCL112" : true,
             |      "isInCL147" : false,
             |      "isInCL010" : false
@@ -158,6 +159,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
             |    "officeOfDeparture" : {
             |      "id" : "GB1",
             |      "name" : "someName",
+            |      "countryId" : "GB",
             |      "isInCL112" : false,
             |      "isInCL147" : true,
             |      "isInCL010" : false
@@ -191,6 +193,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
             |    "officeOfDeparture" : {
             |      "id" : "GB1",
             |      "name" : "someName",
+            |      "countryId" : "GB",
             |      "isInCL112" : false,
             |      "isInCL147" : false,
             |      "isInCL010" : true

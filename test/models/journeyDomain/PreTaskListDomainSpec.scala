@@ -31,8 +31,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
   "PreTaskListDomain" - {
 
-    val gbCustomsOffice           = CustomsOffice("GB1", "Dover", None)
-    val xiCustomsOffice           = CustomsOffice("XI1", "Belfast", None)
+    val gbCustomsOffice           = CustomsOffice("GB1", "Dover", None, "GB")
+    val xiCustomsOffice           = CustomsOffice("XI1", "Belfast", None, "XI")
     val carnetRef                 = Gen.alphaNumStr.sample.value
     val additionalDeclarationType = arbitrary[AdditionalDeclarationType].sample.value
     val procedureType             = arbitrary[ProcedureType].sample.value

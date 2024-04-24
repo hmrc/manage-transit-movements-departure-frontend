@@ -39,7 +39,7 @@ class DeclarationTypesService @Inject() (referenceDataConnector: ReferenceDataCo
     officeOfDeparture: CustomsOffice,
     procedureType: ProcedureType
   ): Seq[DeclarationType] =
-    (officeOfDeparture.countryCode.startsWith(XI), procedureType) match {
+    (officeOfDeparture.countryId.startsWith(XI), procedureType) match {
       case (true, ProcedureType.Normal) => declarationTypes
       case _                            => declarationTypes.filterNot(_.isTIR)
     }

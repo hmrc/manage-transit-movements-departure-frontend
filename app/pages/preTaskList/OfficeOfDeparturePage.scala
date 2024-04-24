@@ -33,7 +33,7 @@ case object OfficeOfDeparturePage extends QuestionPage[CustomsOffice] {
   override def toString: String = "officeOfDeparture"
 
   override def cleanup(value: Option[CustomsOffice], userAnswers: UserAnswers): Try[UserAnswers] =
-    (value.map(_.countryCode), userAnswers.get(DeclarationTypePage)) match {
+    (value.map(_.countryId), userAnswers.get(DeclarationTypePage)) match {
       case (Some(GB), Some(declarationType)) if declarationType.isTIR =>
         userAnswers.remove(DeclarationTypePage).flatMap(_.remove(TIRCarnetReferencePage))
       case _ =>

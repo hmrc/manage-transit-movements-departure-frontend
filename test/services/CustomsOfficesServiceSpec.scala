@@ -34,9 +34,9 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
   val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   val service                                      = new CustomsOfficesService(mockRefDataConnector)
 
-  val gbCustomsOffice1: CustomsOffice            = CustomsOffice("GB1", "BOSTON", None)
-  val gbCustomsOffice2: CustomsOffice            = CustomsOffice("GB2", "Appledore", None)
-  val xiCustomsOffice1: CustomsOffice            = CustomsOffice("XI1", "Belfast", None)
+  val gbCustomsOffice1: CustomsOffice            = CustomsOffice("GB1", "BOSTON", None, "GB")
+  val gbCustomsOffice2: CustomsOffice            = CustomsOffice("GB2", "Appledore", None, "GB")
+  val xiCustomsOffice1: CustomsOffice            = CustomsOffice("XI1", "Belfast", None, "XI")
   val customsOffices: NonEmptySet[CustomsOffice] = NonEmptySet.of(gbCustomsOffice1, gbCustomsOffice2, xiCustomsOffice1)
 
   override def beforeEach(): Unit = {
