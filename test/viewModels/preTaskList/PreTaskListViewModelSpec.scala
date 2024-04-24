@@ -45,7 +45,7 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
         val answers = emptyUserAnswers
           .copy(lrn = LocalReferenceNumber("1234567890").get)
           .setValue(AdditionalDeclarationTypePage, AdditionalDeclarationType("A", "for a standard customs declaration (under Article 162 of the Code)"))
-          .setValue(OfficeOfDeparturePage, CustomsOffice("XI1", "name", None))
+          .setValue(OfficeOfDeparturePage, CustomsOffice("XI1", "name", None, "XI"))
           .setValue(ProcedureTypePage, ProcedureType.Normal)
           .setValue(DeclarationTypePage, DeclarationType("TIR", "TIR carnet"))
           .setValue(TIRCarnetReferencePage, "tir carnet reference")

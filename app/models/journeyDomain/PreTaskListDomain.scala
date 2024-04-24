@@ -47,7 +47,7 @@ object PreTaskListDomain {
   private val tirCarnetReferenceReader: Read[Option[String]] =
     OfficeOfDeparturePage.reader
       .to {
-        _.countryCode match {
+        _.countryId match {
           case XI =>
             ProcedureTypePage
               .filterOptionalDependent(_ == Normal) {

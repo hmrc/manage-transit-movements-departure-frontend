@@ -51,7 +51,7 @@ class DeclarationSubmittedViewSpec extends PanelViewBehaviours with Generators {
   behave like pageWithPartialContent("p", " to find out when goods have been released.")
 
   "when office of destination has a telephone number" - {
-    val officeOfDestination = CustomsOffice("GB123", "Office 123", Some("+123"))
+    val officeOfDestination = CustomsOffice("GB123", "Office 123", Some("+123"), "GB")
     val view                = applyView(officeOfDestination)
     val doc                 = parseView(view)
 
@@ -63,7 +63,7 @@ class DeclarationSubmittedViewSpec extends PanelViewBehaviours with Generators {
   }
 
   "when office of destination does not have a telephone number" - {
-    val officeOfDestination = CustomsOffice("GB123", "Office 123", None)
+    val officeOfDestination = CustomsOffice("GB123", "Office 123", None, "GB")
     val view                = applyView(officeOfDestination)
     val doc                 = parseView(view)
 

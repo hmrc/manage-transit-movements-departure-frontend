@@ -82,11 +82,11 @@ class OfficeOfDepartureController @Inject() (
                   implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
                   for {
                     countryCodesCTC <- countriesService.getCountryCodesCTC()
-                    isInCL112 = countryCodesCTC.map(_.code).contains(value.countryCode)
+                    isInCL112 = countryCodesCTC.map(_.code).contains(value.countryId)
                     customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
-                    isInCL147 = customsSecurityAgreementAreaCountries.map(_.code).contains(value.countryCode)
+                    isInCL147 = customsSecurityAgreementAreaCountries.map(_.code).contains(value.countryId)
                     communityCountries <- countriesService.getCommunityCountries()
-                    isInCL010 = communityCountries.map(_.code).contains(value.countryCode)
+                    isInCL010 = communityCountries.map(_.code).contains(value.countryId)
                     result <- OfficeOfDeparturePage
                       .writeToUserAnswers(value)
                       .appendValue(OfficeOfDepartureInCL112Page, isInCL112)
