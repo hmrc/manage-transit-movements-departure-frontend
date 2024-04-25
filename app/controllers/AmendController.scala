@@ -34,7 +34,13 @@ class AmendController @Inject() (
     extends FrontendController(cc)
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, departureId: String): Action[AnyContent] = actions
+  def amendErrors(lrn: LocalReferenceNumber, departureId: String): Action[AnyContent] =
+    amend(lrn, departureId, SubmissionState.Amendment)
+
+  def amendGuaranteeErrors(lrn: LocalReferenceNumber, departureId: String): Action[AnyContent] =
+    amend(lrn, departureId, SubmissionState.GuaranteeAmendment)
+
+  private def amend(lrn: LocalReferenceNumber, departureId: String, status: SubmissionState.Value): Action[AnyContent] = actions
     .requireData(lrn)
     .async {
       implicit request =>
@@ -42,14 +48,13 @@ class AmendController @Inject() (
           .set(
             request.userAnswers
               .copy(departureId = Some(departureId))
-              .copy(status = SubmissionState.Amendment)
+              .copy(status = status)
           )
           .map {
             case true =>
               Redirect(controllers.routes.TaskListController.onPageLoad(lrn).url)
-            case false => Redirect(controllers.routes.ErrorController.technicalDifficulties().url)
+            case false =>
+              Redirect(controllers.routes.ErrorController.technicalDifficulties().url)
           }
-
     }
-
 }
