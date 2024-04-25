@@ -77,7 +77,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
         view(lrn, viewModel, expiryInDays)(request, messages).toString
     }
 
-    "must redirect to Session Expired for a GET if declaration submitted" in {
+    "must redirect to Technical Difficulties for a GET if declaration submitted" in {
       val userAnswers = emptyUserAnswers.copy(status = SubmissionState.Submitted)
       setExistingUserAnswers(userAnswers)
 
@@ -91,10 +91,10 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
     }
 
-    "must redirect to Session Expired for a POST if declaration submitted" in {
+    "must redirect to Technical Difficulties for a POST if declaration submitted" in {
       setExistingUserAnswers(emptyUserAnswers.copy(status = SubmissionState.Submitted))
 
       val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
@@ -103,7 +103,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
     }
 
     "must redirect to declaration submit for a POST if declaration guaranteeAmendment" in {
@@ -144,7 +144,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
     }
 
     "must redirect to confirmation page when submission success" in {

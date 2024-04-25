@@ -17,7 +17,6 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import controllers.{routes => mainRoutes}
 import forms.SelectableFormProvider
 import models.reference.{Country, CustomsOffice}
 import models.{NormalMode, SelectableList, UserAnswers}
@@ -221,7 +220,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
         view(boundForm, lrn, customsOffices.values, mode)(request, messages).toString
     }
 
-    "must redirect to Session Expired for a GET if no existing data is found" in {
+    "must redirect to Technical Difficulties for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, officeOfDepartureRoute)
@@ -230,10 +229,10 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
     }
 
-    "must redirect to Session Expired for a POST if no existing data is found" in {
+    "must redirect to Technical Difficulties for a POST if no existing data is found" in {
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, officeOfDepartureRoute)
@@ -243,7 +242,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
     }
   }
 }

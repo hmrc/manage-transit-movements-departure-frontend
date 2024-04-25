@@ -51,7 +51,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
       }
     }
 
-    "must redirect to Session Expired for a GET if office of destination not found in user answers" in {
+    "must redirect to Technical Difficulties Page for a GET if office of destination not found in user answers" in {
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, declarationSubmittedRoute)
@@ -60,10 +60,10 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
     }
 
-    "must redirect to Session Expired for a GET if no existing data is found" in {
+    "must redirect to Technical Difficulties Page for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, declarationSubmittedRoute)
@@ -72,7 +72,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
     }
   }
 }

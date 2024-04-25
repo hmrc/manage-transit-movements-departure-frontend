@@ -9,8 +9,8 @@ GET        /                                              controllers.RedirectCo
 ->         /hmrc-frontend                                 hmrcfrontend.Routes
 GET        /assets/*file                                  controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /this-service-has-been-reset                   controllers.SessionExpiredController.onPageLoad()
-POST       /this-service-has-been-reset                   controllers.SessionExpiredController.onSubmit()
+GET        /this-service-has-been-reset/:lrn                   controllers.SessionExpiredController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /this-service-has-been-reset/:lrn                   controllers.SessionExpiredController.onSubmit(lrn: LocalReferenceNumber)
 
 GET        /bad-request                                   controllers.ErrorController.badRequest()
 GET        /not-found                                     controllers.ErrorController.notFound()

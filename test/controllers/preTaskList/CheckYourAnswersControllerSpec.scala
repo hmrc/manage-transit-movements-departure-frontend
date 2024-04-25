@@ -68,7 +68,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       }
     }
 
-    "must redirect to Session Expired for a GET if no existing data is found" in {
+    "must redirect to Technical Difficulties Page for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(lrn).url)
@@ -77,7 +77,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
     }
 
     "must redirect back into journey if answers in invalid state" in {
