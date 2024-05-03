@@ -75,7 +75,7 @@ class SpecificDataRequiredActionSpec extends SpecBase with ScalaCheckPropertyChe
       "when checking one page" - {
 
         "when required data not present in user answers" - {
-          "must redirect to session expired" in {
+          "must redirect to Technical Difficulties Page " in {
 
             val action = new Harness1(FooPage)
 
@@ -85,7 +85,7 @@ class SpecificDataRequiredActionSpec extends SpecBase with ScalaCheckPropertyChe
               r =>
                 val result = Future.successful(r.left.value)
                 status(result) mustEqual SEE_OTHER
-                redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+                redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
             }
           }
         }
@@ -150,7 +150,7 @@ class SpecificDataRequiredActionSpec extends SpecBase with ScalaCheckPropertyChe
         }
 
         "when no pages present in user answers" - {
-          "must redirect to session expired" in {
+          "must redirect to Technical Difficulties Page" in {
 
             val action = new Harness1(FooPage, BarPage)
 
@@ -160,7 +160,7 @@ class SpecificDataRequiredActionSpec extends SpecBase with ScalaCheckPropertyChe
               r =>
                 val result = Future.successful(r.left.value)
                 status(result) mustEqual SEE_OTHER
-                redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+                redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
             }
           }
         }
@@ -173,7 +173,7 @@ class SpecificDataRequiredActionSpec extends SpecBase with ScalaCheckPropertyChe
         new SpecificDataRequestProvider1[String].SpecificDataRequest(fakeRequest, eoriNumber, userAnswers, arg1)
 
       "when required data not present in user answers" - {
-        "must redirect to session expired" in {
+        "must redirect to Technical Difficulties Page" in {
 
           val action = new Harness2[String, String](FooPage)
 
@@ -185,7 +185,7 @@ class SpecificDataRequiredActionSpec extends SpecBase with ScalaCheckPropertyChe
                 r =>
                   val result = Future.successful(r.left.value)
                   status(result) mustEqual SEE_OTHER
-                  redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+                  redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
               }
           }
         }
@@ -222,7 +222,7 @@ class SpecificDataRequiredActionSpec extends SpecBase with ScalaCheckPropertyChe
         new SpecificDataRequestProvider2[String, String].SpecificDataRequest(fakeRequest, eoriNumber, userAnswers, (arg1, arg2))
 
       "when required data not present in user answers" - {
-        "must redirect to session expired" in {
+        "must redirect to Technical Difficulties Page" in {
 
           val action = new Harness3[String, String, String](FooPage)
 
@@ -234,7 +234,7 @@ class SpecificDataRequiredActionSpec extends SpecBase with ScalaCheckPropertyChe
                 r =>
                   val result = Future.successful(r.left.value)
                   status(result) mustEqual SEE_OTHER
-                  redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+                  redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
               }
           }
         }

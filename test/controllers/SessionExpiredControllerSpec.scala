@@ -26,7 +26,7 @@ class SessionExpiredControllerSpec extends SpecBase with AppWithDefaultMockFixtu
 
     "must return OK and the correct view for a GET" in {
 
-      val request = FakeRequest(GET, routes.SessionExpiredController.onPageLoad().url)
+      val request = FakeRequest(GET, routes.SessionExpiredController.onPageLoad(lrn).url)
 
       val result = route(app, request).value
 
@@ -35,7 +35,7 @@ class SessionExpiredControllerSpec extends SpecBase with AppWithDefaultMockFixtu
 
     "must redirect to a new page for a POST" in {
       val request =
-        FakeRequest(POST, routes.SessionExpiredController.onSubmit().url)
+        FakeRequest(POST, routes.SessionExpiredController.onSubmit(lrn).url)
           .withFormUrlEncodedBody()
 
       val result = route(app, request).value
