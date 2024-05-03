@@ -144,7 +144,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
 
     "must redirect to confirmation page when submission success" in {

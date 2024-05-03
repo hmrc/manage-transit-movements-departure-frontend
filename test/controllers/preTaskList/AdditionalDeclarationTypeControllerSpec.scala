@@ -139,7 +139,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
 
     "must redirect to Technical Difficulties for a POST if no existing data is found" in {
@@ -153,7 +153,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
   }
 }

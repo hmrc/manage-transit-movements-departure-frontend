@@ -130,7 +130,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
 
     "must redirect to Technical Difficulties for a POST if no existing data is found" in {
@@ -143,7 +143,7 @@ class SecurityDetailsTypeControllerSpec extends SpecBase with AppWithDefaultMock
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
   }
 }

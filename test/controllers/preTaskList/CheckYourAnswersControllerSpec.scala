@@ -77,7 +77,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
 
     "must redirect back into journey if answers in invalid state" in {

@@ -123,7 +123,7 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
 
     "must redirect to Technical Difficulties for a POST if no existing data is found" in {
@@ -136,7 +136,7 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
   }
 }

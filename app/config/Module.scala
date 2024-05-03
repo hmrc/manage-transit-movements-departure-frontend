@@ -30,7 +30,7 @@ class Module extends AbstractModule {
 
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])
-    bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl])
+    bind(classOf[DataRequiredActionProvider]).to(classOf[DataRequiredActionImpl])
     bind(classOf[PreTaskListCompletedAction]).to(classOf[PreTaskListCompletedActionImpl])
     bind(classOf[DependentTaskAction]).to(classOf[DependentTaskActionImpl])
     bind(classOf[SpecificDataRequiredActionProvider]).to(classOf[SpecificDataRequiredActionImpl]).asEagerSingleton()

@@ -16,7 +16,7 @@
 
 package controllers.actions
 
-import controllers.routes
+import models.LocalReferenceNumber
 import models.requests.{DataRequest, OptionalDataRequest}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -25,15 +25,23 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DataRequiredActionImpl @Inject() (implicit val executionContext: ExecutionContext) extends DataRequiredAction {
+class DataRequiredAction(lrn: LocalReferenceNumber)(implicit val executionContext: ExecutionContext) extends ActionRefiner[OptionalDataRequest, DataRequest] {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] =
     request.userAnswers match {
-      case None =>
-        Future.successful(Left(Redirect(routes.ErrorController.technicalDifficulties())))
       case Some(data) =>
         Future.successful(Right(DataRequest(request.request, request.eoriNumber, data)))
+      case _ =>
+        Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad(lrn))))
     }
 }
 
-trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
+trait DataRequiredActionProvider {
+  def apply(lrn: LocalReferenceNumber): ActionRefiner[OptionalDataRequest, DataRequest]
+}
+
+class DataRequiredActionImpl @Inject() (implicit val executionContext: ExecutionContext) extends DataRequiredActionProvider {
+
+  override def apply(lrn: LocalReferenceNumber): ActionRefiner[OptionalDataRequest, DataRequest] =
+    new DataRequiredAction(lrn)
+}
