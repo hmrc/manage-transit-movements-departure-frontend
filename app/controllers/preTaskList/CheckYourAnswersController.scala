@@ -52,7 +52,7 @@ class CheckYourAnswersController @Inject() (
         UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
           case Left(ReaderError(page, _, _)) =>
             logger.warn(s"[preTaskList.CheckYourAnswersController][$lrn] Shouldn't be here yet. Redirecting to ${page.path}")
-            Redirect(page.route(request.userAnswers, NormalMode).getOrElse(controllers.routes.SessionExpiredController.onPageLoad()))
+            Redirect(page.route(request.userAnswers, NormalMode).getOrElse(controllers.routes.ErrorController.technicalDifficulties()))
           case _ =>
             val section = viewModelProvider.apply(request.userAnswers).section
             Ok(view(lrn, Seq(section)))

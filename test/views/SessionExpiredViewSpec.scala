@@ -23,7 +23,7 @@ import views.html.SessionExpiredView
 class SessionExpiredViewSpec extends ViewBehaviours {
 
   override def view: HtmlFormat.Appendable =
-    injector.instanceOf[SessionExpiredView].apply()(fakeRequest, messages)
+    injector.instanceOf[SessionExpiredView].apply(lrn)(fakeRequest, messages)
 
   override val prefix: String = "session_expired"
 

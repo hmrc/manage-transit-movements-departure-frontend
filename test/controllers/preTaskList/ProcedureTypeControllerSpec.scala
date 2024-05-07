@@ -115,7 +115,7 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
         view(boundForm, ProcedureType.values, lrn, mode)(request, messages).toString
     }
 
-    "must redirect to Session Expired for a GET if no existing data is found" in {
+    "must redirect to Technical Difficulties for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, procedureTypeRoute)
@@ -123,10 +123,10 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
 
-    "must redirect to Session Expired for a POST if no existing data is found" in {
+    "must redirect to Technical Difficulties for a POST if no existing data is found" in {
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, procedureTypeRoute)
@@ -136,7 +136,7 @@ class ProcedureTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
   }
 }
