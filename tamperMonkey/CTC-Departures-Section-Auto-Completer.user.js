@@ -206,7 +206,7 @@ function initialiseJourneys() {
                 new ButtonPage("/manage-transit-movements/departures/items/1/add-ucr/", "value"),
                 new InputPage("/manage-transit-movements/departures/items/1/ucr/", "UCR"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/cus-code/add/", "value"),
-                new InputPage("/manage-transit-movements/departures/items/1/cus-code/", "123ABC789"),
+                new InputPage("/manage-transit-movements/departures/items/1/cus-code/", "0010001-6"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/commodity-code/add/", "value"),
                 new InputPage("/manage-transit-movements/departures/items/1/commodity-code/", "123ABC"),
                 new ButtonPage("/manage-transit-movements/departures/items/1/dangerous-goods/add/", "value"),
