@@ -19,6 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.client.WireMock._
 import config.{PostTransitionModule, TransitionModule}
 import helpers.{ItSpecBase, WireMockServerHandler}
+import models.{DepartureMessage, DepartureMessages}
 import org.scalacheck.Gen
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.JsNumber
@@ -141,6 +142,45 @@ class TransitionSubmissionConnectorSpec extends ItSpecBase with WireMockServerHa
         val result: Long = await(connector.getExpiryInDays(lrn.value))
 
         result mustBe 30
+      }
+    }
+
+    "getMessages" - {
+
+      val url = s"/manage-transit-movements-departure-cache/messages/$lrn"
+
+      val json =
+        """
+          |{
+          |  "messages" : [
+          |    {
+          |      "type" : "IE015"
+          |    },
+          |    {
+          |      "type" : "IE928"
+          |    },
+          |    {
+          |      "type" : "IE013"
+          |    }
+          |  ]
+          |}
+          |""".stripMargin
+
+      "must return messages when status is Ok" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(json))
+        )
+
+        val result: DepartureMessages = await(connector.getMessages(lrn))
+
+        result mustBe DepartureMessages(
+          Seq(
+            DepartureMessage("IE015"),
+            DepartureMessage("IE928"),
+            DepartureMessage("IE013")
+          )
+        )
       }
     }
   }

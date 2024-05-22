@@ -72,7 +72,7 @@ class TaskListController @Inject() (
           case SubmissionState.GuaranteeAmendment | SubmissionState.Amendment =>
             submissionConnector.postAmendment(lrn.value).map {
               case response if is2xx(response.status) =>
-                Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad(lrn))
+                Redirect(controllers.routes.DeclarationSubmittedController.departureAmendmentSubmitted(lrn))
               case e =>
                 logger.error(s"TaskListController:onSubmit:$lrn: ${e.status}")
                 Redirect(routes.ErrorController.technicalDifficulties())
@@ -80,7 +80,7 @@ class TaskListController @Inject() (
           case _ =>
             submissionConnector.post(lrn.value).map {
               case response if is2xx(response.status) =>
-                Redirect(controllers.routes.DeclarationSubmittedController.onPageLoad(lrn))
+                Redirect(controllers.routes.DeclarationSubmittedController.departureDeclarationSubmitted(lrn))
               case e =>
                 logger.error(s"TaskListController:onSubmit:$lrn: ${e.status}")
                 Redirect(routes.ErrorController.technicalDifficulties())

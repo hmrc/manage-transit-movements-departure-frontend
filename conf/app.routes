@@ -26,7 +26,8 @@ GET        /unauthorised-group-access                     controllers.Unauthoris
 GET        /:lrn/declaration-summary                      controllers.TaskListController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/declaration-summary                      controllers.TaskListController.onSubmit(lrn: LocalReferenceNumber)
 
-GET        /departure-declaration-sent/:lrn               controllers.DeclarationSubmittedController.onPageLoad(lrn: LocalReferenceNumber)
+GET        /departure-declaration-sent/:lrn               controllers.DeclarationSubmittedController.departureDeclarationSubmitted(lrn: LocalReferenceNumber)
+GET        /departure-amendment-sent/:lrn                 controllers.DeclarationSubmittedController.departureAmendmentSubmitted(lrn: LocalReferenceNumber)
 
 GET        /:lrn/delete-lock                              controllers.DeleteLockController.delete(lrn: LocalReferenceNumber)
 

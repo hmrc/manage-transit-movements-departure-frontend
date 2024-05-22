@@ -16,28 +16,49 @@
 
 package controllers
 
+import connectors.SubmissionConnector
 import controllers.actions.{Actions, SpecificDataRequiredActionProvider}
 import models.LocalReferenceNumber
 import pages.external.OfficeOfDestinationPage
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.DeclarationSubmittedView
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class DeclarationSubmittedController @Inject() (
   cc: MessagesControllerComponents,
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
-  view: DeclarationSubmittedView
-) extends FrontendController(cc)
-    with I18nSupport {
+  view: DeclarationSubmittedView,
+  submissionConnector: SubmissionConnector
+)(implicit ec: ExecutionContext)
+    extends FrontendController(cc)
+    with I18nSupport
+    with Logging {
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = actions
-    .requireData(lrn)
-    .andThen(getMandatoryPage(OfficeOfDestinationPage)) {
+  def departureDeclarationSubmitted(lrn: LocalReferenceNumber): Action[AnyContent] =
+    onPageLoad(lrn, "IE015")
+
+  def departureAmendmentSubmitted(lrn: LocalReferenceNumber): Action[AnyContent] =
+    onPageLoad(lrn, "IE013")
+
+  private def onPageLoad(lrn: LocalReferenceNumber, messageType: String): Action[AnyContent] = actions
+    .requireDataIgnoreSubmissionStatus(lrn)
+    .andThen(getMandatoryPage(OfficeOfDestinationPage))
+    .async {
       implicit request =>
-        Ok(view(lrn, request.arg))
+        submissionConnector.getMessages(lrn).map {
+          messages =>
+            if (messages.contains(messageType)) {
+              Ok(view(lrn, request.arg))
+            } else {
+              logger.warn(s"$messageType not found for LRN $lrn")
+              InternalServerError
+            }
+        }
     }
 }

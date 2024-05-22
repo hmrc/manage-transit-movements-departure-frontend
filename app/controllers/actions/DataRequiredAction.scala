@@ -16,20 +16,20 @@
 
 package controllers.actions
 
-import models.LocalReferenceNumber
 import models.requests.{DataRequest, OptionalDataRequest}
+import models.{LocalReferenceNumber, SubmissionState}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class DataRequiredAction(lrn: LocalReferenceNumber)(implicit val executionContext: ExecutionContext) extends ActionRefiner[OptionalDataRequest, DataRequest] {
+class DataRequiredAction(lrn: LocalReferenceNumber, ignoreSubmissionStatus: Boolean)(implicit val executionContext: ExecutionContext)
+    extends ActionRefiner[OptionalDataRequest, DataRequest] {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] =
     request.userAnswers match {
-      case Some(data) =>
+      case Some(data) if ignoreSubmissionStatus || data.status != SubmissionState.Submitted =>
         Future.successful(Right(DataRequest(request.request, request.eoriNumber, data)))
       case _ =>
         Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad(lrn))))
@@ -37,11 +37,11 @@ class DataRequiredAction(lrn: LocalReferenceNumber)(implicit val executionContex
 }
 
 trait DataRequiredActionProvider {
-  def apply(lrn: LocalReferenceNumber): ActionRefiner[OptionalDataRequest, DataRequest]
+  def apply(lrn: LocalReferenceNumber, ignoreSubmissionStatus: Boolean): ActionRefiner[OptionalDataRequest, DataRequest]
 }
 
 class DataRequiredActionImpl @Inject() (implicit val executionContext: ExecutionContext) extends DataRequiredActionProvider {
 
-  override def apply(lrn: LocalReferenceNumber): ActionRefiner[OptionalDataRequest, DataRequest] =
-    new DataRequiredAction(lrn)
+  override def apply(lrn: LocalReferenceNumber, ignoreSubmissionStatus: Boolean): ActionRefiner[OptionalDataRequest, DataRequest] =
+    new DataRequiredAction(lrn, ignoreSubmissionStatus)
 }

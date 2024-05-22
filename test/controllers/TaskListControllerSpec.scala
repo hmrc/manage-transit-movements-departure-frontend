@@ -77,7 +77,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
         view(lrn, viewModel, expiryInDays)(request, messages).toString
     }
 
-    "must redirect to Technical Difficulties for a GET if declaration submitted" in {
+    "must redirect to Session Expired for a GET if declaration submitted" in {
       val userAnswers = emptyUserAnswers.copy(status = SubmissionState.Submitted)
       setExistingUserAnswers(userAnswers)
 
@@ -91,10 +91,10 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
 
-    "must redirect to Technical Difficulties for a POST if declaration submitted" in {
+    "must redirect to Session Expired for a POST if declaration submitted" in {
       setExistingUserAnswers(emptyUserAnswers.copy(status = SubmissionState.Submitted))
 
       val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
@@ -103,7 +103,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.ErrorController.technicalDifficulties().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
 
     "must redirect to declaration submit for a POST if declaration guaranteeAmendment" in {
@@ -117,7 +117,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.DeclarationSubmittedController.onPageLoad(lrn).url
+      redirectLocation(result).value mustEqual controllers.routes.DeclarationSubmittedController.departureAmendmentSubmitted(lrn).url
     }
 
     "must redirect to technical difficulties for a POST if declaration guaranteeAmendment response is not 2xx" in {
@@ -158,7 +158,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.DeclarationSubmittedController.onPageLoad(lrn).url
+      redirectLocation(result).value mustEqual routes.DeclarationSubmittedController.departureDeclarationSubmitted(lrn).url
     }
 
     "must redirect to technical difficulties for an error" in {
