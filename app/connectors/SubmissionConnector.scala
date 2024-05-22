@@ -17,6 +17,7 @@
 package connectors
 
 import config.FrontendAppConfig
+import models.{DepartureMessages, LocalReferenceNumber}
 import play.api.Logging
 import play.api.http.HeaderNames._
 import play.api.libs.json.Json
@@ -62,6 +63,13 @@ sealed trait SubmissionConnector extends Logging {
     http
       .get(url)
       .execute[Long]
+  }
+
+  def getMessages(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[DepartureMessages] = {
+    val url = url"$baseUrl/messages/$lrn"
+    http
+      .get(url)
+      .execute[DepartureMessages]
   }
 }
 
