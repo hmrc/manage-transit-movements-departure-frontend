@@ -25,6 +25,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   val appName: String = configuration.get[String]("appName")
 
+  lazy val countriesOfDeparture: Seq[String] = configuration.get[Seq[String]]("countriesOfDeparture")
+
   lazy val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
   lazy val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
 

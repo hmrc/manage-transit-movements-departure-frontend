@@ -16,7 +16,7 @@
 
 package services
 
-import config.Constants._
+import config.FrontendAppConfig
 import connectors.ReferenceDataConnector
 import models.SelectableList
 import models.reference.CustomsOffice
@@ -26,9 +26,12 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsOfficesService @Inject() (
-  referenceDataConnector: ReferenceDataConnector
+  referenceDataConnector: ReferenceDataConnector,
+  config: FrontendAppConfig
 )(implicit ec: ExecutionContext) {
 
   def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[SelectableList[CustomsOffice]] =
-    referenceDataConnector.getCustomsOfficesOfDepartureForCountry(GB, XI).map(SelectableList(_))
+    referenceDataConnector
+      .getCustomsOfficesOfDepartureForCountry(config.countriesOfDeparture: _*)
+      .map(SelectableList(_))
 }

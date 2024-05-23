@@ -16,7 +16,7 @@
 
 package services
 
-import base.SpecBase
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import cats.data.NonEmptySet
 import connectors.ReferenceDataConnector
 import models.SelectableList
@@ -24,15 +24,21 @@ import models.reference.CustomsOffice
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.BeforeAndAfterEach
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
+class CustomsOfficesServiceSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  val service                                      = new CustomsOfficesService(mockRefDataConnector)
+
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+
+  val service: CustomsOfficesService = app.injector.instanceOf[CustomsOfficesService]
 
   val gbCustomsOffice1: CustomsOffice            = CustomsOffice("GB1", "BOSTON", None, "GB")
   val gbCustomsOffice2: CustomsOffice            = CustomsOffice("GB2", "Appledore", None, "GB")
