@@ -2,7 +2,7 @@ GET        /local-reference-number                                       control
 GET        /:lrn/change-local-reference-number                           controllers.preTaskList.LocalReferenceNumberController.onPageReload(lrn: LocalReferenceNumber)
 POST       /local-reference-number                                       controllers.preTaskList.LocalReferenceNumberController.onSubmit()
 
-GET        /:lrn/pre-task-list/standard-declaration-only                 controllers.preTaskList.StandardDeclarationController.onPageLoad(lrn: LocalReferenceNumber)
+GET        /:lrn/pre-task-list/standard-declaration-only                 controllers.preTaskList.StandardDeclarationController.onPageLoad(lrn: LocalReferenceNumber,mode: Mode)
 
 GET        /:lrn/pre-task-list/office-of-departure                       controllers.preTaskList.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/pre-task-list/office-of-departure                       controllers.preTaskList.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
