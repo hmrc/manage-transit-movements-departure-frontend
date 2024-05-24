@@ -47,8 +47,7 @@ class StandardDeclarationController @Inject() (
     .requireData(lrn)
     .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
-        val standard: String = Messages("additionalDeclarationType.A")
-        StandardDeclarationPage.writeToUserAnswers(AdditionalDeclarationType("A", standard)).writeToSession()
+        StandardDeclarationPage.writeToUserAnswers(AdditionalDeclarationType("A", "")).writeToSession()
         Ok(view(lrn, mode))
     }
 
