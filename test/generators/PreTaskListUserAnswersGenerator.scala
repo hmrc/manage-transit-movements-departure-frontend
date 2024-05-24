@@ -23,6 +23,8 @@ import org.scalacheck.Gen
 trait PreTaskListUserAnswersGenerator {
   self: UserAnswersGenerator =>
 
+  private val isPreLodgEnabled = true
+
   def arbitraryPreTaskListAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
-    buildUserAnswers[PreTaskListDomain](userAnswers)
+    buildUserAnswers[PreTaskListDomain](userAnswers)(isPreLodgEnabled)
 }

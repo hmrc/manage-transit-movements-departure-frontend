@@ -18,6 +18,7 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
+import models.NormalMode
 import navigation.PreTaskListNavigatorProvider
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.bind
@@ -49,7 +50,7 @@ class StandardDeclarationControllerSpec extends SpecBase with AppWithDefaultMock
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(lrn)(request, messages).toString
+        view(lrn, NormalMode)(request, messages).toString
     }
 
   }

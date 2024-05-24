@@ -16,6 +16,7 @@
 
 package views.preTaskList
 
+import models.NormalMode
 import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
 import views.html.preTaskList.StandardDeclarationView
@@ -23,7 +24,7 @@ import views.html.preTaskList.StandardDeclarationView
 class StandardDeclarationViewSpec extends ViewBehaviours {
 
   override def view: HtmlFormat.Appendable =
-    injector.instanceOf[StandardDeclarationView].apply(lrn)(fakeRequest, messages)
+    injector.instanceOf[StandardDeclarationView].apply(lrn, NormalMode)(fakeRequest, messages)
   override val prefix: String = "preTaskList.standardDeclaration"
 
   behave like pageWithTitle()

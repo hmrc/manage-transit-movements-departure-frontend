@@ -24,6 +24,6 @@ class FakeNavigator(desiredRoute: Call) extends Navigator {
   override def nextPage(userAnswers: UserAnswers, currentPage: Option[Page]): Call = desiredRoute
 }
 
-class FakePreTaskListNavigator(desiredRoute: Call, mode: Mode) extends PreTaskListNavigator(mode) {
+class FakePreTaskListNavigator(desiredRoute: Call, mode: Mode, isPreLodgeEnabled: Boolean) extends PreTaskListNavigator(mode, isPreLodgeEnabled) {
   override def nextPage(userAnswers: UserAnswers, currentPage: Option[Page]): Call = desiredRoute
 }

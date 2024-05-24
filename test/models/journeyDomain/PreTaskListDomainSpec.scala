@@ -31,21 +31,22 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
   "PreTaskListDomain" - {
 
-    val gbCustomsOffice           = CustomsOffice("GB1", "Dover", None, "GB")
-    val xiCustomsOffice           = CustomsOffice("XI1", "Belfast", None, "XI")
-    val carnetRef                 = Gen.alphaNumStr.sample.value
-    val additionalDeclarationType = arbitrary[AdditionalDeclarationType].sample.value
-    val procedureType             = arbitrary[ProcedureType].sample.value
-    val securityDetails           = arbitrary[SecurityType].sample.value
-    val nonTirDeclarationType     = arbitrary[DeclarationType](arbitraryNonTIRDeclarationType).sample.value
-    val tirDeclarationType        = arbitrary[DeclarationType](arbitraryTIRDeclarationType).sample.value
+    val gbCustomsOffice            = CustomsOffice("GB1", "Dover", None, "GB")
+    val xiCustomsOffice            = CustomsOffice("XI1", "Belfast", None, "XI")
+    val carnetRef                  = Gen.alphaNumStr.sample.value
+    val additionalDeclarationType  = Gen.oneOf("A", "D").sample.value
+    val procedureType              = arbitrary[ProcedureType].sample.value
+    val securityDetails            = arbitrary[SecurityType].sample.value
+    val nonTirDeclarationType      = arbitrary[DeclarationType](arbitraryNonTIRDeclarationType).sample.value
+    val tirDeclarationType         = arbitrary[DeclarationType](arbitraryTIRDeclarationType).sample.value
+    val isPreLodgeEnabled: Boolean = true
 
     "can be parsed from UserAnswers" - {
 
       "when a TIR declaration" in {
 
         val tirUserAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
+          .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
           .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
           .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
@@ -62,7 +63,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           securityDetailsType = securityDetails
         )
 
-        val result = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
+        val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
 
         result.value.value mustBe expectedResult
         result.value.pages mustBe Seq(
@@ -79,7 +80,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       "when a non-TIR declaration" in {
 
         val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
+          .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
           .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(procedureType)
           .unsafeSetVal(DeclarationTypePage)(nonTirDeclarationType)
@@ -95,7 +96,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
           securityDetailsType = securityDetails
         )
 
-        val result = UserAnswersReader[PreTaskListDomain].run(userAnswers)
+        val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(userAnswers)
 
         result.value.value mustBe expectedResult
         result.value.pages mustBe Seq(
@@ -114,13 +115,13 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       "when a TIR declaration without TIRCarnetReferece" in {
 
         val tirUserAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
+          .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
           .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
           .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
 
-        val result = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
+        val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
 
         result.left.value.page mustBe TIRCarnetReferencePage
         result.left.value.pages mustBe Seq(
@@ -135,14 +136,14 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
       "when a TIR with a GB customs office" in {
 
         val tirUserAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
+          .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
           .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(ProcedureTypePage)(Normal)
           .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
           .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
           .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
 
-        val result = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
+        val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
 
         result.left.value.page mustBe DeclarationTypePage
         result.left.value.pages mustBe Seq(

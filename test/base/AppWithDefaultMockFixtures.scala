@@ -45,6 +45,7 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
 
     when(mockLockService.checkLock(any())(any())).thenReturn(Future.successful(LockCheck.Unlocked))
   }
+  val isPreLodgeEnabled = true
 
   final val mockSessionRepository: SessionRepository                     = mock[SessionRepository]
   final val mockDataRetrievalActionProvider: DataRetrievalActionProvider = mock[DataRetrievalActionProvider]
@@ -69,7 +70,7 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
   protected val fakeNavigator: Navigator = new FakeNavigator(onwardRoute)
 
   protected val fakePreTaskListNavigatorProvider: PreTaskListNavigatorProvider =
-    (mode: Mode) => new FakePreTaskListNavigator(onwardRoute, mode)
+    (mode: Mode) => new FakePreTaskListNavigator(onwardRoute, mode, isPreLodgeEnabled)
 
   def guiceApplicationBuilder(): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
