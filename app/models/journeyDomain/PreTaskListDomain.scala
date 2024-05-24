@@ -70,10 +70,10 @@ object PreTaskListDomain {
     AdditionalDeclarationTypePage.reader
   }
 
-  implicit def reader(prelodgeFlag: Boolean): UserAnswersReader[PreTaskListDomain] =
+  implicit def reader(preLodgeFlag: Boolean): UserAnswersReader[PreTaskListDomain] =
     (
       localReferenceNumberReader,
-      standardDeclarationReader(prelodgeFlag),
+      standardDeclarationReader(preLodgeFlag),
       OfficeOfDeparturePage.reader,
       ProcedureTypePage.reader,
       DeclarationTypePage.reader,
