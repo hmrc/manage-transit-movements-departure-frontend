@@ -26,8 +26,7 @@ import play.api.libs.json.{Json, OFormat}
 
 case class PreTaskListDomain(
   localReferenceNumber: LocalReferenceNumber,
-//  standardDeclaration: Option[String],
-  additionalDeclarationType: AdditionalDeclarationType,
+  standardDeclaration: AdditionalDeclarationType,
   officeOfDeparture: CustomsOffice,
   procedureType: ProcedureType,
   declarationType: DeclarationType,
@@ -63,21 +62,18 @@ object PreTaskListDomain {
             }
         }
       }
+  val foo: Read[CustomsOffice] = OfficeOfDeparturePage.reader
 
+  private def standardDeclarationReader(prelodgeFlag: Boolean): Read[AdditionalDeclarationType] = if (!prelodgeFlag) {
+    Read(AdditionalDeclarationType("A", "Standard,,,,"))
+  } else {
+    AdditionalDeclarationTypePage.reader
+  }
 
-//  private def standardDeclarationReader(prelodgeFlag:Boolean): Read[_ >: Option[Nothing] <: Option[String]] = if (prelodgeFlag) {
-//    Read.apply(Option(""))
-//  } else {
-//    UserAnswersReader.none
-//  }
-
-
-
-  implicit val reader: UserAnswersReader[PreTaskListDomain] =
+  implicit def reader(prelodgeFlag: Boolean): UserAnswersReader[PreTaskListDomain] =
     (
       localReferenceNumberReader,
-//      standardDeclarationReader(prelodgeFlag = ???),
-      AdditionalDeclarationTypePage.reader,
+      standardDeclarationReader(prelodgeFlag),
       OfficeOfDeparturePage.reader,
       ProcedureTypePage.reader,
       DeclarationTypePage.reader,

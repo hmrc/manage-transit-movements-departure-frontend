@@ -18,7 +18,7 @@ package controllers.preTaskList
 
 import config.FrontendAppConfig
 import controllers.actions.Actions
-import models.LocalReferenceNumber
+import models.{LocalReferenceNumber, Mode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -35,10 +35,10 @@ class StandardDeclarationController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] =
+  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
     actions.requireData(lrn) {
       implicit request =>
-        Ok(view(lrn))
+        Ok(view(lrn, mode))
     }
 
 }
