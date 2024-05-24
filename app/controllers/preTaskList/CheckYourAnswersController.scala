@@ -51,7 +51,7 @@ class CheckYourAnswersController @Inject() (
     .requireData(lrn)
     .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
-        UserAnswersReader[PreTaskListDomain](frontendAppConfig.preLodge).run(request.userAnswers) match {
+        UserAnswersReader[PreTaskListDomain](frontendAppConfig.isPreLodgeEnabled).run(request.userAnswers) match {
           case Left(ReaderError(page, _, _)) =>
             logger.warn(s"[preTaskList.CheckYourAnswersController][$lrn] Shouldn't be here yet. Redirecting to ${page.path}")
             Redirect(page.route(request.userAnswers, NormalMode).getOrElse(controllers.routes.ErrorController.technicalDifficulties()))
@@ -67,7 +67,7 @@ class CheckYourAnswersController @Inject() (
     .async {
       implicit request =>
         PreTaskListSection
-          .updateTask(frontendAppConfig.preLodge)
+          .updateTask(frontendAppConfig.isPreLodgeEnabled)
           .writeToSession()
           .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn))
     }

@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 class PreTaskListNavigatorProviderImpl @Inject() (val frontendAppConfig: FrontendAppConfig) extends PreTaskListNavigatorProvider {
 
   override def apply(mode: Mode): UserAnswersNavigator =
-    new PreTaskListNavigator(mode, frontendAppConfig.preLodge)
+    new PreTaskListNavigator(mode, frontendAppConfig.isPreLodgeEnabled)
 }
 
 trait PreTaskListNavigatorProvider {

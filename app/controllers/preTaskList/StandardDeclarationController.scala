@@ -47,7 +47,7 @@ class StandardDeclarationController @Inject() (
     .requireData(lrn)
     .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
-        StandardDeclarationPage.writeToUserAnswers(AdditionalDeclarationType("A", "")).writeToSession()
+        StandardDeclarationPage.writeToUserAnswers("A").writeToSession()
         Ok(view(lrn, mode))
     }
 

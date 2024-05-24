@@ -24,11 +24,9 @@ import pages.sections.PreTaskListSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-case object StandardDeclarationPage extends QuestionPage[AdditionalDeclarationType] {
+case object StandardDeclarationPage extends QuestionPage[String] {
 
-  override def path: JsPath = PreTaskListSection.path \ toString
-
-  override def toString: String = "additionalDeclarationType"
+  override def path: JsPath = AdditionalDeclarationTypePage.path \ "code"
 
   override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
     Some(routes.StandardDeclarationController.onPageLoad(userAnswers.lrn))
