@@ -16,6 +16,7 @@
 
 package navigation
 
+import config.FrontendAppConfig
 import models.Mode
 import models.journeyDomain.UserAnswersReader
 import models.journeyDomain.PreTaskListDomain
@@ -23,20 +24,20 @@ import models.journeyDomain.PreTaskListDomain
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class PreTaskListNavigatorProviderImpl @Inject() () extends PreTaskListNavigatorProvider {
+class PreTaskListNavigatorProviderImpl @Inject() (val frontendAppConfig: FrontendAppConfig) extends PreTaskListNavigatorProvider {
 
   override def apply(mode: Mode): UserAnswersNavigator =
-    new PreTaskListNavigator(mode)
+    new PreTaskListNavigator(mode, frontendAppConfig.preLodge)
 }
 
 trait PreTaskListNavigatorProvider {
   def apply(mode: Mode): UserAnswersNavigator
 }
 
-class PreTaskListNavigator(override val mode: Mode) extends UserAnswersNavigator {
+class PreTaskListNavigator(override val mode: Mode, preLodge: Boolean) extends UserAnswersNavigator {
 
   override type T = PreTaskListDomain
 
   implicit override val reader: UserAnswersReader[PreTaskListDomain] =
-    PreTaskListDomain.reader
+    PreTaskListDomain.reader(preLodge)
 }
