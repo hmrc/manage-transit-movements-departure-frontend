@@ -19,25 +19,33 @@ package controllers.preTaskList
 import config.FrontendAppConfig
 import controllers.actions.Actions
 import models.{LocalReferenceNumber, Mode}
+import pages.preTaskList.StandardDeclarationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.StandardDeclarationView
+import controllers.SettableOps
+import models.reference.AdditionalDeclarationType
+import repositories.SessionRepository
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class StandardDeclarationController @Inject() (
   override val messagesApi: MessagesApi,
+  implicit val sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   val config: FrontendAppConfig,
   actions: Actions,
   view: StandardDeclarationView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
-    actions.requireData(lrn) {
+    actions.requireData(lrn).async {
       implicit request =>
+         StandardDeclarationPage.writeToUserAnswers(AdditionalDeclarationType("A", "")).writeToSession()
         Ok(view(lrn, mode))
     }
 

@@ -64,8 +64,8 @@ object PreTaskListDomain {
       }
   val foo: Read[CustomsOffice] = OfficeOfDeparturePage.reader
 
-  private def standardDeclarationReader(prelodgeFlag: Boolean): Read[AdditionalDeclarationType] = if (!prelodgeFlag) {
-    Read(AdditionalDeclarationType("A", "Standard,,,,"))
+  private def standardDeclarationReader(preLodgeFlag: Boolean): Read[AdditionalDeclarationType] = if (!preLodgeFlag) {
+    StandardDeclarationPage.reader
   } else {
     AdditionalDeclarationTypePage.reader
   }
