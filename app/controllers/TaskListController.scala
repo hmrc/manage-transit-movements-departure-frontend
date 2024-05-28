@@ -66,15 +66,12 @@ class TaskListController @Inject() (
     .async {
       implicit request =>
         request.userAnswers.status match {
-          case SubmissionState.Submitted =>
-            logger.warn(s"TaskListController: Departure with LRN $lrn has already been submitted")
-            Future.successful(Redirect(routes.ErrorController.technicalDifficulties()))
           case SubmissionState.GuaranteeAmendment | SubmissionState.Amendment =>
             submissionConnector.postAmendment(lrn.value).map {
               case response if is2xx(response.status) =>
                 Redirect(controllers.routes.DeclarationSubmittedController.departureAmendmentSubmitted(lrn))
               case e =>
-                logger.error(s"TaskListController:onSubmit:$lrn: ${e.status}")
+                logger.error(s"TaskListController:onSubmit:IE013:$lrn: ${e.status}")
                 Redirect(routes.ErrorController.technicalDifficulties())
             }
           case _ =>
@@ -82,7 +79,7 @@ class TaskListController @Inject() (
               case response if is2xx(response.status) =>
                 Redirect(controllers.routes.DeclarationSubmittedController.departureDeclarationSubmitted(lrn))
               case e =>
-                logger.error(s"TaskListController:onSubmit:$lrn: ${e.status}")
+                logger.error(s"TaskListController:onSubmit:IE015:$lrn: ${e.status}")
                 Redirect(routes.ErrorController.technicalDifficulties())
             }
         }

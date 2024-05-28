@@ -32,24 +32,6 @@ final case class UserAnswers(
   departureId: Option[String] = None
 ) {
 
-  def getOptional[A](page: Gettable[A])(implicit rds: Reads[A]): Either[String, Option[A]] =
-    Reads
-      .optionNoError(Reads.at(page.path))
-      .reads(data)
-      .asOpt
-      .toRight(
-        "Something went wrong"
-      )
-
-  def getAsEither[A](page: Gettable[A])(implicit rds: Reads[A]): Either[String, A] =
-    Reads
-      .optionNoError(Reads.at(page.path))
-      .reads(data)
-      .getOrElse(None)
-      .toRight(
-        "Something went wrong"
-      )
-
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
     Reads.optionNoError(Reads.at(page.path)).reads(data).getOrElse(None)
 
