@@ -53,6 +53,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
       .guiceApplicationBuilder()
       .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
       .overrides(bind(classOf[AdditionalDeclarationTypesService]).toInstance(mockAdditionalDeclarationTypesService))
+      .configure("features.isPreLodgeEnabled" -> true)
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -60,7 +61,13 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
     when(mockAdditionalDeclarationTypesService.getAdditionalDeclarationTypes()(any())).thenReturn(Future.successful(adts))
   }
 
-  "AdditionalDeclarationType Controller" - {
+  "AdditionalDeclarationType Controller when preLodge is true" - {
+    val app = super
+      .guiceApplicationBuilder()
+      .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
+      .overrides(bind(classOf[AdditionalDeclarationTypesService]).toInstance(mockAdditionalDeclarationTypesService))
+      .configure("features.isPreLodgeEnabled" -> true)
+      .build()
 
     "must return OK and the correct view for a GET" in {
 
@@ -98,7 +105,6 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
       when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -111,6 +117,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute.url
+
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
@@ -122,24 +129,23 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
 
       val result = route(app, request).value
 
-      val view = injector.instanceOf[AdditionalDeclarationTypeView]
+      val view = app.injector.instanceOf[AdditionalDeclarationTypeView]
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
         view(boundForm, lrn, adts, mode)(request, messages).toString
+
     }
 
     "must redirect to Technical Difficulties for a GET if no existing data is found" in {
 
       setNoExistingUserAnswers()
-
       val request = FakeRequest(GET, additionalDeclarationTypeRoute)
-
-      val result = route(app, request).value
-
+      val result  = route(app, request).value
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
+
     }
 
     "must redirect to Technical Difficulties for a POST if no existing data is found" in {
@@ -155,5 +161,33 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
+  }
+
+  "AdditionalDeclarationType Controller when preLodge is false" - {
+    val app = super
+      .guiceApplicationBuilder()
+      .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
+      .overrides(bind(classOf[AdditionalDeclarationTypesService]).toInstance(mockAdditionalDeclarationTypesService))
+      .configure("features.isPreLodgeEnabled" -> false)
+      .build()
+
+    "must redirect to the standard declaration page when preLodge is false" in {
+      running(app) {
+        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(POST, additionalDeclarationTypeRoute)
+          .withFormUrlEncodedBody(("value", adt1.code))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.preTaskList.routes.StandardDeclarationController.onPageLoad(lrn).url
+      }
+
+    }
+
   }
 }
