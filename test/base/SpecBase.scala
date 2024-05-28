@@ -28,7 +28,7 @@ import pages.{QuestionPage, ReadOnlyPage}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.libs.json.{Format, JsResultException, Json, Reads}
-import play.api.mvc.AnyContentAsEmpty
+import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.{ActionItem, Content, Key, Value}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -51,7 +51,7 @@ trait SpecBase
   val departureId               = "departureId123"
   val uuid                      = "2e8ede47-dbfb-44ea-a1e3-6c57b1fe6fe2"
 
-  def fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
+  def fakeRequest: FakeRequest[AnyContent] = FakeRequest("", "")
 
   val emptyUserAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj(), status = SubmissionState.NotSubmitted)
 
