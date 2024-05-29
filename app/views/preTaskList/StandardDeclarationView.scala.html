@@ -32,14 +32,17 @@
     showBackLink = true
 ) {
 
+    @formHelper(action = controllers.preTaskList.routes.StandardDeclarationController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
+
     @heading(messages("preTaskList.standardDeclaration.heading"), caption = None)
 
     <p class="govuk-body">@messages("preTaskList.standardDeclaration.para1")</p>
     <p class="govuk-body">@messages("preTaskList.standardDeclaration.para2")</p>
 
-    <div>
-        <a class="govuk-button" id="submit" href=@controllers.preTaskList.routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url>
-            @messages("site.continue")
-        </a>
-    </div>
+    @button(
+        messageKey = "site.continue",
+        attributes = Map("id" -> "submit")
+      )
+    }
+
 }

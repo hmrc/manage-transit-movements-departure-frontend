@@ -18,11 +18,11 @@ package controllers.preTaskList
 
 import config.FrontendAppConfig
 import controllers.actions.{Actions, PreTaskListCompletedAction}
-import controllers.{SettableOps, SettableOpsRunner}
-import models.reference.AdditionalDeclarationType
+import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import models.{LocalReferenceNumber, Mode}
+import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.preTaskList.StandardDeclarationPage
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -37,6 +37,7 @@ class StandardDeclarationController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   val config: FrontendAppConfig,
+  navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   view: StandardDeclarationView
 )(implicit ec: ExecutionContext)
@@ -47,8 +48,16 @@ class StandardDeclarationController @Inject() (
     .requireData(lrn)
     .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
-        StandardDeclarationPage.writeToUserAnswers("A").writeToSession()
         Ok(view(lrn, mode))
+    }
+
+  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
+    .requireData(lrn)
+    .async {
+      implicit request =>
+        implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+
+        StandardDeclarationPage.writeToUserAnswers("A").writeToSession().navigate()
     }
 
 }

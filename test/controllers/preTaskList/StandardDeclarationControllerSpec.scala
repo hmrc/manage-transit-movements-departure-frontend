@@ -18,14 +18,21 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
 import navigation.PreTaskListNavigatorProvider
+import org.mockito.ArgumentCaptor
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, verify, when}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.preTaskList.StandardDeclarationPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.preTaskList.StandardDeclarationView
+
+import scala.concurrent.Future
 
 class StandardDeclarationControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
@@ -51,6 +58,35 @@ class StandardDeclarationControllerSpec extends SpecBase with AppWithDefaultMock
 
       contentAsString(result) mustEqual
         view(lrn, NormalMode)(request, messages).toString
+    }
+
+    "must redirect to next page and set Standard Dec Type" in {
+      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+
+      val userAnswers = emptyUserAnswers
+
+      setExistingUserAnswers(userAnswers)
+
+      val request = FakeRequest(POST, standardDeclarationRoute)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+      val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+      verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
+      userAnswersCaptor.getValue.data mustBe Json.parse("""
+          |{
+          |  "preTaskList" : {
+          |    "additionalDeclarationType" : {
+          |      "code" : "A"
+          |
+          |        }
+          |  }
+          |}
+          |""".stripMargin)
     }
 
   }
