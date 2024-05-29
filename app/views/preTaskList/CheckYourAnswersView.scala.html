@@ -37,10 +37,16 @@
 
     @heading(messages("preTaskList.checkYourAnswers.heading"))
 
+    <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span>
+            @messages("preTaskList.checkYourAnswers.p")
+        </strong>
+    </div>
+
     @answerSections(sections)
 
-    <h2 class="govuk-heading-m">@messages("preTaskList.checkYourAnswers.h2")</h2>
-    <p class="govuk-body">@messages("preTaskList.checkYourAnswers.p")</p>
 
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
         @button(
