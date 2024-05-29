@@ -36,7 +36,7 @@ class StandardDeclarationControllerSpec extends SpecBase with AppWithDefaultMock
       .guiceApplicationBuilder()
       .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
 
-  "TIRCarnetReference Controller" - {
+  "StandardDeclaration Controller" - {
 
     "must return OK and the correct view for a GET" in {
       setExistingUserAnswers(emptyUserAnswers)
