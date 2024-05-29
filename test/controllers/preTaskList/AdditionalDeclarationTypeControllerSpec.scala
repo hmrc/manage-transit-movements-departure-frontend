@@ -164,14 +164,14 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
   }
 
   "AdditionalDeclarationType Controller when preLodge is false" - {
-    val app = super
-      .guiceApplicationBuilder()
-      .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
-      .overrides(bind(classOf[AdditionalDeclarationTypesService]).toInstance(mockAdditionalDeclarationTypesService))
-      .configure("features.isPreLodgeEnabled" -> false)
-      .build()
 
-    "must redirect to the standard declaration page when preLodge is false" in {
+    "must redirect to the standard declaration page when preLodge is false for a POST" in {
+      val app = super
+        .guiceApplicationBuilder()
+        .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
+        .overrides(bind(classOf[AdditionalDeclarationTypesService]).toInstance(mockAdditionalDeclarationTypesService))
+        .configure("features.isPreLodgeEnabled" -> false)
+        .build()
       running(app) {
         when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
 
@@ -179,6 +179,29 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
 
         val request = FakeRequest(POST, additionalDeclarationTypeRoute)
           .withFormUrlEncodedBody(("value", adt1.code))
+
+        val result = route(app, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.preTaskList.routes.StandardDeclarationController.onPageLoad(lrn).url
+      }
+
+    }
+
+    "must redirect to the standard declaration page when preLodge is false for a GET" in {
+      val app = super
+        .guiceApplicationBuilder()
+        .overrides(bind(classOf[PreTaskListNavigatorProvider]).toInstance(fakePreTaskListNavigatorProvider))
+        .overrides(bind(classOf[AdditionalDeclarationTypesService]).toInstance(mockAdditionalDeclarationTypesService))
+        .configure("features.isPreLodgeEnabled" -> false)
+        .build()
+      running(app) {
+        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(GET, additionalDeclarationTypeRoute)
 
         val result = route(app, request).value
 
