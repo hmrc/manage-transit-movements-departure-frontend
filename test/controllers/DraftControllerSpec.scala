@@ -26,14 +26,40 @@ import play.api.test.Helpers._
 class DraftControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   "draft controller" - {
-    "when the preTaskList is incomplete the next page will be a preTaskList page" in {
-      setExistingUserAnswers(emptyUserAnswers)
+    "when the preTaskList is incomplete and isPreLodgeEnabled false the next page will be a standardDeclaration page" in {
 
-      val request = FakeRequest(GET, routes.DraftController.draftRedirect(lrn).url)
+      val app = super
+        .guiceApplicationBuilder()
+        .configure("features.isPreLodgeEnabled" -> false)
+        .build()
 
-      val result = route(app, request).value
+      running(app) {
+        setExistingUserAnswers(emptyUserAnswers)
 
-      redirectLocation(result).value mustEqual controllers.preTaskList.routes.AdditionalDeclarationTypeController.onPageLoad(lrn, NormalMode).url
+        val request = FakeRequest(GET, routes.DraftController.draftRedirect(lrn).url)
+
+        val result = route(app, request).value
+
+        redirectLocation(result).value mustEqual controllers.preTaskList.routes.StandardDeclarationController.onPageLoad(lrn).url
+      }
+
+    }
+    "when the preTaskList is incomplete isPreLodgeEnabled true the next page will be a preTaskList page" in {
+
+      val app = super
+        .guiceApplicationBuilder()
+        .configure("features.isPreLodgeEnabled" -> true)
+        .build()
+
+      running(app) {
+        setExistingUserAnswers(emptyUserAnswers)
+
+        val request = FakeRequest(GET, routes.DraftController.draftRedirect(lrn).url)
+
+        val result = route(app, request).value
+
+        redirectLocation(result).value mustEqual controllers.preTaskList.routes.AdditionalDeclarationTypeController.onPageLoad(lrn, NormalMode).url
+      }
 
     }
 
