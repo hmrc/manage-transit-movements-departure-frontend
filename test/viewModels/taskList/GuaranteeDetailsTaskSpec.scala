@@ -55,6 +55,13 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
         task.name mustBe "Edit guarantee details"
       }
     }
+
+    "must be Amend guarantee details" - {
+      "when status is Error" in {
+        val task = GuaranteeDetailsTask(Error)
+        task.name mustBe "Amend guarantee details"
+      }
+    }
   }
 
   "id" - {

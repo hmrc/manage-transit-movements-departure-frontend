@@ -31,9 +31,7 @@ class DependentTaskActionImpl @Inject() (implicit val executionContext: Executio
     def isTaskCompleted(task: String): Boolean =
       request.userAnswers.tasks
         .get(task)
-        .exists(
-          result => result.isCompleted || result.isUnavailable || result.isError
-        )
+        .exists(_.isCompleted)
 
     if (isTaskCompleted(PreTaskListTask.section)) {
       Future.successful(None)

@@ -34,7 +34,7 @@ object SubmissionState extends Enumeration {
 
   implicit class RichSubmissionState(value: Value) {
 
-    private val errorStates       = Seq(RejectedPendingChanges, Amendment, GuaranteeAmendment)
-    def showErrorContent: Boolean = errorStates.contains(value)
+    def showErrorContent: Boolean =
+      Seq(RejectedPendingChanges, Amendment, GuaranteeAmendment).contains(value)
   }
 }

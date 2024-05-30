@@ -17,15 +17,34 @@
 package viewModels.taskList
 
 import models.SubmissionState
+import play.api.i18n.Messages
 import play.api.libs.json._
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+import uk.gov.hmrc.govukfrontend.views.viewmodels.tag.Tag
+import uk.gov.hmrc.govukfrontend.views.viewmodels.tasklist.TaskListItemStatus
 
 sealed trait TaskStatus {
   def messageKey(submissionState: SubmissionState.Value): String
+
   val tag: String
+
   val jsonString: String
-  def isCompleted: Boolean   = this == TaskStatus.Completed
-  def isUnavailable: Boolean = this == TaskStatus.Unavailable
-  def isError: Boolean       = this == TaskStatus.Error
+
+  def isCompleted: Boolean =
+    this == TaskStatus.Completed ||
+      this == TaskStatus.Amended ||
+      this == TaskStatus.Unavailable
+
+  def toTaskListItemStatus(submissionState: SubmissionState.Value, id: String)(implicit messages: Messages): TaskListItemStatus =
+    TaskListItemStatus(
+      tag = Some(
+        Tag(
+          content = messages(messageKey(submissionState)).toText,
+          classes = tag,
+          attributes = Map("id" -> s"$id-status")
+        )
+      )
+    )
 }
 
 object TaskStatus {

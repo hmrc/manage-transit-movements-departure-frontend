@@ -55,6 +55,13 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
         task.name mustBe "Edit trader details"
       }
     }
+
+    "must be Amend trader details" - {
+      "when status is Error" in {
+        val task = TraderDetailsTask(Error)
+        task.name mustBe "Amend trader details"
+      }
+    }
   }
 
   "id" - {
