@@ -13,6 +13,7 @@ site.resend = Confirm and resend
 site.service_name = Manage your transit movements
 site.section = This section is
 site.declaration = This declaration is
+site.warning = Warning
 
 site.email.link = If you have any questions or issues, email us at {0}
 site.email.subject = NCTS Phase 5 - Help with testing

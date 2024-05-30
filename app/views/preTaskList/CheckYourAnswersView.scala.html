@@ -18,13 +18,15 @@
 @import models.LocalReferenceNumber
 @import viewModels.sections.Section
 @import views.html.components.{AnswerSections, Button, Heading}
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(
     mainTemplate: MainTemplate,
     heading: Heading,
     answerSections: AnswerSections,
     button: Button,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    govukWarningText : GovukWarningText
 )
 
 @(lrn: LocalReferenceNumber, sections: Seq[Section])(implicit request: Request[_], messages: Messages)
@@ -37,16 +39,12 @@
 
     @heading(messages("preTaskList.checkYourAnswers.heading"))
 
-    <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text">
-            <span class="govuk-visually-hidden">Warning</span>
-            @messages("preTaskList.checkYourAnswers.p")
-        </strong>
-    </div>
+    @govukWarningText(WarningText(
+        iconFallbackText = Some(messages("site.warning")),
+        content = Text(messages("preTaskList.checkYourAnswers.p"))
+    ))
 
     @answerSections(sections)
-
 
     @formHelper(action = routes.CheckYourAnswersController.onSubmit(lrn), Symbol("autoComplete") -> "off") {
         @button(
