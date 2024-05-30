@@ -17,6 +17,7 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
+import config.FrontendAppConfig
 import models.{LocalReferenceNumber, SubmissionState}
 import org.scalacheck.Arbitrary.arbitrary
 import viewModels.taskList.{TaskListTask, TaskListViewModel}
@@ -28,6 +29,8 @@ class TaskListSpec extends A11ySpecBase {
   "the 'task list' component" must {
     val template  = app.injector.instanceOf[MainTemplate]
     val component = app.injector.instanceOf[TaskList]
+
+    implicit val config: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
     val title                        = nonEmptyString.sample.value
     val tasks                        = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
