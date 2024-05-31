@@ -30,6 +30,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
   lazy val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
 
+  lazy val isPreLodgeEnabled: Boolean = configuration.get[Boolean]("features.isPreLodgeEnabled")
+
   lazy val customsReferenceDataUrl: String = configuration.get[Service]("microservice.services.customs-reference-data").fullServiceUrl
 
   lazy val loginUrl: String         = configuration.get[String]("urls.login")

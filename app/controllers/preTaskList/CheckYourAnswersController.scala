@@ -17,6 +17,7 @@
 package controllers.preTaskList
 
 import com.google.inject.Inject
+import config.FrontendAppConfig
 import controllers.actions.{Actions, PreTaskListCompletedAction}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import models.journeyDomain.{PreTaskListDomain, ReaderError, UserAnswersReader}
@@ -35,6 +36,7 @@ import scala.concurrent.ExecutionContext
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   implicit val sessionRepository: SessionRepository,
+  val frontendAppConfig: FrontendAppConfig,
   actions: Actions,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   val controllerComponents: MessagesControllerComponents,
@@ -49,7 +51,7 @@ class CheckYourAnswersController @Inject() (
     .requireData(lrn)
     .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
-        UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
+        UserAnswersReader[PreTaskListDomain](frontendAppConfig.isPreLodgeEnabled).run(request.userAnswers) match {
           case Left(ReaderError(page, _, _)) =>
             logger.warn(s"[preTaskList.CheckYourAnswersController][$lrn] Shouldn't be here yet. Redirecting to ${page.path}")
             Redirect(page.route(request.userAnswers, NormalMode).getOrElse(controllers.routes.ErrorController.technicalDifficulties()))
@@ -65,7 +67,7 @@ class CheckYourAnswersController @Inject() (
     .async {
       implicit request =>
         PreTaskListSection
-          .updateTask()
+          .updateTask(frontendAppConfig.isPreLodgeEnabled)
           .writeToSession()
           .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn))
     }

@@ -81,16 +81,24 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     }
 
     "must redirect back into journey if answers in invalid state" in {
-      val userAnswers = emptyUserAnswers
-      setExistingUserAnswers(emptyUserAnswers)
+      val app = super
+        .guiceApplicationBuilder()
+        .overrides(bind[PreTaskListViewModelProvider].toInstance(mockViewModelProvider))
+        .configure("features.isPreLodgeEnabled" -> true)
+        .build()
+      running(app) {
+        val userAnswers = emptyUserAnswers
+        setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url)
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(userAnswers.lrn).url)
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.AdditionalDeclarationTypeController.onPageLoad(userAnswers.lrn, NormalMode).url
+        redirectLocation(result).value mustEqual routes.AdditionalDeclarationTypeController.onPageLoad(userAnswers.lrn, NormalMode).url
+      }
+
     }
 
     "must redirect to task list / declaration summary" in {

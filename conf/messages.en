@@ -136,6 +136,11 @@ preTaskList.checkYourAnswers.title = Check your answers
 preTaskList.checkYourAnswers.h2 = Before you continue
 preTaskList.checkYourAnswers.p = Once you have confirmed these details you will not be able to change them.
 
+preTaskList.standardDeclaration.para1 = This means you can only make a declaration for goods which have already boarded at a UK port or airport.
+preTaskList.standardDeclaration.para2 = Pre-lodge declarations will become available later in the year. This will then allow you to send a declaration before the goods have boarded, up to 2 weeks before they are released for transit.
+preTaskList.standardDeclaration.heading = You can only make a standard declaration
+preTaskList.standardDeclaration.title = You can only make a standard declaration
+
 # Task list
 
 taskList.title = Declaration summary
