@@ -22,11 +22,10 @@
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
-    config: FrontendAppConfig,
     heading: Heading,
     taskList: TaskList,
     button: Button
-)
+)(implicit config: FrontendAppConfig)
 
 @(lrn: LocalReferenceNumber, viewModel: TaskListViewModel, expiryInDays: Long)(implicit request: Request[_], messages: Messages)
 

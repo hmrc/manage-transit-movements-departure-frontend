@@ -15,40 +15,20 @@
  *@
 
 @import config.FrontendAppConfig
-@import models.SubmissionState._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 @import viewModels.taskList._
-@import viewModels.taskList.TaskStatus._
 
 @this(
-    config: FrontendAppConfig
+    govukTaskList: GovukTaskList
 )
 
 @(
     viewModel: TaskListViewModel,
     lrn: LocalReferenceNumber
-)(implicit messages: Messages)
+)(implicit messages: Messages, config: FrontendAppConfig)
 
-<ol class="app-task-list">
-    <li>
-        <ul class="app-task-list__items">
-            @for(task <- viewModel.tasks) {
-                <li class="app-task-list__item">
-                    <span class="app-task-list__task-name">
-                        @task.status match {
-                            case CannotStartYet | Unavailable => { @task.name }
-                            case Error              => {
-                                <a href="@{task.href(lrn)(config)}" aria-describedby="@task.id-status">@task.name
-                                    <span class="govuk-visually-hidden" id="@task.id-hidden">@messages("taskStatus.error.hidden")</span>
-                                </a>
-                            }
-                            case _ => { <a href="@{task.href(lrn)(config)}" aria-describedby="@task.id-status">@task.name</a> }
-                        }
-                    </span>
-                    <span class="govuk-tag app-task-list__tag @task.status.tag" id="@task.id-status">
-                        @messages(task.status.messageKey(viewModel.submissionState))
-                    </span>
-                </li>
-            }
-        </ul>
-    </li>
-</ol>
+@govukTaskList(
+    TaskList(
+        items = viewModel.taskListItems(lrn)
+    )
+)

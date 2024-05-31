@@ -164,26 +164,32 @@ taskStatus.amended = Amended
 task.traderDetails = Trader details
 task.traderDetails.add = Add trader details
 task.traderDetails.edit = Edit trader details
+task.traderDetails.amend = Amend trader details
 
 task.routeDetails = Route details
 task.routeDetails.add = Add route details
 task.routeDetails.edit = Edit route details
+task.routeDetails.amend = Amend route details
 
 task.guaranteeDetails = Guarantee details
 task.guaranteeDetails.add = Add guarantee details
 task.guaranteeDetails.edit = Edit guarantee details
+task.guaranteeDetails.amend = Amend guarantee details
 
 task.transportDetails = Transport details
 task.transportDetails.add = Add transport details
 task.transportDetails.edit = Edit transport details
+task.transportDetails.amend = Amend transport details
 
 task.documents = Documents
 task.documents.add = Add documents
 task.documents.edit = Edit documents
+task.documents.amend = Amend documents
 
 task.items = Items
 task.items.add = Add items
 task.items.edit = Edit items
+task.items.amend = Amend items
 
 # Declaration
 

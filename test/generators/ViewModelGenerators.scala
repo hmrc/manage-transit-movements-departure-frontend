@@ -109,15 +109,30 @@ trait ViewModelGenerators {
   }
 
   implicit lazy val arbitraryTaskStatus: Arbitrary[TaskStatus] = Arbitrary {
-    Gen.oneOf(TaskStatus.Completed, TaskStatus.InProgress, TaskStatus.NotStarted, TaskStatus.CannotStartYet)
+    Gen.oneOf(
+      TaskStatus.Completed,
+      TaskStatus.InProgress,
+      TaskStatus.NotStarted,
+      TaskStatus.CannotStartYet,
+      TaskStatus.Error,
+      TaskStatus.Unavailable,
+      TaskStatus.Amended
+    )
   }
 
   lazy val arbitraryIncompleteTaskStatus: Arbitrary[TaskStatus] = Arbitrary {
-    Gen.oneOf(TaskStatus.InProgress, TaskStatus.NotStarted, TaskStatus.CannotStartYet)
+    Gen.oneOf(
+      TaskStatus.InProgress,
+      TaskStatus.NotStarted,
+      TaskStatus.CannotStartYet
+    )
   }
 
   lazy val arbitraryAmendedOrCompleteTaskStatus: Arbitrary[TaskStatus] = Arbitrary {
-    Gen.oneOf(TaskStatus.Completed, TaskStatus.Amended)
+    Gen.oneOf(
+      TaskStatus.Completed,
+      TaskStatus.Amended
+    )
   }
 
   implicit lazy val arbitraryTask: Arbitrary[TaskListTask] = Arbitrary {

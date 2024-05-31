@@ -55,6 +55,13 @@ class TransportTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
         task.name mustBe "Edit transport details"
       }
     }
+
+    "must be Amend transport details" - {
+      "when status is Error" in {
+        val task = TransportTask(Error)
+        task.name mustBe "Amend transport details"
+      }
+    }
   }
 
   "id" - {
