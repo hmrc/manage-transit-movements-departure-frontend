@@ -18,60 +18,34 @@ package viewModels.taskList
 
 import base.SpecBase
 import generators.Generators
-import models.SubmissionState
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, JsString, Json}
 
 class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "messageKey" - {
-    "when Completed" - {
-      "and declaration rejected pending changes" in {
-        TaskStatus.Completed.messageKey(SubmissionState.RejectedPendingChanges) mustBe "taskStatus.amended"
-      }
-
-      "and declaration not rejected pending changes" in {
-        forAll(arbitrary[SubmissionState.Value].retryUntil(_ != SubmissionState.RejectedPendingChanges)) {
-          submissionState =>
-            TaskStatus.Completed.messageKey(submissionState) mustBe "taskStatus.completed"
-        }
-      }
+    "when Completed" in {
+      TaskStatus.Completed.messageKey mustBe "taskStatus.completed"
     }
 
     "when InProgress" in {
-      forAll(arbitrary[SubmissionState.Value]) {
-        submissionState =>
-          TaskStatus.InProgress.messageKey(submissionState) mustBe "taskStatus.inProgress"
-      }
+      TaskStatus.InProgress.messageKey mustBe "taskStatus.inProgress"
     }
 
     "when NotStarted" in {
-      forAll(arbitrary[SubmissionState.Value]) {
-        submissionState =>
-          TaskStatus.NotStarted.messageKey(submissionState) mustBe "taskStatus.notStarted"
-      }
+      TaskStatus.NotStarted.messageKey mustBe "taskStatus.notStarted"
     }
 
     "when CannotStartYet" in {
-      forAll(arbitrary[SubmissionState.Value]) {
-        submissionState =>
-          TaskStatus.CannotStartYet.messageKey(submissionState) mustBe "taskStatus.cannotStartYet"
-      }
+      TaskStatus.CannotStartYet.messageKey mustBe "taskStatus.cannotStartYet"
     }
 
     "when Error" in {
-      forAll(arbitrary[SubmissionState.Value]) {
-        submissionState =>
-          TaskStatus.Error.messageKey(submissionState) mustBe "taskStatus.error"
-      }
+      TaskStatus.Error.messageKey mustBe "taskStatus.error"
     }
 
     "when Unavailable" in {
-      forAll(arbitrary[SubmissionState.Value]) {
-        submissionState =>
-          TaskStatus.Unavailable.messageKey(submissionState) mustBe "taskStatus.completed"
-      }
+      TaskStatus.Unavailable.messageKey mustBe "taskStatus.completed"
     }
   }
 
