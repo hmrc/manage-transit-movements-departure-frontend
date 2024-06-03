@@ -18,7 +18,7 @@ package models.journeyDomain
 
 import config.Constants._
 import models.ProcedureType.Normal
-import models.reference.{AdditionalDeclarationType, CustomsOffice, DeclarationType, SecurityType}
+import models.reference.{CustomsOffice, DeclarationType, SecurityType}
 import models.{LocalReferenceNumber, ProcedureType, UserAnswers}
 import pages.preTaskList._
 import pages.sections.{PreTaskListSection, Section}

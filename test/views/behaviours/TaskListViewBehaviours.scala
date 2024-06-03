@@ -64,7 +64,7 @@ trait TaskListViewBehaviours extends ViewBehaviours with Generators {
               val status = renderedTask.getElementsByClass("govuk-task-list__status").first()
               status.id() mustBe s"task-list-${taskIndex + 1}-status"
               val tag = status.getElementsByClass("govuk-tag").first()
-              tag.text() mustBe messages(task.status.messageKey(submissionState))
+              tag.text() mustBe messages(task.status.messageKey)
               tag.id() mustBe s"${task.id}-status"
               assert(tag.hasClass(task.status.tag))
             }

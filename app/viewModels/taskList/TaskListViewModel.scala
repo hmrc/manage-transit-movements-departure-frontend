@@ -36,7 +36,7 @@ case class TaskListViewModel(tasks: Seq[TaskListTask], submissionState: Submissi
   }
 
   def taskListItems(lrn: LocalReferenceNumber)(implicit messages: Messages, config: FrontendAppConfig): Seq[TaskListItem] =
-    tasks.map(_.toTaskListItem(submissionState, lrn))
+    tasks.map(_.toTaskListItem(lrn))
 }
 
 object TaskListViewModel {

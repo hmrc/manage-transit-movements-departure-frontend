@@ -22,9 +22,8 @@ import models.{NormalMode, UserAnswers}
 import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, verify, when}
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.preTaskList.StandardDeclarationPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json

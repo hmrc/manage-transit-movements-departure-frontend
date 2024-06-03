@@ -17,10 +17,8 @@
 package pages.preTaskList
 
 import controllers.preTaskList.routes
-import models.reference.AdditionalDeclarationType
 import models.{Mode, UserAnswers}
 import pages.QuestionPage
-import pages.sections.PreTaskListSection
 import play.api.libs.json.JsPath
 import play.api.mvc.Call
 

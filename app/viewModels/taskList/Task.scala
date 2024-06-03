@@ -17,7 +17,7 @@
 package viewModels.taskList
 
 import config.FrontendAppConfig
-import models.{LocalReferenceNumber, SubmissionState}
+import models.LocalReferenceNumber
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.tasklist._
@@ -45,12 +45,11 @@ abstract class TaskListTask extends Task {
   }
 
   def toTaskListItem(
-    submissionState: SubmissionState.Value,
     lrn: LocalReferenceNumber
   )(implicit messages: Messages, config: FrontendAppConfig): TaskListItem =
     TaskListItem(
       title = TaskListItemTitle(name.toText),
-      status = status.toTaskListItemStatus(submissionState, id),
+      status = status.toTaskListItemStatus(id),
       href = status match {
         case CannotStartYet | Unavailable => None
         case _                            => Some(href(lrn))
