@@ -57,7 +57,13 @@ class AuthenticatedIdentifierAction @Inject() (
             case Some(enrolment) =>
               enrolment.getIdentifier(config.enrolmentIdentifierKey) match {
                 case Some(enrolmentIdentifier) =>
-                  block(IdentifierRequest(request, EoriNumber(enrolmentIdentifier.value)))
+                  val eori = enrolmentIdentifier.value
+                  config.allowList.map(_.eoris) match {
+                    case Some(eoris) if !eoris.contains(eori) =>
+                      Future.successful(ServiceUnavailable)
+                    case _ =>
+                      block(IdentifierRequest(request, EoriNumber(eori)))
+                  }
                 case None =>
                   Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
               }
