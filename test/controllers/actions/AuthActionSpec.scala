@@ -370,7 +370,8 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
             val controller = new Harness(authAction)
             val result     = controller.onPageLoad()(fakeRequest)
 
-            status(result) mustBe SERVICE_UNAVAILABLE
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe controllers.routes.ErrorController.serviceUnavailable().url
           }
         }
       }

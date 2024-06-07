@@ -64,4 +64,14 @@ class ErrorController @Inject() (
       )
   }
 
+  def serviceUnavailable: Action[AnyContent] = Action {
+    implicit request =>
+      ServiceUnavailable(
+        errorTemplate(
+          title = "global.error.ServiceUnavailable503.title",
+          header = "global.error.ServiceUnavailable503.heading",
+          message = "global.error.ServiceUnavailable503.message"
+        )
+      )
+  }
 }

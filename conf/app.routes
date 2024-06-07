@@ -16,6 +16,7 @@ GET        /bad-request                                   controllers.ErrorContr
 GET        /not-found                                     controllers.ErrorController.notFound()
 GET        /technical-difficulties                        controllers.ErrorController.technicalDifficulties()
 GET        /internal-server-error                         controllers.ErrorController.internalServerError()
+GET        /service-unavailable                           controllers.ErrorController.serviceUnavailable()
 
 GET        /keep-alive                                    controllers.KeepAliveController.keepAlive(lrn: Option[LocalReferenceNumber] = None)
 GET        /:lrn/keep-alive                               controllers.KeepAliveController.keepAlive(lrn: Option[LocalReferenceNumber])

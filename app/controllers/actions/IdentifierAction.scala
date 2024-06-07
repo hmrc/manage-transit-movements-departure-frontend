@@ -60,7 +60,7 @@ class AuthenticatedIdentifierAction @Inject() (
                   val eori = enrolmentIdentifier.value
                   config.allowList.map(_.eoris) match {
                     case Some(eoris) if !eoris.contains(eori) =>
-                      Future.successful(ServiceUnavailable)
+                      Future.successful(Redirect(routes.ErrorController.serviceUnavailable()))
                     case _ =>
                       block(IdentifierRequest(request, EoriNumber(eori)))
                   }
