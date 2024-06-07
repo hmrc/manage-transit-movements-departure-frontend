@@ -17,7 +17,7 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
-import models.LocalReferenceNumber
+import models.{AllowList, LocalReferenceNumber}
 import play.api.Configuration
 
 @Singleton
@@ -61,4 +61,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     val url: String = configuration.get[String](s"urls.${section}Frontend")
     url.replace(":lrn", lrn.toString)
   }
+
+  val allowList: Option[AllowList] = AllowList(
+    configuration.get[Boolean]("allowlist.enabled"),
+    configuration.get[Seq[String]]("allowlist.eoris")
+  )
 }

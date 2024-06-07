@@ -16,23 +16,33 @@
 
 package controllers.actions
 
+import config.FrontendAppConfig
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{LocalReferenceNumber, SubmissionState}
-import play.api.mvc.Results.Redirect
+import models.{AllowList, LocalReferenceNumber, SubmissionState}
+import play.api.mvc.Results.{Redirect, ServiceUnavailable}
 import play.api.mvc.{ActionRefiner, Result}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRequiredAction(lrn: LocalReferenceNumber, ignoreSubmissionStatus: Boolean)(implicit val executionContext: ExecutionContext)
+class DataRequiredAction(
+  lrn: LocalReferenceNumber,
+  ignoreSubmissionStatus: Boolean,
+  allowList: Option[AllowList]
+)(implicit val executionContext: ExecutionContext)
     extends ActionRefiner[OptionalDataRequest, DataRequest] {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] =
-    request.userAnswers match {
-      case Some(data) if ignoreSubmissionStatus || data.status != SubmissionState.Submitted =>
-        Future.successful(Right(DataRequest(request.request, request.eoriNumber, data)))
+    allowList.map(_.eoris) match {
+      case Some(eoris) if !eoris.contains(request.eoriNumber.value) =>
+        Future.successful(Left(ServiceUnavailable))
       case _ =>
-        Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad(lrn))))
+        request.userAnswers match {
+          case Some(data) if ignoreSubmissionStatus || data.status != SubmissionState.Submitted =>
+            Future.successful(Right(DataRequest(request.request, request.eoriNumber, data)))
+          case _ =>
+            Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad(lrn))))
+        }
     }
 }
 
@@ -40,8 +50,8 @@ trait DataRequiredActionProvider {
   def apply(lrn: LocalReferenceNumber, ignoreSubmissionStatus: Boolean): ActionRefiner[OptionalDataRequest, DataRequest]
 }
 
-class DataRequiredActionImpl @Inject() (implicit val executionContext: ExecutionContext) extends DataRequiredActionProvider {
+class DataRequiredActionImpl @Inject() (appConfig: FrontendAppConfig)(implicit val executionContext: ExecutionContext) extends DataRequiredActionProvider {
 
   override def apply(lrn: LocalReferenceNumber, ignoreSubmissionStatus: Boolean): ActionRefiner[OptionalDataRequest, DataRequest] =
-    new DataRequiredAction(lrn, ignoreSubmissionStatus)
+    new DataRequiredAction(lrn, ignoreSubmissionStatus, appConfig.allowList)
 }
