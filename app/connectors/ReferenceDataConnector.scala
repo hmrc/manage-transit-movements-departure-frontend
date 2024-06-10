@@ -34,12 +34,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpClientV2) extends Logging {
 
-  def getCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[Country]] = {
+  def getCountryCodeCommunityCountry(countryId: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Country] = {
     val url = url"${config.customsReferenceDataUrl}/lists/CountryCodesCommunity"
     http
       .get(url)
+      .transform(_.withQueryStringParameters("data.code" -> countryId))
       .setHeader(version2Header)
       .execute[NonEmptySet[Country]]
+      .map(_.head)
   }
 
   def getCustomsOfficesOfDepartureForCountry(
@@ -58,20 +60,24 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
       .execute[NonEmptySet[CustomsOffice]]
   }
 
-  def getCountryCodesCTC()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[Country]] = {
+  def getCountryCodesCTCCountry(countryId: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Country] = {
     val url = url"${config.customsReferenceDataUrl}/lists/CountryCodesCTC"
     http
       .get(url)
+      .transform(_.withQueryStringParameters("data.code" -> countryId))
       .setHeader(version2Header)
       .execute[NonEmptySet[Country]]
+      .map(_.head)
   }
 
-  def getCustomsSecurityAgreementAreaCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[Country]] = {
+  def getCountryCustomsSecurityAgreementAreaCountry(countryId: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Country] = {
     val url = url"${config.customsReferenceDataUrl}/lists/CountryCustomsSecurityAgreementArea"
     http
       .get(url)
+      .transform(_.withQueryStringParameters("data.code" -> countryId))
       .setHeader(version2Header)
       .execute[NonEmptySet[Country]]
+      .map(_.head)
   }
 
   def getSecurityTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[NonEmptySet[SecurityType]] = {

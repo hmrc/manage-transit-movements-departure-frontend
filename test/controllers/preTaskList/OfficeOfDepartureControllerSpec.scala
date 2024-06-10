@@ -18,12 +18,14 @@ package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.SelectableFormProvider
-import models.reference.{Country, CustomsOffice}
+import models.reference.CustomsOffice
 import models.{NormalMode, SelectableList, UserAnswers}
 import navigation.PreTaskListNavigatorProvider
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.preTaskList.OfficeOfDeparturePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -36,7 +38,7 @@ import views.html.preTaskList.OfficeOfDepartureView
 
 import scala.concurrent.Future
 
-class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks {
 
   private val customsOffice1: CustomsOffice                 = CustomsOffice("GB1", "someName", None, "GB")
   private val customsOffice2: CustomsOffice                 = CustomsOffice("GB2", "name", None, "GB")
@@ -101,105 +103,42 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
 
     "must redirect to the next page when valid data is submitted" - {
       "and office is in CL112 but not CL147 and not CL010" in {
-        setExistingUserAnswers(emptyUserAnswers)
-        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
-        when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
-        when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(Seq(Country("GB"))))
-        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(Seq(Country("FR"))))
-        when(mockCountriesService.getCommunityCountries()(any())).thenReturn(Future.successful(Seq(Country("IT"))))
+        forAll(arbitrary[Boolean], arbitrary[Boolean], arbitrary[Boolean]) {
+          (isInCL112, isInCL147, isInCL010) =>
+            beforeEach()
 
-        val request = FakeRequest(POST, officeOfDepartureRoute)
-          .withFormUrlEncodedBody(("value", "GB1"))
+            setExistingUserAnswers(emptyUserAnswers)
+            when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+            when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
+            when(mockCountriesService.isInCL112(any())(any())).thenReturn(Future.successful(isInCL112))
+            when(mockCountriesService.isInCL147(any())(any())).thenReturn(Future.successful(isInCL147))
+            when(mockCountriesService.isInCL010(any())(any())).thenReturn(Future.successful(isInCL010))
 
-        val result: Future[Result] = route(app, request).value
+            val request = FakeRequest(POST, officeOfDepartureRoute)
+              .withFormUrlEncodedBody(("value", "GB1"))
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+            val result: Future[Result] = route(app, request).value
 
-        val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
-        userAnswersCaptor.getValue.data mustBe Json.parse("""
-            |{
-            |  "preTaskList" : {
-            |    "officeOfDeparture" : {
-            |      "id" : "GB1",
-            |      "name" : "someName",
-            |      "countryId" : "GB",
-            |      "isInCL112" : true,
-            |      "isInCL147" : false,
-            |      "isInCL010" : false
-            |    }
-            |  }
-            |}
-            |""".stripMargin)
-      }
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual onwardRoute.url
 
-      "and office is in CL147 but is not in CL112 and not CL010" in {
-        setExistingUserAnswers(emptyUserAnswers)
-        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
-        when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
-        when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(Seq(Country("FR"))))
-        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(Seq(Country("GB"))))
-        when(mockCountriesService.getCommunityCountries()(any())).thenReturn(Future.successful(Seq(Country("IT"))))
-
-        val request = FakeRequest(POST, officeOfDepartureRoute)
-          .withFormUrlEncodedBody(("value", "GB1"))
-
-        val result: Future[Result] = route(app, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
-
-        val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
-        userAnswersCaptor.getValue.data mustBe Json.parse("""
-            |{
-            |  "preTaskList" : {
-            |    "officeOfDeparture" : {
-            |      "id" : "GB1",
-            |      "name" : "someName",
-            |      "countryId" : "GB",
-            |      "isInCL112" : false,
-            |      "isInCL147" : true,
-            |      "isInCL010" : false
-            |    }
-            |  }
-            |}
-            |""".stripMargin)
-      }
-
-      "and office is in CL010 but is not in CL112 and not CL147" in {
-        setExistingUserAnswers(emptyUserAnswers)
-        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
-        when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
-        when(mockCountriesService.getCountryCodesCTC()(any())).thenReturn(Future.successful(Seq(Country("FR"))))
-        when(mockCountriesService.getCustomsSecurityAgreementAreaCountries()(any())).thenReturn(Future.successful(Seq(Country("IT"))))
-        when(mockCountriesService.getCommunityCountries()(any())).thenReturn(Future.successful(Seq(Country("GB"))))
-
-        val request = FakeRequest(POST, officeOfDepartureRoute)
-          .withFormUrlEncodedBody(("value", "GB1"))
-
-        val result: Future[Result] = route(app, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
-
-        val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
-        userAnswersCaptor.getValue.data mustBe Json.parse("""
-            |{
-            |  "preTaskList" : {
-            |    "officeOfDeparture" : {
-            |      "id" : "GB1",
-            |      "name" : "someName",
-            |      "countryId" : "GB",
-            |      "isInCL112" : false,
-            |      "isInCL147" : false,
-            |      "isInCL010" : true
-            |    }
-            |  }
-            |}
-            |""".stripMargin)
+            val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+            verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
+            userAnswersCaptor.getValue.data mustBe Json.parse(s"""
+                |{
+                |  "preTaskList" : {
+                |    "officeOfDeparture" : {
+                |      "id" : "GB1",
+                |      "name" : "someName",
+                |      "countryId" : "GB",
+                |      "isInCL112" : $isInCL112,
+                |      "isInCL147" : $isInCL147,
+                |      "isInCL010" : $isInCL010
+                |    }
+                |  }
+                |}
+                |""".stripMargin)
+        }
       }
     }
 
