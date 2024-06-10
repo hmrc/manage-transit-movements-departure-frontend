@@ -17,12 +17,13 @@
 package services
 
 import base.SpecBase
-import cats.data.NonEmptySet
 import connectors.ReferenceDataConnector
+import connectors.ReferenceDataConnector.NoReferenceDataFoundException
 import generators.Generators
-import models.reference.Country
-import org.mockito.ArgumentMatchers.any
+import models.reference.{Country, CustomsOffice}
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
@@ -34,11 +35,6 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val service                                      = new CountriesService(mockRefDataConnector)
 
-  private val country1: Country = Country("GB")
-  private val country2: Country = Country("FR")
-  private val country3: Country = Country("ES")
-  private val countries         = NonEmptySet.of(country1, country2, country3)
-
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
     super.beforeEach()
@@ -46,44 +42,148 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
   "CountriesService" - {
 
-    "getCommunityCountries" - {
-      "must return a list of sorted EU transit countries" in {
+    "isInCL112" - {
+      "must return true" - {
+        "when connector call returns the country" in {
+          forAll(arbitrary[CustomsOffice], arbitrary[Country]) {
+            (customsOffice, country) =>
+              beforeEach()
 
-        when(mockRefDataConnector.getCountries())
-          .thenReturn(Future.successful(countries))
+              when(mockRefDataConnector.getCountryCodesCTCCountry(any())(any(), any()))
+                .thenReturn(Future.successful(country))
 
-        service.getCommunityCountries().futureValue mustBe
-          Seq(country3, country2, country1)
+              val result = service.isInCL112(customsOffice).futureValue
 
-        verify(mockRefDataConnector).getCountries()(any(), any())
+              result mustBe true
+
+              verify(mockRefDataConnector).getCountryCodesCTCCountry(eqTo(customsOffice.countryId))(any(), any())
+          }
+        }
+      }
+
+      "must return false" - {
+        "when connector call returns NoReferenceDataFoundException" in {
+          forAll(arbitrary[CustomsOffice]) {
+            customsOffice =>
+              when(mockRefDataConnector.getCountryCodesCTCCountry(any())(any(), any()))
+                .thenReturn(Future.failed(new NoReferenceDataFoundException("")))
+
+              val result = service.isInCL112(customsOffice).futureValue
+
+              result mustBe false
+          }
+        }
+      }
+
+      "must fail" - {
+        "when connector call otherwise fails" in {
+          forAll(arbitrary[CustomsOffice]) {
+            customsOffice =>
+              when(mockRefDataConnector.getCountryCodesCTCCountry(any())(any(), any()))
+                .thenReturn(Future.failed(new Throwable("")))
+
+              val result = service.isInCL112(customsOffice)
+
+              result.failed.futureValue mustBe a[Throwable]
+          }
+        }
       }
     }
 
-    "getCustomsSecurityAgreementAreaCountries" - {
-      "must return a list of sorted customs security agreement area countries" in {
+    "isInCL147" - {
+      "must return true" - {
+        "when connector call returns the country" in {
+          forAll(arbitrary[CustomsOffice], arbitrary[Country]) {
+            (customsOffice, country) =>
+              beforeEach()
 
-        when(mockRefDataConnector.getCustomsSecurityAgreementAreaCountries()(any(), any()))
-          .thenReturn(Future.successful(countries))
+              when(mockRefDataConnector.getCountryCustomsSecurityAgreementAreaCountry(any())(any(), any()))
+                .thenReturn(Future.successful(country))
 
-        service.getCustomsSecurityAgreementAreaCountries().futureValue mustBe
-          Seq(country3, country2, country1)
+              val result = service.isInCL147(customsOffice).futureValue
 
-        verify(mockRefDataConnector).getCustomsSecurityAgreementAreaCountries()(any(), any())
+              result mustBe true
+
+              verify(mockRefDataConnector).getCountryCustomsSecurityAgreementAreaCountry(eqTo(customsOffice.countryId))(any(), any())
+          }
+        }
+      }
+
+      "must return false" - {
+        "when connector call returns NoReferenceDataFoundException" in {
+          forAll(arbitrary[CustomsOffice]) {
+            customsOffice =>
+              when(mockRefDataConnector.getCountryCustomsSecurityAgreementAreaCountry(any())(any(), any()))
+                .thenReturn(Future.failed(new NoReferenceDataFoundException("")))
+
+              val result = service.isInCL147(customsOffice).futureValue
+
+              result mustBe false
+          }
+        }
+      }
+
+      "must fail" - {
+        "when connector call otherwise fails" in {
+          forAll(arbitrary[CustomsOffice]) {
+            customsOffice =>
+              when(mockRefDataConnector.getCountryCustomsSecurityAgreementAreaCountry(any())(any(), any()))
+                .thenReturn(Future.failed(new Throwable("")))
+
+              val result = service.isInCL147(customsOffice)
+
+              result.failed.futureValue mustBe a[Throwable]
+          }
+        }
       }
     }
 
-    "getCountryCodesCTC" - {
-      "must return a list of sorted customs security agreement area countries" in {
+    "isInCL010" - {
+      "must return true" - {
+        "when connector call returns the country" in {
+          forAll(arbitrary[CustomsOffice], arbitrary[Country]) {
+            (customsOffice, country) =>
+              beforeEach()
 
-        when(mockRefDataConnector.getCountryCodesCTC()(any(), any()))
-          .thenReturn(Future.successful(countries))
+              when(mockRefDataConnector.getCountryCodeCommunityCountry(any())(any(), any()))
+                .thenReturn(Future.successful(country))
 
-        service.getCountryCodesCTC().futureValue mustBe
-          Seq(country3, country2, country1)
+              val result = service.isInCL010(customsOffice).futureValue
 
-        verify(mockRefDataConnector).getCountryCodesCTC()(any(), any())
+              result mustBe true
+
+              verify(mockRefDataConnector).getCountryCodeCommunityCountry(eqTo(customsOffice.countryId))(any(), any())
+          }
+        }
+      }
+
+      "must return false" - {
+        "when connector call returns NoReferenceDataFoundException" in {
+          forAll(arbitrary[CustomsOffice]) {
+            customsOffice =>
+              when(mockRefDataConnector.getCountryCodeCommunityCountry(any())(any(), any()))
+                .thenReturn(Future.failed(new NoReferenceDataFoundException("")))
+
+              val result = service.isInCL010(customsOffice).futureValue
+
+              result mustBe false
+          }
+        }
+      }
+
+      "must fail" - {
+        "when connector call otherwise fails" in {
+          forAll(arbitrary[CustomsOffice]) {
+            customsOffice =>
+              when(mockRefDataConnector.getCountryCodeCommunityCountry(any())(any(), any()))
+                .thenReturn(Future.failed(new Throwable("")))
+
+              val result = service.isInCL010(customsOffice)
+
+              result.failed.futureValue mustBe a[Throwable]
+          }
+        }
       }
     }
-
   }
 }
