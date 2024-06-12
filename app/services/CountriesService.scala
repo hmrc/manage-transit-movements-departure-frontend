@@ -17,7 +17,8 @@
 package services
 
 import connectors.ReferenceDataConnector
-import models.reference.Country
+import connectors.ReferenceDataConnector.NoReferenceDataFoundException
+import models.reference.CustomsOffice
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -25,13 +26,34 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
 
-  def getCountryCodesCTC()(implicit hc: HeaderCarrier): Future[Seq[Country]] =
-    referenceDataConnector.getCountryCodesCTC().map(_.toSeq)
+  def isInCL112(customsOffice: CustomsOffice)(implicit hc: HeaderCarrier): Future[Boolean] =
+    referenceDataConnector
+      .getCountryCodesCTCCountry(customsOffice.countryId)
+      .map {
+        _ => true
+      }
+      .recover {
+        case _: NoReferenceDataFoundException => false
+      }
 
-  def getCustomsSecurityAgreementAreaCountries()(implicit hc: HeaderCarrier): Future[Seq[Country]] =
-    referenceDataConnector.getCustomsSecurityAgreementAreaCountries().map(_.toSeq)
+  def isInCL147(customsOffice: CustomsOffice)(implicit hc: HeaderCarrier): Future[Boolean] =
+    referenceDataConnector
+      .getCountryCustomsSecurityAgreementAreaCountry(customsOffice.countryId)
+      .map {
+        _ => true
+      }
+      .recover {
+        case _: NoReferenceDataFoundException => false
+      }
 
-  def getCommunityCountries()(implicit hc: HeaderCarrier): Future[Seq[Country]] =
-    referenceDataConnector.getCountries().map(_.toSeq)
+  def isInCL010(customsOffice: CustomsOffice)(implicit hc: HeaderCarrier): Future[Boolean] =
+    referenceDataConnector
+      .getCountryCodeCommunityCountry(customsOffice.countryId)
+      .map {
+        _ => true
+      }
+      .recover {
+        case _: NoReferenceDataFoundException => false
+      }
 
 }

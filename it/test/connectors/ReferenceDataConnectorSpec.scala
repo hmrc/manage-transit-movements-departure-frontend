@@ -105,12 +105,6 @@ class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler w
       |      "code": "GB",
       |      "state": "valid",
       |      "description": "United Kingdom"
-      |    },
-      |    {
-      |      "activeFrom": "2023-01-23",
-      |      "code": "AD",
-      |      "state": "valid",
-      |      "description": "Andorra"
       |    }
       |  ]
       |}
@@ -135,12 +129,6 @@ class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler w
       |      "code": "GB",
       |      "state": "valid",
       |      "description": "United Kingdom"
-      |    },
-      |    {
-      |      "activeFrom": "2023-01-23",
-      |      "code": "AD",
-      |      "state": "valid",
-      |      "description": "Andorra"
       |    }
       |  ]
       |}
@@ -165,12 +153,6 @@ class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler w
       |      "code": "GB",
       |      "state": "valid",
       |      "description": "United Kingdom"
-      |    },
-      |    {
-      |      "activeFrom": "2023-01-23",
-      |      "code": "AD",
-      |      "state": "valid",
-      |      "description": "Andorra"
       |    }
       |  ]
       |}
@@ -294,81 +276,81 @@ class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler w
       }
     }
 
-    "getCountryCodesCTC" - {
-      val url = s"/$baseUrl/lists/CountryCodesCTC"
+    "getCountryCodesCTCCountry" - {
+      def url(countryId: String) = s"/$baseUrl/lists/CountryCodesCTC?data.code=$countryId"
 
       "must return Seq of Country when successful" in {
+        val countryId = "GB"
         server.stubFor(
-          get(urlEqualTo(url))
+          get(urlEqualTo(url(countryId)))
             .willReturn(okJson(countriesResponseCTJson))
         )
 
-        val expectedResult = NonEmptySet.of(
-          Country("GB"),
-          Country("AD")
-        )
+        val expectedResult = Country(countryId)
 
-        connector.getCountryCodesCTC().futureValue mustEqual expectedResult
+        connector.getCountryCodesCTCCountry(countryId).futureValue mustEqual expectedResult
       }
 
       "must throw a NoReferenceDataFoundException for an empty response" in {
-        checkNoReferenceDataFoundResponse(url, connector.getCountryCodesCTC())
+        val countryId = "AD"
+        checkNoReferenceDataFoundResponse(url(countryId), connector.getCountryCodesCTCCountry(countryId))
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(url, connector.getCountryCodesCTC())
+        val countryId = "AD"
+        checkErrorResponse(url(countryId), connector.getCountryCodesCTCCountry(countryId))
       }
     }
 
-    "getCustomsSecurityAgreementAreaCountries" - {
-      val url = s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea"
+    "getCountryCustomsSecurityAgreementAreaCountry" - {
+      def url(countryId: String) = s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea?data.code=$countryId"
 
       "must return Seq of Country when successful" in {
+        val countryId = "GB"
         server.stubFor(
-          get(urlEqualTo(url))
+          get(urlEqualTo(url(countryId)))
             .willReturn(okJson(countriesResponseAAJson))
         )
 
-        val expectedResult = NonEmptySet.of(
-          Country("GB"),
-          Country("AD")
-        )
+        val expectedResult = Country(countryId)
 
-        connector.getCustomsSecurityAgreementAreaCountries().futureValue mustEqual expectedResult
+        connector.getCountryCustomsSecurityAgreementAreaCountry(countryId).futureValue mustEqual expectedResult
       }
 
       "must throw a NoReferenceDataFoundException for an empty response" in {
-        checkNoReferenceDataFoundResponse(url, connector.getCustomsSecurityAgreementAreaCountries())
+        val countryId = "AD"
+        checkNoReferenceDataFoundResponse(url(countryId), connector.getCountryCustomsSecurityAgreementAreaCountry(countryId))
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(url, connector.getCustomsSecurityAgreementAreaCountries())
+        val countryId = "AD"
+        checkErrorResponse(url(countryId), connector.getCountryCustomsSecurityAgreementAreaCountry(countryId))
       }
     }
 
-    "getCountries" - {
-      val url = s"/$baseUrl/lists/CountryCodesCommunity"
+    "getCountryCodeCommunityCountry" - {
+      def url(countryId: String) = s"/$baseUrl/lists/CountryCodesCommunity?data.code=$countryId"
 
       "must return Seq of Country when successful" in {
+        val countryId = "GB"
         server.stubFor(
-          get(urlEqualTo(url))
+          get(urlEqualTo(url(countryId)))
             .willReturn(okJson(countriesResponseCommunity))
         )
 
-        val expectedResult = NonEmptySet.of(
-          Country("GB"),
-          Country("AD")
-        )
+        val expectedResult = Country(countryId)
 
-        connector.getCountries().futureValue mustEqual expectedResult
+        connector.getCountryCodeCommunityCountry(countryId).futureValue mustEqual expectedResult
       }
 
       "must throw a NoReferenceDataFoundException for an empty response" in {
-        checkNoReferenceDataFoundResponse(url, connector.getCountries())
+        val countryId = "AD"
+        checkNoReferenceDataFoundResponse(url(countryId), connector.getCountryCodeCommunityCountry(countryId))
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(url, connector.getCountries())
+        val countryId = "AD"
+        checkErrorResponse(url(countryId), connector.getCountryCodeCommunityCountry(countryId))
       }
     }
 
