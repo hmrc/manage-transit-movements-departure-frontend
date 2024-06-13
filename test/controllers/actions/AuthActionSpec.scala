@@ -314,32 +314,61 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
     "when given new enrolments with eori" - {
       "must return Ok" - {
-        "when EORI is allowed" in {
-          val newEnrolmentsWithEori: Enrolments = Enrolments(
-            Set(
-              createEnrolment("IR-SA", Some("UTR"), "123", "Activated"),
-              createEnrolment(ENROLMENT_KEY, Some(ENROLMENT_ID_KEY), "123", "NotYetActivated"),
-              createEnrolment(ENROLMENT_KEY, Some(ENROLMENT_ID_KEY), "456", "Activated")
+        "when EORI is allowed" - {
+          "when exact EORI" in {
+            val newEnrolmentsWithEori: Enrolments = Enrolments(
+              Set(
+                createEnrolment("IR-SA", Some("UTR"), "123", "Activated"),
+                createEnrolment(ENROLMENT_KEY, Some(ENROLMENT_ID_KEY), "123", "NotYetActivated"),
+                createEnrolment(ENROLMENT_KEY, Some(ENROLMENT_ID_KEY), "456", "Activated")
+              )
             )
-          )
 
-          val app = guiceApplicationBuilder()
-            .overrides(bind[AuthConnector].toInstance(mockAuthConnector))
-            .configure(
-              "allowlist.enabled" -> true,
-              "allowlist.eoris.0" -> "456"
+            val app = guiceApplicationBuilder()
+              .overrides(bind[AuthConnector].toInstance(mockAuthConnector))
+              .configure(
+                "allowlist.enabled" -> true,
+                "allowlist.eoris.0" -> "^456$"
+              )
+              .build()
+
+            running(app) {
+              when(mockAuthConnector.authorise[Enrolments ~ Some[String]](any(), any())(any(), any()))
+                .thenReturn(Future.successful(newEnrolmentsWithEori ~ Some("testName")))
+
+              val authAction = app.injector.instanceOf[AuthenticatedIdentifierAction]
+              val controller = new Harness(authAction)
+              val result     = controller.onPageLoad()(fakeRequest)
+
+              status(result) mustBe OK
+            }
+          }
+
+          "when EORI matches" in {
+            val newEnrolmentsWithEori: Enrolments = Enrolments(
+              Set(
+                createEnrolment(ENROLMENT_KEY, Some(ENROLMENT_ID_KEY), "XI123456", "Activated")
+              )
             )
-            .build()
 
-          running(app) {
-            when(mockAuthConnector.authorise[Enrolments ~ Some[String]](any(), any())(any(), any()))
-              .thenReturn(Future.successful(newEnrolmentsWithEori ~ Some("testName")))
+            val app = guiceApplicationBuilder()
+              .overrides(bind[AuthConnector].toInstance(mockAuthConnector))
+              .configure(
+                "allowlist.enabled" -> true,
+                "allowlist.eoris.0" -> "^XI(.+)$"
+              )
+              .build()
 
-            val authAction = app.injector.instanceOf[AuthenticatedIdentifierAction]
-            val controller = new Harness(authAction)
-            val result     = controller.onPageLoad()(fakeRequest)
+            running(app) {
+              when(mockAuthConnector.authorise[Enrolments ~ Some[String]](any(), any())(any(), any()))
+                .thenReturn(Future.successful(newEnrolmentsWithEori ~ Some("testName")))
 
-            status(result) mustBe OK
+              val authAction = app.injector.instanceOf[AuthenticatedIdentifierAction]
+              val controller = new Harness(authAction)
+              val result     = controller.onPageLoad()(fakeRequest)
+
+              status(result) mustBe OK
+            }
           }
         }
       }
