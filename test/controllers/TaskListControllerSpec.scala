@@ -19,7 +19,7 @@ package controllers
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.SubmissionConnector
 import generators.Generators
-import models.SubmissionState
+import models.{DepartureMessages, SubmissionState}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -44,13 +44,16 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[TaskListViewModelProvider].toInstance(mockViewModelProvider))
-      .overrides(bind(classOf[SubmissionConnector]).toInstance(mockSubmissionConnector))
+      .overrides(
+        bind(classOf[TaskListViewModelProvider]).toInstance(mockViewModelProvider),
+        bind(classOf[SubmissionConnector]).toInstance(mockSubmissionConnector)
+      )
 
   private val sampleTasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
 
   override def beforeEach(): Unit = {
-    reset(mockViewModelProvider); reset(mockSubmissionConnector)
+    reset(mockViewModelProvider)
+    reset(mockSubmissionConnector)
     super.beforeEach()
   }
 
@@ -106,35 +109,6 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
 
-    "must redirect to declaration submit for a POST if declaration guaranteeAmendment" in {
-      setExistingUserAnswers(emptyUserAnswers.copy(status = SubmissionState.GuaranteeAmendment, departureId = Some(departureId)))
-
-      when(mockSubmissionConnector.postAmendment(any())(any())).thenReturn(response(OK))
-
-      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.routes.DeclarationSubmittedController.departureAmendmentSubmitted(lrn).url
-    }
-
-    "must redirect to technical difficulties for a POST if declaration guaranteeAmendment response is not 2xx" in {
-      setExistingUserAnswers(emptyUserAnswers.copy(status = SubmissionState.GuaranteeAmendment, departureId = Some(departureId)))
-
-      val errorCode: Int = Gen.choose(400, 599).sample.value
-      when(mockSubmissionConnector.postAmendment(any())(any())).thenReturn(response(errorCode))
-
-      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.ErrorController.technicalDifficulties().url
-    }
-
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setNoExistingUserAnswers()
 
@@ -147,34 +121,76 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
     }
 
-    "must redirect to confirmation page when submission success" in {
-      when(mockSubmissionConnector.post(any())(any())).thenReturn(response(OK))
+    "must redirect to confirmation page when submission success" - {
+      "when not previously submitted" in {
+        when(mockSubmissionConnector.post(any())(any())).thenReturn(response(OK))
 
-      setExistingUserAnswers(emptyUserAnswers)
+        setExistingUserAnswers(emptyUserAnswers)
 
-      val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+        val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
-      val result = route(app, request).value
+        val result = route(app, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.DeclarationSubmittedController.departureDeclarationSubmitted(lrn).url
+        redirectLocation(result).value mustEqual routes.DeclarationSubmittedController.departureDeclarationSubmitted(lrn).url
+      }
+
+      "when amending" in {
+        forAll(Gen.oneOf(SubmissionState.Amendment, SubmissionState.GuaranteeAmendment)) {
+          submissionStatus =>
+            setExistingUserAnswers(emptyUserAnswers.copy(status = submissionStatus, departureId = Some(departureId)))
+
+            when(mockSubmissionConnector.getMessages(any())(any())).thenReturn(Future.successful(DepartureMessages()))
+
+            when(mockSubmissionConnector.postAmendment(any())(any())).thenReturn(response(OK))
+
+            val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+
+            val result = route(app, request).value
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual controllers.routes.DeclarationSubmittedController.departureAmendmentSubmitted(lrn).url
+        }
+      }
     }
 
-    "must redirect to technical difficulties for an error" in {
-      forAll(Gen.oneOf(BAD_REQUEST, INTERNAL_SERVER_ERROR)) {
-        errorCode =>
-          when(mockSubmissionConnector.post(any())(any())).thenReturn(response(errorCode))
+    "must redirect to technical difficulties for an error" - {
+      "when not previously submitted" in {
+        forAll(Gen.oneOf(BAD_REQUEST, INTERNAL_SERVER_ERROR)) {
+          errorCode =>
+            when(mockSubmissionConnector.post(any())(any())).thenReturn(response(errorCode))
 
-          setExistingUserAnswers(emptyUserAnswers)
+            setExistingUserAnswers(emptyUserAnswers)
 
-          val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+            val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
-          val result = route(app, request).value
+            val result = route(app, request).value
 
-          status(result) mustEqual SEE_OTHER
+            status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual routes.ErrorController.technicalDifficulties().url
+            redirectLocation(result).value mustEqual routes.ErrorController.technicalDifficulties().url
+        }
+      }
+
+      "when amending" in {
+        forAll(Gen.oneOf(SubmissionState.Amendment, SubmissionState.GuaranteeAmendment), Gen.choose(400: Int, 599: Int)) {
+          (submissionStatus, errorCode) =>
+            setExistingUserAnswers(emptyUserAnswers.copy(status = submissionStatus, departureId = Some(departureId)))
+
+            when(mockSubmissionConnector.getMessages(any())(any())).thenReturn(Future.successful(DepartureMessages()))
+
+            when(mockSubmissionConnector.postAmendment(any())(any())).thenReturn(response(errorCode))
+
+            val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
+
+            val result = route(app, request).value
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual routes.ErrorController.technicalDifficulties().url
+        }
       }
     }
   }

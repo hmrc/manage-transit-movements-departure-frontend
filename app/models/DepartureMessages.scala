@@ -25,5 +25,8 @@ case class DepartureMessages(messages: Seq[DepartureMessage]) {
 
 object DepartureMessages {
 
+  def apply(): DepartureMessages =
+    new DepartureMessages(Seq.empty[DepartureMessage])
+
   implicit lazy val format: Format[DepartureMessages] = Json.format[DepartureMessages]
 }

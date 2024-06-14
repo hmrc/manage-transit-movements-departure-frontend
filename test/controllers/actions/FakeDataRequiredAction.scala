@@ -17,15 +17,15 @@
 package controllers.actions
 
 import models.UserAnswers
-import models.requests.{IdentifierRequest, OptionalDataRequest}
-import play.api.mvc.ActionTransformer
+import models.requests.{DataRequest, OptionalDataRequest}
+import play.api.mvc.{ActionRefiner, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeDataRetrievalAction(dataToReturn: Option[UserAnswers]) extends ActionTransformer[IdentifierRequest, OptionalDataRequest] {
+class FakeDataRequiredAction(userAnswers: UserAnswers) extends ActionRefiner[OptionalDataRequest, DataRequest] {
 
-  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
-    Future(OptionalDataRequest(request.request, request.eoriNumber, dataToReturn))
+  override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] =
+    Future.successful(Right(DataRequest(request.request, request.eoriNumber, userAnswers)))
 
   implicit override protected val executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
