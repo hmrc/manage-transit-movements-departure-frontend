@@ -30,7 +30,7 @@ object SubmissionState extends Enumeration {
   // IE013/IE015 has been submitted
   val Submitted: SubmissionState.Value = Value("submitted")
 
-  // IE015 has been rejected - Existing declaration can be resubmitted
+  // IE015 has been rejected - Existing declaration can be resubmitted as a new IE015
   //  IE015 -> IE056
   //  IE015 -> IE028 -> IE056 (new LRN needed)
   val RejectedPendingChanges: SubmissionState.Value = Value("rejectedPendingChanges")
