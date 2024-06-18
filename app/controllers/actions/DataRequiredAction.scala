@@ -54,7 +54,7 @@ class DataRequiredAction(
             submissionConnector.getMessages(lrn).map {
               messages =>
                 if (messages.contains("IE029")) {
-                  logger.warn(s"Movement has been released for transit. Can no longer make changes.")
+                  logger.warn(s"$lrn: Movement has been released for transit. Can no longer make changes.")
                   failure
                 } else {
                   success
