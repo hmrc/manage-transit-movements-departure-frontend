@@ -34,14 +34,14 @@ class AmendController @Inject() (
     extends FrontendController(cc)
     with I18nSupport {
 
-  def amendErrors(lrn: LocalReferenceNumber, departureId: String): Action[AnyContent] =
+  def amendment(lrn: LocalReferenceNumber, departureId: String): Action[AnyContent] =
     amend(lrn, departureId, SubmissionState.Amendment)
 
-  def amendGuaranteeErrors(lrn: LocalReferenceNumber, departureId: String): Action[AnyContent] =
+  def guaranteeAmendment(lrn: LocalReferenceNumber, departureId: String): Action[AnyContent] =
     amend(lrn, departureId, SubmissionState.GuaranteeAmendment)
 
   private def amend(lrn: LocalReferenceNumber, departureId: String, status: SubmissionState.Value): Action[AnyContent] = actions
-    .requireData(lrn)
+    .requireDataIgnoreSubmissionStatus(lrn)
     .async {
       implicit request =>
         sessionRepository
