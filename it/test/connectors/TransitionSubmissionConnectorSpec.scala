@@ -182,6 +182,19 @@ class TransitionSubmissionConnectorSpec extends ItSpecBase with WireMockServerHa
           )
         )
       }
+
+      "must return empty list when status is NotFound" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(aResponse.withStatus(404))
+        )
+
+        val result: DepartureMessages = await(connector.getMessages(lrn))
+
+        result mustBe DepartureMessages(
+          Seq.empty[DepartureMessage]
+        )
+      }
     }
   }
 }
