@@ -23,9 +23,7 @@ import models.LocalReferenceNumber
 import models.SubmissionState.RejectedPendingChanges
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, verifyNoMoreInteractions, when}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.BeforeAndAfterEach
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import viewModels.taskList.TaskStatus
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -86,26 +84,6 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
           verify(mockCacheConnector).get(eqTo(lrn))(any())
           verify(mockCacheConnector).post(eqTo(newDataToSend))(any())
         }
-      }
-
-    }
-
-    "alreadySubmitted" - {
-      "must return correct boolean" - {
-
-        "when local reference number" in {
-          forAll(arbitrary[Boolean]) {
-            isDuplicate =>
-              when(mockCacheConnector.doesIE028ExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(isDuplicate))
-
-              duplicateService.alreadySubmitted(Some(lrn)).futureValue mustBe isDuplicate
-          }
-        }
-
-        "when none" in {
-          duplicateService.alreadySubmitted(None).futureValue mustBe false
-        }
-
       }
 
     }

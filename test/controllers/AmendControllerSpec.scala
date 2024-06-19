@@ -39,15 +39,17 @@ class AmendControllerSpec extends SpecBase with AppWithDefaultMockFixtures with 
     super
       .guiceApplicationBuilder()
 
+  private val baseAnswers = emptyUserAnswers.copy(status = SubmissionState.Submitted)
+
   "AmendController" - {
 
-    "amendErrors" - {
+    "amendment" - {
 
-      lazy val amendRoute: String = routes.AmendController.amendErrors(lrn, departureId).url
+      lazy val amendRoute: String = routes.AmendController.amendment(lrn, departureId).url
 
       "when answers successfully submitted to cache" - {
         "must redirect to the declaration summary" in {
-          setExistingUserAnswers(emptyUserAnswers.copy(departureId = Some(departureId)))
+          setExistingUserAnswers(baseAnswers)
           when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest(GET, amendRoute)
@@ -65,7 +67,7 @@ class AmendControllerSpec extends SpecBase with AppWithDefaultMockFixtures with 
 
       "when answers unsuccessfully submitted to cache" - {
         "must redirect to technical difficulties when" in {
-          setExistingUserAnswers(emptyUserAnswers.copy(departureId = Some(departureId)))
+          setExistingUserAnswers(baseAnswers)
           when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(false))
 
           val request = FakeRequest(GET, amendRoute)
@@ -77,13 +79,13 @@ class AmendControllerSpec extends SpecBase with AppWithDefaultMockFixtures with 
       }
     }
 
-    "amendGuaranteeErrors" - {
+    "guaranteeAmendment" - {
 
-      lazy val amendRoute: String = routes.AmendController.amendGuaranteeErrors(lrn, departureId).url
+      lazy val amendRoute: String = routes.AmendController.guaranteeAmendment(lrn, departureId).url
 
       "when answers successfully submitted to cache" - {
         "must redirect to the declaration summary" in {
-          setExistingUserAnswers(emptyUserAnswers)
+          setExistingUserAnswers(baseAnswers)
           when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest(GET, amendRoute)
@@ -101,7 +103,7 @@ class AmendControllerSpec extends SpecBase with AppWithDefaultMockFixtures with 
 
       "when answers unsuccessfully submitted to cache" - {
         "must redirect to technical difficulties when" in {
-          setExistingUserAnswers(emptyUserAnswers.copy(departureId = Some(departureId)))
+          setExistingUserAnswers(baseAnswers)
           when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(false))
 
           val request = FakeRequest(GET, amendRoute)

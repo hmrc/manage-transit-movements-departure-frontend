@@ -24,11 +24,24 @@ object SubmissionState extends Enumeration {
 
   type SubmissionState = Value
 
-  val NotSubmitted: SubmissionState.Value           = Value("notSubmitted")
-  val Submitted: SubmissionState.Value              = Value("submitted")
+  // IE015 has not yet been submitted
+  val NotSubmitted: SubmissionState.Value = Value("notSubmitted")
+
+  // IE013/IE015 has been submitted
+  val Submitted: SubmissionState.Value = Value("submitted")
+
+  // IE015 has been rejected - Existing declaration can be resubmitted as a new IE015
+  //  IE015 -> IE056
+  //  IE015 -> IE028 -> IE056 (new LRN needed)
   val RejectedPendingChanges: SubmissionState.Value = Value("rejectedPendingChanges")
-  val Amendment: SubmissionState.Value              = Value("amendment")
-  val GuaranteeAmendment: SubmissionState.Value     = Value("guaranteeAmendment")
+
+  // IE015 has been rejected with an IE056 (Rejection from office of departure) message
+  //  IE013 is submitted with amendmentTypeFlag 0 (false)
+  val Amendment: SubmissionState.Value = Value("amendment")
+
+  // IE015 has been rejected with an IE055 (Guarantee not valid) message
+  //  IE013 is submitted with amendmentTypeFlag 1 (true)
+  val GuaranteeAmendment: SubmissionState.Value = Value("guaranteeAmendment")
 
   implicit val format: Format[SubmissionState.Value] = Json.formatEnum(SubmissionState)
 
