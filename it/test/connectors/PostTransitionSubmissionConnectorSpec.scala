@@ -21,12 +21,13 @@ import config.{PostTransitionModule, TransitionModule}
 import helpers.{ItSpecBase, WireMockServerHandler}
 import models.{DepartureMessage, DepartureMessages}
 import org.scalacheck.Gen
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.JsNumber
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 
-class PostTransitionSubmissionConnectorSpec extends ItSpecBase with WireMockServerHandler {
+class PostTransitionSubmissionConnectorSpec extends ItSpecBase with WireMockServerHandler with ScalaCheckPropertyChecks {
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -183,17 +184,20 @@ class PostTransitionSubmissionConnectorSpec extends ItSpecBase with WireMockServ
         )
       }
 
-      "must return empty list when status is NotFound" in {
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(aResponse.withStatus(404))
-        )
+      "must return empty list when status is NoContent or NotFound" in {
+        forAll(Gen.oneOf(204: Int, 404: Int)) {
+          status =>
+            server.stubFor(
+              get(urlEqualTo(url))
+                .willReturn(aResponse.withStatus(status))
+            )
 
-        val result: DepartureMessages = await(connector.getMessages(lrn))
+            val result: DepartureMessages = await(connector.getMessages(lrn))
 
-        result mustBe DepartureMessages(
-          Seq.empty[DepartureMessage]
-        )
+            result mustBe DepartureMessages(
+              Seq.empty[DepartureMessage]
+            )
+        }
       }
     }
   }

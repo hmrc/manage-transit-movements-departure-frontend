@@ -20,11 +20,10 @@ import config.FrontendAppConfig
 import models.{DepartureMessages, LocalReferenceNumber}
 import play.api.Logging
 import play.api.http.HeaderNames._
-import play.api.http.Status.NOT_FOUND
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -67,13 +66,11 @@ sealed trait SubmissionConnector extends Logging {
   }
 
   def getMessages(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[DepartureMessages] = {
+    import models.DepartureMessages.httpReads
     val url = url"$baseUrl/messages/$lrn"
     http
       .get(url)
       .execute[DepartureMessages]
-      .recover {
-        case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND => DepartureMessages()
-      }
   }
 }
 
