@@ -9,20 +9,42 @@ Service manager port: 10120
 
 Run unit tests:
 <pre>sbt test</pre>  
-Run integration tests:  
-<pre>sbt it/test</pre> 
+Run integration tests:
+<pre>sbt it/test</pre>
+Run accessibility linter tests:
+<pre>sbt A11y/test</pre>
 
 ### Running manually or for journey tests
 
+To toggle between the Phase 5 transition and post-transition modes we have defined two separate modules, each with their own set of class bindings to handle the rules associated with these two periods.
+
+#### Transition
+<pre>
+sm2 --start CTC_TRADERS_P5_ACCEPTANCE_TRANSITION
+sm2 --stop MANAGE_TRANSIT_MOVEMENTS_DEPARTURE_FRONTEND_TRANSITION
+sbt -Dplay.additional.module=config.TransitionModule run
+</pre>
+
+#### Final
 <pre>
 sm2 --start CTC_TRADERS_P5_ACCEPTANCE
 sm2 --stop MANAGE_TRANSIT_MOVEMENTS_DEPARTURE_FRONTEND
-sbt run
+sbt -Dplay.additional.module=config.PostTransitionModule run
 </pre>
 
-If you hit an entry point before running the journey tests, it gets the compile out of the way and can help keep the first tests from failing.  
+### Feature toggles
 
-e.g.: http://localhost:10120/manage-transit-movements/departures
+The following features can be toggled in [application.conf](conf/application.conf):
+
+| Key                          | Argument type | sbt                                                             | Description                                                                                                                                                                                    |
+|------------------------------|---------------|-----------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `trader-test.enabled`        | `Boolean`     | `sbt -Dtrader-test.enabled=true run`                            | If enabled, this will override the behaviour of the "Is this page not working properly?" and "feedback" links. This is so we can receive feedback in the absence of Deskpro in `externaltest`. |
+| `countriesOfDeparture`       | `Seq[String]` | `sbt -DcountriesOfDeparture.0=GB countriesOfDeparture.1=XI run` | Controls which countries we fetch offices of departure for. This is so we can run XI only from June 28th before going live with both GB and XI on July 1st.                                    |
+| `banners.showUserResearch`   | `Boolean`     | `sbt -Dbanners.showUserResearch=true run`                       | Controls whether or not we show the user research banner.                                                                                                                                      |
+| `features.isPreLodgeEnabled` | `Boolean`     | `sbt -Dfeatures.isPreLodgeEnabled=true run`                     | Controls whether or not we ask the user if it is a standard (A) or pre-lodged (D) declaration. If false we default to standard (A).                                                            |
+| `play.additional.module`     | `String`      | `sbt -Dplay.additional.module=config.PostTransitionModule run`  | Controls which module (TransitionModule or PostTransitionModule) we bind to the application at start-up.                                                                                       |
+
+To run the application in test-only mode use `sbt -play.http.router=testOnlyDoNotUseInAppConf.Routes` run
 
 ### Running Scaffold
 
@@ -73,9 +95,6 @@ In the example of a text input, we have 4 distinct use cases:
 ![Text input with statement heading and visible label that asks the question](images/TextInputWithStatementHeading.png) | ![Text input used for address fields](images/AddressTextInput.png)
 
 There is similar logic behind the InputYesNo and InputSelect component view models.
-
-### Accessibility testing
-The accessibility of our templates and components can be checked by running `sbt a11y:test`
 
 ### User answers reader
 This microservice has been quite experimental in the approach taken towards navigation. This is primarily driven by the UserAnswersReader.
