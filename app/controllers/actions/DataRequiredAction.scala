@@ -16,32 +16,66 @@
 
 package controllers.actions
 
+import connectors.SubmissionConnector
+import models.LocalReferenceNumber
+import models.SubmissionState._
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{LocalReferenceNumber, SubmissionState}
+import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRequiredAction(lrn: LocalReferenceNumber, ignoreSubmissionStatus: Boolean)(implicit val executionContext: ExecutionContext)
-    extends ActionRefiner[OptionalDataRequest, DataRequest] {
+class DataRequiredAction(
+  submissionConnector: SubmissionConnector
+)(
+  lrn: LocalReferenceNumber,
+  ignoreSubmissionStatus: Boolean
+)(implicit val executionContext: ExecutionContext)
+    extends ActionRefiner[OptionalDataRequest, DataRequest]
+    with Logging {
 
-  override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] =
+  override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
+    lazy val failure = Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad(lrn)))
     request.userAnswers match {
-      case Some(data) if ignoreSubmissionStatus || data.status != SubmissionState.Submitted =>
-        Future.successful(Right(DataRequest(request.request, request.eoriNumber, data)))
+      case Some(data) =>
+        lazy val success = Right(DataRequest(request.request, request.eoriNumber, data))
+
+        data.status match {
+          case Submitted if ignoreSubmissionStatus => Future.successful(success)
+          case Submitted                           => Future.successful(failure)
+          case NotSubmitted                        => Future.successful(success)
+          case _ =>
+            submissionConnector.getMessages(lrn).map {
+              messages =>
+                if (messages.contains("IE029")) {
+                  logger.warn(s"$lrn: Movement has been released for transit. Can no longer make changes.")
+                  failure
+                } else {
+                  success
+                }
+            }
+        }
       case _ =>
-        Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad(lrn))))
+        Future.successful(failure)
     }
+  }
 }
 
 trait DataRequiredActionProvider {
   def apply(lrn: LocalReferenceNumber, ignoreSubmissionStatus: Boolean): ActionRefiner[OptionalDataRequest, DataRequest]
 }
 
-class DataRequiredActionImpl @Inject() (implicit val executionContext: ExecutionContext) extends DataRequiredActionProvider {
+class DataRequiredActionImpl @Inject() (
+  submissionConnector: SubmissionConnector
+)(implicit val executionContext: ExecutionContext)
+    extends DataRequiredActionProvider {
 
   override def apply(lrn: LocalReferenceNumber, ignoreSubmissionStatus: Boolean): ActionRefiner[OptionalDataRequest, DataRequest] =
-    new DataRequiredAction(lrn, ignoreSubmissionStatus)
+    new DataRequiredAction(submissionConnector)(lrn, ignoreSubmissionStatus)
 }

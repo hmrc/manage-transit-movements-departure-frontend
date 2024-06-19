@@ -66,6 +66,7 @@ sealed trait SubmissionConnector extends Logging {
   }
 
   def getMessages(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[DepartureMessages] = {
+    import models.DepartureMessages.httpReads
     val url = url"$baseUrl/messages/$lrn"
     http
       .get(url)
