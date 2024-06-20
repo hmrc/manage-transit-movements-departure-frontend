@@ -43,8 +43,7 @@ The following features can be toggled in [application.conf](conf/application.con
 | `banners.showUserResearch`   | `Boolean`     | `sbt -Dbanners.showUserResearch=true run`                       | Controls whether or not we show the user research banner.                                                                                                                                      |
 | `features.isPreLodgeEnabled` | `Boolean`     | `sbt -Dfeatures.isPreLodgeEnabled=true run`                     | Controls whether or not we ask the user if it is a standard (A) or pre-lodged (D) declaration. If false we default to standard (A).                                                            |
 | `play.additional.module`     | `String`      | `sbt -Dplay.additional.module=config.PostTransitionModule run`  | Controls which module (TransitionModule or PostTransitionModule) we bind to the application at start-up.                                                                                       |
-
-To run the application in test-only mode use `sbt -play.http.router=testOnlyDoNotUseInAppConf.Routes` run
+| `play.http.router`           | `String`      | `sbt -Dplay.http.router=testOnlyDoNotUseInAppConf.Routes run`   | Controls which router is used for the application, either `prod.Routes` or `testOnlyDoNotUseInAppConf.Routes`                                                                                  |
 
 ### Running Scaffold
 
@@ -94,14 +93,16 @@ In the example of a text input, we have 4 distinct use cases:
 :-------------------------:|:-------------------------:
 ![Text input with statement heading and visible label that asks the question](images/TextInputWithStatementHeading.png) | ![Text input used for address fields](images/AddressTextInput.png)
 
-There is similar logic behind the InputYesNo and InputSelect component view models.
+There is similar logic behind the `InputYesNo` and `InputSelect` component view models.
 
 ### User answers reader
-This microservice has been quite experimental in the approach taken towards navigation. This is primarily driven by the UserAnswersReader.
-For any given JourneyDomainModel, a user answers reader is defined as the steps taken in order to have a valid set of user answers for that particular journey, often dependent on a series of other answers from previous sections.
+The navigation in this microservice is primarily driven by the `UserAnswersReader`.
+This is so navigation and task list statuses can be driven by the same logic.
+For any given `JourneyDomainModel`, a user answers reader is defined as the steps taken in order to have a valid set of user answers for that particular journey, often dependent on a series of other answers from previous sections.
 Depending on the state of the user answers, the reader will either return a `Right` when the answers are in a completed state, or a `Left` when they are not.
 The `Right` contains an instance of the journey domain model, which has a corresponding `routeIfCompleted` (generally a check your answers page) to navigate to.
 The `Left` contains an instance of the page that caused the reader to fail, which has a corresponding `route` to navigate to.
+Both have a list of the pages read by the user answers reader. Knowing this and the current page we can then accurately determine where to take the user to.
 
 This logic is utilised by the navigators, add-to-list change links, and task list links.
 
@@ -110,7 +111,7 @@ NormalMode and CheckMode are still used. Generally speaking:
 * section check your answers pages use CheckMode
 
 ### Tampermonkey Scripts
-Tampermonkey scripts have been developed for automating the answering of questions within the departure frontends. The scripts can be found here: https://github.com/hmrc/manage-transit-movements-departure-frontend/tree/CTCP-5537/tamperMonkey
+Tampermonkey scripts have been developed for automating the answering of questions within the departure frontends. The scripts can be found [here](tamperMonkey).
 
 In order to run the scripts, you must have the Tampermonkey extension installed, which can be found on the Google Web Store, or the Firefox Addon browser.
 
