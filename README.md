@@ -1,7 +1,11 @@
 
 # manage-transit-movements-departure-frontend
 
-This service allows a user to create a transit movement departure.
+This service allows a user to create a transit movement departure (IE015).
+It contains the pre task list questions which act as dependencies for the other sections within the task list.
+From this service, a user can also submit an amendment (IE013) to their departure declaration.
+
+This service also acts as a proxy for the journey tests to post data to manage-transit-movements-departure-cache via a test-only POST endpoint.
 
 Service manager port: 10120
 
