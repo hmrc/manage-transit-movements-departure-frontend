@@ -23,11 +23,10 @@ import models.{LocalReferenceNumber, SubmissionState}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel.TaskListViewModelProvider
 import views.html.TaskListView
-
+import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
 import scala.concurrent.{ExecutionContext, Future}
 
 class TaskListController @Inject() (
