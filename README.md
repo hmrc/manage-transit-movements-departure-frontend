@@ -109,6 +109,26 @@ NormalMode and CheckMode are still used. Generally speaking:
 * sub-section check your answers pages use NormalMode
 * section check your answers pages use CheckMode
 
+### Tampermonkey Scripts
+Tampermonkey scripts have been developed for automating the answering of questions within the departure frontends. The scripts can be found here: https://github.com/hmrc/manage-transit-movements-departure-frontend/tree/CTCP-5537/tamperMonkey
+
+In order to run the scripts, you must have the Tampermonkey extension installed, which can be found on the Google Web Store, or the Firefox Addon browser.
+
+They include:
+  * Scripts for authorising
+  * Scripts for answering the pre-task-list
+  * Scripts for answering each individual section within a departure declaration
+
+On the task list screen of the departure frontend you will see this menu if the scripts are running:
+
+![image](https://github.com/hmrc/manage-transit-movements-departure-frontend/assets/99188015/8b2959ef-bbdf-409f-aa45-1c8949937a2b)
+
+To use the scripts, simply press the journey you want answered, and the scripts will go through and answer each question for you.
+
+Keep in mind sometimes if a page has been updated and the scripts have not, you will have to manually intervene and answer a question and then the scripts will run again as usual, or, if the scripts get stuck, and you want to stop them, you can press the "Stop Scripts" button.
+
+If a new update for the scripts has been released, you must visit the relevant file on GitHub and press "Raw" and the Tampermonkey extension will give you the option to update.
+
 ### License
 
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
