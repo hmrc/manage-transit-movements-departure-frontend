@@ -1,7 +1,11 @@
 
 # manage-transit-movements-departure-frontend
 
-This service allows a user to create a transit movement departure.
+This service allows a user to create a transit movement departure (IE015).
+It contains the pre task list questions which act as dependencies for the other sections within the task list.
+From this service, a user can also submit an amendment (IE013) to their departure declaration.
+
+This service also acts as a proxy for the journey tests to post data to manage-transit-movements-departure-cache via a test-only POST endpoint.
 
 Service manager port: 10120
 
@@ -9,20 +13,41 @@ Service manager port: 10120
 
 Run unit tests:
 <pre>sbt test</pre>  
-Run integration tests:  
-<pre>sbt it/test</pre> 
+Run integration tests:
+<pre>sbt it/test</pre>
+Run accessibility linter tests:
+<pre>sbt A11y/test</pre>
 
 ### Running manually or for journey tests
 
+To toggle between the Phase 5 transition and post-transition modes we have defined two separate modules, each with their own set of class bindings to handle the rules associated with these two periods.
+
+#### Transition
+<pre>
+sm2 --start CTC_TRADERS_P5_ACCEPTANCE_TRANSITION
+sm2 --stop MANAGE_TRANSIT_MOVEMENTS_DEPARTURE_FRONTEND_TRANSITION
+sbt -Dplay.additional.module=config.TransitionModule run
+</pre>
+
+#### Final
 <pre>
 sm2 --start CTC_TRADERS_P5_ACCEPTANCE
 sm2 --stop MANAGE_TRANSIT_MOVEMENTS_DEPARTURE_FRONTEND
-sbt run
+sbt -Dplay.additional.module=config.PostTransitionModule run
 </pre>
 
-If you hit an entry point before running the journey tests, it gets the compile out of the way and can help keep the first tests from failing.  
+### Feature toggles
 
-e.g.: http://localhost:10120/manage-transit-movements/departures
+The following features can be toggled in [application.conf](conf/application.conf):
+
+| Key                          | Argument type | sbt                                                             | Description                                                                                                                                                                                    |
+|------------------------------|---------------|-----------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `trader-test.enabled`        | `Boolean`     | `sbt -Dtrader-test.enabled=true run`                            | If enabled, this will override the behaviour of the "Is this page not working properly?" and "feedback" links. This is so we can receive feedback in the absence of Deskpro in `externaltest`. |
+| `countriesOfDeparture`       | `Seq[String]` | `sbt -DcountriesOfDeparture.0=GB countriesOfDeparture.1=XI run` | Controls which countries we fetch offices of departure for. This is so we can run XI only from June 28th before going live with both GB and XI on July 1st.                                    |
+| `banners.showUserResearch`   | `Boolean`     | `sbt -Dbanners.showUserResearch=true run`                       | Controls whether or not we show the user research banner.                                                                                                                                      |
+| `features.isPreLodgeEnabled` | `Boolean`     | `sbt -Dfeatures.isPreLodgeEnabled=true run`                     | Controls whether or not we ask the user if it is a standard (A) or pre-lodged (D) declaration. If false we default to standard (A).                                                            |
+| `play.additional.module`     | `String`      | `sbt -Dplay.additional.module=config.PostTransitionModule run`  | Controls which module (TransitionModule or PostTransitionModule) we bind to the application at start-up.                                                                                       |
+| `play.http.router`           | `String`      | `sbt -Dplay.http.router=testOnlyDoNotUseInAppConf.Routes run`   | Controls which router is used for the application, either `prod.Routes` or `testOnlyDoNotUseInAppConf.Routes`                                                                                  |
 
 ### Running Scaffold
 
@@ -72,23 +97,42 @@ In the example of a text input, we have 4 distinct use cases:
 :-------------------------:|:-------------------------:
 ![Text input with statement heading and visible label that asks the question](images/TextInputWithStatementHeading.png) | ![Text input used for address fields](images/AddressTextInput.png)
 
-There is similar logic behind the InputYesNo and InputSelect component view models.
-
-### Accessibility testing
-The accessibility of our templates and components can be checked by running `sbt a11y:test`
+There is similar logic behind the `InputYesNo` and `InputSelect` component view models.
 
 ### User answers reader
-This microservice has been quite experimental in the approach taken towards navigation. This is primarily driven by the UserAnswersReader.
-For any given JourneyDomainModel, a user answers reader is defined as the steps taken in order to have a valid set of user answers for that particular journey, often dependent on a series of other answers from previous sections.
+The navigation in this microservice is primarily driven by the `UserAnswersReader`.
+This is so navigation and task list statuses can be driven by the same logic.
+For any given `JourneyDomainModel`, a user answers reader is defined as the steps taken in order to have a valid set of user answers for that particular journey, often dependent on a series of other answers from previous sections.
 Depending on the state of the user answers, the reader will either return a `Right` when the answers are in a completed state, or a `Left` when they are not.
 The `Right` contains an instance of the journey domain model, which has a corresponding `routeIfCompleted` (generally a check your answers page) to navigate to.
 The `Left` contains an instance of the page that caused the reader to fail, which has a corresponding `route` to navigate to.
+Both have a list of the pages read by the user answers reader. Knowing this and the current page we can then accurately determine where to take the user to.
 
 This logic is utilised by the navigators, add-to-list change links, and task list links.
 
 NormalMode and CheckMode are still used. Generally speaking:
 * sub-section check your answers pages use NormalMode
 * section check your answers pages use CheckMode
+
+### Tampermonkey Scripts
+Tampermonkey scripts have been developed for automating the answering of questions within the departure frontends. The scripts can be found [here](tamperMonkey).
+
+In order to run the scripts, you must have the Tampermonkey extension installed, which can be found on the Google Web Store, or the Firefox Addon browser.
+
+They include:
+  * Scripts for authorising
+  * Scripts for answering the pre-task-list
+  * Scripts for answering each individual section within a departure declaration
+
+On the task list screen of the departure frontend you will see this menu if the scripts are running:
+
+![image](https://github.com/hmrc/manage-transit-movements-departure-frontend/assets/99188015/8b2959ef-bbdf-409f-aa45-1c8949937a2b)
+
+To use the scripts, simply press the journey you want answered, and the scripts will go through and answer each question for you.
+
+Keep in mind sometimes if a page has been updated and the scripts have not, you will have to manually intervene and answer a question and then the scripts will run again as usual, or, if the scripts get stuck, and you want to stop them, you can press the "Stop Scripts" button.
+
+If a new update for the scripts has been released, you must visit the relevant file on GitHub and press "Raw" and the Tampermonkey extension will give you the option to update.
 
 ### License
 
