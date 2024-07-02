@@ -38,3 +38,5 @@ GET        /:lrn/amend-guarantees/:departureId            controllers.AmendContr
 
 GET        /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onPageLoad(oldLrn: LocalReferenceNumber)
 POST       /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onSubmit(oldLrn: LocalReferenceNumber)
+
+GET     /:path/accompanying-document-pdf     controllers.RobotBlockController.onPageLoad(path: String)
