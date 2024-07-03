@@ -28,6 +28,7 @@ class RobotBlockControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
     val result = route(app, request).value
 
     status(result) mustEqual GONE
+    headers(result).get("X-Robots-Tag") mustBe Some("noindex")
 
   }
 }

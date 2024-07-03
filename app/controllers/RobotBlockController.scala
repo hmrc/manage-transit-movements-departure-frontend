@@ -27,8 +27,8 @@ class RobotBlockController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  // Return 410 to stop robots from indexing the url associated to this controller
+  // Return 410, and an additional noindex header to stop robots from indexing the url associated to this controller
   def onPageLoad(path: String): Action[AnyContent] = Action {
-    Gone
+    Gone.withHeaders("X-Robots-Tag" -> "noindex")
   }
 }
