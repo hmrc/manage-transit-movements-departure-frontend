@@ -127,6 +127,11 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
       result mustBe TaskStatus.CannotStartYet
     }
 
+    "when cannot-continue" in {
+      val result = JsString("cannot-continue").as[TaskStatus]
+      result mustBe TaskStatus.CannotContinue
+    }
+
     "when error" in {
       val result = JsString("error").as[TaskStatus]
       result mustBe TaskStatus.Error
@@ -135,6 +140,11 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when unavailable" in {
       val result = JsString("unavailable").as[TaskStatus]
       result mustBe TaskStatus.Unavailable
+    }
+
+    "when amended" in {
+      val result = JsString("amended").as[TaskStatus]
+      result mustBe TaskStatus.Amended
     }
 
     "when something else" in {

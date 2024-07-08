@@ -68,7 +68,6 @@ object TaskStatus {
 
   case object Amended extends TaskStatus {
     override def messageKey: String = "taskStatus.amended"
-
     override val tag: String        = "govuk-tag--green"
     override val jsonString: String = "amended"
   }
@@ -81,7 +80,6 @@ object TaskStatus {
 
   case object CannotContinue extends TaskStatus {
     override def messageKey: String = "taskStatus.cannotContinue"
-
     override val tag: String        = "govuk-tag--red"
     override val jsonString: String = "cannot-continue"
   }
