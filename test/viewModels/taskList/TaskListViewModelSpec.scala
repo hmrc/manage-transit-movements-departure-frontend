@@ -110,6 +110,27 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
         itemsTask.href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
       }
     }
+
+    "when pre task list, trader details, route details and documents completed, transport details and items in progress" - {
+      "items must be 'not started'" in {
+        val tasks = Map(
+          PreTaskListTask.section   -> TaskStatus.Completed,
+          TraderDetailsTask.section -> TaskStatus.Completed,
+          RouteDetailsTask.section  -> TaskStatus.Completed,
+          TransportTask.section     -> TaskStatus.InProgress,
+          DocumentsTask.section     -> TaskStatus.Completed,
+          ItemsTask.section         -> TaskStatus.InProgress
+        )
+        val answers = emptyUserAnswers.copy(tasks = tasks)
+        val result  = new TaskListViewModelProvider().apply(answers)
+
+        val itemsTask = result.tasks(4: Int)
+
+        itemsTask.name mustBe "Items"
+        itemsTask.status mustBe TaskStatus.CannotContinue
+        itemsTask.href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
+      }
+    }
   }
 
   "showSubmissionButton" - {

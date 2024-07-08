@@ -30,6 +30,16 @@ class ItemsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
         val task = ItemsTask(CannotStartYet)
         task.name mustBe "Items"
       }
+
+      "when status is CannotContinue" in {
+        val task = ItemsTask(CannotContinue)
+        task.name mustBe "Items"
+      }
+
+      "when status is Unavailable" in {
+        val task = ItemsTask(Unavailable)
+        task.name mustBe "Items"
+      }
     }
 
     "must be Add items" - {
