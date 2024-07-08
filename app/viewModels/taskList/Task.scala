@@ -51,8 +51,8 @@ abstract class TaskListTask extends Task {
       title = TaskListItemTitle(name.toText),
       status = status.toTaskListItemStatus(id),
       href = status match {
-        case CannotStartYet | Unavailable => None
-        case _                            => Some(href(lrn))
+        case CannotStartYet | CannotContinue | Unavailable => None
+        case _                                             => Some(href(lrn))
       }
     )
 }

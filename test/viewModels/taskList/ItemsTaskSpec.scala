@@ -18,7 +18,9 @@ package viewModels.taskList
 
 import base.SpecBase
 import generators.Generators
+import models.LocalReferenceNumber
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.taskList.TaskStatus._
 
@@ -90,6 +92,30 @@ class ItemsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
         taskStatus =>
           val task = ItemsTask(taskStatus)
           task.href(lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
+      }
+    }
+  }
+
+  "toTaskListItem" - {
+    "must have a href undefined" - {
+      "when task has status CannotStartYet, CannotContinue, Unavailable" in {
+        forAll(Gen.oneOf(CannotStartYet, CannotContinue, Unavailable), arbitrary[LocalReferenceNumber]) {
+          (taskStatus, lrn) =>
+            val task   = ItemsTask(taskStatus)
+            val result = task.toTaskListItem(lrn)(messages, frontendAppConfig)
+            result.href mustBe None
+        }
+      }
+    }
+
+    "must have a href defined" - {
+      "when task status is something else" in {
+        forAll(Gen.oneOf(Completed, InProgress, NotStarted, Error, Amended)) {
+          taskStatus =>
+            val task   = ItemsTask(taskStatus)
+            val result = task.toTaskListItem(lrn)(messages, frontendAppConfig)
+            result.href.value must endWith(s"/items/$lrn")
+        }
       }
     }
   }
