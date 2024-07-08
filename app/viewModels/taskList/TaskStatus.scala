@@ -80,7 +80,7 @@ object TaskStatus {
 
   case object CannotContinue extends TaskStatus {
     override def messageKey: String = "taskStatus.cannotContinue"
-    override val tag: String        = "govuk-tag--red"
+    override val tag: String        = "govuk-tag--yellow"
     override val jsonString: String = "cannot-continue"
   }
 

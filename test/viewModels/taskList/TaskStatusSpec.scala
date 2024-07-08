@@ -47,6 +47,10 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when Unavailable" in {
       TaskStatus.Unavailable.messageKey mustBe "taskStatus.completed"
     }
+
+    "when CannotContinue" in {
+      TaskStatus.CannotContinue.messageKey mustBe "taskStatus.cannotContinue"
+    }
   }
 
   "tag" - {
@@ -73,6 +77,10 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when Error" in {
       TaskStatus.Error.tag mustBe "govuk-tag--red"
     }
+
+    "when CannotContinue" in {
+      TaskStatus.CannotContinue.tag mustBe "govuk-tag--yellow"
+    }
   }
 
   "must serialise to json" - {
@@ -95,6 +103,7 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
       val result = Json.toJson[TaskStatus](TaskStatus.CannotStartYet)
       result mustBe JsString("cannot-start-yet")
     }
+
     "when error" in {
       val result = Json.toJson[TaskStatus](TaskStatus.Error)
       result mustBe JsString("error")
@@ -103,6 +112,11 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when unavailable" in {
       val result = Json.toJson[TaskStatus](TaskStatus.Unavailable)
       result mustBe JsString("unavailable")
+    }
+
+    "when cannot continue" in {
+      val result = Json.toJson[TaskStatus](TaskStatus.CannotContinue)
+      result mustBe JsString("cannot-continue")
     }
   }
 
