@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class OfficeOfDepartureController @Inject() (
   override val messagesApi: MessagesApi,
-  implicit val sessionRepository: SessionRepository,
+  sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
@@ -79,7 +79,7 @@ class OfficeOfDepartureController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.values, mode))),
                 value => {
-                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                  val navigator: UserAnswersNavigator = navigatorProvider(mode)
                   for {
                     isInCL112 <- countriesService.isInCL112(value)
                     isInCL147 <- countriesService.isInCL147(value)
@@ -89,8 +89,8 @@ class OfficeOfDepartureController @Inject() (
                       .appendValue(OfficeOfDepartureInCL112Page, isInCL112)
                       .appendValue(OfficeOfDepartureInCL147Page, isInCL147)
                       .appendValue(OfficeOfDepartureInCL010Page, isInCL010)
-                      .writeToSession()
-                      .navigate()
+                      .writeToSession(sessionRepository)
+                      .navigateWith(navigator)
                   } yield result
                 }
               )
