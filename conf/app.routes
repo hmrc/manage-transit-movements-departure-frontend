@@ -40,3 +40,4 @@ GET        /:oldLrn/new-local-reference-number            controllers.NewLocalRe
 POST       /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onSubmit(oldLrn: LocalReferenceNumber)
 
 GET     /:path/accompanying-document-pdf     controllers.RobotBlockController.onPageLoad(path: String)
+GET     /robots.txt                          controllers.Assets.at(path="/public", file="robots.txt")
