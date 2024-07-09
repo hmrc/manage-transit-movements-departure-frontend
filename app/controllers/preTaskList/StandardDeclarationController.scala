@@ -33,7 +33,7 @@ import scala.concurrent.ExecutionContext
 
 class StandardDeclarationController @Inject() (
   override val messagesApi: MessagesApi,
-  implicit val sessionRepository: SessionRepository,
+  sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   val config: FrontendAppConfig,
@@ -55,9 +55,9 @@ class StandardDeclarationController @Inject() (
     .requireData(lrn)
     .async {
       implicit request =>
-        implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+        val navigator: UserAnswersNavigator = navigatorProvider(mode)
 
-        StandardDeclarationPage.writeToUserAnswers("A").writeToSession().navigate()
+        StandardDeclarationPage.writeToUserAnswers("A").writeToSession(sessionRepository).navigateWith(navigator)
     }
 
 }

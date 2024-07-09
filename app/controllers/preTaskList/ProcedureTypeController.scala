@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ProcedureTypeController @Inject() (
   override val messagesApi: MessagesApi,
-  implicit val sessionRepository: SessionRepository,
+  sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
@@ -68,8 +68,8 @@ class ProcedureTypeController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.values, lrn, mode))),
             value => {
-              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              ProcedureTypePage.writeToUserAnswers(value).writeToSession().navigate()
+              val navigator: UserAnswersNavigator = navigatorProvider(mode)
+              ProcedureTypePage.writeToUserAnswers(value).writeToSession(sessionRepository).navigateWith(navigator)
             }
           )
     }

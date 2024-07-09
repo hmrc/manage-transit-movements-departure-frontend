@@ -35,7 +35,7 @@ import scala.concurrent.ExecutionContext
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
-  implicit val sessionRepository: SessionRepository,
+  sessionRepository: SessionRepository,
   val frontendAppConfig: FrontendAppConfig,
   actions: Actions,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
@@ -68,7 +68,7 @@ class CheckYourAnswersController @Inject() (
       implicit request =>
         PreTaskListSection
           .updateTask(frontendAppConfig.isPreLodgeEnabled)
-          .writeToSession()
+          .writeToSession(sessionRepository)
           .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn))
     }
 

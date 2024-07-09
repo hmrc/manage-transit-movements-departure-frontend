@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AdditionalDeclarationTypeController @Inject() (
   override val messagesApi: MessagesApi,
-  implicit val sessionRepository: SessionRepository,
+  sessionRepository: SessionRepository,
   val frontendAppConfig: FrontendAppConfig,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
@@ -87,8 +87,8 @@ class AdditionalDeclarationTypeController @Inject() (
                 .fold(
                   formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, additionalDeclarationTypes, mode))),
                   value => {
-                    implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                    AdditionalDeclarationTypePage.writeToUserAnswers(value).writeToSession().navigate()
+                    val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                    AdditionalDeclarationTypePage.writeToUserAnswers(value).writeToSession(sessionRepository).navigateWith(navigator)
                   }
                 )
           }
