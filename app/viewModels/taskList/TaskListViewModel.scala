@@ -54,7 +54,8 @@ object TaskListViewModel {
           tasks
             .get(section)
             .fold[TaskStatus](CannotStartYet) {
-              _ => CannotContinue
+              case InProgress => CannotContinue
+              case value      => value
             }
         }
 
