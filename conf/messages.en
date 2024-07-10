@@ -162,6 +162,7 @@ taskStatus.completed = Completed
 taskStatus.inProgress = In progress
 taskStatus.notStarted = Not started
 taskStatus.cannotStartYet = Cannot start yet
+taskStatus.cannotContinue = Cannot continue
 taskStatus.error = Error
 taskStatus.unavailable = Unavailable
 taskStatus.amended = Amended

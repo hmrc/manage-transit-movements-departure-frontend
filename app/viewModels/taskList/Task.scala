@@ -37,10 +37,10 @@ abstract class TaskListTask extends Task {
 
   def name(implicit messages: Messages): String = messages {
     status match {
-      case Completed | InProgress | Amended => s"task.$messageKey.edit"
-      case Error                            => s"task.$messageKey.amend"
-      case NotStarted                       => s"task.$messageKey.add"
-      case CannotStartYet | Unavailable     => s"task.$messageKey"
+      case Completed | InProgress | Amended              => s"task.$messageKey.edit"
+      case Error                                         => s"task.$messageKey.amend"
+      case NotStarted                                    => s"task.$messageKey.add"
+      case CannotStartYet | CannotContinue | Unavailable => s"task.$messageKey"
     }
   }
 
@@ -51,8 +51,8 @@ abstract class TaskListTask extends Task {
       title = TaskListItemTitle(name.toText),
       status = status.toTaskListItemStatus(id),
       href = status match {
-        case CannotStartYet | Unavailable => None
-        case _                            => Some(href(lrn))
+        case CannotStartYet | CannotContinue | Unavailable => None
+        case _                                             => Some(href(lrn))
       }
     )
 }

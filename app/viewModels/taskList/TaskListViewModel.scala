@@ -21,7 +21,7 @@ import models.SubmissionState.{Amendment, GuaranteeAmendment}
 import models.{LocalReferenceNumber, SubmissionState, UserAnswers}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.tasklist.TaskListItem
-import viewModels.taskList.TaskStatus.Amended
+import viewModels.taskList.TaskStatus._
 
 case class TaskListViewModel(tasks: Seq[TaskListTask], submissionState: SubmissionState.Value) {
 
@@ -47,10 +47,18 @@ object TaskListViewModel {
 
       def task(section: String, dependentSections: Seq[String] = Nil): Option[Task] = {
         val tasks = userAnswers.tasks
-        val status = tasks.getOrElse(
-          section,
-          if ((PreTaskListTask.section +: dependentSections).allCompleted(tasks)) TaskStatus.NotStarted else TaskStatus.CannotStartYet
-        )
+
+        val status = if ((PreTaskListTask.section +: dependentSections).allCompleted(tasks)) {
+          tasks.getOrElse(section, NotStarted)
+        } else {
+          tasks
+            .get(section)
+            .fold[TaskStatus](CannotStartYet) {
+              case InProgress => CannotContinue
+              case value      => value
+            }
+        }
+
         Task(section, status)
       }
 
