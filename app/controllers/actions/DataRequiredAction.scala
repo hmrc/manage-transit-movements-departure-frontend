@@ -16,7 +16,7 @@
 
 package controllers.actions
 
-import connectors.SubmissionConnector
+import connectors.CacheConnector
 import models.LocalReferenceNumber
 import models.SubmissionState._
 import models.requests.{DataRequest, OptionalDataRequest}
@@ -30,7 +30,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DataRequiredAction(
-  submissionConnector: SubmissionConnector
+  connector: CacheConnector
 )(
   lrn: LocalReferenceNumber,
   ignoreSubmissionStatus: Boolean
@@ -51,7 +51,7 @@ class DataRequiredAction(
           case Submitted                           => Future.successful(failure)
           case NotSubmitted                        => Future.successful(success)
           case _ =>
-            submissionConnector.getMessages(lrn).map {
+            connector.getMessages(lrn).map {
               messages =>
                 if (messages.contains("IE029")) {
                   logger.warn(s"$lrn: Movement has been released for transit. Can no longer make changes.")
@@ -72,10 +72,10 @@ trait DataRequiredActionProvider {
 }
 
 class DataRequiredActionImpl @Inject() (
-  submissionConnector: SubmissionConnector
+  connector: CacheConnector
 )(implicit val executionContext: ExecutionContext)
     extends DataRequiredActionProvider {
 
   override def apply(lrn: LocalReferenceNumber, ignoreSubmissionStatus: Boolean): ActionRefiner[OptionalDataRequest, DataRequest] =
-    new DataRequiredAction(submissionConnector)(lrn, ignoreSubmissionStatus)
+    new DataRequiredAction(connector)(lrn, ignoreSubmissionStatus)
 }

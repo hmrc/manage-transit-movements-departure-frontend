@@ -17,7 +17,7 @@
 package controllers.actions
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.SubmissionConnector
+import connectors.CacheConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber, SubmissionState, UserAnswers}
@@ -36,19 +36,19 @@ import scala.concurrent.Future
 class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks {
 
   private class Harness(
-    submissionConnector: SubmissionConnector
+    cacheConnector: CacheConnector
   )(
     lrn: LocalReferenceNumber,
     ignoreSubmissionState: Boolean
-  ) extends DataRequiredAction(submissionConnector)(lrn, ignoreSubmissionState) {
+  ) extends DataRequiredAction(cacheConnector)(lrn, ignoreSubmissionState) {
     def callRefine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = refine(request)
   }
 
-  private val mockSubmissionConnector = mock[SubmissionConnector]
+  private val mockCacheConnector = mock[CacheConnector]
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockSubmissionConnector)
+    reset(mockCacheConnector)
   }
 
   "Data Required Action" - {
@@ -60,10 +60,10 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
       "when there are no UserAnswers" - {
 
         "must return Left and redirect to session expired" in {
-          when(mockSubmissionConnector.getMessages(any())(any()))
+          when(mockCacheConnector.getMessages(any())(any()))
             .thenReturn(Future.successful(DepartureMessages()))
 
-          val harness = new Harness(mockSubmissionConnector)(lrn, ignoreSubmissionState)
+          val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
           val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, None)).map(_.left.value)
 
@@ -76,12 +76,12 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
         "and answers have previously been submitted" - {
           "must return Left and redirect to session expired" in {
-            when(mockSubmissionConnector.getMessages(any())(any()))
+            when(mockCacheConnector.getMessages(any())(any()))
               .thenReturn(Future.successful(DepartureMessages()))
 
             val userAnswers = UserAnswers(lrn, eoriNumber, Json.obj(), status = SubmissionState.Submitted)
 
-            val harness = new Harness(mockSubmissionConnector)(lrn, ignoreSubmissionState)
+            val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
             val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers))).map(_.left.value)
 
@@ -96,12 +96,12 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
               submissionStatus =>
                 beforeEach()
 
-                when(mockSubmissionConnector.getMessages(any())(any()))
+                when(mockCacheConnector.getMessages(any())(any()))
                   .thenReturn(Future.successful(DepartureMessages()))
 
                 val userAnswers = UserAnswers(lrn = lrn, eoriNumber = eoriNumber, status = submissionStatus)
 
-                val harness = new Harness(mockSubmissionConnector)(lrn, ignoreSubmissionState)
+                val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
                 val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers)))
 
@@ -123,10 +123,10 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
       "when there are no UserAnswers" - {
 
         "must return Left and redirect to session expired" in {
-          when(mockSubmissionConnector.getMessages(any())(any()))
+          when(mockCacheConnector.getMessages(any())(any()))
             .thenReturn(Future.successful(DepartureMessages()))
 
-          val harness = new Harness(mockSubmissionConnector)(lrn, ignoreSubmissionState)
+          val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
           val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, None)).map(_.left.value)
 
@@ -155,12 +155,12 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
                     )
                   )
 
-                  when(mockSubmissionConnector.getMessages(any())(any()))
+                  when(mockCacheConnector.getMessages(any())(any()))
                     .thenReturn(Future.successful(departureMessages))
 
                   val userAnswers = UserAnswers(lrn, eoriNumber, status = submissionStatus)
 
-                  val harness = new Harness(mockSubmissionConnector)(lrn, ignoreSubmissionState)
+                  val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
                   val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers))).map(_.left.value)
 
@@ -184,12 +184,12 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
                     )
                   )
 
-                  when(mockSubmissionConnector.getMessages(any())(any()))
+                  when(mockCacheConnector.getMessages(any())(any()))
                     .thenReturn(Future.successful(departureMessages))
 
                   val userAnswers = UserAnswers(lrn, eoriNumber, status = submissionStatus)
 
-                  val harness = new Harness(mockSubmissionConnector)(lrn, ignoreSubmissionState)
+                  val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
                   val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers)))
 
@@ -205,14 +205,14 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
         "and not amending" - {
           "must return Right with DataRequest" in {
-            when(mockSubmissionConnector.getMessages(any())(any()))
+            when(mockCacheConnector.getMessages(any())(any()))
               .thenReturn(Future.successful(DepartureMessages()))
 
             val submissionStatus = SubmissionState.NotSubmitted
 
             val userAnswers = UserAnswers(lrn, eoriNumber, status = submissionStatus)
 
-            val harness = new Harness(mockSubmissionConnector)(lrn, ignoreSubmissionState)
+            val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
             val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers)))
 

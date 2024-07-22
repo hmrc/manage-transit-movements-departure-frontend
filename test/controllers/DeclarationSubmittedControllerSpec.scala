@@ -17,7 +17,7 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.SubmissionConnector
+import connectors.CacheConnector
 import generators.Generators
 import models.reference.CustomsOffice
 import models.{DepartureMessage, DepartureMessages}
@@ -36,16 +36,16 @@ import scala.concurrent.Future
 
 class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
-  private val mockSubmissionConnector: SubmissionConnector = mock[SubmissionConnector]
+  private val mockCacheConnector: CacheConnector = mock[CacheConnector]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[SubmissionConnector]).toInstance(mockSubmissionConnector))
+      .overrides(bind(classOf[CacheConnector]).toInstance(mockCacheConnector))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockSubmissionConnector)
+    reset(mockCacheConnector)
   }
 
   "DeclarationSubmittedController" - {
@@ -59,7 +59,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
           officeOfDestination =>
             beforeEach()
 
-            when(mockSubmissionConnector.getMessages(any())(any()))
+            when(mockCacheConnector.getMessages(any())(any()))
               .thenReturn(Future.successful(DepartureMessages(Seq(DepartureMessage("IE015")))))
 
             val userAnswers = emptyUserAnswers.setValue(OfficeOfDestinationPage, officeOfDestination)
@@ -76,7 +76,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
             contentAsString(result) mustEqual
               view(lrn, officeOfDestination)(request, messages).toString
 
-            verify(mockSubmissionConnector).getMessages(eqTo(lrn))(any())
+            verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
         }
       }
 
@@ -85,7 +85,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
           officeOfDestination =>
             beforeEach()
 
-            when(mockSubmissionConnector.getMessages(any())(any()))
+            when(mockCacheConnector.getMessages(any())(any()))
               .thenReturn(Future.successful(DepartureMessages(Nil)))
 
             val userAnswers = emptyUserAnswers.setValue(OfficeOfDestinationPage, officeOfDestination)
@@ -97,7 +97,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
 
             status(result) mustEqual INTERNAL_SERVER_ERROR
 
-            verify(mockSubmissionConnector).getMessages(eqTo(lrn))(any())
+            verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
         }
       }
 
@@ -135,7 +135,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
           officeOfDestination =>
             beforeEach()
 
-            when(mockSubmissionConnector.getMessages(any())(any()))
+            when(mockCacheConnector.getMessages(any())(any()))
               .thenReturn(Future.successful(DepartureMessages(Seq(DepartureMessage("IE013")))))
 
             val userAnswers = emptyUserAnswers.setValue(OfficeOfDestinationPage, officeOfDestination)
@@ -152,7 +152,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
             contentAsString(result) mustEqual
               view(lrn, officeOfDestination)(request, messages).toString
 
-            verify(mockSubmissionConnector).getMessages(eqTo(lrn))(any())
+            verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
         }
       }
 
@@ -161,7 +161,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
           officeOfDestination =>
             beforeEach()
 
-            when(mockSubmissionConnector.getMessages(any())(any()))
+            when(mockCacheConnector.getMessages(any())(any()))
               .thenReturn(Future.successful(DepartureMessages(Nil)))
 
             val userAnswers = emptyUserAnswers.setValue(OfficeOfDestinationPage, officeOfDestination)
@@ -173,7 +173,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
 
             status(result) mustEqual INTERNAL_SERVER_ERROR
 
-            verify(mockSubmissionConnector).getMessages(eqTo(lrn))(any())
+            verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
         }
       }
 

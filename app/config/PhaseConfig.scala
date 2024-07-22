@@ -16,11 +16,14 @@
 
 package config
 
-class TransitionModule extends Module {
+trait PhaseConfig {
+  val acceptHeader: String
+}
 
-  override def configure(): Unit = {
-    super.configure()
+class TransitionConfig() extends PhaseConfig {
+  override val acceptHeader: String = "application/vnd.hmrc.transition+json"
+}
 
-    bind(classOf[PhaseConfig]).to(classOf[TransitionConfig])
-  }
+class PostTransitionConfig() extends PhaseConfig {
+  override val acceptHeader: String = "application/vnd.hmrc.final+json"
 }

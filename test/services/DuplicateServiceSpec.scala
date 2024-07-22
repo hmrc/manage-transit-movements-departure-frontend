@@ -19,8 +19,8 @@ package services
 import base.SpecBase
 import connectors.CacheConnector
 import generators.Generators
-import models.LocalReferenceNumber
 import models.SubmissionState.RejectedPendingChanges
+import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, verifyNoMoreInteractions, when}
 import org.scalatest.BeforeAndAfterEach
@@ -85,7 +85,6 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
           verify(mockCacheConnector).post(eqTo(newDataToSend))(any())
         }
       }
-
     }
 
     "doesDraftOrSubmissionExistForLrn" - {
@@ -107,24 +106,41 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
       }
     }
 
-    "doesDraftOrSubmissionExistForLrn" - {
-      "must return true if LRN exists in API" in {
+    "doesIE028ExistForLrn" - {
+      "must return true if IE028 exists for LRN" in {
 
-        when(mockCacheConnector.doesIE028ExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(true))
+        val messages = DepartureMessages(
+          Seq(
+            DepartureMessage("IE015"),
+            DepartureMessage("IE928"),
+            DepartureMessage("IE028")
+          )
+        )
+
+        when(mockCacheConnector.getMessages(eqTo(lrn))(any()))
+          .thenReturn(Future.successful(messages))
 
         duplicateService.doesIE028ExistForLrn(lrn).futureValue mustBe true
 
-        verify(mockCacheConnector).doesIE028ExistForLrn(eqTo(lrn))(any())
+        verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
       }
 
-      "must return false if LRN does not exist in API" in {
-        when(mockCacheConnector.doesIE028ExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(false))
+      "must return false if IE028 does not exist for LRN" in {
+
+        val messages = DepartureMessages(
+          Seq(
+            DepartureMessage("IE015"),
+            DepartureMessage("IE928")
+          )
+        )
+
+        when(mockCacheConnector.getMessages(eqTo(lrn))(any()))
+          .thenReturn(Future.successful(messages))
 
         duplicateService.doesIE028ExistForLrn(lrn).futureValue mustBe false
 
-        verify(mockCacheConnector).doesIE028ExistForLrn(eqTo(lrn))(any())
+        verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
       }
     }
-
   }
 }
