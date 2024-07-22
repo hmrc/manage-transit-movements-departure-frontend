@@ -16,10 +16,11 @@
 
 package connectors
 
-import config.FrontendAppConfig
+import config.{FrontendAppConfig, PhaseConfig}
 import models.LockCheck._
-import models.{LocalReferenceNumber, LockCheck, UserAnswers}
+import models.{DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers}
 import play.api.Logging
+import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -31,7 +32,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CacheConnector @Inject() (
   config: FrontendAppConfig,
-  http: HttpClientV2
+  http: HttpClientV2,
+  phaseConfig: PhaseConfig
 )(implicit ec: ExecutionContext)
     extends Logging {
 
@@ -108,15 +110,36 @@ class CacheConnector @Inject() (
       }
   }
 
-  def doesIE028ExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    val url = url"$baseUrl/does-ie028-exist-for-lrn/${lrn.toString}"
+  def submit(lrn: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    val url = url"$baseUrl/declaration/submit"
+    http
+      .post(url)
+      .setHeader(ACCEPT -> phaseConfig.acceptHeader)
+      .withBody(Json.toJson(lrn))
+      .execute[HttpResponse]
+  }
+
+  def submitAmendment(lrn: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    val url = url"$baseUrl/declaration/submit-amendment"
+    http
+      .post(url)
+      .setHeader(ACCEPT -> phaseConfig.acceptHeader)
+      .withBody(Json.toJson(lrn))
+      .execute[HttpResponse]
+  }
+
+  def getExpiryInDays(lrn: String)(implicit hc: HeaderCarrier): Future[Long] = {
+    val url = url"$baseUrl/user-answers/$lrn/expiry"
     http
       .get(url)
-      .execute[Boolean]
-      .recoverWith {
-        case e =>
-          logger.error(s"Failed to check if lrn was inside the API with error: $e")
-          Future.failed(new Exception(e))
-      }
+      .execute[Long]
+  }
+
+  def getMessages(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[DepartureMessages] = {
+    import models.DepartureMessages.httpReads
+    val url = url"$baseUrl/messages/$lrn"
+    http
+      .get(url)
+      .execute[DepartureMessages]
   }
 }

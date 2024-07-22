@@ -17,7 +17,7 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.SubmissionConnector
+import connectors.CacheConnector
 import generators.Generators
 import models.{DepartureMessages, SubmissionState}
 import org.mockito.ArgumentMatchers.any
@@ -38,7 +38,7 @@ import scala.concurrent.Future
 class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   private lazy val mockViewModelProvider: TaskListViewModelProvider = mock[TaskListViewModelProvider]
-  private val mockSubmissionConnector: SubmissionConnector          = mock[SubmissionConnector]
+  private val mockCacheConnector: CacheConnector                    = mock[CacheConnector]
   private val expiryInDays                                          = 30
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
@@ -46,14 +46,14 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       .guiceApplicationBuilder()
       .overrides(
         bind(classOf[TaskListViewModelProvider]).toInstance(mockViewModelProvider),
-        bind(classOf[SubmissionConnector]).toInstance(mockSubmissionConnector)
+        bind(classOf[CacheConnector]).toInstance(mockCacheConnector)
       )
 
   private val sampleTasks = arbitrary[List[TaskListTask]](arbitraryTasks(arbitraryTask)).sample.value
 
   override def beforeEach(): Unit = {
     reset(mockViewModelProvider)
-    reset(mockSubmissionConnector)
+    reset(mockCacheConnector)
     super.beforeEach()
   }
 
@@ -66,7 +66,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       val viewModel = TaskListViewModel(sampleTasks, userAnswers.status)
 
       when(mockViewModelProvider.apply(any())).thenReturn(viewModel)
-      when(mockSubmissionConnector.getExpiryInDays(any())(any())).thenReturn(Future.successful(expiryInDays))
+      when(mockCacheConnector.getExpiryInDays(any())(any())).thenReturn(Future.successful(expiryInDays))
 
       val request = FakeRequest(GET, routes.TaskListController.onPageLoad(lrn).url)
 
@@ -123,7 +123,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
     "must redirect to confirmation page when submission success" - {
       "when not previously submitted" in {
-        when(mockSubmissionConnector.post(any())(any())).thenReturn(response(OK))
+        when(mockCacheConnector.submit(any())(any())).thenReturn(response(OK))
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -141,9 +141,9 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
           submissionStatus =>
             setExistingUserAnswers(emptyUserAnswers.copy(status = submissionStatus, departureId = Some(departureId)))
 
-            when(mockSubmissionConnector.getMessages(any())(any())).thenReturn(Future.successful(DepartureMessages()))
+            when(mockCacheConnector.getMessages(any())(any())).thenReturn(Future.successful(DepartureMessages()))
 
-            when(mockSubmissionConnector.postAmendment(any())(any())).thenReturn(response(OK))
+            when(mockCacheConnector.submitAmendment(any())(any())).thenReturn(response(OK))
 
             val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
@@ -160,7 +160,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       "when not previously submitted" in {
         forAll(Gen.oneOf(BAD_REQUEST, INTERNAL_SERVER_ERROR)) {
           errorCode =>
-            when(mockSubmissionConnector.post(any())(any())).thenReturn(response(errorCode))
+            when(mockCacheConnector.submit(any())(any())).thenReturn(response(errorCode))
 
             setExistingUserAnswers(emptyUserAnswers)
 
@@ -179,9 +179,9 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
           (submissionStatus, errorCode) =>
             setExistingUserAnswers(emptyUserAnswers.copy(status = submissionStatus, departureId = Some(departureId)))
 
-            when(mockSubmissionConnector.getMessages(any())(any())).thenReturn(Future.successful(DepartureMessages()))
+            when(mockCacheConnector.getMessages(any())(any())).thenReturn(Future.successful(DepartureMessages()))
 
-            when(mockSubmissionConnector.postAmendment(any())(any())).thenReturn(response(errorCode))
+            when(mockCacheConnector.submitAmendment(any())(any())).thenReturn(response(errorCode))
 
             val request = FakeRequest(POST, routes.TaskListController.onSubmit(lrn).url)
 
