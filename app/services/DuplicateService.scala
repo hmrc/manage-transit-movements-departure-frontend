@@ -41,7 +41,10 @@ class DuplicateService @Inject() (
     }
 
   def doesDraftOrSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
-    cacheConnector.doesDraftOrSubmissionExistForLrn(lrn)
+    cacheConnector.get(lrn).map(_.isDefined).flatMap {
+      case true  => Future.successful(true)
+      case false => doesIE028ExistForLrn(lrn)
+    }
 
   def doesIE028ExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
     cacheConnector.getMessages(lrn).map(_.contains("IE028"))

@@ -98,18 +98,6 @@ class CacheConnector @Inject() (
       .map(_.status == OK)
   }
 
-  def doesDraftOrSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    val url = url"$baseUrl/does-draft-or-submission-exist-for-lrn/${lrn.toString}"
-    http
-      .get(url)
-      .execute[Boolean]
-      .recoverWith {
-        case e =>
-          logger.error(s"Failed to check if lrn was a duplicate with error: $e")
-          Future.failed(new Exception(e))
-      }
-  }
-
   def submit(lrn: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val url = url"$baseUrl/declaration/submit"
     http
