@@ -22,7 +22,7 @@ import models.{DepartureMessage, DepartureMessages, LockCheck, UserAnswers}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsBoolean, JsNumber, Json}
+import play.api.libs.json.{JsNumber, Json}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 
@@ -224,41 +224,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
             val result: Boolean = await(connector.delete(userAnswers.lrn))
 
             result mustBe false
-        }
-      }
-    }
-
-    "doesDraftOrSubmissionExistForLrn" - {
-      val url = s"/manage-transit-movements-departure-cache/does-draft-or-submission-exist-for-lrn/${lrn.value}"
-
-      "must return false when status is Ok and lrn does not exists in cache/API" in {
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(okJson(Json.stringify(JsBoolean(false))))
-        )
-
-        connector.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe false
-      }
-
-      "must return true when status is Ok and lrn does exists in cache/API" in {
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(okJson(Json.stringify(JsBoolean(true))))
-        )
-
-        connector.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe true
-      }
-
-      "return an exception for 4xx or 5xx response" in {
-        val status = Gen.choose(400: Int, 599: Int).sample.value
-
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(aResponse().withStatus(status))
-        )
-
-        assertThrows[Exception] {
-          await(connector.doesDraftOrSubmissionExistForLrn(lrn))
         }
       }
     }

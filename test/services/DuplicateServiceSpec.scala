@@ -22,7 +22,7 @@ import generators.Generators
 import models.SubmissionState.RejectedPendingChanges
 import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{reset, verify, verifyNoMoreInteractions, when}
+import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import viewModels.taskList.TaskStatus
 
@@ -88,21 +88,50 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
     }
 
     "doesDraftOrSubmissionExistForLrn" - {
-      "must return true if LRN is a duplicate" in {
+      "must return true" - {
+        "if draft exists" in {
+          when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(Some(emptyUserAnswers)))
 
-        when(mockCacheConnector.doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(true))
+          duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe true
 
-        duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe true
+          verify(mockCacheConnector).get(eqTo(lrn))(any())
+          verify(mockCacheConnector, never()).getMessages(any())(any())
+        }
 
-        verify(mockCacheConnector).doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())
+        "if draft doesn't exist but IE028 does" in {
+          val messages = DepartureMessages(
+            Seq(
+              DepartureMessage("IE015"),
+              DepartureMessage("IE928"),
+              DepartureMessage("IE028")
+            )
+          )
+          when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(None))
+          when(mockCacheConnector.getMessages(any())(any())).thenReturn(Future.successful(messages))
+
+          duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe true
+
+          verify(mockCacheConnector).get(eqTo(lrn))(any())
+          verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
+        }
       }
 
-      "must return false if LRN is not a duplicate" in {
-        when(mockCacheConnector.doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())).thenReturn(Future.successful(false))
+      "must return false" - {
+        "if draft doesn't exist and IE028 doesn't exist" in {
+          val messages = DepartureMessages(
+            Seq(
+              DepartureMessage("IE015"),
+              DepartureMessage("IE928")
+            )
+          )
+          when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(None))
+          when(mockCacheConnector.getMessages(any())(any())).thenReturn(Future.successful(messages))
 
-        duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe false
+          duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe false
 
-        verify(mockCacheConnector).doesDraftOrSubmissionExistForLrn(eqTo(lrn))(any())
+          verify(mockCacheConnector).get(eqTo(lrn))(any())
+          verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
+        }
       }
     }
 
