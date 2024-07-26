@@ -33,10 +33,7 @@ GET        /:lrn/delete-lock                              controllers.DeleteLock
 
 GET        /cannot-open                                   controllers.LockedController.onPageLoad()
 
-GET        /:lrn/amend/:departureId                       controllers.AmendController.amendment(lrn: LocalReferenceNumber, departureId: String)
-GET        /:lrn/amend-guarantees/:departureId            controllers.AmendController.guaranteeAmendment(lrn: LocalReferenceNumber, departureId: String)
-
 GET        /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onPageLoad(oldLrn: LocalReferenceNumber)
 POST       /:oldLrn/new-local-reference-number            controllers.NewLocalReferenceNumberController.onSubmit(oldLrn: LocalReferenceNumber)
 
-GET     /:path/accompanying-document-pdf     controllers.RobotBlockController.onPageLoad(path: String)
+GET        /:path/accompanying-document-pdf               controllers.RobotBlockController.onPageLoad(path: String)
