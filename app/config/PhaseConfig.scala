@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package navigation
+package config
 
-import models.{Mode, UserAnswers}
-import pages.Page
-import play.api.mvc.Call
-
-class FakeNavigator(desiredRoute: Call) extends Navigator {
-  override def nextPage(userAnswers: UserAnswers, currentPage: Option[Page]): Call = desiredRoute
+trait PhaseConfig {
+  val acceptHeader: String
 }
 
-class FakePreTaskListNavigator(desiredRoute: Call, mode: Mode, isPreLodgeEnabled: Boolean) extends PreTaskListNavigator(mode, isPreLodgeEnabled) {
-  override def nextPage(userAnswers: UserAnswers, currentPage: Option[Page]): Call = desiredRoute
+class TransitionConfig() extends PhaseConfig {
+  override val acceptHeader: String = "application/vnd.hmrc.transition+json"
+}
+
+class PostTransitionConfig() extends PhaseConfig {
+  override val acceptHeader: String = "application/vnd.hmrc.final+json"
 }

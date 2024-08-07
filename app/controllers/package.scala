@@ -44,8 +44,8 @@ package object controllers {
         case None          => Left(WriterError(page, Some(s"Failed to find section in JSON path ${page.path}")))
       }
 
-    def updateTask[A](page: QuestionPage[A], section: String, userAnswers: UserAnswers): EitherType[Write[A]] = {
-      val status = PreTaskListDomain.reader.run(userAnswers) match {
+    def updateTask[A](page: QuestionPage[A], section: String, userAnswers: UserAnswers, preLodgeFlag: Boolean): EitherType[Write[A]] = {
+      val status = PreTaskListDomain.reader(preLodgeFlag).run(userAnswers) match {
         case Left(_)  => InProgress
         case Right(_) => Completed
       }
@@ -55,12 +55,12 @@ package object controllers {
 
   implicit class SettableOps[A](page: QuestionPage[A]) {
 
-    def updateTask(): UserAnswersWriter[Write[A]] =
+    def updateTask(preLodgeFlag: Boolean): UserAnswersWriter[Write[A]] =
       ReaderT[EitherType, UserAnswers, Write[A]] {
         userAnswers =>
           UserAnswersWriter.updateTask(page) {
             section =>
-              UserAnswersWriter.updateTask(page, section, userAnswers)
+              UserAnswersWriter.updateTask(page, section, userAnswers, preLodgeFlag)
           }
       }
 
@@ -94,17 +94,18 @@ package object controllers {
           }
       }
 
-    def updateTask(): UserAnswersWriter[Write[A]] =
+    def updateTask(preLodgeFlag: Boolean): UserAnswersWriter[Write[A]] =
       userAnswersWriter.flatMapF {
         case (page, userAnswers) =>
           UserAnswersWriter.updateTask(page) {
-            section => UserAnswersWriter.updateTask(page, section, userAnswers)
+            section => UserAnswersWriter.updateTask(page, section, userAnswers, preLodgeFlag)
           }
       }
 
     def writeToSession(
-      userAnswers: UserAnswers
-    )(implicit sessionRepository: SessionRepository, executionContext: ExecutionContext, hc: HeaderCarrier): Future[Write[A]] =
+      userAnswers: UserAnswers,
+      sessionRepository: SessionRepository
+    )(implicit executionContext: ExecutionContext, hc: HeaderCarrier): Future[Write[A]] =
       userAnswersWriter.run(userAnswers) match {
         case Left(opsError) => Future.failed(new Exception(s"${opsError.toString}"))
         case Right(value) =>
@@ -116,17 +117,16 @@ package object controllers {
             }
       }
 
-    def writeToSession()(implicit
+    def writeToSession(sessionRepository: SessionRepository)(implicit
       dataRequest: MandatoryDataRequest[_],
-      sessionRepository: SessionRepository,
       ex: ExecutionContext,
       hc: HeaderCarrier
-    ): Future[Write[A]] = writeToSession(dataRequest.userAnswers)
+    ): Future[Write[A]] = writeToSession(dataRequest.userAnswers, sessionRepository)
   }
 
   implicit class NavigatorOps[A](write: Future[Write[A]]) {
 
-    def navigate()(implicit navigator: UserAnswersNavigator, executionContext: ExecutionContext): Future[Result] =
+    def navigateWith(navigator: UserAnswersNavigator)(implicit executionContext: ExecutionContext): Future[Result] =
       navigate {
         case (page, userAnswers) => navigator.nextPage(userAnswers, Some(page))
       }

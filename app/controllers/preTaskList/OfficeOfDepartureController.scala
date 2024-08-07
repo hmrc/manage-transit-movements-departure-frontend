@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class OfficeOfDepartureController @Inject() (
   override val messagesApi: MessagesApi,
-  implicit val sessionRepository: SessionRepository,
+  sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
@@ -79,21 +79,18 @@ class OfficeOfDepartureController @Inject() (
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, customsOfficeList.values, mode))),
                 value => {
-                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                  val navigator: UserAnswersNavigator = navigatorProvider(mode)
                   for {
-                    countryCodesCTC <- countriesService.getCountryCodesCTC()
-                    isInCL112 = countryCodesCTC.map(_.code).contains(value.countryId)
-                    customsSecurityAgreementAreaCountries <- countriesService.getCustomsSecurityAgreementAreaCountries()
-                    isInCL147 = customsSecurityAgreementAreaCountries.map(_.code).contains(value.countryId)
-                    communityCountries <- countriesService.getCommunityCountries()
-                    isInCL010 = communityCountries.map(_.code).contains(value.countryId)
+                    isInCL112 <- countriesService.isInCL112(value)
+                    isInCL147 <- countriesService.isInCL147(value)
+                    isInCL010 <- countriesService.isInCL010(value)
                     result <- OfficeOfDeparturePage
                       .writeToUserAnswers(value)
                       .appendValue(OfficeOfDepartureInCL112Page, isInCL112)
                       .appendValue(OfficeOfDepartureInCL147Page, isInCL147)
                       .appendValue(OfficeOfDepartureInCL010Page, isInCL010)
-                      .writeToSession()
-                      .navigate()
+                      .writeToSession(sessionRepository)
+                      .navigateWith(navigator)
                   } yield result
                 }
               )

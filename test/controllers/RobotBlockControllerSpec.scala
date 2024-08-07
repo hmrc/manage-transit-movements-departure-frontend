@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package navigation
+package controllers
 
-import models.{Mode, UserAnswers}
-import pages.Page
-import play.api.mvc.Call
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import play.api.test.FakeRequest
+import play.api.test.Helpers._
 
-class FakeNavigator(desiredRoute: Call) extends Navigator {
-  override def nextPage(userAnswers: UserAnswers, currentPage: Option[Page]): Call = desiredRoute
-}
+class RobotBlockControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-class FakePreTaskListNavigator(desiredRoute: Call, mode: Mode, isPreLodgeEnabled: Boolean) extends PreTaskListNavigator(mode, isPreLodgeEnabled) {
-  override def nextPage(userAnswers: UserAnswers, currentPage: Option[Page]): Call = desiredRoute
+  "return Gone" in {
+    val request = FakeRequest(GET, routes.RobotBlockController.onPageLoad("string").url)
+
+    val result = route(app, request).value
+
+    status(result) mustEqual GONE
+
+  }
 }

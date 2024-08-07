@@ -105,6 +105,13 @@ trait ModelGenerators {
       } yield EoriNumber(number)
     }
 
+  implicit lazy val arbitraryCountry: Arbitrary[Country] =
+    Arbitrary {
+      for {
+        code <- nonEmptyString
+      } yield Country(code)
+    }
+
   implicit lazy val arbitraryCustomsOffice: Arbitrary[CustomsOffice] =
     Arbitrary {
       for {

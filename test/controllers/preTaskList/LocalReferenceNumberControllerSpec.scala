@@ -135,43 +135,61 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
     "must create new user answers and redirect with NormalMode" - {
       "when there are no existing user answers" in {
 
-        when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(false))
+        val app = super
+          .guiceApplicationBuilder()
+          .overrides(bind(classOf[DuplicateService]).toInstance(mockDuplicateService))
+          .configure("features.isPreLodgeEnabled" -> true)
+          .build()
 
-        when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None) thenReturn Future.successful(Some(emptyUserAnswers))
-        when(mockSessionRepository.put(any())(any())) thenReturn Future.successful(true)
+        running(app) {
+          when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(false))
 
-        val request = FakeRequest(POST, localReferenceNumberRoute)
-          .withFormUrlEncodedBody(("value", lrn.toString))
+          when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None) thenReturn Future.successful(Some(emptyUserAnswers))
+          when(mockSessionRepository.put(any())(any())) thenReturn Future.successful(true)
 
-        val result = route(app, request).value
+          val request = FakeRequest(POST, localReferenceNumberRoute)
+            .withFormUrlEncodedBody(("value", lrn.toString))
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          s"/manage-transit-movements/departures/$lrn/pre-task-list/standard-prelodged-declaration"
+          val result = route(app, request).value
 
-        verify(mockSessionRepository, times(2)).get(eqTo(lrn))(any())
-        verify(mockSessionRepository).put(eqTo(lrn))(any())
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            s"/manage-transit-movements/departures/$lrn/pre-task-list/standard-prelodged-declaration"
+
+          verify(mockSessionRepository, times(2)).get(eqTo(lrn))(any())
+          verify(mockSessionRepository).put(eqTo(lrn))(any())
+        }
+
       }
     }
 
     "must not create user answers and redirect with CheckMode" - {
       "when there are existing user answers" in {
 
-        when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(true))
+        val app = super
+          .guiceApplicationBuilder()
+          .overrides(bind(classOf[DuplicateService]).toInstance(mockDuplicateService))
+          .configure("features.isPreLodgeEnabled" -> true)
+          .build()
 
-        when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(Some(emptyUserAnswers))
+        running(app) {
+          when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(true))
 
-        val request = FakeRequest(POST, localReferenceNumberRoute)
-          .withFormUrlEncodedBody(("value", lrn.toString))
+          when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(Some(emptyUserAnswers))
 
-        val result = route(app, request).value
+          val request = FakeRequest(POST, localReferenceNumberRoute)
+            .withFormUrlEncodedBody(("value", lrn.toString))
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          s"/manage-transit-movements/departures/$lrn/pre-task-list/change-standard-prelodged-declaration"
+          val result = route(app, request).value
 
-        verify(mockSessionRepository).get(eqTo(lrn))(any())
-        verify(mockSessionRepository, never()).put(any())(any())
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            s"/manage-transit-movements/departures/$lrn/pre-task-list/change-standard-prelodged-declaration"
+
+          verify(mockSessionRepository).get(eqTo(lrn))(any())
+          verify(mockSessionRepository, never()).put(any())(any())
+        }
+
       }
     }
 

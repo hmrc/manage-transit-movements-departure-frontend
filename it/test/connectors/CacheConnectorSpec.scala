@@ -18,12 +18,13 @@ package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import helpers.{ItSpecBase, WireMockServerHandler}
-import models.{LockCheck, UserAnswers}
+import models.{DepartureMessage, DepartureMessages, LockCheck, UserAnswers}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsBoolean, Json}
+import play.api.libs.json.{JsNumber, Json}
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HttpResponse
 
 class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with ScalaCheckPropertyChecks {
 
@@ -227,75 +228,165 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       }
     }
 
-    "doesDraftOrSubmissionExistForLrn" - {
-      val url = s"/manage-transit-movements-departure-cache/does-draft-or-submission-exist-for-lrn/${lrn.value}"
+    "submit" - {
 
-      "must return false when status is Ok and lrn does not exists in cache/API" in {
+      val url = s"/manage-transit-movements-departure-cache/declaration/submit"
+
+      "must return true when status is Ok" in {
         server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(okJson(Json.stringify(JsBoolean(false))))
+          post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .willReturn(aResponse().withStatus(OK))
         )
 
-        connector.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe false
+        val result: HttpResponse = await(connector.submit(lrn.value))
+
+        result.status mustBe OK
       }
 
-      "must return true when status is Ok and lrn does exists in cache/API" in {
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(okJson(Json.stringify(JsBoolean(true))))
-        )
-
-        connector.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe true
-      }
-
-      "return an exception for 4xx or 5xx response" in {
-        val status = Gen.choose(400: Int, 599: Int).sample.value
+      "return false for 4xx response" in {
+        val status = Gen.choose(400: Int, 499: Int).sample.value
 
         server.stubFor(
-          get(urlEqualTo(url))
+          post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
             .willReturn(aResponse().withStatus(status))
         )
 
-        assertThrows[Exception] {
-          await(connector.doesDraftOrSubmissionExistForLrn(lrn))
-        }
-      }
-    }
+        val result: HttpResponse = await(connector.submit(lrn.value))
 
-    "doesIE028ExistForLrn" - {
-      val url = s"/manage-transit-movements-departure-cache/does-ie028-exist-for-lrn/${lrn.value}"
-
-      "must return false when status is Ok and lrn does not exists in API" in {
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(okJson(Json.stringify(JsBoolean(false))))
-        )
-
-        connector.doesIE028ExistForLrn(lrn).futureValue mustBe false
+        result.status mustBe status
       }
 
-      "must return true when status is Ok and lrn does exists in API" in {
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(okJson(Json.stringify(JsBoolean(true))))
-        )
-
-        connector.doesIE028ExistForLrn(lrn).futureValue mustBe true
-      }
-
-      "return an exception for 4xx or 5xx response" in {
-        val status = Gen.choose(400: Int, 599: Int).sample.value
+      "return false for 5xx response" in {
+        val status = Gen.choose(500: Int, 599: Int).sample.value
 
         server.stubFor(
-          get(urlEqualTo(url))
+          post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
             .willReturn(aResponse().withStatus(status))
         )
 
-        assertThrows[Exception] {
-          await(connector.doesIE028ExistForLrn(lrn))
-        }
+        val result: HttpResponse = await(connector.submit(lrn.value))
+
+        result.status mustBe status
       }
     }
 
+    "submitAmendment" - {
+
+      val url = s"/manage-transit-movements-departure-cache/declaration/submit-amendment"
+
+      "must return true when status is Ok" in {
+        server.stubFor(
+          post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .willReturn(aResponse().withStatus(OK))
+        )
+
+        val result: HttpResponse = await(connector.submitAmendment(lrn.value))
+
+        result.status mustBe OK
+      }
+
+      "return false for 4xx response" in {
+        val status = Gen.choose(400: Int, 499: Int).sample.value
+
+        server.stubFor(
+          post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .willReturn(aResponse().withStatus(status))
+        )
+
+        val result: HttpResponse = await(connector.submitAmendment(lrn.value))
+
+        result.status mustBe status
+      }
+
+      "return false for 5xx response" in {
+        val status = Gen.choose(500: Int, 599: Int).sample.value
+
+        server.stubFor(
+          post(urlEqualTo(url))
+            .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .willReturn(aResponse().withStatus(status))
+        )
+
+        val result: HttpResponse = await(connector.submitAmendment(lrn.value))
+
+        result.status mustBe status
+      }
+    }
+
+    "getExpiryInDays" - {
+
+      val url = s"/manage-transit-movements-departure-cache/user-answers/$lrn/expiry"
+
+      "must return expiry in days when status is Ok" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(JsNumber(30).toString()))
+        )
+
+        val result: Long = await(connector.getExpiryInDays(lrn.value))
+
+        result mustBe 30
+      }
+    }
+
+    "getMessages" - {
+
+      val url = s"/manage-transit-movements-departure-cache/messages/$lrn"
+
+      val json =
+        """
+          |{
+          |  "messages" : [
+          |    {
+          |      "type" : "IE015"
+          |    },
+          |    {
+          |      "type" : "IE928"
+          |    },
+          |    {
+          |      "type" : "IE013"
+          |    }
+          |  ]
+          |}
+          |""".stripMargin
+
+      "must return messages when status is Ok" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .willReturn(okJson(json))
+        )
+
+        val result: DepartureMessages = await(connector.getMessages(lrn))
+
+        result mustBe DepartureMessages(
+          Seq(
+            DepartureMessage("IE015"),
+            DepartureMessage("IE928"),
+            DepartureMessage("IE013")
+          )
+        )
+      }
+
+      "must return empty list when status is NoContent or NotFound" in {
+        forAll(Gen.oneOf(204: Int, 404: Int)) {
+          status =>
+            server.stubFor(
+              get(urlEqualTo(url))
+                .willReturn(aResponse.withStatus(status))
+            )
+
+            val result: DepartureMessages = await(connector.getMessages(lrn))
+
+            result mustBe DepartureMessages(
+              Seq.empty[DepartureMessage]
+            )
+        }
+      }
+    }
   }
 }

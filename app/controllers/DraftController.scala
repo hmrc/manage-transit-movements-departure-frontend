@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import controllers.actions.Actions
 import models.journeyDomain.{PreTaskListDomain, UserAnswersReader}
 import models.{LocalReferenceNumber, NormalMode}
@@ -28,12 +29,13 @@ import javax.inject.Inject
 class DraftController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   actions: Actions,
+  val frontendAppConfig: FrontendAppConfig,
   navigatorProvider: PreTaskListNavigatorProvider
 ) extends FrontendBaseController {
 
   def draftRedirect(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
     implicit request =>
-      UserAnswersReader[PreTaskListDomain].run(request.userAnswers) match {
+      UserAnswersReader[PreTaskListDomain](frontendAppConfig.isPreLodgeEnabled).run(request.userAnswers) match {
         case Left(_) =>
           Redirect(navigatorProvider(NormalMode).nextPage(request.userAnswers, None))
         case Right(_) =>

@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package generators
+package controllers.actions
 
 import models.UserAnswers
-import models.journeyDomain.PreTaskListDomain
-import org.scalacheck.Gen
+import models.requests.{DataRequest, OptionalDataRequest}
+import play.api.mvc.{ActionRefiner, Result}
 
-trait PreTaskListUserAnswersGenerator {
-  self: UserAnswersGenerator =>
+import scala.concurrent.{ExecutionContext, Future}
 
-  private val isPreLodgEnabled = true
+class FakeDataRequiredAction(userAnswers: UserAnswers) extends ActionRefiner[OptionalDataRequest, DataRequest] {
 
-  def arbitraryPreTaskListAnswers(userAnswers: UserAnswers): Gen[UserAnswers] =
-    buildUserAnswers[PreTaskListDomain](userAnswers)(isPreLodgEnabled)
+  override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] =
+    Future.successful(Right(DataRequest(request.request, request.eoriNumber, userAnswers)))
+
+  implicit override protected val executionContext: ExecutionContext =
+    scala.concurrent.ExecutionContext.Implicits.global
 }

@@ -35,34 +35,36 @@ trait TaskListViewBehaviours extends ViewBehaviours with Generators {
   def pageWithTaskList(lrn: LocalReferenceNumber): Unit =
     "page with task list" - {
 
-      val taskList = getElementByClass(doc, "app-task-list")
+      val taskList = getElementByClass(doc, "govuk-task-list")
 
-      val renderedTasks = taskList.getElementsByClass("app-task-list__item").asScala
+      val renderedTasks = taskList.getElementsByClass("govuk-task-list__item").asScala
 
       tasks.zipWithIndex.foreach {
         case (task, taskIndex) =>
           val renderedTask = renderedTasks(taskIndex)
 
           s"task ${taskIndex + 1}" - {
-            val name = renderedTask.getElementsByClass("app-task-list__task-name").first()
+            val name = renderedTask.getElementsByClass("govuk-task-list__name-and-hint").first()
 
             task.status match {
-              case CannotStartYet =>
+              case CannotStartYet | Unavailable =>
                 "must contain a name" in {
                   name.text() mustBe task.name
                 }
               case _ =>
                 "must contain a name with a link" in {
-                  val link = name.getElementsByTag("a").first()
+                  val link = name.getElementsByClass("govuk-link govuk-task-list__link").first()
                   getElementHref(link) mustBe task.href(lrn)(frontendAppConfig)
-                  link.attr("aria-describedby") mustBe s"${task.id}-status"
+                  link.attr("aria-describedby") mustBe s"task-list-${taskIndex + 1}-status"
                   link.text() mustBe task.name
                 }
             }
 
             "must contain a tag" in {
-              val tag = renderedTask.getElementsByClass("app-task-list__tag").first()
-              tag.text() mustBe messages(task.status.messageKey(submissionState))
+              val status = renderedTask.getElementsByClass("govuk-task-list__status").first()
+              status.id() mustBe s"task-list-${taskIndex + 1}-status"
+              val tag = status.getElementsByClass("govuk-tag").first()
+              tag.text() mustBe messages(task.status.messageKey)
               tag.id() mustBe s"${task.id}-status"
               assert(tag.hasClass(task.status.tag))
             }

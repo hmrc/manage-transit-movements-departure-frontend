@@ -16,8 +16,6 @@
 
 package viewModels
 
-import viewModels.taskList.TaskStatus.Completed
-
 package object taskList {
 
   implicit class RichDependentSections(dependentSections: Seq[String]) {
@@ -29,9 +27,6 @@ package object taskList {
   implicit class RichDependentSection(dependentSection: String) {
 
     def isCompleted(tasks: Map[String, TaskStatus]): Boolean =
-      tasks.exists {
-        case (`dependentSection`, Completed) => true
-        case _                               => false
-      }
+      tasks.get(dependentSection).exists(_.isCompleted)
   }
 }

@@ -34,124 +34,245 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
     val gbCustomsOffice           = CustomsOffice("GB1", "Dover", None, "GB")
     val xiCustomsOffice           = CustomsOffice("XI1", "Belfast", None, "XI")
     val carnetRef                 = Gen.alphaNumStr.sample.value
-    val additionalDeclarationType = arbitrary[AdditionalDeclarationType].sample.value
+    val additionalDeclarationType = Gen.oneOf("A", "D").sample.value
     val procedureType             = arbitrary[ProcedureType].sample.value
     val securityDetails           = arbitrary[SecurityType].sample.value
     val nonTirDeclarationType     = arbitrary[DeclarationType](arbitraryNonTIRDeclarationType).sample.value
     val tirDeclarationType        = arbitrary[DeclarationType](arbitraryTIRDeclarationType).sample.value
 
-    "can be parsed from UserAnswers" - {
+    "when isPreLodgeEnabled is true" - {
+      val isPreLodgeEnabled = true
+      "can be parsed from UserAnswers" - {
 
-      "when a TIR declaration" in {
+        "when a TIR declaration" in {
 
-        val tirUserAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
-          .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
-          .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
-          .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
-          .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+          val tirUserAnswers = emptyUserAnswers
+            .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
+            .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
+            .unsafeSetVal(ProcedureTypePage)(Normal)
+            .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
+            .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
 
-        val expectedResult = PreTaskListDomain(
-          localReferenceNumber = emptyUserAnswers.lrn,
-          additionalDeclarationType = additionalDeclarationType,
-          officeOfDeparture = xiCustomsOffice,
-          procedureType = Normal,
-          declarationType = tirDeclarationType,
-          tirCarnetReference = Some(carnetRef),
-          securityDetailsType = securityDetails
-        )
+          val expectedResult = PreTaskListDomain(
+            localReferenceNumber = emptyUserAnswers.lrn,
+            additionalDeclarationType = additionalDeclarationType,
+            officeOfDeparture = xiCustomsOffice,
+            procedureType = Normal,
+            declarationType = tirDeclarationType,
+            tirCarnetReference = Some(carnetRef),
+            securityDetailsType = securityDetails
+          )
 
-        val result = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
+          val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
 
-        result.value.value mustBe expectedResult
-        result.value.pages mustBe Seq(
-          AdditionalDeclarationTypePage,
-          OfficeOfDeparturePage,
-          ProcedureTypePage,
-          DeclarationTypePage,
-          TIRCarnetReferencePage,
-          SecurityDetailsTypePage,
-          PreTaskListSection
-        )
+          result.value.value mustBe expectedResult
+          result.value.pages mustBe Seq(
+            AdditionalDeclarationTypePage,
+            OfficeOfDeparturePage,
+            ProcedureTypePage,
+            DeclarationTypePage,
+            TIRCarnetReferencePage,
+            SecurityDetailsTypePage,
+            PreTaskListSection
+          )
+        }
+
+        "when a non-TIR declaration" in {
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
+            .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
+            .unsafeSetVal(ProcedureTypePage)(procedureType)
+            .unsafeSetVal(DeclarationTypePage)(nonTirDeclarationType)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+
+          val expectedResult = PreTaskListDomain(
+            localReferenceNumber = emptyUserAnswers.lrn,
+            additionalDeclarationType = additionalDeclarationType,
+            officeOfDeparture = gbCustomsOffice,
+            procedureType = procedureType,
+            declarationType = nonTirDeclarationType,
+            tirCarnetReference = None,
+            securityDetailsType = securityDetails
+          )
+
+          val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(userAnswers)
+
+          result.value.value mustBe expectedResult
+          result.value.pages mustBe Seq(
+            AdditionalDeclarationTypePage,
+            OfficeOfDeparturePage,
+            ProcedureTypePage,
+            DeclarationTypePage,
+            SecurityDetailsTypePage,
+            PreTaskListSection
+          )
+        }
       }
 
-      "when a non-TIR declaration" in {
+      "cannot be parsed from UserAnswers" - {
 
-        val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
-          .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
-          .unsafeSetVal(ProcedureTypePage)(procedureType)
-          .unsafeSetVal(DeclarationTypePage)(nonTirDeclarationType)
-          .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+        "when a TIR declaration without TIRCarnetReferece" in {
 
-        val expectedResult = PreTaskListDomain(
-          localReferenceNumber = emptyUserAnswers.lrn,
-          additionalDeclarationType = additionalDeclarationType,
-          officeOfDeparture = gbCustomsOffice,
-          procedureType = procedureType,
-          declarationType = nonTirDeclarationType,
-          tirCarnetReference = None,
-          securityDetailsType = securityDetails
-        )
+          val tirUserAnswers = emptyUserAnswers
+            .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
+            .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
+            .unsafeSetVal(ProcedureTypePage)(Normal)
+            .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
 
-        val result = UserAnswersReader[PreTaskListDomain].run(userAnswers)
+          val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
 
-        result.value.value mustBe expectedResult
-        result.value.pages mustBe Seq(
-          AdditionalDeclarationTypePage,
-          OfficeOfDeparturePage,
-          ProcedureTypePage,
-          DeclarationTypePage,
-          SecurityDetailsTypePage,
-          PreTaskListSection
-        )
+          result.left.value.page mustBe TIRCarnetReferencePage
+          result.left.value.pages mustBe Seq(
+            AdditionalDeclarationTypePage,
+            OfficeOfDeparturePage,
+            ProcedureTypePage,
+            DeclarationTypePage,
+            TIRCarnetReferencePage
+          )
+        }
+
+        "when a TIR with a GB customs office" in {
+
+          val tirUserAnswers = emptyUserAnswers
+            .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
+            .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
+            .unsafeSetVal(ProcedureTypePage)(Normal)
+            .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
+            .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+
+          val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
+
+          result.left.value.page mustBe DeclarationTypePage
+          result.left.value.pages mustBe Seq(
+            AdditionalDeclarationTypePage,
+            OfficeOfDeparturePage,
+            ProcedureTypePage,
+            DeclarationTypePage
+          )
+        }
       }
     }
 
-    "cannot be parsed from UserAnswers" - {
+    "when isPreLodgeEnabled is false" - {
+      val isPreLodgeEnabled = false
+      "can be parsed from UserAnswers" - {
 
-      "when a TIR declaration without TIRCarnetReferece" in {
+        "when a TIR declaration" in {
 
-        val tirUserAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
-          .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
-          .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
-          .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+          val tirUserAnswers = emptyUserAnswers
+            .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
+            .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
+            .unsafeSetVal(ProcedureTypePage)(Normal)
+            .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
+            .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
 
-        val result = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
+          val expectedResult = PreTaskListDomain(
+            localReferenceNumber = emptyUserAnswers.lrn,
+            additionalDeclarationType = additionalDeclarationType,
+            officeOfDeparture = xiCustomsOffice,
+            procedureType = Normal,
+            declarationType = tirDeclarationType,
+            tirCarnetReference = Some(carnetRef),
+            securityDetailsType = securityDetails
+          )
 
-        result.left.value.page mustBe TIRCarnetReferencePage
-        result.left.value.pages mustBe Seq(
-          AdditionalDeclarationTypePage,
-          OfficeOfDeparturePage,
-          ProcedureTypePage,
-          DeclarationTypePage,
-          TIRCarnetReferencePage
-        )
+          val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
+
+          result.value.value mustBe expectedResult
+          result.value.pages mustBe Seq(
+            StandardDeclarationPage,
+            OfficeOfDeparturePage,
+            ProcedureTypePage,
+            DeclarationTypePage,
+            TIRCarnetReferencePage,
+            SecurityDetailsTypePage,
+            PreTaskListSection
+          )
+        }
+
+        "when a non-TIR declaration" in {
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
+            .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
+            .unsafeSetVal(ProcedureTypePage)(procedureType)
+            .unsafeSetVal(DeclarationTypePage)(nonTirDeclarationType)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+
+          val expectedResult = PreTaskListDomain(
+            localReferenceNumber = emptyUserAnswers.lrn,
+            additionalDeclarationType = additionalDeclarationType,
+            officeOfDeparture = gbCustomsOffice,
+            procedureType = procedureType,
+            declarationType = nonTirDeclarationType,
+            tirCarnetReference = None,
+            securityDetailsType = securityDetails
+          )
+
+          val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(userAnswers)
+
+          result.value.value mustBe expectedResult
+          result.value.pages mustBe Seq(
+            StandardDeclarationPage,
+            OfficeOfDeparturePage,
+            ProcedureTypePage,
+            DeclarationTypePage,
+            SecurityDetailsTypePage,
+            PreTaskListSection
+          )
+        }
       }
 
-      "when a TIR with a GB customs office" in {
+      "cannot be parsed from UserAnswers" - {
 
-        val tirUserAnswers = emptyUserAnswers
-          .unsafeSetVal(AdditionalDeclarationTypePage)(additionalDeclarationType)
-          .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
-          .unsafeSetVal(ProcedureTypePage)(Normal)
-          .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
-          .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
-          .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+        "when a TIR declaration without TIRCarnetReferece" in {
 
-        val result = UserAnswersReader[PreTaskListDomain].run(tirUserAnswers)
+          val tirUserAnswers = emptyUserAnswers
+            .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
+            .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice)
+            .unsafeSetVal(ProcedureTypePage)(Normal)
+            .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
 
-        result.left.value.page mustBe DeclarationTypePage
-        result.left.value.pages mustBe Seq(
-          AdditionalDeclarationTypePage,
-          OfficeOfDeparturePage,
-          ProcedureTypePage,
-          DeclarationTypePage
-        )
+          val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
+
+          result.left.value.page mustBe TIRCarnetReferencePage
+          result.left.value.pages mustBe Seq(
+            StandardDeclarationPage,
+            OfficeOfDeparturePage,
+            ProcedureTypePage,
+            DeclarationTypePage,
+            TIRCarnetReferencePage
+          )
+        }
+
+        "when a TIR with a GB customs office" in {
+
+          val tirUserAnswers = emptyUserAnswers
+            .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
+            .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
+            .unsafeSetVal(ProcedureTypePage)(Normal)
+            .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
+            .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
+            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
+
+          val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
+
+          result.left.value.page mustBe DeclarationTypePage
+          result.left.value.pages mustBe Seq(
+            StandardDeclarationPage,
+            OfficeOfDeparturePage,
+            ProcedureTypePage,
+            DeclarationTypePage
+          )
+        }
       }
     }
+
   }
 }

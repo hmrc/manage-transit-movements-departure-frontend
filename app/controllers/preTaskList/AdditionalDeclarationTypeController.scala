@@ -16,6 +16,7 @@
 
 package controllers.preTaskList
 
+import config.FrontendAppConfig
 import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.EnumerableFormProvider
@@ -36,7 +37,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AdditionalDeclarationTypeController @Inject() (
   override val messagesApi: MessagesApi,
-  implicit val sessionRepository: SessionRepository,
+  sessionRepository: SessionRepository,
+  val frontendAppConfig: FrontendAppConfig,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
@@ -56,14 +58,18 @@ class AdditionalDeclarationTypeController @Inject() (
     .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
-        service.getAdditionalDeclarationTypes().map {
-          additionalDeclarationTypes =>
-            val preparedForm = request.userAnswers.get(AdditionalDeclarationTypePage) match {
-              case None        => form(additionalDeclarationTypes)
-              case Some(value) => form(additionalDeclarationTypes).fill(value)
-            }
+        if (frontendAppConfig.isPreLodgeEnabled) {
+          service.getAdditionalDeclarationTypes().map {
+            additionalDeclarationTypes =>
+              val preparedForm = request.userAnswers.get(AdditionalDeclarationTypePage) match {
+                case None        => form(additionalDeclarationTypes)
+                case Some(value) => form(additionalDeclarationTypes).fill(value)
+              }
 
-            Ok(view(preparedForm, lrn, additionalDeclarationTypes, mode))
+              Ok(view(preparedForm, lrn, additionalDeclarationTypes, mode))
+          }
+        } else {
+          Future.successful(Redirect(controllers.preTaskList.routes.StandardDeclarationController.onPageLoad(lrn)))
         }
     }
 
@@ -72,17 +78,23 @@ class AdditionalDeclarationTypeController @Inject() (
     .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
-        service.getAdditionalDeclarationTypes().flatMap {
-          additionalDeclarationTypes =>
-            form(additionalDeclarationTypes)
-              .bindFromRequest()
-              .fold(
-                formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, additionalDeclarationTypes, mode))),
-                value => {
-                  implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                  AdditionalDeclarationTypePage.writeToUserAnswers(value).writeToSession().navigate()
-                }
-              )
+        if (frontendAppConfig.isPreLodgeEnabled) {
+
+          service.getAdditionalDeclarationTypes().flatMap {
+            additionalDeclarationTypes =>
+              form(additionalDeclarationTypes)
+                .bindFromRequest()
+                .fold(
+                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, additionalDeclarationTypes, mode))),
+                  value => {
+                    val navigator: UserAnswersNavigator = navigatorProvider(mode)
+                    AdditionalDeclarationTypePage.writeToUserAnswers(value).writeToSession(sessionRepository).navigateWith(navigator)
+                  }
+                )
+          }
+
+        } else {
+          Future.successful(Redirect(controllers.preTaskList.routes.StandardDeclarationController.onPageLoad(lrn)))
         }
     }
 }

@@ -19,6 +19,8 @@ package viewModels.taskList
 import config.FrontendAppConfig
 import models.LocalReferenceNumber
 import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+import uk.gov.hmrc.govukfrontend.views.viewmodels.tasklist._
 import viewModels.taskList.TaskStatus._
 
 trait Task {
@@ -28,21 +30,31 @@ trait Task {
 
 abstract class TaskListTask extends Task {
   val id: String
+
   def href(lrn: LocalReferenceNumber)(implicit config: FrontendAppConfig): String
+
   val messageKey: String
 
   def name(implicit messages: Messages): String = messages {
     status match {
-      case Completed | InProgress | Error => s"task.$messageKey.edit"
-      case NotStarted                     => s"task.$messageKey.add"
-      case CannotStartYet | Unavailable   => s"task.$messageKey"
-      case TaskStatus.Amended             => s"task.$messageKey.edit"
+      case Completed | InProgress | Amended              => s"task.$messageKey.edit"
+      case Error                                         => s"task.$messageKey.amend"
+      case NotStarted                                    => s"task.$messageKey.add"
+      case CannotStartYet | CannotContinue | Unavailable => s"task.$messageKey"
     }
   }
 
-  def isAmended: Boolean   = status == Amended
-  def isCompleted: Boolean = status == Completed || status == Unavailable
-  def isError: Boolean     = status == Error
+  def toTaskListItem(
+    lrn: LocalReferenceNumber
+  )(implicit messages: Messages, config: FrontendAppConfig): TaskListItem =
+    TaskListItem(
+      title = TaskListItemTitle(name.toText),
+      status = status.toTaskListItemStatus(id),
+      href = status match {
+        case CannotStartYet | CannotContinue | Unavailable => None
+        case _                                             => Some(href(lrn))
+      }
+    )
 }
 
 object Task {

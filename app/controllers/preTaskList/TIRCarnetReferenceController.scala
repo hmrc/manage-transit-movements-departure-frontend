@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TIRCarnetReferenceController @Inject() (
   override val messagesApi: MessagesApi,
-  implicit val sessionRepository: SessionRepository,
+  sessionRepository: SessionRepository,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
@@ -72,8 +72,8 @@ class TIRCarnetReferenceController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
             value => {
-              implicit val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              TIRCarnetReferencePage.writeToUserAnswers(value).writeToSession().navigate()
+              val navigator: UserAnswersNavigator = navigatorProvider(mode)
+              TIRCarnetReferencePage.writeToUserAnswers(value).writeToSession(sessionRepository).navigateWith(navigator)
             }
           )
     }

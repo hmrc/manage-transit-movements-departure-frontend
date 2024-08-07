@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.preTaskList
 
+import controllers.preTaskList.routes
 import models.{Mode, UserAnswers}
-import pages.Page
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 import play.api.mvc.Call
 
-class FakeNavigator(desiredRoute: Call) extends Navigator {
-  override def nextPage(userAnswers: UserAnswers, currentPage: Option[Page]): Call = desiredRoute
-}
+case object StandardDeclarationPage extends QuestionPage[String] {
 
-class FakePreTaskListNavigator(desiredRoute: Call, mode: Mode, isPreLodgeEnabled: Boolean) extends PreTaskListNavigator(mode, isPreLodgeEnabled) {
-  override def nextPage(userAnswers: UserAnswers, currentPage: Option[Page]): Call = desiredRoute
+  override def path: JsPath = AdditionalDeclarationTypePage.path \ "code"
+
+  override def route(userAnswers: UserAnswers, mode: Mode): Option[Call] =
+    Some(routes.StandardDeclarationController.onPageLoad(userAnswers.lrn))
 }

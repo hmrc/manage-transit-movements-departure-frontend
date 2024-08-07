@@ -17,13 +17,13 @@
 package controllers
 
 import com.google.inject.Inject
-import connectors.SubmissionConnector
+import connectors.CacheConnector
 import controllers.actions.{Actions, DependentTaskAction}
 import models.{LocalReferenceNumber, SubmissionState}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.http.HttpReads.is2xx
+import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel.TaskListViewModelProvider
 import views.html.TaskListView
@@ -37,7 +37,7 @@ class TaskListController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: TaskListView,
   viewModelProvider: TaskListViewModelProvider,
-  submissionConnector: SubmissionConnector
+  connector: CacheConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -54,7 +54,7 @@ class TaskListController @Inject() (
             Future.successful(Redirect(routes.ErrorController.technicalDifficulties()))
           case _ =>
             for {
-              expiryInDays <- submissionConnector.getExpiryInDays(lrn.value)
+              expiryInDays <- connector.getExpiryInDays(lrn.value)
               viewModel = viewModelProvider(request.userAnswers)
             } yield Ok(view(lrn, viewModel, expiryInDays))
         }
@@ -67,7 +67,7 @@ class TaskListController @Inject() (
       implicit request =>
         request.userAnswers.status match {
           case SubmissionState.GuaranteeAmendment | SubmissionState.Amendment =>
-            submissionConnector.postAmendment(lrn.value).map {
+            connector.submitAmendment(lrn.value).map {
               case response if is2xx(response.status) =>
                 Redirect(controllers.routes.DeclarationSubmittedController.departureAmendmentSubmitted(lrn))
               case e =>
@@ -75,7 +75,7 @@ class TaskListController @Inject() (
                 Redirect(routes.ErrorController.technicalDifficulties())
             }
           case _ =>
-            submissionConnector.post(lrn.value).map {
+            connector.submit(lrn.value).map {
               case response if is2xx(response.status) =>
                 Redirect(controllers.routes.DeclarationSubmittedController.departureDeclarationSubmitted(lrn))
               case e =>

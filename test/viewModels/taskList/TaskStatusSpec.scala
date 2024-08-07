@@ -18,60 +18,38 @@ package viewModels.taskList
 
 import base.SpecBase
 import generators.Generators
-import models.SubmissionState
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, JsString, Json}
 
 class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "messageKey" - {
-    "when Completed" - {
-      "and declaration rejected pending changes" in {
-        TaskStatus.Completed.messageKey(SubmissionState.RejectedPendingChanges) mustBe "taskStatus.amended"
-      }
-
-      "and declaration not rejected pending changes" in {
-        forAll(arbitrary[SubmissionState.Value].retryUntil(_ != SubmissionState.RejectedPendingChanges)) {
-          submissionState =>
-            TaskStatus.Completed.messageKey(submissionState) mustBe "taskStatus.completed"
-        }
-      }
+    "when Completed" in {
+      TaskStatus.Completed.messageKey mustBe "taskStatus.completed"
     }
 
     "when InProgress" in {
-      forAll(arbitrary[SubmissionState.Value]) {
-        submissionState =>
-          TaskStatus.InProgress.messageKey(submissionState) mustBe "taskStatus.inProgress"
-      }
+      TaskStatus.InProgress.messageKey mustBe "taskStatus.inProgress"
     }
 
     "when NotStarted" in {
-      forAll(arbitrary[SubmissionState.Value]) {
-        submissionState =>
-          TaskStatus.NotStarted.messageKey(submissionState) mustBe "taskStatus.notStarted"
-      }
+      TaskStatus.NotStarted.messageKey mustBe "taskStatus.notStarted"
     }
 
     "when CannotStartYet" in {
-      forAll(arbitrary[SubmissionState.Value]) {
-        submissionState =>
-          TaskStatus.CannotStartYet.messageKey(submissionState) mustBe "taskStatus.cannotStartYet"
-      }
+      TaskStatus.CannotStartYet.messageKey mustBe "taskStatus.cannotStartYet"
     }
 
     "when Error" in {
-      forAll(arbitrary[SubmissionState.Value]) {
-        submissionState =>
-          TaskStatus.Error.messageKey(submissionState) mustBe "taskStatus.error"
-      }
+      TaskStatus.Error.messageKey mustBe "taskStatus.error"
     }
 
     "when Unavailable" in {
-      forAll(arbitrary[SubmissionState.Value]) {
-        submissionState =>
-          TaskStatus.Unavailable.messageKey(submissionState) mustBe "taskStatus.completed"
-      }
+      TaskStatus.Unavailable.messageKey mustBe "taskStatus.completed"
+    }
+
+    "when CannotContinue" in {
+      TaskStatus.CannotContinue.messageKey mustBe "taskStatus.cannotContinue"
     }
   }
 
@@ -99,6 +77,10 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when Error" in {
       TaskStatus.Error.tag mustBe "govuk-tag--red"
     }
+
+    "when CannotContinue" in {
+      TaskStatus.CannotContinue.tag mustBe "govuk-tag--yellow"
+    }
   }
 
   "must serialise to json" - {
@@ -121,6 +103,7 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
       val result = Json.toJson[TaskStatus](TaskStatus.CannotStartYet)
       result mustBe JsString("cannot-start-yet")
     }
+
     "when error" in {
       val result = Json.toJson[TaskStatus](TaskStatus.Error)
       result mustBe JsString("error")
@@ -129,6 +112,11 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when unavailable" in {
       val result = Json.toJson[TaskStatus](TaskStatus.Unavailable)
       result mustBe JsString("unavailable")
+    }
+
+    "when cannot continue" in {
+      val result = Json.toJson[TaskStatus](TaskStatus.CannotContinue)
+      result mustBe JsString("cannot-continue")
     }
   }
 
@@ -153,6 +141,11 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
       result mustBe TaskStatus.CannotStartYet
     }
 
+    "when cannot-continue" in {
+      val result = JsString("cannot-continue").as[TaskStatus]
+      result mustBe TaskStatus.CannotContinue
+    }
+
     "when error" in {
       val result = JsString("error").as[TaskStatus]
       result mustBe TaskStatus.Error
@@ -161,6 +154,11 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
     "when unavailable" in {
       val result = JsString("unavailable").as[TaskStatus]
       result mustBe TaskStatus.Unavailable
+    }
+
+    "when amended" in {
+      val result = JsString("amended").as[TaskStatus]
+      result mustBe TaskStatus.Amended
     }
 
     "when something else" in {

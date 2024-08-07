@@ -77,7 +77,7 @@ localReferenceNumber.change.hidden = local reference number
 additionalDeclarationType.title = Is this a standard or pre-lodged declaration?
 additionalDeclarationType.heading = Is this a standard or pre-lodged declaration?
 additionalDeclarationType.A = Standard - the goods have already boarded at a UK port or airport
-additionalDeclarationType.D = Pre-lodged - the goods have yet to board at a UK port or airport
+additionalDeclarationType.D = Pre-lodged - the goods have yet to board at a UK port or airport. This allows you to submit your declaration up to 2 weeks before the goods are released for transit, and then provide any missing information at a later date
 additionalDeclarationType.checkYourAnswersLabel = Is this a standard or pre-lodged declaration?
 additionalDeclarationType.change.hidden = whether this is a standard or pre-lodged declaration
 additionalDeclarationType.error.required = Select whether this is a standard or pre-lodged declaration
@@ -137,6 +137,11 @@ preTaskList.checkYourAnswers.title = Check your answers
 preTaskList.checkYourAnswers.h2 = Before you continue
 preTaskList.checkYourAnswers.p = Once you have confirmed these details you will not be able to change them.
 
+preTaskList.standardDeclaration.para1 = This means you can only make a declaration for goods which have already boarded at a UK port or airport.
+preTaskList.standardDeclaration.para2 = Pre-lodge declarations will become available later in the year. This will then allow you to send a declaration before the goods have boarded, up to 2 weeks before they are released for transit.
+preTaskList.standardDeclaration.heading = You can only make a standard declaration
+preTaskList.standardDeclaration.title = You can only make a standard declaration
+
 # Task list
 
 taskList.title = Declaration summary
@@ -158,6 +163,7 @@ taskStatus.completed = Completed
 taskStatus.inProgress = In progress
 taskStatus.notStarted = Not started
 taskStatus.cannotStartYet = Cannot start yet
+taskStatus.cannotContinue = Cannot continue
 taskStatus.error = Error
 taskStatus.unavailable = Unavailable
 taskStatus.amended = Amended
@@ -165,26 +171,32 @@ taskStatus.amended = Amended
 task.traderDetails = Trader details
 task.traderDetails.add = Add trader details
 task.traderDetails.edit = Edit trader details
+task.traderDetails.amend = Amend trader details
 
 task.routeDetails = Route details
 task.routeDetails.add = Add route details
 task.routeDetails.edit = Edit route details
+task.routeDetails.amend = Amend route details
 
 task.guaranteeDetails = Guarantee details
 task.guaranteeDetails.add = Add guarantee details
 task.guaranteeDetails.edit = Edit guarantee details
+task.guaranteeDetails.amend = Amend guarantee details
 
 task.transportDetails = Transport details
 task.transportDetails.add = Add transport details
 task.transportDetails.edit = Edit transport details
+task.transportDetails.amend = Amend transport details
 
 task.documents = Documents
 task.documents.add = Add documents
 task.documents.edit = Edit documents
+task.documents.amend = Amend documents
 
 task.items = Items
 task.items.add = Add items
 task.items.edit = Edit items
+task.items.amend = Amend items
 
 # Declaration
 

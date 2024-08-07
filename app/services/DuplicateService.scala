@@ -17,8 +17,8 @@
 package services
 
 import connectors.CacheConnector
-import models.SubmissionState.{Amendment, GuaranteeAmendment, RejectedPendingChanges}
-import models.{LocalReferenceNumber, SubmissionState, UserAnswers}
+import models.LocalReferenceNumber
+import models.SubmissionState.RejectedPendingChanges
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -28,33 +28,24 @@ class DuplicateService @Inject() (
   cacheConnector: CacheConnector
 )(implicit ec: ExecutionContext) {
 
-  private def statusToCopy(status: SubmissionState.Value): SubmissionState.Value = status match {
-    case Amendment          => Amendment
-    case GuaranteeAmendment => GuaranteeAmendment
-    case _                  => RejectedPendingChanges
-  } // TODO: Better way to handle the changing states?
-
   def copyUserAnswers(
     oldLocalReferenceNumber: LocalReferenceNumber,
     newLocalReferenceNumber: LocalReferenceNumber
-  )(implicit hc: HeaderCarrier): Future[Boolean] = cacheConnector.get(oldLocalReferenceNumber) flatMap {
-    case Some(userAnswers) =>
-      val updatedUserAnswers: UserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, status = statusToCopy(userAnswers.status))
-      cacheConnector.post(
-        updatedUserAnswers
-      )
-    case None => Future.successful(false)
-  }
+  )(implicit hc: HeaderCarrier): Future[Boolean] =
+    cacheConnector.get(oldLocalReferenceNumber).flatMap {
+      case Some(userAnswers) =>
+        val updatedUserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, status = RejectedPendingChanges)
+        cacheConnector.post(updatedUserAnswers)
+      case None =>
+        Future.successful(false)
+    }
 
   def doesDraftOrSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
-    cacheConnector.doesDraftOrSubmissionExistForLrn(lrn)
+    cacheConnector.get(lrn).map(_.isDefined).flatMap {
+      case true  => Future.successful(true)
+      case false => doesIE028ExistForLrn(lrn)
+    }
 
   def doesIE028ExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
-    cacheConnector.doesIE028ExistForLrn(lrn)
-
-  def alreadySubmitted(submittedValue: Option[LocalReferenceNumber])(implicit hc: HeaderCarrier): Future[Boolean] =
-    submittedValue match {
-      case Some(newLocalReferenceNumber) => doesIE028ExistForLrn(newLocalReferenceNumber)
-      case None                          => Future.successful(false)
-    }
+    cacheConnector.getMessages(lrn).map(_.contains("IE028"))
 }

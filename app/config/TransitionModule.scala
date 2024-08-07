@@ -16,14 +16,11 @@
 
 package config
 
-import connectors.SubmissionConnector
-import connectors.SubmissionConnector.TransitionSubmissionConnector
-
 class TransitionModule extends Module {
 
   override def configure(): Unit = {
     super.configure()
 
-    bind(classOf[SubmissionConnector]).to(classOf[TransitionSubmissionConnector])
+    bind(classOf[PhaseConfig]).to(classOf[TransitionConfig])
   }
 }

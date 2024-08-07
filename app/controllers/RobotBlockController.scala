@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package navigation
+package controllers
 
-import models.{Mode, UserAnswers}
-import pages.Page
-import play.api.mvc.Call
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
-class FakeNavigator(desiredRoute: Call) extends Navigator {
-  override def nextPage(userAnswers: UserAnswers, currentPage: Option[Page]): Call = desiredRoute
-}
+import javax.inject.Inject
 
-class FakePreTaskListNavigator(desiredRoute: Call, mode: Mode, isPreLodgeEnabled: Boolean) extends PreTaskListNavigator(mode, isPreLodgeEnabled) {
-  override def nextPage(userAnswers: UserAnswers, currentPage: Option[Page]): Call = desiredRoute
+class RobotBlockController @Inject() (
+  val controllerComponents: MessagesControllerComponents
+) extends FrontendBaseController
+    with I18nSupport {
+
+  // Return 410 to stop robots from indexing the url associated to this controller
+  def onPageLoad(path: String): Action[AnyContent] = Action {
+    Gone
+  }
 }

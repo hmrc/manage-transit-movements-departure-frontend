@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,61 +16,48 @@
 
 package controllers.preTaskList
 
-import controllers.actions._
+import config.FrontendAppConfig
+import controllers.actions.{Actions, PreTaskListCompletedAction}
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.EnumerableFormProvider
-import models.{LocalReferenceNumber, Mode, ProcedureType}
+import models.{LocalReferenceNumber, Mode}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
-import pages.preTaskList.ProcedureTypePage
+import pages.preTaskList.StandardDeclarationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.preTaskList.ProcedureTypeView
+import views.html.preTaskList.StandardDeclarationView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
-class ProcedureTypeController @Inject() (
+class StandardDeclarationController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
+  val controllerComponents: MessagesControllerComponents,
+  checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
+  val config: FrontendAppConfig,
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
-  checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
-  formProvider: EnumerableFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: ProcedureTypeView
+  view: StandardDeclarationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
-
-  private val form = formProvider[ProcedureType]("procedureType")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
     .andThen(checkIfPreTaskListAlreadyCompleted) {
       implicit request =>
-        val preparedForm = request.userAnswers.get(ProcedureTypePage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
-        }
-
-        Ok(view(preparedForm, ProcedureType.values, lrn, mode))
+        Ok(view(lrn, mode))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
-    .andThen(checkIfPreTaskListAlreadyCompleted)
     .async {
       implicit request =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, ProcedureType.values, lrn, mode))),
-            value => {
-              val navigator: UserAnswersNavigator = navigatorProvider(mode)
-              ProcedureTypePage.writeToUserAnswers(value).writeToSession(sessionRepository).navigateWith(navigator)
-            }
-          )
+        val navigator: UserAnswersNavigator = navigatorProvider(mode)
+
+        StandardDeclarationPage.writeToUserAnswers("A").writeToSession(sessionRepository).navigateWith(navigator)
     }
+
 }

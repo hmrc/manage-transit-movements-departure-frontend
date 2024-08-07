@@ -16,7 +16,7 @@
 
 package controllers
 
-import connectors.SubmissionConnector
+import connectors.CacheConnector
 import controllers.actions.{Actions, SpecificDataRequiredActionProvider}
 import models.LocalReferenceNumber
 import pages.external.OfficeOfDestinationPage
@@ -34,7 +34,7 @@ class DeclarationSubmittedController @Inject() (
   actions: Actions,
   getMandatoryPage: SpecificDataRequiredActionProvider,
   view: DeclarationSubmittedView,
-  submissionConnector: SubmissionConnector
+  connector: CacheConnector
 )(implicit ec: ExecutionContext)
     extends FrontendController(cc)
     with I18nSupport
@@ -51,7 +51,7 @@ class DeclarationSubmittedController @Inject() (
     .andThen(getMandatoryPage(OfficeOfDestinationPage))
     .async {
       implicit request =>
-        submissionConnector.getMessages(lrn).map {
+        connector.getMessages(lrn).map {
           messages =>
             if (messages.contains(messageType)) {
               Ok(view(lrn, request.arg))
