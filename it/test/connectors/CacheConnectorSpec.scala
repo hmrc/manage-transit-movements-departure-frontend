@@ -236,6 +236,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
         server.stubFor(
           post(urlEqualTo(url))
             .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .withHeader("APIVersion", equalTo("transitional"))
             .willReturn(aResponse().withStatus(OK))
         )
 
@@ -250,6 +251,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
         server.stubFor(
           post(urlEqualTo(url))
             .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .withHeader("APIVersion", equalTo("transitional"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -264,6 +266,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
         server.stubFor(
           post(urlEqualTo(url))
             .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .withHeader("APIVersion", equalTo("transitional"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -281,6 +284,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
         server.stubFor(
           post(urlEqualTo(url))
             .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .withHeader("APIVersion", equalTo("transitional"))
             .willReturn(aResponse().withStatus(OK))
         )
 
@@ -295,6 +299,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
         server.stubFor(
           post(urlEqualTo(url))
             .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .withHeader("APIVersion", equalTo("transitional"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -309,6 +314,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
         server.stubFor(
           post(urlEqualTo(url))
             .withHeader("Accept", equalTo("application/vnd.hmrc.transition+json"))
+            .withHeader("APIVersion", equalTo("transitional"))
             .willReturn(aResponse().withStatus(status))
         )
 

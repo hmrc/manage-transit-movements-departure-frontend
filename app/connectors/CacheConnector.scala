@@ -39,6 +39,9 @@ class CacheConnector @Inject() (
 
   private val baseUrl = s"${config.cacheUrl}"
 
+  private val acceptHeader     = ACCEPT       -> phaseConfig.acceptHeader
+  private val apiVersionHeader = "APIVersion" -> phaseConfig.apiVersionHeader
+
   def get(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
     val url = url"$baseUrl/user-answers/$lrn"
     http
@@ -102,7 +105,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/declaration/submit"
     http
       .post(url)
-      .setHeader(ACCEPT -> phaseConfig.acceptHeader)
+      .setHeader(acceptHeader, apiVersionHeader)
       .withBody(Json.toJson(lrn))
       .execute[HttpResponse]
   }
@@ -111,7 +114,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/declaration/submit-amendment"
     http
       .post(url)
-      .setHeader(ACCEPT -> phaseConfig.acceptHeader)
+      .setHeader(acceptHeader, apiVersionHeader)
       .withBody(Json.toJson(lrn))
       .execute[HttpResponse]
   }
