@@ -16,19 +16,14 @@
 
 package config
 
-// TODO - these two headers fundamentally do the same thing.
-//  Once the relevant frontend and backend changes have been deployed we can remove `acceptHeader`.
 trait PhaseConfig {
-  val acceptHeader: String
   val apiVersionHeader: String
 }
 
 class TransitionConfig() extends PhaseConfig {
-  override val acceptHeader: String     = "application/vnd.hmrc.transition+json"
   override val apiVersionHeader: String = "transitional"
 }
 
 class PostTransitionConfig() extends PhaseConfig {
-  override val acceptHeader: String     = "application/vnd.hmrc.final+json"
   override val apiVersionHeader: String = "final"
 }
