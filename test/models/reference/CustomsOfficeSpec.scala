@@ -22,7 +22,7 @@ import models.SelectableList
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import play.api.libs.json.Json
+import play.api.libs.json.{JsError, Json}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 
 class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
@@ -127,6 +127,114 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
         customsOffice2,
         customsOffice1
       )
+    }
+
+    "listReads" - {
+      "must read list of customs offices" - {
+        "when offices have distinct IDs" in {
+          val json = Json.parse("""
+                                  |[
+                                  |  {
+                                  |    "id" : "AD000001",
+                                  |    "name" : "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA",
+                                  |    "countryId" : "AD",
+                                  |    "languageCode" : "EN"
+                                  |  },
+                                  |  {
+                                  |    "id" : "AD000002",
+                                  |    "name" : "DCNJ PORTA",
+                                  |    "countryId" : "AD",
+                                  |    "languageCode" : "EN"
+                                  |  },
+                                  |  {
+                                  |    "id": "IT261101",
+                                  |    "name": "PASSO NUOVO",
+                                  |    "countryId": "IT",
+                                  |    "languageCode": "IT"
+                                  |  }
+                                  |]
+                                  |""".stripMargin)
+
+          val result = json.as[List[CustomsOffice]]
+
+          result mustBe List(
+            CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD"),
+            CustomsOffice("AD000002", "DCNJ PORTA", None, "AD"),
+            CustomsOffice("IT261101", "PASSO NUOVO", None, "IT")
+          )
+        }
+
+        "when offices have duplicate IDs must prioritise the office with an EN language code" in {
+          val json = Json.parse("""
+                                  |[
+                                  |  {
+                                  |    "id" : "AD000001",
+                                  |    "name" : "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA",
+                                  |    "countryId" : "AD",
+                                  |    "languageCode" : "EN"
+                                  |  },
+                                  |  {
+                                  |    "id" : "AD000001",
+                                  |    "name" : "ADUANA DE ST. JULIÀ DE LÒRIA",
+                                  |    "countryId" : "AD",
+                                  |    "languageCode" : "ES"
+                                  |  },
+                                  |  {
+                                  |    "id" : "AD000001",
+                                  |    "name" : "BUREAU DE SANT JULIÀ DE LÒRIA",
+                                  |    "countryId" : "AD",
+                                  |    "languageCode" : "FR"
+                                  |  },
+                                  |  {
+                                  |    "id" : "AD000002",
+                                  |    "name" : "DCNJ PORTA",
+                                  |    "countryId" : "AD",
+                                  |    "languageCode" : "FR"
+                                  |  },
+                                  |  {
+                                  |    "id" : "AD000002",
+                                  |    "name" : "DCNJ PORTA",
+                                  |    "countryId" : "AD",
+                                  |    "languageCode" : "ES"
+                                  |  },
+                                  |  {
+                                  |    "id" : "AD000002",
+                                  |    "name" : "DCNJ PORTA",
+                                  |    "countryId" : "AD",
+                                  |    "languageCode" : "EN"
+                                  |  },
+                                  |  {
+                                  |    "id": "IT261101",
+                                  |    "name": "PASSO NUOVO",
+                                  |    "countryId": "IT",
+                                  |    "languageCode": "IT"
+                                  |  }
+                                  |]
+                                  |""".stripMargin)
+
+          val result = json.as[List[CustomsOffice]]
+
+          result mustBe List(
+            CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD"),
+            CustomsOffice("AD000002", "DCNJ PORTA", None, "AD"),
+            CustomsOffice("IT261101", "PASSO NUOVO", None, "IT")
+          )
+        }
+      }
+
+      "must fail to read list of customs offices" - {
+        "when not an array" in {
+          val json = Json.parse("""
+                                  |{
+                                  |  "foo" : "bar"
+                                  |}
+                                  |""".stripMargin)
+
+          val result = json.validate[List[CustomsOffice]]
+
+          result mustBe JsError("Expected customs offices to be in a JsArray")
+        }
+      }
     }
   }
 

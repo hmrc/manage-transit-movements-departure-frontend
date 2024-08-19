@@ -60,7 +60,7 @@ class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler w
       |      "activeFrom": "2019-01-01",
       |      "id": "GB1",
       |      "name": "testName1",
-      |      "LanguageCode": "EN",
+      |      "languageCode": "EN",
       |      "countryId": "GB",
       |      "eMailAddress": "foo@andorra.ad",
       |      "roles": [
@@ -74,7 +74,7 @@ class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler w
       |      "activeFrom": "2019-01-01",
       |      "id": "GB2",
       |      "name": "testName2",
-      |      "LanguageCode": "ES",
+      |      "languageCode": "ES",
       |      "countryId": "GB",
       |      "roles": [
       |        {
