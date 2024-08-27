@@ -21,7 +21,7 @@ import play.api.data.{Form, FormError}
 
 trait DoubleFieldBehaviours extends FieldBehaviours {
 
-  def doubleField(form: Form[_], fieldName: String, nonNumericError: FormError): Unit =
+  def doubleField(form: Form[?], fieldName: String, nonNumericError: FormError): Unit =
     "must not bind non-numeric numbers" in {
 
       forAll(nonNumerics -> "nonNumeric") {
@@ -31,17 +31,17 @@ trait DoubleFieldBehaviours extends FieldBehaviours {
       }
     }
 
-  def doubleFieldWithMinimum(form: Form[_], fieldName: String, minimum: Double, expectedError: FormError): Unit =
+  def doubleFieldWithMinimum(form: Form[?], fieldName: String, minimum: Double, expectedError: FormError): Unit =
     s"must not bind values below $minimum" in {
 
       forAll(doublesBelowValue(minimum) -> "doubleBelowMin") {
-        number: Double =>
+        (number: Double) =>
           val result = form.bind(Map(fieldName -> number.toString)).apply(fieldName)
           result.errors mustEqual Seq(expectedError)
       }
     }
 
-  def doubleFieldWithMaximum(form: Form[_], fieldName: String, maxBits: Int, expectedError: FormError): Unit =
+  def doubleFieldWithMaximum(form: Form[?], fieldName: String, maxBits: Int, expectedError: FormError): Unit =
     s"must not bind values above 1E$maxBits" in {
       forAll(stringsLongerThan(maxBits, Gen.numChar) -> "doubleAboveMax") {
         numberAsString =>

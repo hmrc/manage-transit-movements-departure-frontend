@@ -103,7 +103,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
     "must redirect to the next page when valid data is submitted" in {
       setExistingUserAnswers(baseAnswers)
 
-      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, declarationTypeRoute)
         .withFormUrlEncodedBody(("value", dt1.code))

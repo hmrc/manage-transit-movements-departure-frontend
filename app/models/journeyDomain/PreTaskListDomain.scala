@@ -34,7 +34,7 @@ case class PreTaskListDomain(
   securityDetailsType: SecurityType
 ) extends JourneyDomainModel {
 
-  override def page: Option[Section[_]] = Some(PreTaskListSection)
+  override def page: Option[Section[?]] = Some(PreTaskListSection)
 }
 
 object PreTaskListDomain {

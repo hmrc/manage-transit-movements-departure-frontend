@@ -15,7 +15,7 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.html.components.{TaskList => HTaskList}
 @import viewModels.taskList._
 
 @this(
@@ -28,7 +28,7 @@
 )(implicit messages: Messages, config: FrontendAppConfig)
 
 @govukTaskList(
-    TaskList(
+    HTaskList(
         items = viewModel.taskListItems(lrn)
     )
 )

@@ -56,7 +56,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http
       .get(url)
       .setHeader(version2Header)
-      .transform(_.withQueryStringParameters(query: _*))
+      .transform(_.withQueryStringParameters(query *))
       .execute[NonEmptySet[CustomsOffice]]
   }
 
@@ -115,7 +115,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
             case JsSuccess(Nil, _) =>
               throw new NoReferenceDataFoundException(url)
             case JsSuccess(head :: tail, _) =>
-              NonEmptySet.of(head, tail: _*)
+              NonEmptySet.of(head, tail *)
             case JsError(errors) =>
               throw JsResultException(errors)
           }

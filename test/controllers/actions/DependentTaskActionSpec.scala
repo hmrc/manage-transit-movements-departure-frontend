@@ -37,10 +37,7 @@ class DependentTaskActionSpec extends SpecBase with ScalaCheckPropertyChecks wit
     action
       .invokeBlock(
         DataRequest(fakeRequest, eoriNumber, emptyUserAnswers.copy(tasks = tasks)),
-        {
-          _: DataRequest[_] =>
-            Future.successful(Results.Ok)
-        }
+        (_: DataRequest[?]) => Future.successful(Results.Ok)
       )
   }
 

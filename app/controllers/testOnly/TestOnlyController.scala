@@ -36,7 +36,7 @@ class TestOnlyController @Inject() (
   def setUserAnswers(sessionId: String): Action[JsValue] = action.async(parse.json) {
     implicit request =>
       val headerCarrier = hc
-        .copy(authorization = request.headers.get("Authorization").map(Authorization))
+        .copy(authorization = request.headers.get("Authorization").map(Authorization.apply))
         .copy(sessionId = Some(SessionId(sessionId)))
 
       request.body.validate[UserAnswers] match {

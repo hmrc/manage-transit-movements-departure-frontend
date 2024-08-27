@@ -98,7 +98,7 @@ class UserAnswersJsonFormatSpec extends SpecBase with ScalaCheckPropertyChecks w
 
       "be readable as a LocalDateTime for backwards compatibility" in {
         val json = Json.toJson(Instant.now())
-        json.validate[LocalDateTime] mustBe a[JsSuccess[_]]
+        json.validate[LocalDateTime] mustBe a[JsSuccess[?]]
       }
     }
 

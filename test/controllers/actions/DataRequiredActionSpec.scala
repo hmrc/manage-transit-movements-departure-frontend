@@ -105,7 +105,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
                 val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers)))
 
-                whenReady[Either[Result, DataRequest[_]], Assertion](result) {
+                whenReady[Either[Result, DataRequest[?]], Assertion](result) {
                   result =>
                     result.value.userAnswers mustBe userAnswers
                     result.value.eoriNumber mustBe eoriNumber
@@ -193,7 +193,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
                   val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers)))
 
-                  whenReady[Either[Result, DataRequest[_]], Assertion](result) {
+                  whenReady[Either[Result, DataRequest[?]], Assertion](result) {
                     result =>
                       result.value.userAnswers mustBe userAnswers
                       result.value.eoriNumber mustBe eoriNumber
@@ -216,7 +216,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
             val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers)))
 
-            whenReady[Either[Result, DataRequest[_]], Assertion](result) {
+            whenReady[Either[Result, DataRequest[?]], Assertion](result) {
               result =>
                 result.value.userAnswers mustBe userAnswers
                 result.value.eoriNumber mustBe eoriNumber
