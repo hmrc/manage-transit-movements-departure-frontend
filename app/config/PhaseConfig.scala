@@ -16,14 +16,36 @@
 
 package config
 
+import com.typesafe.config.Config
+import config.PhaseConfig.Values
+import play.api.{ConfigLoader, Configuration}
+
+import javax.inject.Inject
+
 trait PhaseConfig {
-  val apiVersionHeader: String
+  val values: Values
 }
 
-class TransitionConfig() extends PhaseConfig {
-  override val apiVersionHeader: String = "transitional"
-}
+object PhaseConfig {
 
-class PostTransitionConfig() extends PhaseConfig {
-  override val apiVersionHeader: String = "final"
+  class TransitionConfig @Inject() (configuration: Configuration) extends PhaseConfig {
+    override val values: Values = configuration.get[Values]("phase.transitional")
+  }
+
+  class PostTransitionConfig @Inject() (configuration: Configuration) extends PhaseConfig {
+    override val values: Values = configuration.get[Values]("phase.final")
+  }
+
+  case class Values(name: String, apiVersion: Double)
+
+  object Values {
+
+    implicit val configLoader: ConfigLoader[Values] = (config: Config, path: String) =>
+      config.getConfig(path) match {
+        case phase =>
+          val name       = phase.getString("name")
+          val apiVersion = phase.getDouble("apiVersion")
+          Values(name, apiVersion)
+      }
+  }
 }
