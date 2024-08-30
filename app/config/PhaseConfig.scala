@@ -36,16 +36,15 @@ object PhaseConfig {
     override val values: Values = configuration.get[Values]("phase.final")
   }
 
-  case class Values(name: String, apiVersion: Double)
+  case class Values(apiVersion: Double)
 
   object Values {
 
     implicit val configLoader: ConfigLoader[Values] = (config: Config, path: String) =>
       config.getConfig(path) match {
         case phase =>
-          val name       = phase.getString("name")
           val apiVersion = phase.getDouble("apiVersion")
-          Values(name, apiVersion)
+          Values(apiVersion)
       }
   }
 }
