@@ -235,7 +235,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" in {
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("transitional"))
             .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
             .willReturn(aResponse().withStatus(OK))
         )
@@ -250,7 +249,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("transitional"))
             .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
             .willReturn(aResponse().withStatus(status))
         )
@@ -265,7 +263,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("transitional"))
             .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
             .willReturn(aResponse().withStatus(status))
         )
@@ -283,7 +280,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" in {
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("transitional"))
             .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
             .willReturn(aResponse().withStatus(OK))
         )
@@ -298,7 +294,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("transitional"))
             .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
             .willReturn(aResponse().withStatus(status))
         )
@@ -313,7 +308,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("transitional"))
             .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
             .willReturn(aResponse().withStatus(status))
         )
