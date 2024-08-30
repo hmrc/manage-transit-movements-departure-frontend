@@ -20,6 +20,7 @@ import config.{FrontendAppConfig, PhaseConfig}
 import models.LockCheck._
 import models.{DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers}
 import play.api.Logging
+import play.api.http.HeaderNames._
 import play.api.http.Status._
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -38,7 +39,12 @@ class CacheConnector @Inject() (
 
   private val baseUrl = s"${config.cacheUrl}"
 
-  private val apiVersionHeader = "APIVersion" -> phaseConfig.apiVersionHeader
+  private val apiVersionHeader = "APIVersion" -> phaseConfig.values.name
+
+  private val acceptHeader = ACCEPT -> {
+    val version = phaseConfig.values.apiVersion
+    s"application/vnd.hmrc.$version+json"
+  }
 
   def get(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
     val url = url"$baseUrl/user-answers/$lrn"
@@ -103,7 +109,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/declaration/submit"
     http
       .post(url)
-      .setHeader(apiVersionHeader)
+      .setHeader(apiVersionHeader, acceptHeader)
       .withBody(Json.toJson(lrn))
       .execute[HttpResponse]
   }
@@ -112,7 +118,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/declaration/submit-amendment"
     http
       .post(url)
-      .setHeader(apiVersionHeader)
+      .setHeader(apiVersionHeader, acceptHeader)
       .withBody(Json.toJson(lrn))
       .execute[HttpResponse]
   }
@@ -129,6 +135,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/messages/$lrn"
     http
       .get(url)
+      .setHeader(acceptHeader)
       .execute[DepartureMessages]
   }
 }
