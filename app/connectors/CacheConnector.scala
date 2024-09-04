@@ -39,12 +39,13 @@ class CacheConnector @Inject() (
 
   private val baseUrl = s"${config.cacheUrl}"
 
-  private val headers = Seq(
-    ACCEPT -> {
-      val version = phaseConfig.values.apiVersion
-      s"application/vnd.hmrc.$version+json"
-    }
-  )
+  private val headers = {
+    val version = phaseConfig.values.apiVersion.toString
+    Seq(
+      ACCEPT       -> s"application/vnd.hmrc.$version+json",
+      "APIVersion" -> version
+    )
+  }
 
   def get(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
     val url = url"$baseUrl/user-answers/$lrn"
