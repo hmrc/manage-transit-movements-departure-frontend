@@ -20,7 +20,6 @@ import config.{FrontendAppConfig, PhaseConfig}
 import models.LockCheck._
 import models.{DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers}
 import play.api.Logging
-import play.api.http.HeaderNames._
 import play.api.http.Status._
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -41,10 +40,7 @@ class CacheConnector @Inject() (
   private val baseUrl = s"${config.cacheUrl}"
 
   private val headers = Seq(
-    ACCEPT -> {
-      val version = phaseConfig.values.apiVersion
-      s"application/vnd.hmrc.$version+json"
-    }
+    "APIVersion" -> phaseConfig.values.apiVersion.toString
   )
 
   def get(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
