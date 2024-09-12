@@ -44,7 +44,7 @@ lazy val microservice = (project in file("."))
       ".*ControllerConfiguration",
     ScoverageKeys.coverageExcludedPackages := ".*views.html.components.*",
     ScoverageKeys.coverageMinimumStmtTotal := 75,
-    ScoverageKeys.coverageFailOnMinimum := false, // TODO set coverageFailOnMinimum true after https://github.com/scoverage/sbt-scoverage/issues/550 is fixed
+    ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting  := true,
     ThisBuild / useSuperShell := false,
     scalacOptions ++= Seq(

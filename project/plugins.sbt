@@ -14,7 +14,7 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0" exclude("org.
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.6")
 
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.1.0")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.2.0")
 
 addSbtPlugin("net.ground5hark.sbt" % "sbt-concat" % "0.2.0")
 
