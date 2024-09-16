@@ -22,7 +22,7 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 trait StringFieldBehaviours extends FieldBehaviours {
 
-  def fieldWithMaxLength(form: Form[_], fieldName: String, maxLength: Int, lengthError: FormError): Unit =
+  def fieldWithMaxLength(form: Form[?], fieldName: String, maxLength: Int, lengthError: FormError): Unit =
     s"must not bind strings longer than $maxLength characters" in {
 
       forAll(stringsLongerThan(maxLength) -> "longString") {
@@ -33,7 +33,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
     }
 
   def fieldWithMaxLength(
-    form: Form[_],
+    form: Form[?],
     fieldName: String,
     maxLength: Int,
     lengthError: FormError,
@@ -48,7 +48,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
-  def fieldWithMinLength(form: Form[_], fieldName: String, minLength: Int, lengthError: FormError): Unit =
+  def fieldWithMinLength(form: Form[?], fieldName: String, minLength: Int, lengthError: FormError): Unit =
     s"must not bind strings shorter than $minLength characters" in {
 
       forAll(stringsWithLength(minLength - 1) -> "shortString") {
@@ -58,7 +58,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
-  def fieldWithInvalidCharacters(form: Form[_], fieldName: String, error: FormError, length: Int = 100): Unit =
+  def fieldWithInvalidCharacters(form: Form[?], fieldName: String, error: FormError, length: Int = 100): Unit =
     "must not bind strings with invalid characters" in {
 
       val generator: Gen[String] = RegexpGen.from(s"[!£^*(){}_+=:;|`~<>,±üçñèé]{$length}")
@@ -70,7 +70,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
-  def mandatoryTrimmedField(form: Form[_], fieldName: String, requiredError: FormError): Unit = {
+  def mandatoryTrimmedField(form: Form[?], fieldName: String, requiredError: FormError): Unit = {
 
     mandatoryField(form, fieldName, requiredError)
 
@@ -81,7 +81,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
     }
   }
 
-  def stringFieldWithMaximumIntValue(form: Form[_], fieldName: String, max: Int, fieldMax: Int, expectedError: FormError): Unit =
+  def stringFieldWithMaximumIntValue(form: Form[?], fieldName: String, max: Int, fieldMax: Int, expectedError: FormError): Unit =
     s"must not bind values > $max and < $max" in {
       forAll(positiveIntsMinMax(max, fieldMax)) {
         number =>
@@ -90,7 +90,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
-  def stringFieldWithMinimumIntValue(form: Form[_], fieldName: String, min: Int, expectedError: FormError): Unit =
+  def stringFieldWithMinimumIntValue(form: Form[?], fieldName: String, min: Int, expectedError: FormError): Unit =
     s"must not bind values < $min" in {
       val testCase = min - 1
       val result   = form.bind(Map(fieldName -> testCase.toString)).apply(fieldName)

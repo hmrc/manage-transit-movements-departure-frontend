@@ -106,7 +106,7 @@ object ViewUtils {
     override def withFormFieldWithErrorAsHtml(field: Field): Fieldset = fieldset
 
     def withHeadingAndCaption(heading: String, caption: Option[String]): Fieldset =
-      withHeadingLegend(fieldset, Text(heading), caption.map(Text))(
+      withHeadingLegend(fieldset, Text(heading), caption.map(Text.apply))(
         (fs, l) => fs.copy(legend = Some(l))
       )
   }
@@ -144,7 +144,7 @@ object ViewUtils {
           }
           val arg = formError.args.find(args.contains).getOrElse(args.head).toString
           val key = s"#${formError.key}${arg.capitalize}"
-          ErrorLink(href = Some(key), content = messages(formError.message, formError.args: _*).toText)
+          ErrorLink(href = Some(key), content = messages(formError.message, formError.args *).toText)
       }
   }
 

@@ -54,7 +54,7 @@ class DataRetrievalActionSpec extends SpecBase with Generators {
       .invokeBlock(
         IdentifierRequest(FakeRequest(GET, "/").asInstanceOf[Request[AnyContent]], EoriNumber("")),
         {
-          request: OptionalDataRequest[AnyContent] =>
+          (request: OptionalDataRequest[AnyContent]) =>
             f(request)
             Future.successful(Results.Ok)
         }
@@ -68,7 +68,7 @@ class DataRetrievalActionSpec extends SpecBase with Generators {
 
       "where there are no existing answers for this LRN" in {
 
-        when(sessionRepository.get(any())(any())) thenReturn Future.successful(None)
+        when(sessionRepository.get(any())(any())).thenReturn(Future.successful(None))
 
         harness(lrn, request => request.userAnswers must not be defined)
       }
@@ -78,7 +78,7 @@ class DataRetrievalActionSpec extends SpecBase with Generators {
 
       "when there are existing answers for this LRN" in {
 
-        when(sessionRepository.get(any())(any())) thenReturn Future.successful(Some(emptyUserAnswers))
+        when(sessionRepository.get(any())(any())).thenReturn(Future.successful(Some(emptyUserAnswers)))
 
         harness(lrn, request => request.userAnswers mustBe defined)
       }

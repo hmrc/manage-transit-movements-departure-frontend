@@ -36,10 +36,7 @@ class LockActionSpec extends SpecBase with AppWithDefaultMockFixtures {
     actionProvider()
       .invokeBlock(
         dataRequest,
-        {
-          _: DataRequest[AnyContent] =>
-            Future.successful(Results.Ok)
-        }
+        (_: DataRequest[AnyContent]) => Future.successful(Results.Ok)
       )
       .futureValue
 

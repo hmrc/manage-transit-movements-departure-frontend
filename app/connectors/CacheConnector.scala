@@ -25,6 +25,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
+import play.api.libs.ws.JsonBodyWritables._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -105,7 +106,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/declaration/submit"
     http
       .post(url)
-      .setHeader(headers: _*)
+      .setHeader(headers *)
       .withBody(Json.toJson(lrn))
       .execute[HttpResponse]
   }
@@ -114,7 +115,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/declaration/submit-amendment"
     http
       .post(url)
-      .setHeader(headers: _*)
+      .setHeader(headers *)
       .withBody(Json.toJson(lrn))
       .execute[HttpResponse]
   }
@@ -131,7 +132,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/messages/$lrn"
     http
       .get(url)
-      .setHeader(headers: _*)
+      .setHeader(headers *)
       .execute[DepartureMessages]
   }
 }

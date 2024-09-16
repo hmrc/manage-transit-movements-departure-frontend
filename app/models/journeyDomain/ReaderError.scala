@@ -24,5 +24,5 @@ sealed trait OpsError {
   val message: Option[String]
 }
 
-case class ReaderError(page: Gettable[_], pages: Pages, message: Option[String] = None) extends OpsError
-case class WriterError(page: Settable[_], message: Option[String] = None) extends OpsError
+case class ReaderError(page: Gettable[?], pages: Pages, message: Option[String] = None) extends OpsError
+case class WriterError(page: Settable[?], message: Option[String] = None) extends OpsError

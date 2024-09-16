@@ -78,7 +78,7 @@ object UserAnswers {
         (__ \ "tasks").read[Map[String, TaskStatus]] and
         (__ \ "isSubmitted").read[SubmissionState.Value] and
         (__ \ "departureId").readNullable[String]
-    )(UserAnswers.apply _)
+    )(UserAnswers.apply)
 
   implicit lazy val writes: Writes[UserAnswers] =
     (
@@ -88,7 +88,9 @@ object UserAnswers {
         (__ \ "tasks").write[Map[String, TaskStatus]] and
         (__ \ "isSubmitted").write[SubmissionState.Value] and
         (__ \ "departureId").writeNullable[String]
-    )(unlift(UserAnswers.unapply))
+    )(
+      ua => Tuple.fromProductTyped(ua)
+    )
 
   implicit lazy val format: Format[UserAnswers] = Format(reads, writes)
 }

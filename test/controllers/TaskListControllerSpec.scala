@@ -39,7 +39,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
   private lazy val mockViewModelProvider: TaskListViewModelProvider = mock[TaskListViewModelProvider]
   private val mockCacheConnector: CacheConnector                    = mock[CacheConnector]
-  private val expiryInDays                                          = 30
+  private val expiryInDays                                          = 30.asInstanceOf[Number].longValue
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

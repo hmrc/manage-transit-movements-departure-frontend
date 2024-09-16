@@ -50,8 +50,8 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
       "must return true" - {
         "when answers in the cache can be found and data posts to cache" in {
 
-          when(mockCacheConnector.get(eqTo(lrn))(any())) thenReturn Future.successful(Some(oldLrnData))
-          when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(true)
+          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(Some(oldLrnData)))
+          when(mockCacheConnector.post(eqTo(newDataToSend))(any())).thenReturn(Future.successful(true))
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe true
 
@@ -65,7 +65,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
         "when answers not found in the cache" in {
 
-          when(mockCacheConnector.get(eqTo(lrn))(any())) thenReturn Future.successful(None)
+          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(None))
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe false
 
@@ -76,8 +76,8 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
         "when answers found in the cache, but post fails" in {
 
-          when(mockCacheConnector.get(eqTo(lrn))(any())) thenReturn Future.successful(Some(oldLrnData))
-          when(mockCacheConnector.post(eqTo(newDataToSend))(any())) thenReturn Future.successful(false)
+          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(Some(oldLrnData)))
+          when(mockCacheConnector.post(eqTo(newDataToSend))(any())).thenReturn(Future.successful(false))
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe false
 

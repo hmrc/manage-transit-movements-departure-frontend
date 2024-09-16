@@ -32,7 +32,7 @@ class UserAnswersSpec extends SpecBase {
   private val testCleanupPagePath   = "testCleanupPagePath"
   private val testCleanupPageAnswer = "testCleanupPageAnswer"
 
-  final case object TestPage extends QuestionPage[String] {
+  case object TestPage extends QuestionPage[String] {
     override def path: JsPath = JsPath \ testPagePath
 
     override def cleanup(value: Option[String], userAnswers: UserAnswers): Try[UserAnswers] =
@@ -42,7 +42,7 @@ class UserAnswersSpec extends SpecBase {
       }
   }
 
-  final case object TestCleanupPage extends QuestionPage[String] {
+  case object TestCleanupPage extends QuestionPage[String] {
     override def path: JsPath = JsPath \ testCleanupPagePath
   }
 

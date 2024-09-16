@@ -105,7 +105,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -173,7 +173,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
         .configure("features.isPreLodgeEnabled" -> false)
         .build()
       running(app) {
-        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
         setExistingUserAnswers(emptyUserAnswers)
 
@@ -197,7 +197,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
         .configure("features.isPreLodgeEnabled" -> false)
         .build()
       running(app) {
-        when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
         setExistingUserAnswers(emptyUserAnswers)
 

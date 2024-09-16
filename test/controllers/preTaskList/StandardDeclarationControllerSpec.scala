@@ -60,7 +60,7 @@ class StandardDeclarationControllerSpec extends SpecBase with AppWithDefaultMock
     }
 
     "must redirect to next page and set Standard Dec Type" in {
-      when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val userAnswers = emptyUserAnswers
 

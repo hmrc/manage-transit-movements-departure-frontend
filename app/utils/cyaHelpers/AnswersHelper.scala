@@ -41,7 +41,7 @@ class AnswersHelper(userAnswers: UserAnswers, mode: Mode)(implicit messages: Mes
       answer = formatAnswer(answer),
       id = id,
       call = call,
-      args = args: _*
+      args = args *
     )
 
 }

@@ -26,17 +26,17 @@ import queries.Gettable
 trait UserAnswersEntryGenerators {
   self: Generators =>
 
-  def generateAnswer: PartialFunction[Gettable[_], Gen[JsValue]] =
+  def generateAnswer: PartialFunction[Gettable[?], Gen[JsValue]] =
     generatePreTaskListAnswer
 
-  private def generatePreTaskListAnswer: PartialFunction[Gettable[_], Gen[JsValue]] = {
+  private def generatePreTaskListAnswer: PartialFunction[Gettable[?], Gen[JsValue]] = {
     import pages.preTaskList._
     {
       case AdditionalDeclarationTypePage => arbitrary[AdditionalDeclarationType].map(Json.toJson(_))
       case OfficeOfDeparturePage         => arbitrary[CustomsOffice](arbitraryOfficeOfDeparture).map(Json.toJson(_))
       case ProcedureTypePage             => arbitrary[ProcedureType].map(Json.toJson(_))
       case DeclarationTypePage           => arbitrary[DeclarationType].map(Json.toJson(_))
-      case TIRCarnetReferencePage        => Gen.alphaNumStr.map(JsString)
+      case TIRCarnetReferencePage        => Gen.alphaNumStr.map(JsString.apply)
       case SecurityDetailsTypePage       => arbitrary[SecurityType].map(Json.toJson(_))
     }
   }

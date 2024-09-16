@@ -108,7 +108,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
             beforeEach()
 
             setExistingUserAnswers(emptyUserAnswers)
-            when(mockSessionRepository.set(any())(any())) thenReturn Future.successful(true)
+            when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
             when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
             when(mockCountriesService.isInCL112(any())(any())).thenReturn(Future.successful(isInCL112))
             when(mockCountriesService.isInCL147(any())(any())).thenReturn(Future.successful(isInCL147))

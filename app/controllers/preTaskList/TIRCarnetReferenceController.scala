@@ -38,7 +38,6 @@ class TIRCarnetReferenceController @Inject() (
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
-  getMandatoryPage: SpecificDataRequiredActionProvider,
   formProvider: TIRCarnetReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: TirCarnetReferenceView

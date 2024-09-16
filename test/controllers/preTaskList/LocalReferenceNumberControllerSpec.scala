@@ -74,8 +74,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(true))
 
         val submissionState = arbitrary[SubmissionState](arbitrarySubmittedSubmissionState).sample.value
-        when(mockSessionRepository.get(any())(any())) thenReturn
-          Future.successful(Some(emptyUserAnswers.copy(status = submissionState)))
+        when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(Some(emptyUserAnswers.copy(status = submissionState))))
 
         val invalidAnswer = "ABC123"
 
@@ -94,7 +93,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
       "when user answers not found" in {
         when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(true))
 
-        when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None)
+        when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(None))
 
         val invalidAnswer = "ABC123"
 
@@ -144,8 +143,8 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         running(app) {
           when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(false))
 
-          when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None) thenReturn Future.successful(Some(emptyUserAnswers))
-          when(mockSessionRepository.put(any())(any())) thenReturn Future.successful(true)
+          when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(None)).thenReturn(Future.successful(Some(emptyUserAnswers)))
+          when(mockSessionRepository.put(any())(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest(POST, localReferenceNumberRoute)
             .withFormUrlEncodedBody(("value", lrn.toString))
@@ -175,7 +174,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         running(app) {
           when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(true))
 
-          when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(Some(emptyUserAnswers))
+          when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(Some(emptyUserAnswers)))
 
           val request = FakeRequest(POST, localReferenceNumberRoute)
             .withFormUrlEncodedBody(("value", lrn.toString))
@@ -198,8 +197,8 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
         when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(false))
 
-        when(mockSessionRepository.get(any())(any())) thenReturn Future.successful(None) thenReturn Future.successful(None)
-        when(mockSessionRepository.put(any())(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(None)).thenReturn(Future.successful(None))
+        when(mockSessionRepository.put(any())(any())).thenReturn(Future.successful(true))
 
         val request = FakeRequest(POST, localReferenceNumberRoute)
           .withFormUrlEncodedBody(("value", lrn.toString))
