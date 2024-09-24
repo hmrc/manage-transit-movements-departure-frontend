@@ -106,7 +106,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/declaration/submit"
     http
       .post(url)
-      .setHeader(headers *)
+      .setHeader(headers*)
       .withBody(Json.toJson(lrn))
       .execute[HttpResponse]
   }
@@ -115,7 +115,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/declaration/submit-amendment"
     http
       .post(url)
-      .setHeader(headers *)
+      .setHeader(headers*)
       .withBody(Json.toJson(lrn))
       .execute[HttpResponse]
   }
@@ -132,7 +132,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/messages/$lrn"
     http
       .get(url)
-      .setHeader(headers *)
+      .setHeader(headers*)
       .execute[DepartureMessages]
   }
 }

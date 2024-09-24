@@ -187,7 +187,7 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
         Seq(Bar, Baz)
           .map(
             v => v.toString -> v
-          ) *
+          )*
       )
 
     val testForm = Form(

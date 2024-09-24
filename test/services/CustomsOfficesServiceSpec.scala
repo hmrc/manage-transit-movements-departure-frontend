@@ -62,7 +62,7 @@ class CustomsOfficesServiceSpec extends SpecBase with AppWithDefaultMockFixtures
           SelectableList(Seq(gbCustomsOffice2, xiCustomsOffice1, gbCustomsOffice1))
 
         val varargsCaptor: ArgumentCaptor[Seq[String]] = ArgumentCaptor.forClass(classOf[Seq[String]])
-        verify(mockRefDataConnector).getCustomsOfficesOfDepartureForCountry(varargsCaptor.capture() *)(any(), any())
+        verify(mockRefDataConnector).getCustomsOfficesOfDepartureForCountry(varargsCaptor.capture()*)(any(), any())
         varargsCaptor.getValue mustBe Seq("GB", "XI")
       }
     }

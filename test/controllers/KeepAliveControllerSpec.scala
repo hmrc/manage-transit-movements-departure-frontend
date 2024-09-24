@@ -21,7 +21,7 @@ import models.LocalReferenceNumber
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, times, verify, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{GET, route, status, _}
+import play.api.test.Helpers.{route, status, GET, _}
 
 import scala.concurrent.Future
 

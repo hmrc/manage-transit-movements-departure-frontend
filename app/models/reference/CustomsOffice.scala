@@ -31,9 +31,7 @@ case class CustomsOffice(id: String, name: String, phoneNumber: Option[String], 
 object CustomsOffice {
   implicit val format: OFormat[CustomsOffice] = Json.format[CustomsOffice]
 
-  implicit val order: Order[CustomsOffice] = (x: CustomsOffice, y: CustomsOffice) => {
-    (x, y).compareBy(_.name, _.id)
-  }
+  implicit val order: Order[CustomsOffice] = (x: CustomsOffice, y: CustomsOffice) => (x, y).compareBy(_.name, _.id)
 
   implicit val listReads: Reads[List[CustomsOffice]] = {
 

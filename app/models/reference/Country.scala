@@ -24,7 +24,5 @@ case class Country(code: String)
 object Country {
   implicit val format: Format[Country] = Json.format[Country]
 
-  implicit val order: Order[Country] = (x: Country, y: Country) => {
-    (x, y).compareBy(_.code)
-  }
+  implicit val order: Order[Country] = (x: Country, y: Country) => (x, y).compareBy(_.code)
 }
