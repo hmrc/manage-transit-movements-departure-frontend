@@ -34,7 +34,5 @@ case class SecurityType(
 object SecurityType extends DynamicEnumerableType[SecurityType] {
   implicit val format: Format[SecurityType] = Json.format[SecurityType]
 
-  implicit val order: Order[SecurityType] = (x: SecurityType, y: SecurityType) => {
-    (x, y).compareBy(_.code)
-  }
+  implicit val order: Order[SecurityType] = (x: SecurityType, y: SecurityType) => (x, y).compareBy(_.code)
 }

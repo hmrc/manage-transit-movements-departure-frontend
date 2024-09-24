@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{GET, route, status, _}
+import play.api.test.Helpers.{route, status, GET, _}
 
 import scala.concurrent.Future
 

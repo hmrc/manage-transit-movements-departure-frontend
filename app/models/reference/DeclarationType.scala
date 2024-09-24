@@ -36,7 +36,5 @@ case class DeclarationType(
 object DeclarationType extends DynamicEnumerableType[DeclarationType] {
   implicit val format: Format[DeclarationType] = Json.format[DeclarationType]
 
-  implicit val order: Order[DeclarationType] = (x: DeclarationType, y: DeclarationType) => {
-    (x, y).compareBy(_.code)
-  }
+  implicit val order: Order[DeclarationType] = (x: DeclarationType, y: DeclarationType) => (x, y).compareBy(_.code)
 }
