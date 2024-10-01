@@ -30,7 +30,7 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
 
     val testForm: Form[String] =
       Form(
-        "value" -> text()(identity)
+        "value" -> text()
       )
 
     "must bind a valid string" in {
@@ -54,7 +54,7 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Gene
     }
 
     "must return a custom error message" in {
-      val form   = Form("value" -> text("custom.error")(identity))
+      val form   = Form("value" -> text("custom.error"))
       val result = form.bind(Map("value" -> ""))
       result.errors must contain(FormError("value", "custom.error"))
     }
