@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package models.domain
+package models
 
-import scala.util.matching.Regex
+import play.api.libs.json.{Json, OFormat}
 
-object StringFieldRegex {
+case class DynamicAddress(
+  numberAndStreet: String,
+  city: String,
+  postalCode: Option[String]
+) {
 
-  val alphaNumericRegex: Regex = "^[a-zA-Z0-9]*$".r
-  val alphaNumericWithSpacesRegex: Regex = "^[a-zA-Z\\s0-9]*$".r
-  val stringFieldRegex: Regex         = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
+  override def toString: String = Seq(Some(numberAndStreet), Some(city), postalCode).flatten.mkString("<br>")
+}
 
-  val tirCarnetNumberRegex: Regex =
-    "([1-9][0-9]{0,6}|(1[0-9]|2[0-4])[0-9]{0,6}|25000000|(X[A-Z]|[A-Z]X)(2[5-9]|[3-9][0-9]|[1-9][0-9][0-9])[0-9]{6})".r
+object DynamicAddress {
+  implicit val format: OFormat[DynamicAddress] = Json.format[DynamicAddress]
 }

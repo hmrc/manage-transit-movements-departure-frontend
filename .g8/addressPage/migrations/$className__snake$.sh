@@ -6,12 +6,29 @@ echo "Applying migration $className;format="snake"$"
 echo "Adding routes to conf/app.$package$.routes"
 
 if [ ! -f ../conf/app.$package$.routes ]; then
-  echo "Write into prod.routes file"
-  awk '/health.Routes/ {\
-    print;\
-    print "";\
-    print "->         /manage-transit-movements/departures                   app.$package$.Routes"
-    next }1' ../conf/prod.routes >> tmp && mv tmp ../conf/prod.routes
+  echo "Write into app.routes file"
+  awk '
+  /# microservice specific routes/ {
+    print;
+    print "";
+    next;
+  }
+  /^\$/ {
+    if (!printed) {
+      printed = 1;
+      print "->         /                                              app.$package$.Routes";
+      next;
+    }
+    print;
+    next;
+  }
+  {
+    if (!printed) {
+      printed = 1;
+      print "->         /                                                 app.$package$.Routes";
+    }
+    print
+  }' ../conf/app.routes > tmp && mv tmp ../conf/app.routes
 fi
 
 echo "" >> ../conf/app.$package$.routes
@@ -37,5 +54,46 @@ echo "$package$.$className;format="decap"$.error.postcode.invalidFormat = Enter 
 echo "$package$.$className;format="decap"$.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.error.required = Enter the {0} of {1}’s address" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.error.length = The {0} of {1}’s address must be 35 characters or less" >> ../conf/messages.en
+
+if grep -q "def doesCountryRequireZip" ../app/services/CountriesService.scala; then
+  echo "Function 'doesCountryRequireZip' already exists. No changes made."
+else
+  awk '/class CountriesService @Inject\(\) \(referenceDataConnector: ReferenceDataConnector\)\(implicit ec: ExecutionContext\) {/ {
+      print;
+      print "";
+      print "  def doesCountryRequireZip(country: Country)(implicit hc: HeaderCarrier): Future[Boolean] = {";
+      print "    referenceDataConnector";
+      print "      .getCountryWithoutZip(country.code)";
+      print "      .map(_ => false)";
+      print "      .recover {";
+      print "        case _: NoReferenceDataFoundException => true";
+      print "      }";
+      print "  }";
+      next;
+  }
+  { print }' ../app/services/CountriesService.scala > tmp && mv tmp ../app/services/CountriesService.scala
+  echo "Function 'doesCountryRequireZip' has been added."
+fi
+
+if grep -q "def getCountryWithoutZip" ../app/connectors/ReferenceDataConnector.scala; then
+  echo "Function 'getCountryWithoutZip' already exists. No changes made."
+else
+  awk '/class ReferenceDataConnector @Inject\(\) \(config: FrontendAppConfig, http: HttpClientV2\) extends Logging \{/{
+      print;
+      print "";
+      print "  def getCountryWithoutZip(countryCode: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryCode] = {";
+      print "    val url = url\"\${config.customsReferenceDataUrl}/lists/CountryWithoutZip\"";
+      print "    http";
+      print "      .get(url)";
+      print "      .transform(_.withQueryStringParameters(\"data.code\" -> countryCode))";
+      print "      .setHeader(version2Header)";
+      print "      .execute[NonEmptySet[CountryCode]]";
+      print "      .map(_.head)";
+      print "  }";
+      next;
+  }
+  { print }' ../app/connectors/ReferenceDataConnector.scala > tmp && mv tmp ../app/connectors/ReferenceDataConnector.scala
+  echo "Function 'getCountryWithoutZip' has been added."
+fi
 
 echo "Migration $className;format="snake"$ completed"
