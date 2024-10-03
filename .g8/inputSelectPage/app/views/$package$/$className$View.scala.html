@@ -4,7 +4,7 @@
 @import models.Selectable
 @import models.Selectable._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import viewmodels.components.InputSelectViewModel._
+@import viewModels.components.InputSelectViewModel._
 @import views.html.components.{Button, ErrorSummary, InputSelect}
 
 @this(
@@ -20,7 +20,7 @@
 @mainTemplate(
     title = messages("$package$.$className;format="decap"$.title"),
     showBackLink = true,
-    lrn = lrn
+    lrn = Some(lrn)
 ) {
 
     @formHelper(action = routes.$className;format="cap"$Controller.onSubmit(lrn, mode), Symbol("autoComplete") -> "off") {
