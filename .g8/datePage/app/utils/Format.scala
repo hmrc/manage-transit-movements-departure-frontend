@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package models.domain
+package utils
 
-import scala.util.matching.Regex
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-object StringFieldRegex {
+object Format {
 
-  val alphaNumericRegex: Regex           = "^[a-zA-Z0-9]*$".r
-  val alphaNumericWithSpacesRegex: Regex = "^[a-zA-Z\\s0-9]*$".r
-  val stringFieldRegex: Regex            = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
+  val formatterNoMillis: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
 
-  val tirCarnetNumberRegex: Regex =
-    "([1-9][0-9]{0,6}|(1[0-9]|2[0-4])[0-9]{0,6}|25000000|(X[A-Z]|[A-Z]X)(2[5-9]|[3-9][0-9]|[1-9][0-9][0-9])[0-9]{6})".r
+  implicit class RichLocalDate(localDate: LocalDate) {
+    def formatAsString: String = localDate.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))
+  }
 }

@@ -6,6 +6,7 @@ import forms.DateFormProvider
 import models.{Mode, LocalReferenceNumber}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.$package$.$className$Page
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -15,6 +16,7 @@ import views.html.$package$.$className$View
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import java.time.LocalDate
 
 class $className;format="cap"$Controller @Inject()(
   override val messagesApi: MessagesApi,
@@ -28,7 +30,7 @@ class $className;format="cap"$Controller @Inject()(
 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def form: Form[LocalDate] = {
-    val minDate: LocalDate = dateTimeService.plusMinusDays(-1)
+    val minDate: LocalDate = dateTimeService.yesterday
     val maxDate: LocalDate = dateTimeService.today
     formProvider("$package$.$className;format="decap"$", minDate, maxDate)
   }
@@ -50,7 +52,7 @@ class $className;format="cap"$Controller @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
         value => {
           val navigator: UserAnswersNavigator = navigatorProvider(mode)
-          $className$Page.writeToUserAnswers(value).updateTask[$navRoute$Domain]().writeToSession(sessionRepository).navigateWith(navigator)
+          $className$Page.writeToUserAnswers(value).writeToSession(sessionRepository).navigateWith(navigator)
         }
       )
   }

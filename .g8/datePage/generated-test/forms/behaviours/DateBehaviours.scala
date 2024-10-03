@@ -30,9 +30,9 @@ class DateBehaviours extends FieldBehaviours {
       forAll(validData -> "valid date") {
         date =>
           val data = Map(
-            s"$key.day"   -> date.getDayOfMonth.toString,
-            s"$key.month" -> date.getMonthValue.toString,
-            s"$key.year"  -> date.getYear.toString
+            s"\$key.day"   -> date.getDayOfMonth.toString,
+            s"\$key.month" -> date.getMonthValue.toString,
+            s"\$key.year"  -> date.getYear.toString
           )
 
           val result = form.bind(data)
@@ -42,16 +42,16 @@ class DateBehaviours extends FieldBehaviours {
     }
 
   def dateFieldWithMax(form: Form[?], key: String, max: LocalDate, formError: FormError): Unit =
-    s"must fail to bind a date greater than ${max.format(DateTimeFormatter.ISO_LOCAL_DATE)}" in {
+    s"must fail to bind a date greater than \${max.format(DateTimeFormatter.ISO_LOCAL_DATE)}" in {
 
       val generator = datesBetween(max.plusDays(1), max.plusYears(10))
 
       forAll(generator -> "invalid dates") {
         date =>
           val data = Map(
-            s"$key.day"   -> date.getDayOfMonth.toString,
-            s"$key.month" -> date.getMonthValue.toString,
-            s"$key.year"  -> date.getYear.toString
+            s"\$key.day"   -> date.getDayOfMonth.toString,
+            s"\$key.month" -> date.getMonthValue.toString,
+            s"\$key.year"  -> date.getYear.toString
           )
 
           val result = form.bind(data)
@@ -61,16 +61,16 @@ class DateBehaviours extends FieldBehaviours {
     }
 
   def dateFieldWithMin(form: Form[?], key: String, min: LocalDate, formError: FormError): Unit =
-    s"must fail to bind a date earlier than ${min.format(DateTimeFormatter.ISO_LOCAL_DATE)}" in {
+    s"must fail to bind a date earlier than \${min.format(DateTimeFormatter.ISO_LOCAL_DATE)}" in {
 
       val generator = datesBetween(min.minusYears(10), min.minusDays(1))
 
       forAll(generator -> "invalid dates") {
         date =>
           val data = Map(
-            s"$key.day"   -> date.getDayOfMonth.toString,
-            s"$key.month" -> date.getMonthValue.toString,
-            s"$key.year"  -> date.getYear.toString
+            s"\$key.day"   -> date.getDayOfMonth.toString,
+            s"\$key.month" -> date.getMonthValue.toString,
+            s"\$key.year"  -> date.getYear.toString
           )
 
           val result = form.bind(data)

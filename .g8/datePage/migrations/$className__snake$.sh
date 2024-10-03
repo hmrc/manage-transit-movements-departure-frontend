@@ -49,4 +49,23 @@ echo "$package$.$className;format="decap"$.error.required.two = The date for $ti
 echo "$package$.$className;format="decap"$.error.required = The date for $title$ must include {0}" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.error.invalid = Enter a real date for $title$" >> ../conf/messages.en
 
+if grep -q "protected def localDate" ../app/forms/mappings/Mappings.scala; then
+  echo "Function 'localDate' already exists in Mappings. No changes made."
+else
+  awk '/trait Mappings extends Formatters with Constraints \{/{
+      print;
+      print "";
+      print "  import java.time.LocalDate";
+      print "";
+      print "  protected def localDate(";
+      print "    invalidKey: String,";
+      print "    requiredKey: String";
+      print "  ): FieldMapping[LocalDate] =";
+      print "    of(new LocalDateFormatter(invalidKey, requiredKey))";
+      next;
+  }
+  { print }' ../app/forms/mappings/Mappings.scala > tmp && mv tmp ../app/forms/mappings/Mappings.scala
+  echo "Function 'localDate' has been added to Mappings."
+fi
+
 echo "Migration $className;format="snake"$ completed"

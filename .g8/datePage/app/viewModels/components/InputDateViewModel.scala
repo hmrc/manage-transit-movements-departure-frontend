@@ -14,16 +14,24 @@
  * limitations under the License.
  */
 
-package models.domain
+package viewModels.components
 
-import scala.util.matching.Regex
+import play.twirl.api.Html
 
-object StringFieldRegex {
+sealed trait InputDateViewModel
 
-  val alphaNumericRegex: Regex           = "^[a-zA-Z0-9]*$".r
-  val alphaNumericWithSpacesRegex: Regex = "^[a-zA-Z\\s0-9]*$".r
-  val stringFieldRegex: Regex            = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
+object InputDateViewModel {
 
-  val tirCarnetNumberRegex: Regex =
-    "([1-9][0-9]{0,6}|(1[0-9]|2[0-4])[0-9]{0,6}|25000000|(X[A-Z]|[A-Z]X)(2[5-9]|[3-9][0-9]|[1-9][0-9][0-9])[0-9]{6})".r
+  case class OrdinaryDateInput(
+    heading: String,
+    caption: Option[String] = None
+  ) extends InputDateViewModel
+
+  case class DateInputWithAdditionalHtml(
+    heading: String,
+    caption: Option[String] = None,
+    additionalHtml: Html
+  ) extends InputDateViewModel
+      with AdditionalHtmlViewModel
+
 }
