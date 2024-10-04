@@ -45,9 +45,11 @@ echo "$package$.$className;format="decap"$.heading = $title$" >> ../conf/message
 echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $title$" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.hint = For example, 14 1 2020" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.error.required.all = Enter the date for $title$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.error.required.two = The date for $title$" must include {0} and {1} >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.required.multiple = The date for $title$" must include {0} and {1} >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.error.required = The date for $title$ must include {0}" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.error.invalid = Enter a real date for $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.min.date = The date must be after {0}" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.max.date = The date must be before the current date" >> ../conf/messages.en
 
 if grep -q "protected def localDate" ../app/forms/mappings/Mappings.scala; then
   echo "Function 'localDate' already exists in Mappings. No changes made."

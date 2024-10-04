@@ -45,7 +45,7 @@ echo "$package$.$className;format="decap"$.heading = $title$" >> ../conf/message
 echo "$package$.$className;format="decap"$.$option1key;format="decap"$ = $option1msg$" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.$option2key;format="decap"$ = $option2msg$" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $title$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.error.required = Select  $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.required = Select $title$" >> ../conf/messages.en
 
 echo "Adding to ModelGenerators"
 awk '/self: Generators =>/ {\
