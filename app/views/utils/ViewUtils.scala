@@ -35,15 +35,8 @@ object ViewUtils {
     (if (mainContent.body.contains("govuk-error-summary")) s"${messages("error.title.prefix")} " else "") +
       s"$title - ${messages("site.title.prefix")} - ${messages("site.service_name")} - GOV.UK"
 
-  def errorClass(error: Option[FormError], dateArg: String): String =
-    error.fold("") {
-      e =>
-        if (e.args.contains(dateArg) || e.args.isEmpty) {
-          "govuk-input--error"
-        } else {
-          ""
-        }
-    }
+  def errorClass(errors: Seq[FormError], dateArg: String): String =
+    if (errors.flatMap(_.args).contains(dateArg)) "govuk-input--error" else ""
 
   implicit class RadiosImplicits(radios: Radios)(implicit messages: Messages) extends RichRadiosSupport {
 
@@ -92,7 +85,7 @@ object ViewUtils {
 
     private def withErrorMapping[T](form: Form[T], fieldName: String, args: Seq[String]): ErrorSummary = {
       val arg = form.errors.flatMap(_.args).find(args.contains).getOrElse(args.head).toString
-      errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"$fieldName${arg.capitalize}"))
+      errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"${fieldName}_$arg"))
     }
 
     def withDateErrorMapping(form: Form[LocalDate], fieldName: String): ErrorSummary = {

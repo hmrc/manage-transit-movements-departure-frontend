@@ -6,12 +6,29 @@ echo "Applying migration $className;format="snake"$"
 echo "Adding routes to conf/app.$package$.routes"
 
 if [ ! -f ../conf/app.$package$.routes ]; then
-  echo "Write into prod.routes file"
-  awk '/health.Routes/ {\
-    print;\
-    print "";\
-    print "->         /manage-transit-movements/departures                   app.$package$.Routes"
-    next }1' ../conf/prod.routes >> tmp && mv tmp ../conf/prod.routes
+  echo "Write into app.routes file"
+  awk '
+  /# microservice specific routes/ {
+    print;
+    print "";
+    next;
+  }
+  /^\$/ {
+    if (!printed) {
+      printed = 1;
+      print "->         /                                              app.$package$.Routes";
+      next;
+    }
+    print;
+    next;
+  }
+  {
+    if (!printed) {
+      printed = 1;
+      print "->         /                                                 app.$package$.Routes";
+    }
+    print
+  }' ../conf/app.routes > tmp && mv tmp ../conf/app.routes
 fi
 
 echo "" >> ../conf/app.$package$.routes
@@ -28,7 +45,7 @@ echo "$package$.$className;format="decap"$.heading = $title$" >> ../conf/message
 echo "$package$.$className;format="decap"$.$option1key;format="decap"$ = $option1msg$" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.$option2key;format="decap"$ = $option2msg$" >> ../conf/messages.en
 echo "$package$.$className;format="decap"$.checkYourAnswersLabel = $title$" >> ../conf/messages.en
-echo "$package$.$className;format="decap"$.error.required = Select  $title$" >> ../conf/messages.en
+echo "$package$.$className;format="decap"$.error.required = Select $title$" >> ../conf/messages.en
 
 echo "Adding to ModelGenerators"
 awk '/self: Generators =>/ {\

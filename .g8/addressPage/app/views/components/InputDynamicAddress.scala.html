@@ -1,0 +1,65 @@
+@import models.DynamicAddress
+@import models.reference.Country
+@import viewModels.components.InputSelectViewModel._
+@import viewModels.components.InputTextViewModel._
+@import views.html.components.{InputSelect, InputText}
+
+@this(
+    inputText: InputText,
+    inputSelect: InputSelect,
+    govukFieldset: GovukFieldset
+)
+
+@(
+    form: Form[DynamicAddress],
+    messageKeyPrefix: String,
+    caption: Option[String],
+    isPostalCodeRequired: Boolean,
+    headingArgs: Any*
+)(implicit messages: Messages)
+
+@html = {
+    @inputText(
+        field = form("numberAndStreet"),
+        inputTextType = MultiTextInput(
+            label = messages(s"\$messageKeyPrefix.numberAndStreet")
+        ),
+        autocomplete = Some("address-line1"),
+        inputClass = Some("govuk-!-width-two-thirds")
+    )
+
+    @inputText(
+        field = form("city"),
+        inputTextType = MultiTextInput(
+            label = messages(s"\$messageKeyPrefix.city")
+        ),
+        autocomplete = Some("address-line2"),
+        inputClass = Some("govuk-!-width-two-thirds")
+    )
+
+    @inputText(
+        field = form("postalCode"),
+        inputTextType = MultiTextInput(
+            label = if (isPostalCodeRequired) {
+                messages(s"\$messageKeyPrefix.postalCode")
+            } else {
+                messages(s"\$messageKeyPrefix.postalCode.optional")
+            }
+        ),
+        autocomplete = Some("postal-code"),
+        inputClass = InputSize.Width10
+    )
+}
+
+@fieldset = @{
+    Fieldset(
+        html = html
+    )
+}
+
+@govukFieldset(
+    fieldset.withHeadingAndCaption(
+        heading = messages(s"\$messageKeyPrefix.heading", headingArgs: _*),
+        caption = caption
+    )
+)

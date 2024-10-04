@@ -27,7 +27,7 @@ class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("tirCarnetReference.error.required")(_.toUpperCase)
+      "value" -> adaptedText("tirCarnetReference.error.required")(_.toUpperCase)
         .verifying(
           forms.StopOnFirstFail[String](
             maxLength(tirCarnetReferenceMaxLength, "tirCarnetReference.error.length"),

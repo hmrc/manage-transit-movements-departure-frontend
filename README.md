@@ -64,8 +64,10 @@ Return to command line:
 
 This updates the test classes app.routes and messages files
 
+If you deviate from any of the default answers when creating a page via scaffold, your new code and tests may require additional intervention to get achieve passing tests
+
 ### Creating an Address Page in Scaffold
-Then you create the address page referencing the Name Page
+You can create an address page which will anticipate referencing a Name Page and a Country Page (both of which must be answered ahead of the address page)
 <pre>g8Scaffold addressPage
 -> package: foo.bar                       # use same package as created for Address name page above
 -> title[My New Address]: Consignee Address                    

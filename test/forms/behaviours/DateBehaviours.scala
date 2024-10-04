@@ -30,9 +30,9 @@ class DateBehaviours extends FieldBehaviours {
       forAll(validData -> "valid date") {
         date =>
           val data = Map(
-            s"${key}Day"   -> date.getDayOfMonth.toString,
-            s"${key}Month" -> date.getMonthValue.toString,
-            s"${key}Year"  -> date.getYear.toString
+            s"$key.day"   -> date.getDayOfMonth.toString,
+            s"$key.month" -> date.getMonthValue.toString,
+            s"$key.year"  -> date.getYear.toString
           )
 
           val result = form.bind(data)
@@ -49,9 +49,9 @@ class DateBehaviours extends FieldBehaviours {
       forAll(generator -> "invalid dates") {
         date =>
           val data = Map(
-            s"${key}Day"   -> date.getDayOfMonth.toString,
-            s"${key}Month" -> date.getMonthValue.toString,
-            s"${key}Year"  -> date.getYear.toString
+            s"$key.day"   -> date.getDayOfMonth.toString,
+            s"$key.month" -> date.getMonthValue.toString,
+            s"$key.year"  -> date.getYear.toString
           )
 
           val result = form.bind(data)
@@ -68,9 +68,9 @@ class DateBehaviours extends FieldBehaviours {
       forAll(generator -> "invalid dates") {
         date =>
           val data = Map(
-            s"${key}Day"   -> date.getDayOfMonth.toString,
-            s"${key}Month" -> date.getMonthValue.toString,
-            s"${key}Year"  -> date.getYear.toString
+            s"$key.day"   -> date.getDayOfMonth.toString,
+            s"$key.month" -> date.getMonthValue.toString,
+            s"$key.year"  -> date.getYear.toString
           )
 
           val result = form.bind(data)

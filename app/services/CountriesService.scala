@@ -18,7 +18,7 @@ package services
 
 import connectors.ReferenceDataConnector
 import connectors.ReferenceDataConnector.NoReferenceDataFoundException
-import models.reference.CustomsOffice
+import models.reference._
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject

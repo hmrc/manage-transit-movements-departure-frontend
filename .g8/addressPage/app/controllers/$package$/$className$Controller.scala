@@ -4,9 +4,9 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.$formProvider$
 import models.reference.Country
-import models.requests.SpecificDataRequestProvider1
+import models.requests.SpecificDataRequestProvider2
 import models.{DynamicAddress, LocalReferenceNumber, Mode}
-import navigation.UserAnswersNavigator
+import navigation.{$navRoute$NavigatorProvider, UserAnswersNavigator}
 import pages.$package$._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -33,9 +33,9 @@ class $className;format="cap"$Controller @Inject()(
     extends FrontendBaseController
     with I18nSupport {
 
-  private type Request = SpecificDataRequestProvider2[String, Country]#SpecificDataRequest[_]
+  private type Request = SpecificDataRequestProvider2[String, Country]#SpecificDataRequest[?]
 
-  private def name(implicit request: Request): String = request.arg
+  private def name(implicit request: Request): String = request.arg._1
 
   private def country(implicit request: Request): Country = request.arg._2
 
@@ -73,7 +73,7 @@ class $className;format="cap"$Controller @Inject()(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode, name, isPostalCodeRequired))),
                 value => {
                   val navigator: UserAnswersNavigator = navigatorProvider(mode)
-                  $className$Page.writeToUserAnswers(value).updateTask[$navRoute$Domain]().writeToSession(sessionRepository).navigateWith(navigator)
+                  $className$Page.writeToUserAnswers(value).writeToSession(sessionRepository).navigateWith(navigator)
                 }
               )
             }

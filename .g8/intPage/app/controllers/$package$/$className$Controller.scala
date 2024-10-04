@@ -4,7 +4,7 @@ import controllers.actions._
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
 import forms.$formProvider$
 import models.{Mode, LocalReferenceNumber}
-import navigation.UserAnswersNavigator
+import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
 import pages.$package$.$className$Page
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -45,7 +45,7 @@ class $className;format="cap"$Controller @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, lrn, mode))),
         value => {
           val navigator: UserAnswersNavigator = navigatorProvider(mode)
-          $className$Page.writeToUserAnswers(value).updateTask[$navRoute$Domain]().writeToSession(sessionRepository).navigateWith(navigator)
+          $className$Page.writeToUserAnswers(value).writeToSession(sessionRepository).navigateWith(navigator)
         }
     )
   }

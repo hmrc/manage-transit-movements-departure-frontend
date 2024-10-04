@@ -20,7 +20,9 @@ import scala.util.matching.Regex
 
 object StringFieldRegex {
 
-  val alphaNumericRegex: Regex = "^[a-zA-Z0-9]*$".r
+  val alphaNumericRegex: Regex           = "^[a-zA-Z0-9]*$".r
+  val alphaNumericWithSpacesRegex: Regex = "^[a-zA-Z\\s0-9]*$".r
+  val stringFieldRegex: Regex            = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
 
   val tirCarnetNumberRegex: Regex =
     "([1-9][0-9]{0,6}|(1[0-9]|2[0-4])[0-9]{0,6}|25000000|(X[A-Z]|[A-Z]X)(2[5-9]|[3-9][0-9]|[1-9][0-9][0-9])[0-9]{6})".r
