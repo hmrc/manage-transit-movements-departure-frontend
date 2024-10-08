@@ -3,7 +3,7 @@ package controllers.$package$
 import base.{SpecBase, AppWithDefaultMockFixtures}
 import forms.DateFormProvider
 import models.NormalMode
-import navigation.PreTaskListNavigatorProvider
+import navigation.$navRoute$NavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.$package$.$className$Page
