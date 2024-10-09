@@ -4,7 +4,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.EnumerableFormProvider
 import models.NormalMode
 import models.$package$.$className$
-import navigation.PreTaskListNavigatorProvider
+import navigation.$navRoute$NavigatorProvider
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.$package$.$className$Page
