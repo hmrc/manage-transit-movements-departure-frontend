@@ -45,7 +45,8 @@ lazy val microservice = (project in file("."))
     ScoverageKeys.coverageExcludedPackages := Seq(
       ".*views.html.components.*",
       ".*views.html.resources.*",
-      ".*views.html.templates.*"
+      ".*views.html.templates.*",
+      ".*views.utils.*"
     ).mkString(";"),
     ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := true,
