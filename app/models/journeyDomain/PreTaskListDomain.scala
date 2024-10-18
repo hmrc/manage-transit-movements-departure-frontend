@@ -16,13 +16,12 @@
 
 package models.journeyDomain
 
-import config.Constants._
+import config.Constants.*
 import models.ProcedureType.Normal
 import models.reference.{CustomsOffice, DeclarationType, SecurityType}
 import models.{LocalReferenceNumber, ProcedureType, UserAnswers}
-import pages.preTaskList._
+import pages.preTaskList.*
 import pages.sections.{PreTaskListSection, Section}
-import play.api.libs.json.{Json, OFormat}
 
 case class PreTaskListDomain(
   localReferenceNumber: LocalReferenceNumber,
@@ -82,7 +81,5 @@ object PreTaskListDomain {
       tirCarnetReferenceReader,
       SecurityDetailsTypePage.reader
     ).map(PreTaskListDomain.apply).apply(Nil)
-
-  implicit val format: OFormat[PreTaskListDomain] = Json.format[PreTaskListDomain]
 
 }
