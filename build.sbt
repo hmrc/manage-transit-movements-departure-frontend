@@ -42,8 +42,12 @@ lazy val microservice = (project in file("."))
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*repositories.*;" +
       ".*BuildInfo.*;.*javascript.*;.*Routes.*;.*GuiceInjector;" +
       ".*ControllerConfiguration",
-    ScoverageKeys.coverageExcludedPackages := ".*views.html.components.*",
-    ScoverageKeys.coverageMinimumStmtTotal := 75,
+    ScoverageKeys.coverageExcludedPackages := Seq(
+      ".*views.html.components.*",
+      ".*views.html.resources.*",
+      ".*views.html.templates.*"
+    ).mkString(";"),
+    ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting  := true,
     ThisBuild / useSuperShell := false,

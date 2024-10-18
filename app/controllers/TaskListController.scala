@@ -28,7 +28,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.taskList.TaskListViewModel.TaskListViewModelProvider
 import views.html.TaskListView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class TaskListController @Inject() (
   override val messagesApi: MessagesApi,
@@ -48,16 +48,10 @@ class TaskListController @Inject() (
     .andThen(checkPreTaskListCompleted)
     .async {
       implicit request =>
-        request.userAnswers.status match {
-          case SubmissionState.Submitted =>
-            logger.info(s"TaskListController: Departure with LRN $lrn has already been submitted")
-            Future.successful(Redirect(routes.ErrorController.technicalDifficulties()))
-          case _ =>
-            for {
-              expiryInDays <- connector.getExpiryInDays(lrn.value)
-              viewModel = viewModelProvider(request.userAnswers)
-            } yield Ok(view(lrn, viewModel, expiryInDays))
-        }
+        for {
+          expiryInDays <- connector.getExpiryInDays(lrn.value)
+          viewModel = viewModelProvider(request.userAnswers)
+        } yield Ok(view(lrn, viewModel, expiryInDays))
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] = actions

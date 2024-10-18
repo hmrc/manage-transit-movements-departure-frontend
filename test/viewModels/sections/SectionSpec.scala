@@ -14,13 +14,29 @@
  * limitations under the License.
  */
 
-package models
+package viewModels.sections
 
-import play.api.libs.json.{Json, Reads}
+import base.SpecBase
+import generators.Generators
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-case class DepartureMessage(`type`: String)
+class SectionSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-object DepartureMessage {
+  "removeTitle" - {
+    "must remove title" in {
+      forAll(nonEmptyString) {
+        str =>
+          val section = Section(
+            sectionTitle = Some(str),
+            rows = Nil,
+            addAnotherLink = None
+          )
 
-  implicit lazy val reads: Reads[DepartureMessage] = Json.reads[DepartureMessage]
+          val result = section.removeTitle()
+
+          result.sectionTitle.mustBe(None)
+      }
+    }
+  }
+
 }

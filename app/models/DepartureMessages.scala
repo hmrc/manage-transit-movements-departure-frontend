@@ -16,8 +16,8 @@
 
 package models
 
-import play.api.http.Status._
-import play.api.libs.json.{Format, Json}
+import play.api.http.Status.*
+import play.api.libs.json.{Json, Reads}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse, UpstreamErrorResponse}
 
 case class DepartureMessages(messages: Seq[DepartureMessage]) {
@@ -30,7 +30,7 @@ object DepartureMessages {
   def apply(): DepartureMessages =
     new DepartureMessages(Seq.empty[DepartureMessage])
 
-  implicit lazy val format: Format[DepartureMessages] = Json.format[DepartureMessages]
+  implicit lazy val reads: Reads[DepartureMessages] = Json.reads[DepartureMessages]
 
   implicit lazy val httpReads: HttpReads[DepartureMessages] = {
     (_: String, _: String, response: HttpResponse) =>
