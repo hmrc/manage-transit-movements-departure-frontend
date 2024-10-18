@@ -56,7 +56,7 @@ class DepartureMessagesSpec extends SpecBase with ScalaCheckPropertyChecks with 
       }
     }
 
-    "must not deserialise" - {
+    "must fail to deserialise" - {
       "when json is in unexpected shape" in {
         val json = Json.parse("""
             |{

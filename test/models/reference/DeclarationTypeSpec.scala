@@ -17,11 +17,12 @@
 package models.reference
 
 import base.SpecBase
+import generators.Generators
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import play.api.libs.json.Json
+import play.api.libs.json.{JsError, Json}
 
-class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks {
+class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "DeclarationType" - {
 
@@ -38,23 +39,42 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks {
       }
     }
 
-    "must deserialise" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
-        (code, description) =>
-          val declarationType = DeclarationType(code, description)
-          Json
-            .parse(s"""
-              |{
-              |  "code": "$code",
-              |  "description": "$description"
-              |}
-              |""".stripMargin)
-            .as[DeclarationType] mustBe declarationType
+    "must deserialise" - {
+      "when json contains a declaration type" in {
+        forAll(nonEmptyString, nonEmptyString) {
+          (code, description) =>
+            val declarationType = DeclarationType(code, description)
+            Json
+              .parse(s"""
+                   |{
+                   |  "code": "$code",
+                   |  "description": "$description"
+                   |}
+                   |""".stripMargin)
+              .as[DeclarationType] mustBe declarationType
+        }
+      }
+    }
+
+    "must fail to deserialise" - {
+      "when json is in unexpected shape" in {
+        forAll(nonEmptyString, nonEmptyString) {
+          (key, value) =>
+            val json = Json.parse(s"""
+                 |{
+                 |  "$key" : "$value"
+                 |}
+                 |""".stripMargin)
+
+            val result = json.validate[DeclarationType]
+
+            result.mustBe(a[JsError])
+        }
       }
     }
 
     "must format as string" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+      forAll(nonEmptyString, nonEmptyString) {
         (code, description) =>
           val declarationType = DeclarationType(code, description)
           declarationType.toString mustBe s"$code - $description"

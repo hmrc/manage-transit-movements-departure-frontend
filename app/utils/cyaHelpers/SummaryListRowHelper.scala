@@ -35,8 +35,6 @@ private[utils] class SummaryListRowHelper(implicit messages: Messages) {
 
   protected def formatDynamicEnumAsText[T <: Radioable[T]](answer: T): Content = answer.asString.toText
 
-  protected def formatAsPassword(answer: String): Content = ("•" * answer.length).toText
-
   protected def formatEnumAsText[T](messageKeyPrefix: String)(answer: T): Content =
     formatEnumAsString(messageKeyPrefix)(answer).toText
 

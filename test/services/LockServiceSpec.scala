@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.CacheConnector
 import generators.Generators
 import models.LockCheck
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -58,6 +58,21 @@ class LockServiceSpec extends SpecBase with AppWithDefaultMockFixtures with Scal
             val result = service.checkLock(userAnswers)
             result.futureValue mustBe response
             verify(mockConnector).checkLock(eqTo(userAnswers))(any())
+        }
+      }
+    }
+
+    "when deleteLock" - {
+      "must call deleteLock in connector" in {
+        forAll(arbitrary[Boolean]) {
+          response =>
+            beforeEach()
+
+            val userAnswers = emptyUserAnswers
+            when(mockConnector.deleteLock(any())(any())).thenReturn(Future.successful(response))
+            val result = service.deleteLock(userAnswers)
+            result.futureValue mustBe response
+            verify(mockConnector).deleteLock(eqTo(userAnswers))(any())
         }
       }
     }

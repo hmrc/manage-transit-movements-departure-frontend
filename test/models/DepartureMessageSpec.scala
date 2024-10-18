@@ -43,7 +43,7 @@ class DepartureMessageSpec extends SpecBase with ScalaCheckPropertyChecks with G
       }
     }
 
-    "must not deserialise" - {
+    "must fail to deserialise" - {
       "when json is in unexpected shape" in {
         forAll(nonEmptyString, nonEmptyString) {
           (key, value) =>
