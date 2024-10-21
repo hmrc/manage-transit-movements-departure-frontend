@@ -16,7 +16,7 @@
 
 package controllers.preTaskList
 
-import controllers.actions._
+import controllers.actions.*
 import forms.preTaskList.LocalReferenceNumberFormProvider
 import models.{CheckMode, LocalReferenceNumber, NormalMode, SubmissionState}
 import navigation.PreTaskListNavigatorProvider
@@ -67,30 +67,26 @@ class LocalReferenceNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
           lrn =>
-            for {
-              alreadyExists <- duplicateService.doesDraftOrSubmissionExistForLrn(lrn)
-              userAnswers   <- sessionRepository.get(lrn)
-              result <- (alreadyExists, userAnswers) match {
-                case (true, Some(userAnswers)) if userAnswers.status == SubmissionState.NotSubmitted =>
-                  Future.successful(Redirect(navigatorProvider(CheckMode).nextPage(userAnswers, None)))
-                case (true, _) =>
-                  val formWithErrors = form.withError(FormError("value", s"$prefix.error.alreadyExists"))
-                  Future.successful(BadRequest(view(formWithErrors)))
-                case (false, None) =>
-                  sessionRepository
-                    .put(lrn)
-                    .flatMap {
-                      _ => sessionRepository.get(lrn)
-                    }
-                    .map {
-                      case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers, None))
-                      case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
-                    }
-                case _ =>
-                  logger.warn(s"Unexpected result: No draft or submission exists for LRN $lrn but some user answers were found")
-                  Future.successful(Redirect(controllers.routes.ErrorController.technicalDifficulties()))
-              }
-            } yield result
+            duplicateService.doesDraftOrSubmissionExistForLrn(lrn).flatMap {
+              case true =>
+                sessionRepository.get(lrn).map {
+                  case Some(userAnswers) if userAnswers.status == SubmissionState.NotSubmitted =>
+                    Redirect(navigatorProvider(CheckMode).nextPage(userAnswers, None))
+                  case _ =>
+                    val formWithErrors = form.withError(FormError("value", s"$prefix.error.alreadyExists"))
+                    BadRequest(view(formWithErrors))
+                }
+              case false =>
+                sessionRepository
+                  .put(lrn)
+                  .flatMap {
+                    _ => sessionRepository.get(lrn)
+                  }
+                  .map {
+                    case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers, None))
+                    case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
+                  }
+            }
         )
   }
 }

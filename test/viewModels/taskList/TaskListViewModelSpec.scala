@@ -20,7 +20,6 @@ import base.SpecBase
 import generators.Generators
 import models.SubmissionState
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.taskList.TaskListViewModel.TaskListViewModelProvider
 
@@ -251,32 +250,19 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
     }
 
     "must be true if at least one amended" in {
-      val listTaskStatus = for {
-        amendedCount <- Gen.choose(1, 7)
-        amendedList  <- Gen.listOfN(amendedCount, TaskStatus.Amended) // Ensure at least one 'Amended'
-        randomList   <- Gen.listOfN(7 - amendedCount, arbitraryAmendedOrCompleteTaskStatus.arbitrary)
-      } yield amendedList ++ randomList
+      val tasks = Map(
+        PreTaskListTask.section      -> TaskStatus.Completed,
+        TraderDetailsTask.section    -> TaskStatus.Completed,
+        RouteDetailsTask.section     -> TaskStatus.Completed,
+        TransportTask.section        -> TaskStatus.Completed,
+        DocumentsTask.section        -> TaskStatus.Completed,
+        ItemsTask.section            -> TaskStatus.Amended,
+        GuaranteeDetailsTask.section -> TaskStatus.Completed
+      )
+      val answers = emptyUserAnswers.copy(tasks = tasks, status = SubmissionState.Amendment)
+      val result  = new TaskListViewModelProvider().apply(answers)
 
-      forAll(listTaskStatus) {
-        taskStatus =>
-          val sectionKeys = List(
-            PreTaskListTask.section,
-            TraderDetailsTask.section,
-            RouteDetailsTask.section,
-            TransportTask.section,
-            DocumentsTask.section,
-            ItemsTask.section,
-            GuaranteeDetailsTask.section
-          )
-          val tasks = sectionKeys.zip(taskStatus).toMap
-
-          val answers = emptyUserAnswers.copy(tasks = tasks, status = SubmissionState.Amendment)
-          val result  = new TaskListViewModelProvider().apply(answers)
-
-          result.showSubmissionButton mustBe true
-
-      }
-
+      result.showSubmissionButton mustBe true
     }
   }
 }

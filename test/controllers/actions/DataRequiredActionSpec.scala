@@ -223,6 +223,24 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
             }
           }
         }
+
+        "and already submitted" - {
+          "must return Right with DataRequest" in {
+            val submissionStatus = SubmissionState.Submitted
+
+            val userAnswers = UserAnswers(lrn, eoriNumber, status = submissionStatus)
+
+            val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
+
+            val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers)))
+
+            whenReady[Either[Result, DataRequest[?]], Assertion](result) {
+              result =>
+                result.value.userAnswers mustBe userAnswers
+                result.value.eoriNumber mustBe eoriNumber
+            }
+          }
+        }
       }
     }
   }

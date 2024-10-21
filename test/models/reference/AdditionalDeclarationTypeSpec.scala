@@ -18,16 +18,15 @@ package models.reference
 
 import base.SpecBase
 import generators.Generators
-import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import play.api.libs.json.Json
+import play.api.libs.json.{JsError, Json}
 
 class AdditionalDeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "AdditionalDeclarationType" - {
 
     "must serialise" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+      forAll(nonEmptyString, nonEmptyString) {
         (code, description) =>
           val additionalDeclarationType = AdditionalDeclarationType(code, description)
           Json.toJson(additionalDeclarationType) mustBe Json.parse(s"""
@@ -39,23 +38,42 @@ class AdditionalDeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChec
       }
     }
 
-    "must deserialise" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
-        (code, description) =>
-          val additionalDeclarationType = AdditionalDeclarationType(code, description)
-          Json
-            .parse(s"""
+    "must deserialise" - {
+      "when json contains an additional declaration type" in {
+        forAll(nonEmptyString, nonEmptyString) {
+          (code, description) =>
+            val additionalDeclarationType = AdditionalDeclarationType(code, description)
+            Json
+              .parse(s"""
+                   |{
+                   |  "code": "$code",
+                   |  "description": "$description"
+                   |}
+                   |""".stripMargin)
+              .as[AdditionalDeclarationType] mustBe additionalDeclarationType
+        }
+      }
+    }
+
+    "must fail to deserialise" - {
+      "when json is in unexpected shape" in {
+        forAll(nonEmptyString, nonEmptyString) {
+          (key, value) =>
+            val json = Json.parse(s"""
                  |{
-                 |  "code": "$code",
-                 |  "description": "$description"
+                 |  "$key" : "$value"
                  |}
                  |""".stripMargin)
-            .as[AdditionalDeclarationType] mustBe additionalDeclarationType
+
+            val result = json.validate[AdditionalDeclarationType]
+
+            result.mustBe(a[JsError])
+        }
       }
     }
 
     "must format as string" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+      forAll(nonEmptyString, nonEmptyString) {
         (code, description) =>
           val additionalDeclarationType = AdditionalDeclarationType(code, description)
           additionalDeclarationType.toString mustBe s"$code - $description"

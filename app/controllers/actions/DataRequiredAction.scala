@@ -41,7 +41,11 @@ class DataRequiredAction(
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    lazy val failure = Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad(lrn)))
+    lazy val failure = {
+      logger.info(s"TaskListController: Departure with LRN $lrn has already been submitted")
+      Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad(lrn)))
+    }
+
     request.userAnswers match {
       case Some(data) =>
         lazy val success = Right(DataRequest(request.request, request.eoriNumber, data))

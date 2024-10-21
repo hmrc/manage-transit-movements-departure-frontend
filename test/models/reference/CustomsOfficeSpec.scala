@@ -18,20 +18,20 @@ package models.reference
 
 import base.SpecBase
 import cats.data.NonEmptySet
+import generators.Generators
 import models.SelectableList
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, Json}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 
-class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
+class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "CustomsOffice" - {
 
     "must serialise" - {
       "when phone number defined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
+        forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
           (id, name, phoneNumber, countryId) =>
             val customsOffice = CustomsOffice(id, name, Some(phoneNumber), countryId)
             Json.toJson(customsOffice) mustBe Json.parse(s"""
@@ -46,7 +46,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
       }
 
       "when phone number undefined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
+        forAll(nonEmptyString, nonEmptyString, nonEmptyString) {
           (id, name, countryId) =>
             val customsOffice = CustomsOffice(id, name, None, countryId)
             Json.toJson(customsOffice) mustBe Json.parse(s"""
@@ -62,7 +62,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
 
     "must deserialise" - {
       "when phone number defined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
+        forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
           (id, name, phoneNumber, countryId) =>
             val customsOffice = CustomsOffice(id, name, Some(phoneNumber), countryId)
             Json
@@ -79,7 +79,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
       }
 
       "when phone number undefined" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
+        forAll(nonEmptyString, nonEmptyString, nonEmptyString) {
           (id, name, countryId) =>
             val customsOffice = CustomsOffice(id, name, None, countryId)
             Json
@@ -95,8 +95,25 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
       }
     }
 
+    "must fail to deserialise" - {
+      "when json is in unexpected shape" in {
+        forAll(nonEmptyString, nonEmptyString) {
+          (key, value) =>
+            val json = Json.parse(s"""
+                 |{
+                 |  "$key" : "$value"
+                 |}
+                 |""".stripMargin)
+
+            val result = json.validate[CustomsOffice]
+
+            result.mustBe(a[JsError])
+        }
+      }
+    }
+
     "must convert to select item" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr, arbitrary[Boolean]) {
+      forAll(nonEmptyString, nonEmptyString, nonEmptyString, arbitrary[Boolean]) {
         (id, name, countryId, selected) =>
           val customsOffice = CustomsOffice(id, name, None, countryId)
           customsOffice.toSelectItem(selected) mustBe SelectItem(Some(id), s"$name ($id)", selected)
@@ -104,7 +121,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks {
     }
 
     "must format as string" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.alphaNumStr) {
+      forAll(nonEmptyString, nonEmptyString, nonEmptyString) {
         (id, name, countryId) =>
           val customsOffice = CustomsOffice(id, name, None, countryId)
           customsOffice.toString mustBe s"$name ($id)"

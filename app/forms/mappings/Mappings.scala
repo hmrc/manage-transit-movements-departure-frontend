@@ -28,17 +28,6 @@ trait Mappings extends Formatters with Constraints {
   protected def adaptedText(errorKey: String = "error.required", args: Seq[Any] = Seq.empty)(f: String => String): FieldMapping[String] =
     of(stringFormatter(errorKey, args)(f))
 
-  protected def formattedPostcode(errorKey: String = "error.required", args: Seq[Any] = Seq.empty): FieldMapping[String] =
-    of(postcodeFormatter(errorKey, args))
-
-  protected def int(
-    requiredKey: String = "error.required",
-    wholeNumberKey: String = "error.wholeNumber",
-    nonNumericKey: String = "error.nonNumeric",
-    args: Seq[String] = Seq.empty[String]
-  ): FieldMapping[Int] =
-    of(intFormatter(requiredKey, wholeNumberKey, nonNumericKey, args))
-
   protected def boolean(requiredKey: String = "error.required", invalidKey: String = "error.boolean", args: Seq[Any] = Seq.empty): FieldMapping[Boolean] =
     of(booleanFormatter(requiredKey, invalidKey, args))
 

@@ -17,16 +17,16 @@
 package models.reference
 
 import base.SpecBase
-import org.scalacheck.Gen
+import generators.Generators
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import play.api.libs.json.Json
+import play.api.libs.json.{JsError, Json}
 
-class SecurityTypeSpec extends SpecBase with ScalaCheckPropertyChecks {
+class SecurityTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "SecurityType" - {
 
     "must serialise" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+      forAll(nonEmptyString, nonEmptyString) {
         (code, description) =>
           val securityType = SecurityType(code, description)
           Json.toJson(securityType) mustBe Json.parse(s"""
@@ -38,24 +38,43 @@ class SecurityTypeSpec extends SpecBase with ScalaCheckPropertyChecks {
       }
     }
 
-    "must deserialise" in {
-      forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
-        (code, description) =>
-          val securityType = SecurityType(code, description)
-          Json
-            .parse(s"""
-              |{
-              |  "code": "$code",
-              |  "description": "$description"
-              |}
-              |""".stripMargin)
-            .as[SecurityType] mustBe securityType
+    "must deserialise" - {
+      "when json contains a security type" in {
+        forAll(nonEmptyString, nonEmptyString) {
+          (code, description) =>
+            val securityType = SecurityType(code, description)
+            Json
+              .parse(s"""
+                   |{
+                   |  "code": "$code",
+                   |  "description": "$description"
+                   |}
+                   |""".stripMargin)
+              .as[SecurityType] mustBe securityType
+        }
+      }
+    }
+
+    "must fail to deserialise" - {
+      "when json is in unexpected shape" in {
+        forAll(nonEmptyString, nonEmptyString) {
+          (key, value) =>
+            val json = Json.parse(s"""
+                 |{
+                 |  "$key" : "$value"
+                 |}
+                 |""".stripMargin)
+
+            val result = json.validate[SecurityType]
+
+            result.mustBe(a[JsError])
+        }
       }
     }
 
     "must format as string" - {
       "when description doesn't contain raw HTML" in {
-        forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+        forAll(nonEmptyString, nonEmptyString) {
           (code, description) =>
             val securityType = SecurityType(code, description)
             securityType.toString mustBe description

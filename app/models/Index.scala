@@ -25,7 +25,7 @@ case class Index(position: Int) {
 
 object Index {
 
-  implicit def indexPathBindable(implicit intBinder: PathBindable[Int]): PathBindable[Index] = new PathBindable[Index] {
+  implicit def pathBindable(implicit intBinder: PathBindable[Int]): PathBindable[Index] = new PathBindable[Index] {
 
     override def bind(key: String, value: String): Either[String, Index] =
       intBinder.bind(key, value) match {
