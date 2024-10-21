@@ -17,15 +17,19 @@
 package models
 
 import base.SpecBase
+import generators.Generators
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class IndexSpec extends SpecBase {
+class IndexSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  "Index display must return correct Int" in {
-    Index(0).display mustEqual 1
+  "display" - {
+    "must return correct Int" in {
+      Index(0).display mustEqual 1
+    }
   }
 
-  "indexPathBindable" - {
-    val binder = Index.indexPathBindable
+  "pathBindable" - {
+    val binder = Index.pathBindable
     val key    = "index"
 
     "bind a valid index" in {
@@ -38,6 +42,28 @@ class IndexSpec extends SpecBase {
 
     "unbind an index" in {
       binder.unbind(key, Index(0)) mustEqual "1"
+    }
+  }
+
+  "isFirst" - {
+    "must return true" - {
+      "when position is 0" in {
+        val position = 0
+        val index    = Index(position)
+        val result   = index.isFirst
+        result.mustBe(true)
+      }
+    }
+
+    "must return false" - {
+      "when position is not 0" in {
+        forAll(positiveInts) {
+          position =>
+            val index  = Index(position)
+            val result = index.isFirst
+            result.mustBe(false)
+        }
+      }
     }
   }
 }

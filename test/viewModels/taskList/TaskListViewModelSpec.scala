@@ -20,7 +20,6 @@ import base.SpecBase
 import generators.Generators
 import models.SubmissionState
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.taskList.TaskListViewModel.TaskListViewModelProvider
 
