@@ -137,6 +137,8 @@ else
       print;
       print "";
       print "  implicit class DateTimeRichFormErrors(formErrors: Seq[FormError])(implicit messages: Messages) {";
+      print "   import forms.mappings.LocalDateFormatter";
+      print "   import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorLink";
       print "";
       print "    def toErrorLinks: Seq[ErrorLink] =";
       print "      formErrors.map {";
