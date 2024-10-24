@@ -19,11 +19,10 @@ package views.utils
 import play.api.data.{Field, Form, FormError}
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import uk.gov.hmrc.govukfrontend.views.Aliases._
-import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-import uk.gov.hmrc.govukfrontend.views.implicits._
+import uk.gov.hmrc.govukfrontend.views.Aliases.*
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+import uk.gov.hmrc.govukfrontend.views.implicits.*
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
-import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorLink
 import uk.gov.hmrc.govukfrontend.views.viewmodels.input.Input
 import uk.gov.hmrc.hmrcfrontend.views.implicits.{RichDateInputSupport, RichErrorSummarySupport}
 
@@ -85,7 +84,7 @@ object ViewUtils {
 
     private def withErrorMapping[T](form: Form[T], fieldName: String, args: Seq[String]): ErrorSummary = {
       val arg = form.errors.flatMap(_.args).find(args.contains).getOrElse(args.head).toString
-      errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"${fieldName}_$arg"))
+      errorSummary.withFormErrorsAsText(form, mapping = Map(fieldName -> s"$fieldName.$arg"))
     }
 
     def withDateErrorMapping(form: Form[LocalDate], fieldName: String): ErrorSummary = {
@@ -123,22 +122,6 @@ object ViewUtils {
 
     def withVisuallyHiddenLegend(legend: String): DateInput =
       dateInput.copy(fieldset = Some(Fieldset(legend = Some(Legend(content = Text(legend), isPageHeading = false, classes = "govuk-visually-hidden")))))
-  }
-
-  implicit class DateTimeRichFormErrors(formErrors: Seq[FormError])(implicit messages: Messages) {
-
-    def toErrorLinks: Seq[ErrorLink] =
-      formErrors.map {
-        formError =>
-          val args = formError.key match {
-            case "date" => Seq("day", "month", "year")
-            case "time" => Seq("hour", "minute")
-            case _      => Seq("")
-          }
-          val arg = formError.args.find(args.contains).getOrElse(args.head).toString
-          val key = s"#${formError.key}${arg.capitalize}"
-          ErrorLink(href = Some(key), content = messages(formError.message, formError.args*).toText)
-      }
   }
 
   implicit class StringImplicits(string: String) {

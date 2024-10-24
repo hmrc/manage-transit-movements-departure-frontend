@@ -28,12 +28,6 @@ address.numberAndStreet = number and street name
 address.city = town or city
 address.streetNumber = street number
 
-date.day.capitalized = Day
-date.month.capitalized = Month
-date.year.capitalized = Year
-date.hour.capitalized = Hour
-date.minute.capitalized = Minute
-
 pageNotFound.title = Page not found
 pageNotFound.heading = Page not found
 pageNotFound.paragraph1 = If you typed the web address, check it is correct.
