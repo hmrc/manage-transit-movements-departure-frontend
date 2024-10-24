@@ -50,7 +50,7 @@
             timeout = Some(renderConfig.timeoutSeconds),
             countdown = Some(renderConfig.countdownSeconds),
             keepAliveUrl = Some(routes.KeepAliveController.keepAlive(lrn).url),
-            signOutUrl = Some(renderConfig.signOutAndUnlockUrl(lrn))
+            signOutUrl = Some(routes.SessionExpiredController.onPageLoad(lrn).url)
         ))
     }
 
