@@ -31,7 +31,7 @@ POST       /:lrn/declaration-summary                      controllers.TaskListCo
 GET        /departure-declaration-sent/:lrn               controllers.DeclarationSubmittedController.departureDeclarationSubmitted(lrn: LocalReferenceNumber)
 GET        /departure-amendment-sent/:lrn                 controllers.DeclarationSubmittedController.departureAmendmentSubmitted(lrn: LocalReferenceNumber)
 
-GET        /:lrn/delete-lock                              controllers.DeleteLockController.delete(lrn: LocalReferenceNumber)
+GET        /:lrn/delete-lock                              controllers.DeleteLockController.delete(lrn: LocalReferenceNumber, continue: Option[RedirectUrl])
 
 GET        /cannot-open                                   controllers.LockedController.onPageLoad()
 

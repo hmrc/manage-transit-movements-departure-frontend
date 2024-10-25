@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import models.LocalReferenceNumber
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.SessionExpiredView
 
@@ -39,6 +40,10 @@ class SessionExpiredController @Inject() (
 
   def onSubmit(lrn: Option[LocalReferenceNumber]): Action[AnyContent] = Action {
     _ =>
-      Redirect(s"${config.manageTransitMovementsUrl}/what-do-you-want-to-do").withNewSession
+      val url = s"${config.manageTransitMovementsUrl}/what-do-you-want-to-do"
+
+      lrn match
+        case Some(value) => Redirect(controllers.routes.DeleteLockController.delete(value, Some(RedirectUrl(url)))).withNewSession
+        case None        => Redirect(url).withNewSession
   }
 }
