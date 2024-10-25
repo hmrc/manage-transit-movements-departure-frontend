@@ -138,7 +138,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(Some(lrn)).url
     }
 
     "must redirect to Technical Difficulties for a POST if no existing data is found" in {
@@ -151,7 +151,7 @@ class DeclarationTypeControllerSpec extends SpecBase with AppWithDefaultMockFixt
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(Some(lrn)).url
     }
   }
 }

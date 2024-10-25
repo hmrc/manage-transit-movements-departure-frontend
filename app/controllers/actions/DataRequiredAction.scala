@@ -43,7 +43,7 @@ class DataRequiredAction(
 
     lazy val failure = {
       logger.info(s"TaskListController: Departure with LRN $lrn has already been submitted")
-      Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad(lrn)))
+      Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad(Some(lrn))))
     }
 
     request.userAnswers match {

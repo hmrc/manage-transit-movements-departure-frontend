@@ -144,7 +144,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
       val request = FakeRequest(GET, additionalDeclarationTypeRoute)
       val result  = route(app, request).value
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(Some(lrn)).url
 
     }
 
@@ -159,7 +159,7 @@ class AdditionalDeclarationTypeControllerSpec extends SpecBase with AppWithDefau
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(Some(lrn)).url
     }
   }
 

@@ -23,7 +23,7 @@
     button: Button
 )
 
-@(lrn: LocalReferenceNumber)(implicit request: Request[_], messages: Messages)
+@(lrn: Option[LocalReferenceNumber])(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("session_expired.title"),
