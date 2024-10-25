@@ -35,7 +35,7 @@ class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderCo
   override val showUserResearchBanner: Boolean = configuration.get[Boolean]("banners.showUserResearch")
   override val userResearchUrl: String         = configuration.get[String]("urls.userResearch")
 
-  override def signOutAndUnlockUrl(lrn: Option[LocalReferenceNumber]): String = lrn.map(routes.DeleteLockController.delete(_).url).getOrElse(signOutUrl)
+  override def signOutAndUnlockUrl(lrn: Option[LocalReferenceNumber]): String = lrn.map(routes.DeleteLockController.delete(_, None).url).getOrElse(signOutUrl)
 
   override val isTraderTest: Boolean = configuration.get[Boolean]("trader-test.enabled")
   override val feedbackEmail: String = configuration.get[String]("trader-test.feedback.email")

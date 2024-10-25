@@ -16,14 +16,16 @@
 
 package controllers
 
-import config.RenderConfig
+import config.{FrontendAppConfig, RenderConfig}
 import controllers.actions.Actions
 import models.LocalReferenceNumber
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.LockService
+import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl.idFunctor
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -32,21 +34,26 @@ class DeleteLockController @Inject() (
   actions: Actions,
   cc: MessagesControllerComponents,
   lockService: LockService,
-  renderConfig: RenderConfig
+  renderConfig: RenderConfig,
+  appConfig: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendController(cc)
     with I18nSupport
     with Logging {
 
-  def delete(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn).async {
+  def delete(lrn: LocalReferenceNumber, continue: Option[RedirectUrl]): Action[AnyContent] = actions.requireData(lrn).async {
     implicit request =>
+      val redirectUrlPolicy = AbsoluteWithHostnameFromAllowlist(appConfig.allowedRedirectUrls*) | OnlyRelative
+
+      val url = continue.map(_.get(redirectUrlPolicy).url).getOrElse(renderConfig.signOutUrl)
+
       lockService.deleteLock(request.userAnswers).map {
         _ =>
-          Redirect(renderConfig.signOutUrl)
+          Redirect(url)
       } recover {
         case exception =>
           logger.info("Failed to unlock session", exception)
-          Redirect(renderConfig.signOutUrl)
+          Redirect(url)
       }
   }
 }

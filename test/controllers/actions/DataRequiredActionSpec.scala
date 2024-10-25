@@ -68,7 +68,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
           val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, None)).map(_.left.value)
 
           status(result) mustBe 303
-          redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(lrn).url
+          redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
         }
       }
 
@@ -86,7 +86,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
             val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers))).map(_.left.value)
 
             status(result) mustBe 303
-            redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(lrn).url
+            redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
           }
         }
 
@@ -131,7 +131,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
           val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, None)).map(_.left.value)
 
           status(result) mustBe 303
-          redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(lrn).url
+          redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
         }
       }
 
@@ -165,7 +165,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
                   val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers))).map(_.left.value)
 
                   status(result) mustBe 303
-                  redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(lrn).url
+                  redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
               }
             }
           }

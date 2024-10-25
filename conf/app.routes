@@ -9,8 +9,10 @@ GET        /                                              controllers.RedirectCo
 ->         /hmrc-frontend                                 hmrcfrontend.Routes
 GET        /assets/*file                                  controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /this-service-has-been-reset/:lrn                   controllers.SessionExpiredController.onPageLoad(lrn: LocalReferenceNumber)
-POST       /this-service-has-been-reset/:lrn                   controllers.SessionExpiredController.onSubmit(lrn: LocalReferenceNumber)
+GET        /this-service-has-been-reset                   controllers.SessionExpiredController.onPageLoad(lrn: Option[LocalReferenceNumber] = None)
+GET        /this-service-has-been-reset/:lrn              controllers.SessionExpiredController.onPageLoad(lrn: Option[LocalReferenceNumber])
+POST       /this-service-has-been-reset                   controllers.SessionExpiredController.onSubmit(lrn: Option[LocalReferenceNumber] = None)
+POST       /this-service-has-been-reset/:lrn              controllers.SessionExpiredController.onSubmit(lrn: Option[LocalReferenceNumber])
 
 GET        /bad-request                                   controllers.ErrorController.badRequest()
 GET        /not-found                                     controllers.ErrorController.notFound()
@@ -29,7 +31,7 @@ POST       /:lrn/declaration-summary                      controllers.TaskListCo
 GET        /departure-declaration-sent/:lrn               controllers.DeclarationSubmittedController.departureDeclarationSubmitted(lrn: LocalReferenceNumber)
 GET        /departure-amendment-sent/:lrn                 controllers.DeclarationSubmittedController.departureAmendmentSubmitted(lrn: LocalReferenceNumber)
 
-GET        /:lrn/delete-lock                              controllers.DeleteLockController.delete(lrn: LocalReferenceNumber)
+GET        /:lrn/delete-lock                              controllers.DeleteLockController.delete(lrn: LocalReferenceNumber, continue: Option[RedirectUrl])
 
 GET        /cannot-open                                   controllers.LockedController.onPageLoad()
 

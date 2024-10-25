@@ -122,7 +122,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(Some(lrn)).url
       }
     }
 
@@ -198,7 +198,7 @@ class DeclarationSubmittedControllerSpec extends SpecBase with AppWithDefaultMoc
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(lrn).url
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad(Some(lrn)).url
       }
     }
   }
