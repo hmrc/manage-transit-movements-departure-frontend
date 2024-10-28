@@ -18,68 +18,31 @@ package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.*
-import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
-import views.html.SessionExpiredView
+import play.api.test.Helpers._
 
 class SessionExpiredControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   "Session Expired Controller" - {
 
-    "must return OK and the correct view for a GET" - {
+    "must return OK and the correct view for a GET" in {
 
-      "when LRN is defined" in {
-        val request = FakeRequest(GET, routes.SessionExpiredController.onPageLoad(Some(lrn)).url)
+      val request = FakeRequest(GET, routes.SessionExpiredController.onPageLoad(lrn).url)
 
-        val result = route(app, request).value
+      val result = route(app, request).value
 
-        val view = injector.instanceOf[SessionExpiredView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(Some(lrn))(request, messages).toString
-      }
-
-      "when LRN is undefined" in {
-        val request = FakeRequest(GET, routes.SessionExpiredController.onPageLoad(None).url)
-
-        val result = route(app, request).value
-
-        val view = injector.instanceOf[SessionExpiredView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(None)(request, messages).toString
-      }
+      status(result) mustEqual OK
     }
 
-    "must redirect to a new page for a POST" - {
+    "must redirect to a new page for a POST" in {
+      val request =
+        FakeRequest(POST, routes.SessionExpiredController.onSubmit(lrn).url)
+          .withFormUrlEncodedBody()
 
-      "when LRN is defined" in {
-        val request =
-          FakeRequest(POST, routes.SessionExpiredController.onSubmit(Some(lrn)).url)
+      val result = route(app, request).value
 
-        val result = route(app, request).value
+      status(result) mustEqual SEE_OTHER
 
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          controllers.routes.DeleteLockController.delete(lrn, Some(RedirectUrl("http://localhost:9485/manage-transit-movements/what-do-you-want-to-do"))).url
-      }
-
-      "when LRN is undefined" in {
-        val request =
-          FakeRequest(POST, routes.SessionExpiredController.onSubmit(None).url)
-
-        val result = route(app, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual "http://localhost:9485/manage-transit-movements/what-do-you-want-to-do"
-      }
-
+      redirectLocation(result).value mustEqual "http://localhost:9485/manage-transit-movements/what-do-you-want-to-do"
     }
   }
 }

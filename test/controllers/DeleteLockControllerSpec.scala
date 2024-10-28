@@ -19,10 +19,8 @@ package controllers
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
-import org.scalatest.Assertion
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{route, status, GET, *}
-import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
+import play.api.test.Helpers.{route, status, GET, _}
 
 import scala.concurrent.Future
 
@@ -34,115 +32,46 @@ class DeleteLockControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
   }
 
   "DeleteLockController" - {
-    "must redirect to logout url when lock successfully deleted" - {
+    "must redirect to logout url when lock successfully deleted" in {
 
-      "when continue URL is defined" - {
-        "and URL is acceptable against Redirect policy" in {
-          setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
-          when(mockLockService.deleteLock(any())(any())).thenReturn(Future.successful(true))
+      when(mockLockService.deleteLock(any())(any())).thenReturn(Future.successful(true))
 
-          val url = "http://localhost:9485/manage-transit-movements/what-do-you-want-to-do"
+      val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn).url)).value
 
-          val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn, Some(RedirectUrl(url))).url)).value
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result).value mustBe renderConfig.signOutUrl
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe url
-
-          verify(mockLockService, times(1)).deleteLock(any())(any())
-        }
-
-        "and URL is unacceptable against Redirect policy" in {
-          setExistingUserAnswers(emptyUserAnswers)
-
-          when(mockLockService.deleteLock(any())(any())).thenReturn(Future.successful(true))
-
-          val url = "https://www.google.com/"
-
-          val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn, Some(RedirectUrl(url))).url)).value
-
-          whenReady[Throwable, Assertion](result.failed) {
-            _ mustBe a[IllegalArgumentException]
-          }
-
-          verify(mockLockService, times(0)).deleteLock(any())(any())
-        }
-      }
-
-      "when continue URL is undefined" in {
-        setExistingUserAnswers(emptyUserAnswers)
-
-        when(mockLockService.deleteLock(any())(any())).thenReturn(Future.successful(true))
-
-        val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn, None).url)).value
-
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe renderConfig.signOutUrl
-
-        verify(mockLockService, times(1)).deleteLock(any())(any())
-      }
+      verify(mockLockService, times(1)).deleteLock(any())(any())
     }
 
-    "must redirect to logout url when lock is not deleted" - {
+    "must redirect to logout url when lock is not deleted" in {
 
-      "when continue URL is defined" in {
-        setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
-        when(mockLockService.deleteLock(any())(any())).thenReturn(Future.successful(false))
+      when(mockLockService.deleteLock(any())(any())).thenReturn(Future.successful(false))
 
-        val url = "http://localhost:9485/manage-transit-movements/what-do-you-want-to-do"
+      val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn).url)).value
 
-        val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn, Some(RedirectUrl(url))).url)).value
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result).value mustBe renderConfig.signOutUrl
 
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe url
-
-        verify(mockLockService, times(1)).deleteLock(any())(any())
-      }
-
-      "when continue URL is undefined" in {
-        setExistingUserAnswers(emptyUserAnswers)
-
-        when(mockLockService.deleteLock(any())(any())).thenReturn(Future.successful(false))
-
-        val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn, None).url)).value
-
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe renderConfig.signOutUrl
-
-        verify(mockLockService, times(1)).deleteLock(any())(any())
-      }
+      verify(mockLockService, times(1)).deleteLock(any())(any())
     }
 
-    "must redirect to logout url when delete lock fails" - {
+    "must redirect to logout url when delete lock fails" in {
 
-      "when continue URL is defined" in {
-        setExistingUserAnswers(emptyUserAnswers)
+      setExistingUserAnswers(emptyUserAnswers)
 
-        when(mockLockService.deleteLock(any())(any())).thenReturn(Future.failed(new Exception))
+      when(mockLockService.deleteLock(any())(any())).thenReturn(Future.failed(new Exception))
 
-        val url = "http://localhost:9485/manage-transit-movements/what-do-you-want-to-do"
+      val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn).url)).value
 
-        val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn, Some(RedirectUrl(url))).url)).value
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result).value mustBe renderConfig.signOutUrl
 
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe url
-
-        verify(mockLockService, times(1)).deleteLock(any())(any())
-      }
-
-      "when continue URL is undefined" in {
-        setExistingUserAnswers(emptyUserAnswers)
-
-        when(mockLockService.deleteLock(any())(any())).thenReturn(Future.failed(new Exception))
-
-        val result = route(app, FakeRequest(GET, routes.DeleteLockController.delete(lrn, None).url)).value
-
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe renderConfig.signOutUrl
-
-        verify(mockLockService, times(1)).deleteLock(any())(any())
-      }
+      verify(mockLockService, times(1)).deleteLock(any())(any())
     }
   }
 }
