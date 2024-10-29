@@ -102,7 +102,7 @@ else
       print "";
       print "    new Formatter[Int] {";
       print "";
-      print "      val decimalRegexp = \"\"\"^-?(\\\\d*\\\\.\\\\d*)\\\$\"\"\"";
+      print "      val decimalRegexp = \"\"\"^-?(\\\\d*\\\\.\\\\d*)\$\"\"\"";
       print "";
       print "      private val baseFormatter = stringFormatter(requiredKey, args)(_.replace(\",\", \"\").removeSpaces())";
       print "";
