@@ -16,8 +16,8 @@
 
 package models
 
-import pages._
-import play.api.libs.json._
+import pages.*
+import play.api.libs.json.*
 import queries.Gettable
 import viewModels.taskList.TaskStatus
 
@@ -29,7 +29,8 @@ final case class UserAnswers(
   data: JsObject = Json.obj(),
   tasks: Map[String, TaskStatus] = Map(),
   status: SubmissionState.Value,
-  departureId: Option[String] = None
+  departureId: Option[String] = None,
+  isTransitional: Boolean = false
 ) {
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
@@ -68,7 +69,7 @@ final case class UserAnswers(
 
 object UserAnswers {
 
-  import play.api.libs.functional.syntax._
+  import play.api.libs.functional.syntax.*
 
   implicit lazy val reads: Reads[UserAnswers] =
     (
@@ -77,7 +78,8 @@ object UserAnswers {
         (__ \ "data").read[JsObject] and
         (__ \ "tasks").read[Map[String, TaskStatus]] and
         (__ \ "isSubmitted").read[SubmissionState.Value] and
-        (__ \ "departureId").readNullable[String]
+        (__ \ "departureId").readNullable[String] and
+        (__ \ "isTransitional").read[Boolean]
     )(UserAnswers.apply)
 
   implicit lazy val writes: Writes[UserAnswers] =
@@ -87,7 +89,8 @@ object UserAnswers {
         (__ \ "data").write[JsObject] and
         (__ \ "tasks").write[Map[String, TaskStatus]] and
         (__ \ "isSubmitted").write[SubmissionState.Value] and
-        (__ \ "departureId").writeNullable[String]
+        (__ \ "departureId").writeNullable[String] and
+        (__ \ "isTransitional").write[Boolean]
     )(
       ua => Tuple.fromProductTyped(ua)
     )

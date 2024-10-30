@@ -3,6 +3,7 @@
 ->         /                                              app.preTaskList.Routes
 
 GET        /drafts/:lrn                                   controllers.DraftController.draftRedirect(lrn: models.LocalReferenceNumber)
+GET        /draft-declarations/not-available              controllers.DraftNoLongerAvailableController.onPageLoad()
 
 GET        /                                              controllers.RedirectController.onPageLoad()
 

@@ -53,7 +53,7 @@ trait SpecBase
 
   def fakeRequest: FakeRequest[AnyContent] = FakeRequest("", "")
 
-  val emptyUserAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj(), status = SubmissionState.NotSubmitted)
+  val emptyUserAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj(), status = SubmissionState.NotSubmitted, isTransitional = true)
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
