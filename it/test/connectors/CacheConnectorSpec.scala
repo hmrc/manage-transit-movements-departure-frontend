@@ -350,6 +350,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return expiry in days when status is Ok" in {
         server.stubFor(
           get(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(okJson(JsNumber(30).toString()))
         )
 

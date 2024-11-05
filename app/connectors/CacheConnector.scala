@@ -124,6 +124,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/user-answers/$lrn/expiry"
     http
       .get(url)
+      .setHeader(headers*)
       .execute[Long]
   }
 
