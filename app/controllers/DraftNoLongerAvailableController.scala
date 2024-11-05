@@ -32,7 +32,7 @@ class DraftNoLongerAvailableController @Inject() (
 
   def onPageLoad(): Action[AnyContent] = Action {
     implicit request =>
-      NotAcceptable(view())
+      Ok(view())
   }
 
 }

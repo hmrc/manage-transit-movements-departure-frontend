@@ -17,15 +17,15 @@
 package connectors
 
 import config.{FrontendAppConfig, PhaseConfig}
-import models.LockCheck._
-import models.{DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers}
+import models.LockCheck.*
+import models.{DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers, UserAnswersResponse}
 import play.api.Logging
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
-import play.api.libs.ws.JsonBodyWritables._
+import play.api.libs.ws.JsonBodyWritables.*
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,14 +43,14 @@ class CacheConnector @Inject() (
     "APIVersion" -> phaseConfig.values.apiVersion.toString
   )
 
-  def get(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
+  def get(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[UserAnswersResponse] = {
     val url = url"$baseUrl/user-answers/$lrn"
     http
       .get(url)
-      .execute[UserAnswers]
-      .map(Some(_))
+      .setHeader(headers*)
+      .execute[UserAnswersResponse]
       .recover {
-        case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND => None
+        case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND => UserAnswersResponse.NoAnswers
       }
   }
 

@@ -31,7 +31,7 @@ class DraftNoLongerAvailableControllerSpec extends SpecBase with AppWithDefaultM
 
   "DraftNoLongerAvailableController" - {
 
-    "must return NOT_ACCEPTABLE and the correct view for a GET" in {
+    "must return Ok and the correct view for a GET" in {
 
       val request = FakeRequest(GET, controllers.routes.DraftNoLongerAvailableController.onPageLoad().url)
 
@@ -39,7 +39,7 @@ class DraftNoLongerAvailableControllerSpec extends SpecBase with AppWithDefaultM
 
       val view = injector.instanceOf[DraftNoLongerAvailableView]
 
-      status(result) mustEqual NOT_ACCEPTABLE
+      status(result) mustEqual OK
 
       contentAsString(result) mustEqual
         view()(request, messages).toString

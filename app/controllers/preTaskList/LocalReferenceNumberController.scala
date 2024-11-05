@@ -18,7 +18,7 @@ package controllers.preTaskList
 
 import controllers.actions.*
 import forms.preTaskList.LocalReferenceNumberFormProvider
-import models.{CheckMode, LocalReferenceNumber, NormalMode, SubmissionState}
+import models.{CheckMode, LocalReferenceNumber, NormalMode, SubmissionState, UserAnswers, UserAnswersResponse}
 import navigation.PreTaskListNavigatorProvider
 import play.api.Logging
 import play.api.data.{Form, FormError}
@@ -70,7 +70,7 @@ class LocalReferenceNumberController @Inject() (
             duplicateService.doesDraftOrSubmissionExistForLrn(lrn).flatMap {
               case true =>
                 sessionRepository.get(lrn).map {
-                  case Some(userAnswers) if userAnswers.status == SubmissionState.NotSubmitted =>
+                  case userAnswers: UserAnswers if userAnswers.status == SubmissionState.NotSubmitted =>
                     Redirect(navigatorProvider(CheckMode).nextPage(userAnswers, None))
                   case _ =>
                     val formWithErrors = form.withError(FormError("value", s"$prefix.error.alreadyExists"))
@@ -83,8 +83,9 @@ class LocalReferenceNumberController @Inject() (
                     _ => sessionRepository.get(lrn)
                   }
                   .map {
-                    case Some(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers, None))
-                    case None              => Redirect(controllers.routes.ErrorController.technicalDifficulties())
+                    case userAnswers: UserAnswers          => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers, None))
+                    case UserAnswersResponse.NotAcceptable => Redirect(controllers.routes.DraftNoLongerAvailableController.onPageLoad())
+                    case _                                 => Redirect(controllers.routes.ErrorController.technicalDifficulties())
                   }
             }
         )

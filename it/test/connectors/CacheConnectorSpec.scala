@@ -16,14 +16,14 @@
 
 package connectors
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import helpers.{ItSpecBase, WireMockServerHandler}
-import models.{DepartureMessage, DepartureMessages, LockCheck, UserAnswers}
+import models.{DepartureMessage, DepartureMessages, LockCheck, UserAnswers, UserAnswersResponse}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsNumber, Json}
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.http.HttpResponse
 
 class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with ScalaCheckPropertyChecks {
@@ -45,8 +45,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       |    "data" : {},
       |    "tasks" : {},
       |    "createdAt" : "2022-09-05T15:58:44.188Z",
-      |    "lastUpdated" : "2022-09-07T10:33:23.472Z",
-      |    "isTransitional" : true
+      |    "lastUpdated" : "2022-09-07T10:33:23.472Z"
       |}
       |""".stripMargin
 
@@ -61,21 +60,46 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return user answers when status is Ok" in {
         server.stubFor(
           get(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(okJson(json))
         )
 
-        connector.get(lrn).futureValue mustBe Some(userAnswers)
+        connector.get(lrn).futureValue mustBe userAnswers
       }
 
-      "return None when no cached data found for provided LRN" in {
+      "return NoAnswers when no cached data found for provided LRN" in {
         server.stubFor(
           get(urlEqualTo(url))
             .willReturn(notFound())
         )
 
-        val result: Option[UserAnswers] = await(connector.get(lrn))
+        val result: UserAnswersResponse = await(connector.get(lrn))
 
-        result mustBe None
+        result mustBe UserAnswersResponse.NoAnswers
+      }
+
+      "return NotAcceptable when http status indicates" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
+            .willReturn(aResponse.withStatus(NOT_ACCEPTABLE))
+        )
+
+        val result: UserAnswersResponse = await(connector.get(lrn))
+
+        result mustBe UserAnswersResponse.NotAcceptable
+      }
+
+      "return Other when response have the other statuses" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
+            .willReturn(aResponse.withStatus(505).withBody("body"))
+        )
+
+        val result: UserAnswersResponse = await(connector.get(lrn))
+
+        result mustBe UserAnswersResponse.Other(505, "body")
       }
     }
 

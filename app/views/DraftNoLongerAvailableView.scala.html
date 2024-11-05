@@ -20,6 +20,7 @@
 
 @this(
         mainTemplate: MainTemplate,
+        formHelper: FormWithCSRF,
         heading: Heading,
         button: Button,
         config: FrontendAppConfig
@@ -40,9 +41,8 @@
     </p>
 
     <div>
-        @button(
-            messageKey = messages("draftNoLongerAvailable.button"),
-            href = Some(config.manageTransitMovementsDraftDeparturesUrl)
-        )
+        @formHelper(action = routes.DraftController.onSubmit(), Symbol("autoComplete") -> "off") {
+            @button(messageKey = messages("draftNoLongerAvailable.button"), attributes = Map("id" -> "submit"))
+        }
     </div>
 }

@@ -20,9 +20,9 @@ import base.SpecBase
 import connectors.CacheConnector
 import generators.Generators
 import models.SubmissionState.RejectedPendingChanges
-import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber}
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito._
+import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber, UserAnswersResponse}
+import org.mockito.ArgumentMatchers.{any, eq as eqTo}
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
 import viewModels.taskList.TaskStatus
 
@@ -50,7 +50,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
       "must return true" - {
         "when answers in the cache can be found and data posts to cache" in {
 
-          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(Some(oldLrnData)))
+          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(oldLrnData))
           when(mockCacheConnector.post(eqTo(newDataToSend))(any())).thenReturn(Future.successful(true))
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe true
@@ -65,7 +65,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
         "when answers not found in the cache" in {
 
-          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(None))
+          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(UserAnswersResponse.NoAnswers))
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe false
 
@@ -76,7 +76,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
         "when answers found in the cache, but post fails" in {
 
-          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(Some(oldLrnData)))
+          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(oldLrnData))
           when(mockCacheConnector.post(eqTo(newDataToSend))(any())).thenReturn(Future.successful(false))
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe false
@@ -90,7 +90,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
     "doesDraftOrSubmissionExistForLrn" - {
       "must return true" - {
         "if draft exists" in {
-          when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(Some(emptyUserAnswers)))
+          when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(emptyUserAnswers))
 
           duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe true
 
@@ -106,7 +106,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
               DepartureMessage("IE028")
             )
           )
-          when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(None))
+          when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(UserAnswersResponse.NoAnswers))
           when(mockCacheConnector.getMessages(any())(any())).thenReturn(Future.successful(messages))
 
           duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe true
@@ -124,7 +124,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
               DepartureMessage("IE928")
             )
           )
-          when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(None))
+          when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(UserAnswersResponse.NoAnswers))
           when(mockCacheConnector.getMessages(any())(any())).thenReturn(Future.successful(messages))
 
           duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe false

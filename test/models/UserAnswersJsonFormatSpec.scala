@@ -56,8 +56,7 @@ class UserAnswersJsonFormatSpec extends SpecBase with ScalaCheckPropertyChecks w
            |        "task3" : "not-started",
            |        "task4" : "cannot-start-yet"
            |    },
-           |    "isSubmitted" : "notSubmitted",
-           |    "isTransitional": false
+           |    "isSubmitted" : "notSubmitted"
            |}
            |""".stripMargin)
 
@@ -73,8 +72,7 @@ class UserAnswersJsonFormatSpec extends SpecBase with ScalaCheckPropertyChecks w
            |        "task4" : "cannot-start-yet"
            |    },
            |    "isSubmitted" : "notSubmitted",
-           |    "departureId": "$departureId",
-           |    "isTransitional": false
+           |    "departureId": "$departureId"
            |}
            |""".stripMargin)
 

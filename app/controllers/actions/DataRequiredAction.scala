@@ -17,9 +17,9 @@
 package controllers.actions
 
 import connectors.CacheConnector
-import models.LocalReferenceNumber
-import models.SubmissionState._
+import models.SubmissionState.*
 import models.requests.{DataRequest, OptionalDataRequest}
+import models.{LocalReferenceNumber, UserAnswers, UserAnswersResponse}
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -47,7 +47,7 @@ class DataRequiredAction(
     }
 
     request.userAnswers match {
-      case Some(data) =>
+      case data: UserAnswers =>
         lazy val success = Right(DataRequest(request.request, request.eoriNumber, data))
 
         data.status match {
@@ -65,6 +65,7 @@ class DataRequiredAction(
                 }
             }
         }
+      case UserAnswersResponse.NotAcceptable => Future.successful(Left(Redirect(controllers.routes.DraftNoLongerAvailableController.onPageLoad())))
       case _ =>
         Future.successful(failure)
     }

@@ -29,9 +29,8 @@ final case class UserAnswers(
   data: JsObject = Json.obj(),
   tasks: Map[String, TaskStatus] = Map(),
   status: SubmissionState.Value,
-  departureId: Option[String] = None,
-  isTransitional: Boolean = false
-) {
+  departureId: Option[String] = None
+) extends UserAnswersResponse {
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
     Reads.optionNoError(Reads.at(page.path)).reads(data).getOrElse(None)
@@ -78,8 +77,7 @@ object UserAnswers {
         (__ \ "data").read[JsObject] and
         (__ \ "tasks").read[Map[String, TaskStatus]] and
         (__ \ "isSubmitted").read[SubmissionState.Value] and
-        (__ \ "departureId").readNullable[String] and
-        (__ \ "isTransitional").read[Boolean]
+        (__ \ "departureId").readNullable[String]
     )(UserAnswers.apply)
 
   implicit lazy val writes: Writes[UserAnswers] =
@@ -89,8 +87,7 @@ object UserAnswers {
         (__ \ "data").write[JsObject] and
         (__ \ "tasks").write[Map[String, TaskStatus]] and
         (__ \ "isSubmitted").write[SubmissionState.Value] and
-        (__ \ "departureId").writeNullable[String] and
-        (__ \ "isTransitional").write[Boolean]
+        (__ \ "departureId").writeNullable[String]
     )(
       ua => Tuple.fromProductTyped(ua)
     )

@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.IdentifierAction
-import models.LocalReferenceNumber
+import models.{LocalReferenceNumber, UserAnswers}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -39,7 +39,7 @@ class KeepAliveController @Inject() (
       lrn match {
         case Some(refNumber) =>
           sessionRepository.get(refNumber) flatMap {
-            case Some(ua) =>
+            case ua: UserAnswers =>
               sessionRepository
                 .set(ua)
                 .map(

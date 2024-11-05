@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.CacheConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber, SubmissionState, UserAnswers}
+import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber, SubmissionState, UserAnswers, UserAnswersResponse}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Gen
@@ -28,7 +28,7 @@ import org.scalatest.{Assertion, EitherValues}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -65,10 +65,25 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
           val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
-          val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, None)).map(_.left.value)
+          val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, UserAnswersResponse.NoAnswers)).map(_.left.value)
 
           status(result) mustBe 303
           redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
+        }
+      }
+
+      "when UserAnswers is not acceptable" - {
+
+        "must return Left and redirect to draft no longer available" in {
+          when(mockCacheConnector.getMessages(any())(any()))
+            .thenReturn(Future.successful(DepartureMessages()))
+
+          val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
+
+          val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, UserAnswersResponse.NotAcceptable)).map(_.left.value)
+
+          status(result) mustBe 303
+          redirectLocation(result).value mustBe routes.DraftNoLongerAvailableController.onPageLoad().url
         }
       }
 
@@ -83,7 +98,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
             val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
-            val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers))).map(_.left.value)
+            val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, userAnswers)).map(_.left.value)
 
             status(result) mustBe 303
             redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
@@ -103,7 +118,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
                 val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
-                val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers)))
+                val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, userAnswers))
 
                 whenReady[Either[Result, DataRequest[?]], Assertion](result) {
                   result =>
@@ -128,7 +143,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
           val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
-          val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, None)).map(_.left.value)
+          val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, UserAnswersResponse.NoAnswers)).map(_.left.value)
 
           status(result) mustBe 303
           redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
@@ -162,7 +177,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
                   val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
-                  val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers))).map(_.left.value)
+                  val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, userAnswers)).map(_.left.value)
 
                   status(result) mustBe 303
                   redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
@@ -191,7 +206,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
                   val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
-                  val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers)))
+                  val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, userAnswers))
 
                   whenReady[Either[Result, DataRequest[?]], Assertion](result) {
                     result =>
@@ -214,7 +229,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
             val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
-            val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers)))
+            val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, userAnswers))
 
             whenReady[Either[Result, DataRequest[?]], Assertion](result) {
               result =>
@@ -232,7 +247,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
             val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
-            val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Some(userAnswers)))
+            val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, userAnswers))
 
             whenReady[Either[Result, DataRequest[?]], Assertion](result) {
               result =>

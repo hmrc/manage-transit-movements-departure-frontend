@@ -47,6 +47,6 @@ class DraftNoLongerAvailableViewSpec extends ViewBehaviours {
   )
 
   behave like pageWithButton("Return to drafts") {
-    assertElementContainsHref(_, frontendAppConfig.manageTransitMovementsDraftDeparturesUrl)
+    assertParentContainsAction(_, controllers.routes.DraftController.onSubmit().url)
   }
 }
