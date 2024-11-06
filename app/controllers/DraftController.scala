@@ -43,10 +43,4 @@ class DraftController @Inject() (
       }
   }
 
-  def onSubmit(): Action[AnyContent] = Action {
-    Redirect(
-      frontendAppConfig.manageTransitMovementsDraftDeparturesUrl
-    )
-  }
-
 }

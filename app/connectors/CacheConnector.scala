@@ -22,10 +22,10 @@ import models.{DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers, 
 import play.api.Logging
 import play.api.http.Status.*
 import play.api.libs.json.Json
+import play.api.libs.ws.JsonBodyWritables.*
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
-import play.api.libs.ws.JsonBodyWritables.*
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -49,9 +49,6 @@ class CacheConnector @Inject() (
       .get(url)
       .setHeader(headers*)
       .execute[UserAnswersResponse]
-      .recover {
-        case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND => UserAnswersResponse.NoAnswers
-      }
   }
 
   def post(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] = {

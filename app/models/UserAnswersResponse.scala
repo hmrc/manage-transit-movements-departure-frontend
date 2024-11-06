@@ -19,7 +19,7 @@ package models
 import play.api.http.Status.*
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
-trait UserAnswersResponse
+sealed trait UserAnswersResponse
 
 object UserAnswersResponse {
 
@@ -28,8 +28,6 @@ object UserAnswersResponse {
   case object NoAnswers extends UserAnswersResponse
 
   case object NotAcceptable extends UserAnswersResponse
-
-  case class Other(code: Int, message: String) extends UserAnswersResponse
 
   implicit val httpReads: HttpReads[UserAnswersResponse] =
     (_: String, _: String, response: HttpResponse) =>

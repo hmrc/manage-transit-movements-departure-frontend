@@ -47,6 +47,6 @@ class DraftNoLongerAvailableViewSpec extends ViewBehaviours {
   )
 
   behave like pageWithButton("Return to drafts") {
-    assertParentContainsAction(_, controllers.routes.DraftController.onSubmit().url)
+    assertParentContainsAction(_, controllers.routes.DraftNoLongerAvailableController.onSubmit().url)
   }
 }

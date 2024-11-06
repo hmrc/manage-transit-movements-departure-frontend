@@ -36,7 +36,7 @@ class DuplicateService @Inject() (
       case UserAnswersResponse.Answers(userAnswers) =>
         val updatedUserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, status = RejectedPendingChanges)
         cacheConnector.post(updatedUserAnswers)
-      case UserAnswersResponse.NoAnswers =>
+      case _ =>
         Future.successful(false)
     }
 

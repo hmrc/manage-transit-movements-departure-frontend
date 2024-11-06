@@ -41,7 +41,7 @@
     </p>
 
     <div>
-        @formHelper(action = routes.DraftController.onSubmit(), Symbol("autoComplete") -> "off") {
+        @formHelper(action = routes.DraftNoLongerAvailableController.onSubmit(), Symbol("autoComplete") -> "off") {
             @button(messageKey = messages("draftNoLongerAvailable.button"), attributes = Map("id" -> "submit"))
         }
     </div>

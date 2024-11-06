@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -25,6 +26,7 @@ import javax.inject.Inject
 
 class DraftNoLongerAvailableController @Inject() (
   override val messagesApi: MessagesApi,
+  val frontendAppConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
   view: DraftNoLongerAvailableView
 ) extends FrontendBaseController
@@ -33,6 +35,12 @@ class DraftNoLongerAvailableController @Inject() (
   def onPageLoad(): Action[AnyContent] = Action {
     implicit request =>
       Ok(view())
+  }
+
+  def onSubmit(): Action[AnyContent] = Action {
+    Redirect(
+      frontendAppConfig.manageTransitMovementsDraftDeparturesUrl
+    )
   }
 
 }

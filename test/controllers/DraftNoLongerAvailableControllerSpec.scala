@@ -44,5 +44,14 @@ class DraftNoLongerAvailableControllerSpec extends SpecBase with AppWithDefaultM
       contentAsString(result) mustEqual
         view()(request, messages).toString
     }
+
+    "when redirect to draft departures on submit" in {
+
+      val request = FakeRequest(POST, controllers.routes.DraftNoLongerAvailableController.onSubmit().url)
+
+      val result = route(app, request).value
+
+      redirectLocation(result).value must include(frontendAppConfig.manageTransitMovementsDraftDeparturesUrl)
+    }
   }
 }
