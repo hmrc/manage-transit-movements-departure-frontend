@@ -20,6 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.preTaskList.LocalReferenceNumberFormProvider
 import generators.Generators
 import models.SubmissionState.SubmissionState
+import models.UserAnswersResponse.Answers
 import models.{LocalReferenceNumber, UserAnswersResponse}
 import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.*
@@ -89,7 +90,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         val submissionState = arbitrary[SubmissionState](arbitrarySubmittedSubmissionState).sample.value
 
         when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(true))
-        when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(emptyUserAnswers.copy(status = submissionState)))
+        when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(Answers(emptyUserAnswers.copy(status = submissionState))))
 
         val invalidAnswer = "ABC123"
 
@@ -154,7 +155,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
         running(app) {
           when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(false))
-          when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(emptyUserAnswers))
+          when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(Answers(emptyUserAnswers)))
           when(mockSessionRepository.put(any())(any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest(POST, localReferenceNumberRoute)
@@ -182,7 +183,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
         running(app) {
           when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(true))
-          when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(emptyUserAnswers))
+          when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(Answers(emptyUserAnswers)))
 
           val request = FakeRequest(POST, localReferenceNumberRoute)
             .withFormUrlEncodedBody(("value", lrn.toString))

@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.CacheConnector
 import models.SubmissionState.*
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{LocalReferenceNumber, UserAnswers, UserAnswersResponse}
+import models.{LocalReferenceNumber, UserAnswersResponse}
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -47,7 +47,7 @@ class DataRequiredAction(
     }
 
     request.userAnswers match {
-      case data: UserAnswers =>
+      case UserAnswersResponse.Answers(data) =>
         lazy val success = Right(DataRequest(request.request, request.eoriNumber, data))
 
         data.status match {

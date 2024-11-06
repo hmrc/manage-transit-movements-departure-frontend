@@ -17,42 +17,33 @@
 package models
 
 import play.api.http.Status.*
-import play.api.libs.json.{Json, Reads}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 trait UserAnswersResponse
 
 object UserAnswersResponse {
 
+  case class Answers(value: UserAnswers) extends UserAnswersResponse
+
   case object NoAnswers extends UserAnswersResponse
-
-  case class BadRequest(code: String) extends UserAnswersResponse
-
-  object BadRequest {
-
-    implicit val reads: Reads[BadRequest] = Json.reads[BadRequest]
-  }
 
   case object NotAcceptable extends UserAnswersResponse
 
   case class Other(code: Int, message: String) extends UserAnswersResponse
 
   implicit val httpReads: HttpReads[UserAnswersResponse] =
-    (_: String, _: String, response: HttpResponse) => {
-      def validate[T <: UserAnswersResponse](implicit rds: Reads[T]): UserAnswersResponse =
-        response.json
-          .validate[T]
-          .fold(
-            errors => Other(response.status, s"Failed to validate json: $errors"),
-            identity
-          )
-
+    (_: String, _: String, response: HttpResponse) =>
       response.status match {
-        case OK                     => validate[UserAnswers]
-        case NO_CONTENT | NOT_FOUND => NoAnswers
-        case NOT_ACCEPTABLE         => NotAcceptable
-        case BAD_REQUEST            => validate[BadRequest]
-        case _                      => Other(response.status, response.body)
+        case OK =>
+          response.json
+            .validate[UserAnswers]
+            .map(Answers.apply)
+            .fold(
+              errors => throw new RuntimeException(s"Failed to validate json: $errors"),
+              identity
+            )
+        case NOT_FOUND      => NoAnswers
+        case NOT_ACCEPTABLE => NotAcceptable
+        case status         => throw new RuntimeException(s"Unexpected http status: $status")
       }
-    }
 }

@@ -20,6 +20,7 @@ import base.SpecBase
 import connectors.CacheConnector
 import generators.Generators
 import models.SubmissionState.RejectedPendingChanges
+import models.UserAnswersResponse.Answers
 import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber, UserAnswersResponse}
 import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.*
@@ -50,7 +51,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
       "must return true" - {
         "when answers in the cache can be found and data posts to cache" in {
 
-          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(oldLrnData))
+          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(Answers(oldLrnData)))
           when(mockCacheConnector.post(eqTo(newDataToSend))(any())).thenReturn(Future.successful(true))
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe true
@@ -76,7 +77,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
         "when answers found in the cache, but post fails" in {
 
-          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(oldLrnData))
+          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(Answers(oldLrnData)))
           when(mockCacheConnector.post(eqTo(newDataToSend))(any())).thenReturn(Future.successful(false))
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe false
@@ -90,7 +91,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
     "doesDraftOrSubmissionExistForLrn" - {
       "must return true" - {
         "if draft exists" in {
-          when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(emptyUserAnswers))
+          when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(Answers(emptyUserAnswers)))
 
           duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustBe true
 

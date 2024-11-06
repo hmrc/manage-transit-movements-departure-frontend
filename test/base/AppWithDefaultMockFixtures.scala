@@ -56,7 +56,7 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
     guiceApplicationBuilder()
       .build()
 
-  protected def setExistingUserAnswers(userAnswers: UserAnswers): Unit = setUserAnswers(userAnswers)
+  protected def setExistingUserAnswers(userAnswers: UserAnswers): Unit = setUserAnswers(UserAnswersResponse.Answers(userAnswers))
 
   protected def setNoExistingUserAnswers(): Unit = setUserAnswers(UserAnswersResponse.NoAnswers)
 

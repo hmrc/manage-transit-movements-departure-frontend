@@ -18,7 +18,7 @@ package services
 
 import connectors.CacheConnector
 import models.SubmissionState.RejectedPendingChanges
-import models.{LocalReferenceNumber, UserAnswers, UserAnswersResponse}
+import models.{LocalReferenceNumber, UserAnswersResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -33,7 +33,7 @@ class DuplicateService @Inject() (
     newLocalReferenceNumber: LocalReferenceNumber
   )(implicit hc: HeaderCarrier): Future[Boolean] =
     cacheConnector.get(oldLocalReferenceNumber).flatMap {
-      case userAnswers: UserAnswers =>
+      case UserAnswersResponse.Answers(userAnswers) =>
         val updatedUserAnswers = userAnswers.copy(lrn = newLocalReferenceNumber, status = RejectedPendingChanges)
         cacheConnector.post(updatedUserAnswers)
       case UserAnswersResponse.NoAnswers =>
@@ -42,8 +42,8 @@ class DuplicateService @Inject() (
 
   def doesDraftOrSubmissionExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
     cacheConnector.get(lrn).flatMap {
-      case _: UserAnswers => Future.successful(true)
-      case _              => doesIE028ExistForLrn(lrn)
+      case UserAnswersResponse.Answers(_) => Future.successful(true)
+      case _                              => doesIE028ExistForLrn(lrn)
     }
 
   def doesIE028ExistForLrn(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] =

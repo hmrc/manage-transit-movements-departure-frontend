@@ -18,6 +18,7 @@ package controllers.actions
 
 import base.SpecBase
 import generators.Generators
+import models.UserAnswersResponse.Answers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import models.{EoriNumber, LocalReferenceNumber, UserAnswersResponse}
 import org.mockito.ArgumentMatchers.any
@@ -78,9 +79,9 @@ class DataRetrievalActionSpec extends SpecBase with Generators {
 
       "when there are existing answers for this LRN" in {
 
-        when(sessionRepository.get(any())(any())).thenReturn(Future.successful(emptyUserAnswers))
+        when(sessionRepository.get(any())(any())).thenReturn(Future.successful(Answers(emptyUserAnswers)))
 
-        harness(lrn, request => request.userAnswers mustBe emptyUserAnswers)
+        harness(lrn, request => request.userAnswers mustBe Answers(emptyUserAnswers))
       }
     }
   }

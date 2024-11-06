@@ -30,7 +30,7 @@ final case class UserAnswers(
   tasks: Map[String, TaskStatus] = Map(),
   status: SubmissionState.Value,
   departureId: Option[String] = None
-) extends UserAnswersResponse {
+) {
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
     Reads.optionNoError(Reads.at(page.path)).reads(data).getOrElse(None)

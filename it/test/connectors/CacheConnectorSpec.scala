@@ -18,6 +18,7 @@ package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import helpers.{ItSpecBase, WireMockServerHandler}
+import models.UserAnswersResponse.Answers
 import models.{DepartureMessage, DepartureMessages, LockCheck, UserAnswers, UserAnswersResponse}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -64,7 +65,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
             .willReturn(okJson(json))
         )
 
-        connector.get(lrn).futureValue mustBe userAnswers
+        connector.get(lrn).futureValue mustBe UserAnswersResponse.Answers(userAnswers)
       }
 
       "return NoAnswers when no cached data found for provided LRN" in {
@@ -90,16 +91,28 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
         result mustBe UserAnswersResponse.NotAcceptable
       }
 
-      "return Other when response have the other statuses" in {
+      "return failed future when response have an unexpected status" in {
         server.stubFor(
           get(urlEqualTo(url))
             .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse.withStatus(505).withBody("body"))
         )
 
-        val result: UserAnswersResponse = await(connector.get(lrn))
+        val result = connector.get(lrn)
 
-        result mustBe UserAnswersResponse.Other(505, "body")
+        result.failed.futureValue mustBe a[Throwable]
+      }
+
+      "return failed future when response cannot be parsed" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
+            .willReturn(okJson("{}"))
+        )
+
+        val result = connector.get(lrn)
+
+        result.failed.futureValue mustBe a[Throwable]
       }
     }
 
