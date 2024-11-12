@@ -56,6 +56,7 @@ class CacheConnector @Inject() (
     http
       .post(url)
       .withBody(Json.toJson(userAnswers))
+      .setHeader(headers*)
       .execute[HttpResponse]
       .map(_.status == OK)
   }
@@ -87,6 +88,7 @@ class CacheConnector @Inject() (
     http
       .put(url)
       .withBody(Json.toJson(lrn.toString))
+      .setHeader(headers*)
       .execute[HttpResponse]
       .map(_.status == OK)
   }

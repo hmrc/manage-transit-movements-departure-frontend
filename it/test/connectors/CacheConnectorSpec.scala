@@ -121,7 +121,11 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       val url = s"/manage-transit-movements-departure-cache/user-answers/${userAnswers.lrn}"
 
       "must return true when status is Ok" in {
-        server.stubFor(post(urlEqualTo(url)).willReturn(aResponse().withStatus(OK)))
+        server.stubFor(
+          post(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
+            .willReturn(aResponse().withStatus(OK))
+        )
 
         val result: Boolean = await(connector.post(userAnswers))
 
@@ -133,6 +137,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -149,6 +154,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" in {
         server.stubFor(
           put(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(OK))
         )
 
@@ -162,6 +168,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           put(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(status))
         )
 
