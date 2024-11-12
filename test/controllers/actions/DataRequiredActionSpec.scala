@@ -73,7 +73,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
         }
       }
 
-      "when UserAnswers is not acceptable" - {
+      "when UserAnswers is returns bad request" - {
 
         "must return Left and redirect to draft no longer available" in {
           when(mockCacheConnector.getMessages(any())(any()))
@@ -81,7 +81,7 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
           val harness = new Harness(mockCacheConnector)(lrn, ignoreSubmissionState)
 
-          val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, NotAcceptable)).map(_.left.value)
+          val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, BadRequest)).map(_.left.value)
 
           status(result) mustBe 303
           redirectLocation(result).value mustBe routes.DraftNoLongerAvailableController.onPageLoad().url

@@ -220,10 +220,10 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         verify(mockSessionRepository).put(eqTo(lrn))(any())
       }
 
-      "to draft no longer available when both session repository return not acceptable" in {
+      "to draft no longer available when session repository returns bad request" in {
 
         when(mockDuplicateService.doesDraftOrSubmissionExistForLrn(any())(any())).thenReturn(Future.successful(false))
-        when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(UserAnswersResponse.NotAcceptable))
+        when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(UserAnswersResponse.BadRequest))
         when(mockSessionRepository.put(any())(any())).thenReturn(Future.successful(true))
 
         val request = FakeRequest(POST, localReferenceNumberRoute)

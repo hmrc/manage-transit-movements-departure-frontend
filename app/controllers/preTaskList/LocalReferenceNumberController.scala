@@ -84,7 +84,7 @@ class LocalReferenceNumberController @Inject() (
                   }
                   .map {
                     case UserAnswersResponse.Answers(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers, None))
-                    case UserAnswersResponse.NotAcceptable        => Redirect(controllers.routes.DraftNoLongerAvailableController.onPageLoad())
+                    case UserAnswersResponse.BadRequest           => Redirect(controllers.routes.DraftNoLongerAvailableController.onPageLoad())
                     case _                                        => Redirect(controllers.routes.ErrorController.technicalDifficulties())
                   }
             }

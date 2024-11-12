@@ -56,7 +56,6 @@ class CacheConnector @Inject() (
     http
       .post(url)
       .withBody(Json.toJson(userAnswers))
-      .setHeader(headers*)
       .execute[HttpResponse]
       .map(_.status == OK)
   }

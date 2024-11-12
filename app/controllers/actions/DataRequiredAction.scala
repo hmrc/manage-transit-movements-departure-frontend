@@ -65,7 +65,7 @@ class DataRequiredAction(
                 }
             }
         }
-      case UserAnswersResponse.NotAcceptable => Future.successful(Left(Redirect(controllers.routes.DraftNoLongerAvailableController.onPageLoad())))
+      case UserAnswersResponse.BadRequest => Future.successful(Left(Redirect(controllers.routes.DraftNoLongerAvailableController.onPageLoad())))
       case _ =>
         Future.successful(failure)
     }
