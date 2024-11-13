@@ -139,7 +139,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       "when amending" in {
         forAll(Gen.oneOf(SubmissionState.Amendment, SubmissionState.GuaranteeAmendment)) {
           submissionStatus =>
-            setExistingUserAnswers(emptyUserAnswers.copy(status = submissionStatus, departureId = Some(departureId)))
+            setExistingUserAnswers(emptyUserAnswers.copy(status = submissionStatus))
 
             when(mockCacheConnector.getMessages(any())(any())).thenReturn(Future.successful(DepartureMessages()))
 
@@ -177,7 +177,7 @@ class TaskListControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       "when amending" in {
         forAll(Gen.oneOf(SubmissionState.Amendment, SubmissionState.GuaranteeAmendment), Gen.choose(400: Int, 599: Int)) {
           (submissionStatus, errorCode) =>
-            setExistingUserAnswers(emptyUserAnswers.copy(status = submissionStatus, departureId = Some(departureId)))
+            setExistingUserAnswers(emptyUserAnswers.copy(status = submissionStatus))
 
             when(mockCacheConnector.getMessages(any())(any())).thenReturn(Future.successful(DepartureMessages()))
 

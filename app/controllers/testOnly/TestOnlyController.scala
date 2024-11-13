@@ -16,10 +16,9 @@
 
 package controllers.testOnly
 
-import models.UserAnswers
-import play.api.libs.json.{JsError, JsSuccess, JsValue}
+import connectors.testOnly.TestOnlyCacheConnector
+import play.api.libs.json.{__, JsValue}
 import play.api.mvc.{Action, DefaultActionBuilder, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.http.{Authorization, SessionId}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -29,7 +28,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TestOnlyController @Inject() (
   cc: MessagesControllerComponents,
   action: DefaultActionBuilder,
-  sessionRepository: SessionRepository
+  connector: TestOnlyCacheConnector
 )(implicit val ec: ExecutionContext)
     extends FrontendController(cc) {
 
@@ -39,15 +38,16 @@ class TestOnlyController @Inject() (
         .copy(authorization = request.headers.get("Authorization").map(Authorization.apply))
         .copy(sessionId = Some(SessionId(sessionId)))
 
-      request.body.validate[UserAnswers] match {
-        case JsSuccess(userAnswers, _) =>
-          sessionRepository
-            .set(userAnswers)(headerCarrier)
-            .map {
-              case true  => Ok
-              case false => InternalServerError
-            }
-        case JsError(errors) => Future.successful(BadRequest(errors.toString()))
+      val json = request.body
+
+      json.asOpt((__ \ "lrn").read[String]) match {
+        case Some(lrn) =>
+          connector.post(lrn, json)(headerCarrier).map {
+            case true  => Ok
+            case false => InternalServerError
+          }
+        case None =>
+          Future.successful(BadRequest("LRN missing from JSON"))
       }
   }
 

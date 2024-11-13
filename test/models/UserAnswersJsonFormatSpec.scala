@@ -39,8 +39,6 @@ class UserAnswersJsonFormatSpec extends SpecBase with ScalaCheckPropertyChecks w
     status = SubmissionState.NotSubmitted
   )
 
-  private val userAnswersWithDepartureId = userAnswers.copy(departureId = Some(departureId))
-
   "User answers" - {
 
     "being passed between backend and frontend" - {
@@ -60,40 +58,14 @@ class UserAnswersJsonFormatSpec extends SpecBase with ScalaCheckPropertyChecks w
            |}
            |""".stripMargin)
 
-      val jsonWithDepartureId: JsValue = Json.parse(s"""
-           |{
-           |    "lrn" : "$lrn",
-           |    "eoriNumber" : "${eoriNumber.value}",
-           |    "data" : {},
-           |    "tasks" : {
-           |        "task1" : "completed",
-           |        "task2" : "in-progress",
-           |        "task3" : "not-started",
-           |        "task4" : "cannot-start-yet"
-           |    },
-           |    "isSubmitted" : "notSubmitted",
-           |    "departureId": "$departureId"
-           |}
-           |""".stripMargin)
-
       "read correctly" in {
         val result = json.as[UserAnswers]
         result mustBe userAnswers
       }
 
-      "read correctly with departureId" in {
-        val result = jsonWithDepartureId.as[UserAnswers]
-        result mustBe userAnswersWithDepartureId
-      }
-
       "write correctly" in {
         val result = Json.toJson(userAnswers)
         result mustBe json
-      }
-
-      "write correctly with departureId" in {
-        val result = Json.toJson(userAnswersWithDepartureId)
-        result mustBe jsonWithDepartureId
       }
 
       "be readable as a LocalDateTime for backwards compatibility" in {
