@@ -17,9 +17,10 @@
 package controllers.testOnly
 
 import connectors.testOnly.TestOnlyCacheConnector
+import play.api.Configuration
 import play.api.libs.json.{__, JsValue}
 import play.api.mvc.{Action, DefaultActionBuilder, MessagesControllerComponents}
-import uk.gov.hmrc.http.{Authorization, SessionId}
+import uk.gov.hmrc.http.{Authorization, HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
@@ -28,23 +29,35 @@ import scala.concurrent.{ExecutionContext, Future}
 class TestOnlyController @Inject() (
   cc: MessagesControllerComponents,
   action: DefaultActionBuilder,
-  connector: TestOnlyCacheConnector
+  connector: TestOnlyCacheConnector,
+  config: Configuration
 )(implicit val ec: ExecutionContext)
     extends FrontendController(cc) {
 
   def setUserAnswers(sessionId: String): Action[JsValue] = action.async(parse.json) {
     implicit request =>
-      val headerCarrier = hc
+      implicit val headerCarrier: HeaderCarrier = hc
         .copy(authorization = request.headers.get("Authorization").map(Authorization.apply))
         .copy(sessionId = Some(SessionId(sessionId)))
 
       val json = request.body
 
+      val version = json.asOpt((__ \ "isTransitional").read[Boolean]) match {
+        case Some(false) => config.get[String]("phase.final.apiVersion")
+        case _           => config.get[String]("phase.transitional.apiVersion")
+      }
+
       json.asOpt((__ \ "lrn").read[String]) match {
         case Some(lrn) =>
-          connector.post(lrn, json)(headerCarrier).map {
-            case true  => Ok
-            case false => InternalServerError
+          (
+            for {
+              put <- connector.put(lrn, version)
+              if put
+              post <- connector.post(lrn, json)
+              if post
+            } yield Ok
+          ).recover {
+            case _ => InternalServerError
           }
         case None =>
           Future.successful(BadRequest("LRN missing from JSON"))

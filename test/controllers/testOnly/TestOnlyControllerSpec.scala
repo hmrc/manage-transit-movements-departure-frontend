@@ -51,19 +51,87 @@ class TestOnlyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
       val lrn = nonEmptyString.sample.value
 
-      val json = Json.parse(s"""
-           |{
-           |  "lrn" : "$lrn",
-           |  "eoriNumber" : "eori123",
-           |  "isSubmitted" : "notSubmitted",
-           |  "tasks" : {},
-           |  "isTransitional" : true
-           |}
-           |""".stripMargin)
-
       "when answers successfully submitted to cache" - {
-        "must return Ok" in {
-          when(mockConnector.post(any(), any())(any())).thenReturn(Future.successful(true))
+        "must return Ok" - {
+          "when transition" in {
+            val json = Json.parse(s"""
+                 |{
+                 |  "lrn" : "$lrn",
+                 |  "eoriNumber" : "eori123",
+                 |  "isSubmitted" : "notSubmitted",
+                 |  "tasks" : {},
+                 |  "isTransitional" : true
+                 |}
+                 |""".stripMargin)
+
+            when(mockConnector.put(any(), any())(any())).thenReturn(Future.successful(true))
+            when(mockConnector.post(any(), any())(any())).thenReturn(Future.successful(true))
+
+            val request = FakeRequest(POST, testOnlyRoute)
+              .withHeaders("Authorization" -> bearerToken)
+              .withJsonBody(json)
+
+            val result = route(app, request).value
+
+            status(result) mustEqual OK
+
+            val headerCarrierCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
+
+            verify(mockConnector).put(eqTo(lrn), eqTo("2.0"))(headerCarrierCaptor.capture())
+            val headerCarrier = headerCarrierCaptor.getValue
+            verify(mockConnector).post(eqTo(lrn), eqTo(json))(eqTo(headerCarrier))
+
+            headerCarrier.authorization.value.value mustBe bearerToken
+            headerCarrier.sessionId.value.value mustBe sessionId
+          }
+
+          "when final" in {
+            val json = Json.parse(s"""
+                 |{
+                 |  "lrn" : "$lrn",
+                 |  "eoriNumber" : "eori123",
+                 |  "isSubmitted" : "notSubmitted",
+                 |  "tasks" : {},
+                 |  "isTransitional" : false
+                 |}
+                 |""".stripMargin)
+
+            when(mockConnector.put(any(), any())(any())).thenReturn(Future.successful(true))
+            when(mockConnector.post(any(), any())(any())).thenReturn(Future.successful(true))
+
+            val request = FakeRequest(POST, testOnlyRoute)
+              .withHeaders("Authorization" -> bearerToken)
+              .withJsonBody(json)
+
+            val result = route(app, request).value
+
+            status(result) mustEqual OK
+
+            val headerCarrierCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
+
+            verify(mockConnector).put(eqTo(lrn), eqTo("2.1"))(headerCarrierCaptor.capture())
+            val headerCarrier = headerCarrierCaptor.getValue
+            verify(mockConnector).post(eqTo(lrn), eqTo(json))(eqTo(headerCarrier))
+
+            headerCarrier.authorization.value.value mustBe bearerToken
+            headerCarrier.sessionId.value.value mustBe sessionId
+          }
+        }
+      }
+
+      "when PUT fails" - {
+        "must return InternalServerError" in {
+          val json = Json.parse(s"""
+               |{
+               |  "lrn" : "$lrn",
+               |  "eoriNumber" : "eori123",
+               |  "isSubmitted" : "notSubmitted",
+               |  "tasks" : {},
+               |  "isTransitional" : true
+               |}
+               |""".stripMargin)
+
+          when(mockConnector.put(any(), any())(any())).thenReturn(Future.successful(false))
 
           val request = FakeRequest(POST, testOnlyRoute)
             .withHeaders("Authorization" -> bearerToken)
@@ -71,20 +139,23 @@ class TestOnlyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
 
           val result = route(app, request).value
 
-          status(result) mustEqual OK
-
-          val headerCarrierCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
-
-          verify(mockConnector).post(eqTo(lrn), eqTo(json))(headerCarrierCaptor.capture())
-
-          val headerCarrier = headerCarrierCaptor.getValue
-          headerCarrier.authorization.value.value mustBe bearerToken
-          headerCarrier.sessionId.value.value mustBe sessionId
+          status(result) mustEqual INTERNAL_SERVER_ERROR
         }
       }
 
-      "when answers unsuccessfully submitted to cache" - {
+      "when POST fails" - {
         "must return InternalServerError" in {
+          val json = Json.parse(s"""
+               |{
+               |  "lrn" : "$lrn",
+               |  "eoriNumber" : "eori123",
+               |  "isSubmitted" : "notSubmitted",
+               |  "tasks" : {},
+               |  "isTransitional" : true
+               |}
+               |""".stripMargin)
+
+          when(mockConnector.put(any(), any())(any())).thenReturn(Future.successful(false))
           when(mockConnector.post(any(), any())(any())).thenReturn(Future.successful(false))
 
           val request = FakeRequest(POST, testOnlyRoute)

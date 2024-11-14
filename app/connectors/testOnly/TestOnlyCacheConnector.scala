@@ -17,9 +17,10 @@
 package connectors.testOnly
 
 import config.FrontendAppConfig
+import models.LocalReferenceNumber
 import play.api.Logging
 import play.api.http.Status.*
-import play.api.libs.json.{JsObject, JsValue}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.JsonBodyWritables.*
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -41,6 +42,16 @@ class TestOnlyCacheConnector @Inject() (
     http
       .post(url)
       .withBody(json)
+      .execute[HttpResponse]
+      .map(_.status == OK)
+  }
+
+  def put(lrn: String, version: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val url = url"$baseUrl/user-answers"
+    http
+      .put(url)
+      .withBody(Json.toJson(lrn))
+      .setHeader("APIVersion" -> version)
       .execute[HttpResponse]
       .map(_.status == OK)
   }
