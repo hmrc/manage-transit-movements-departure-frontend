@@ -45,45 +45,24 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
     "copyUserAnswers" - {
 
       val newLrn: LocalReferenceNumber = LocalReferenceNumber("DCBA0987654321321").value
-      val oldLrnData                   = emptyUserAnswers.copy(lrn = lrn, tasks = Map("task1" -> TaskStatus.Error), status = RejectedPendingChanges)
-      val newDataToSend                = oldLrnData.copy(lrn = newLrn)
 
       "must return true" - {
-        "when answers in the cache can be found and data posts to cache" in {
-
-          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(Answers(oldLrnData)))
-          when(mockCacheConnector.post(eqTo(newDataToSend))(any())).thenReturn(Future.successful(true))
+        "when copy returns true" in {
+          when(mockCacheConnector.copy(eqTo(lrn), eqTo(newLrn))(any())).thenReturn(Future.successful(true))
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe true
 
-          verify(mockCacheConnector).get(eqTo(lrn))(any())
-          verify(mockCacheConnector).post(eqTo(newDataToSend))(any())
-
+          verify(mockCacheConnector).copy(eqTo(lrn), eqTo(newLrn))(any())
         }
       }
 
       "must return false" - {
-
-        "when answers not found in the cache" in {
-
-          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(UserAnswersResponse.NoAnswers))
+        "when copy returns false" in {
+          when(mockCacheConnector.copy(eqTo(lrn), eqTo(newLrn))(any())).thenReturn(Future.successful(false))
 
           duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe false
 
-          verify(mockCacheConnector).get(eqTo(lrn))(any())
-          verifyNoMoreInteractions(mockCacheConnector)
-
-        }
-
-        "when answers found in the cache, but post fails" in {
-
-          when(mockCacheConnector.get(eqTo(lrn))(any())).thenReturn(Future.successful(Answers(oldLrnData)))
-          when(mockCacheConnector.post(eqTo(newDataToSend))(any())).thenReturn(Future.successful(false))
-
-          duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustBe false
-
-          verify(mockCacheConnector).get(eqTo(lrn))(any())
-          verify(mockCacheConnector).post(eqTo(newDataToSend))(any())
+          verify(mockCacheConnector).copy(eqTo(lrn), eqTo(newLrn))(any())
         }
       }
     }

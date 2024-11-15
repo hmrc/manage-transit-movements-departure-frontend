@@ -19,11 +19,11 @@ package connectors
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import helpers.{ItSpecBase, WireMockServerHandler}
 import models.UserAnswersResponse.Answers
-import models.{DepartureMessage, DepartureMessages, LockCheck, UserAnswers, UserAnswersResponse}
+import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers, UserAnswersResponse}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsNumber, Json}
+import play.api.libs.json.{JsNumber, JsString, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.http.HttpResponse
 
@@ -433,6 +433,41 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
               Seq.empty[DepartureMessage]
             )
         }
+      }
+    }
+
+    "copy" - {
+
+      val oldLrn = new LocalReferenceNumber("oldLrn")
+      val newLrn = new LocalReferenceNumber("newLrn")
+      val url    = s"/manage-transit-movements-departure-cache/user-answers/${oldLrn.value}/copy"
+
+      "must return true when status is Ok" in {
+        server.stubFor(
+          post(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(newLrn.value))))
+            .willReturn(aResponse().withStatus(OK))
+        )
+
+        val result: Boolean = await(connector.copy(oldLrn, newLrn))
+
+        result mustBe true
+      }
+
+      "return false for 4xx or 5xx response" in {
+        val status = Gen.choose(400: Int, 599: Int).sample.value
+
+        server.stubFor(
+          put(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(newLrn.value))))
+            .willReturn(aResponse().withStatus(status))
+        )
+
+        val result: Boolean = await(connector.copy(oldLrn, newLrn))
+
+        result mustBe false
       }
     }
   }

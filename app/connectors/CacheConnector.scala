@@ -134,4 +134,14 @@ class CacheConnector @Inject() (
       .setHeader(headers*)
       .execute[DepartureMessages]
   }
+
+  def copy(oldLrn: LocalReferenceNumber, newLrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val url = url"$baseUrl/user-answers/$oldLrn/copy"
+    http
+      .post(url)
+      .setHeader(headers*)
+      .withBody(Json.toJson(newLrn))
+      .execute[HttpResponse]
+      .map(_.status == OK)
+  }
 }
