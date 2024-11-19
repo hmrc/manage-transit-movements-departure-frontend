@@ -16,7 +16,8 @@
 
 package controllers
 
-import controllers.actions._
+import config.FrontendAppConfig
+import controllers.actions.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -28,7 +29,8 @@ class LockedController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   val controllerComponents: MessagesControllerComponents,
-  view: LockedView
+  view: LockedView,
+  config: FrontendAppConfig
 ) extends FrontendBaseController
     with I18nSupport {
 
@@ -36,5 +38,12 @@ class LockedController @Inject() (
     implicit request =>
       Ok(view())
   }
+
+  def onSubmit(): Action[AnyContent] =
+    (Action andThen identify) {
+      Redirect {
+        config.manageTransitMovementsDraftDeparturesUrl
+      }
+    }
 
 }

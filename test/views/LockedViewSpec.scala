@@ -37,7 +37,5 @@ class LockedViewSpec extends ViewBehaviours {
 
   behave like pageWithContent("p", "Another person from your organisation is currently working on this declaration. You cannot open it until they’re finished.")
 
-  behave like pageWithButton("Return to drafts") {
-    assertElementContainsHref(_, frontendAppConfig.manageTransitMovementsDraftDeparturesUrl)
-  }
+  behave like pageWithSubmitButton("Return to drafts")
 }
