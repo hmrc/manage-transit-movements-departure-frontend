@@ -221,6 +221,6 @@ newLocalReferenceNumber.error.alreadyExists = The Local Reference Number must be
 
 draftNoLongerAvailable.title = This declaration is no longer available
 draftNoLongerAvailable.heading = This declaration is no longer available
-draftNoLongerAvailable.paragraph = You cannot access any drafts you created before the NCTS 5 update on 1 February. These will soon be deleted from your draft declarations.
+draftNoLongerAvailable.paragraph = You cannot access any drafts you created before the NCTS 5 update on 21 January. These will soon be deleted from your draft declarations.
 draftNoLongerAvailable.newDeparture = Make a new departure declaration
 draftNoLongerAvailable.button = Return to drafts

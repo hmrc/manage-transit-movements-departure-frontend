@@ -37,7 +37,7 @@ class DraftNoLongerAvailableViewSpec extends ViewBehaviours {
 
   behave like pageWithContent(
     "p",
-    "You cannot access any drafts you created before the NCTS 5 update on 1 February. These will soon be deleted from your draft declarations."
+    "You cannot access any drafts you created before the NCTS 5 update on 21 January. These will soon be deleted from your draft declarations."
   )
 
   behave like pageWithLink(
