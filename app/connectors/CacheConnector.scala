@@ -17,15 +17,15 @@
 package connectors
 
 import config.{FrontendAppConfig, PhaseConfig}
-import models.LockCheck._
-import models.{DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers}
+import models.LockCheck.*
+import models.{DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers, UserAnswersResponse}
 import play.api.Logging
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import play.api.libs.ws.JsonBodyWritables.*
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
-import play.api.libs.ws.JsonBodyWritables._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,15 +43,12 @@ class CacheConnector @Inject() (
     "APIVersion" -> phaseConfig.values.apiVersion.toString
   )
 
-  def get(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
+  def get(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[UserAnswersResponse] = {
     val url = url"$baseUrl/user-answers/$lrn"
     http
       .get(url)
-      .execute[UserAnswers]
-      .map(Some(_))
-      .recover {
-        case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND => None
-      }
+      .setHeader(headers*)
+      .execute[UserAnswersResponse]
   }
 
   def post(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] = {
@@ -90,6 +87,7 @@ class CacheConnector @Inject() (
     http
       .put(url)
       .withBody(Json.toJson(lrn.toString))
+      .setHeader(headers*)
       .execute[HttpResponse]
       .map(_.status == OK)
   }
@@ -124,6 +122,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/user-answers/$lrn/expiry"
     http
       .get(url)
+      .setHeader(headers*)
       .execute[Long]
   }
 
@@ -134,5 +133,15 @@ class CacheConnector @Inject() (
       .get(url)
       .setHeader(headers*)
       .execute[DepartureMessages]
+  }
+
+  def copy(oldLrn: LocalReferenceNumber, newLrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val url = url"$baseUrl/user-answers/$oldLrn/copy"
+    http
+      .post(url)
+      .setHeader(headers*)
+      .withBody(Json.toJson(newLrn))
+      .execute[HttpResponse]
+      .map(_.status == OK)
   }
 }

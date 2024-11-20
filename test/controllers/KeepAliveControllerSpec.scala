@@ -17,11 +17,12 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import models.LocalReferenceNumber
+import models.UserAnswersResponse.Answers
+import models.{LocalReferenceNumber, UserAnswersResponse}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, times, verify, when}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{route, status, GET, _}
+import play.api.test.Helpers.{route, status, GET, *}
 
 import scala.concurrent.Future
 
@@ -31,7 +32,7 @@ class KeepAliveControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   "Keep alive controller" - {
     "touch mongo cache when lrn is available" in {
-      when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(Some(emptyUserAnswers)))
+      when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(Answers(emptyUserAnswers)))
       when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
 
       val result = route(app, FakeRequest(GET, keepAliveRoute(Some(lrn)))).value
@@ -52,7 +53,7 @@ class KeepAliveControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
     }
 
     "return NO_CONTENT when get from mongo cache returns None" in {
-      when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(None))
+      when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(UserAnswersResponse.NoAnswers))
 
       val result = route(app, FakeRequest(GET, keepAliveRoute(Some(lrn)))).value
 

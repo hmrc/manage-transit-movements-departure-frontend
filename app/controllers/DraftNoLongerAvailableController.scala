@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,30 +17,30 @@
 package controllers
 
 import config.FrontendAppConfig
-import controllers.actions.Actions
-import models.journeyDomain.{PreTaskListDomain, UserAnswersReader}
-import models.{LocalReferenceNumber, NormalMode}
-import navigation.PreTaskListNavigatorProvider
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.DraftNoLongerAvailableView
 
 import javax.inject.Inject
 
-class DraftController @Inject() (
-  val controllerComponents: MessagesControllerComponents,
-  actions: Actions,
+class DraftNoLongerAvailableController @Inject() (
+  override val messagesApi: MessagesApi,
   val frontendAppConfig: FrontendAppConfig,
-  navigatorProvider: PreTaskListNavigatorProvider
-) extends FrontendBaseController {
+  val controllerComponents: MessagesControllerComponents,
+  view: DraftNoLongerAvailableView
+) extends FrontendBaseController
+    with I18nSupport {
 
-  def draftRedirect(lrn: LocalReferenceNumber): Action[AnyContent] = actions.requireData(lrn) {
+  def onPageLoad(): Action[AnyContent] = Action {
     implicit request =>
-      UserAnswersReader[PreTaskListDomain](frontendAppConfig.isPreLodgeEnabled).run(request.userAnswers) match {
-        case Left(_) =>
-          Redirect(navigatorProvider(NormalMode).nextPage(request.userAnswers, None))
-        case Right(_) =>
-          Redirect(controllers.routes.TaskListController.onPageLoad(lrn))
-      }
+      Ok(view())
+  }
+
+  def onSubmit(): Action[AnyContent] = Action {
+    Redirect(
+      frontendAppConfig.manageTransitMovementsDraftDeparturesUrl
+    )
   }
 
 }

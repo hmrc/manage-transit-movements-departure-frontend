@@ -51,6 +51,9 @@ trait ViewSpecAssertions extends ViewSpecGetters {
   def assertElementContainsHref(element: Element, expectedHref: String): Assertion =
     getElementHref(element) mustBe expectedHref
 
+  def assertParentContainsAction(element: Element, expectedAction: String): Assertion =
+    element.parent().attr("action") mustBe expectedAction
+
   def assertElementContainsId(element: Element, expectedId: String): Assertion =
     element.id() mustBe expectedId
 
