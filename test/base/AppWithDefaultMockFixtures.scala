@@ -16,9 +16,9 @@
 
 package base
 
-import controllers.actions._
-import models.{LockCheck, Mode, UserAnswers}
-import navigation._
+import controllers.actions.*
+import models.{LockCheck, Mode, UserAnswers, UserAnswersResponse}
+import navigation.*
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.{BeforeAndAfterEach, TestSuite}
@@ -56,11 +56,11 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
     guiceApplicationBuilder()
       .build()
 
-  protected def setExistingUserAnswers(userAnswers: UserAnswers): Unit = setUserAnswers(Some(userAnswers))
+  protected def setExistingUserAnswers(userAnswers: UserAnswers): Unit = setUserAnswers(UserAnswersResponse.Answers(userAnswers))
 
-  protected def setNoExistingUserAnswers(): Unit = setUserAnswers(None)
+  protected def setNoExistingUserAnswers(): Unit = setUserAnswers(UserAnswersResponse.NoAnswers)
 
-  private def setUserAnswers(userAnswers: Option[UserAnswers]): Unit = {
+  private def setUserAnswers(userAnswers: UserAnswersResponse): Unit = {
     when(mockLockActionProvider.apply()).thenReturn(new FakeLockAction(mockLockService))
     when(mockDataRetrievalActionProvider.apply(any())).thenReturn(new FakeDataRetrievalAction(userAnswers))
   }

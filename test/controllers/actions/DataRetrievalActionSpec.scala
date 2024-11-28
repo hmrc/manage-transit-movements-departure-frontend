@@ -18,15 +18,16 @@ package controllers.actions
 
 import base.SpecBase
 import generators.Generators
+import models.UserAnswersResponse.Answers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
-import models.{EoriNumber, LocalReferenceNumber}
+import models.{EoriNumber, LocalReferenceNumber, UserAnswersResponse}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{AnyContent, Request, Results}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 
 import scala.concurrent.Future
@@ -68,9 +69,9 @@ class DataRetrievalActionSpec extends SpecBase with Generators {
 
       "where there are no existing answers for this LRN" in {
 
-        when(sessionRepository.get(any())(any())).thenReturn(Future.successful(None))
+        when(sessionRepository.get(any())(any())).thenReturn(Future.successful(UserAnswersResponse.NoAnswers))
 
-        harness(lrn, request => request.userAnswers must not be defined)
+        harness(lrn, request => request.userAnswers mustBe UserAnswersResponse.NoAnswers)
       }
     }
 
@@ -78,9 +79,9 @@ class DataRetrievalActionSpec extends SpecBase with Generators {
 
       "when there are existing answers for this LRN" in {
 
-        when(sessionRepository.get(any())(any())).thenReturn(Future.successful(Some(emptyUserAnswers)))
+        when(sessionRepository.get(any())(any())).thenReturn(Future.successful(Answers(emptyUserAnswers)))
 
-        harness(lrn, request => request.userAnswers mustBe defined)
+        harness(lrn, request => request.userAnswers mustBe Answers(emptyUserAnswers))
       }
     }
   }

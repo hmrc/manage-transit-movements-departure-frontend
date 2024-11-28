@@ -16,14 +16,15 @@
 
 package connectors
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import helpers.{ItSpecBase, WireMockServerHandler}
-import models.{DepartureMessage, DepartureMessages, LockCheck, UserAnswers}
+import models.UserAnswersResponse.Answers
+import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers, UserAnswersResponse}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsNumber, Json}
-import play.api.test.Helpers._
+import play.api.libs.json.{JsNumber, JsString, Json}
+import play.api.test.Helpers.*
 import uk.gov.hmrc.http.HttpResponse
 
 class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with ScalaCheckPropertyChecks {
@@ -60,21 +61,58 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return user answers when status is Ok" in {
         server.stubFor(
           get(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(okJson(json))
         )
 
-        connector.get(lrn).futureValue mustBe Some(userAnswers)
+        connector.get(lrn).futureValue mustBe UserAnswersResponse.Answers(userAnswers)
       }
 
-      "return None when no cached data found for provided LRN" in {
+      "return NoAnswers when no cached data found for provided LRN" in {
         server.stubFor(
           get(urlEqualTo(url))
             .willReturn(notFound())
         )
 
-        val result: Option[UserAnswers] = await(connector.get(lrn))
+        val result: UserAnswersResponse = await(connector.get(lrn))
 
-        result mustBe None
+        result mustBe UserAnswersResponse.NoAnswers
+      }
+
+      "return BadRequest when http status indicates" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
+            .willReturn(aResponse.withStatus(BAD_REQUEST))
+        )
+
+        val result: UserAnswersResponse = await(connector.get(lrn))
+
+        result mustBe UserAnswersResponse.BadRequest
+      }
+
+      "return failed future when response have an unexpected status" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
+            .willReturn(aResponse.withStatus(505).withBody("body"))
+        )
+
+        val result = connector.get(lrn)
+
+        result.failed.futureValue mustBe a[Throwable]
+      }
+
+      "return failed future when response cannot be parsed" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
+            .willReturn(okJson("{}"))
+        )
+
+        val result = connector.get(lrn)
+
+        result.failed.futureValue mustBe a[Throwable]
       }
     }
 
@@ -83,7 +121,10 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       val url = s"/manage-transit-movements-departure-cache/user-answers/${userAnswers.lrn}"
 
       "must return true when status is Ok" in {
-        server.stubFor(post(urlEqualTo(url)).willReturn(aResponse().withStatus(OK)))
+        server.stubFor(
+          post(urlEqualTo(url))
+            .willReturn(aResponse().withStatus(OK))
+        )
 
         val result: Boolean = await(connector.post(userAnswers))
 
@@ -95,6 +136,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -111,6 +153,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" in {
         server.stubFor(
           put(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(OK))
         )
 
@@ -124,6 +167,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           put(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -325,6 +369,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return expiry in days when status is Ok" in {
         server.stubFor(
           get(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(okJson(JsNumber(30).toString()))
         )
 
@@ -388,6 +433,41 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
               Seq.empty[DepartureMessage]
             )
         }
+      }
+    }
+
+    "copy" - {
+
+      val oldLrn = new LocalReferenceNumber("oldLrn")
+      val newLrn = new LocalReferenceNumber("newLrn")
+      val url    = s"/manage-transit-movements-departure-cache/user-answers/${oldLrn.value}/copy"
+
+      "must return true when status is Ok" in {
+        server.stubFor(
+          post(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(newLrn.value))))
+            .willReturn(aResponse().withStatus(OK))
+        )
+
+        val result: Boolean = await(connector.copy(oldLrn, newLrn))
+
+        result mustBe true
+      }
+
+      "return false for 4xx or 5xx response" in {
+        val status = Gen.choose(400: Int, 599: Int).sample.value
+
+        server.stubFor(
+          put(urlEqualTo(url))
+            .withHeader("APIVersion", equalTo("2.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(newLrn.value))))
+            .willReturn(aResponse().withStatus(status))
+        )
+
+        val result: Boolean = await(connector.copy(oldLrn, newLrn))
+
+        result mustBe false
       }
     }
   }
