@@ -20,6 +20,7 @@
 
 @this(
     mainTemplate: MainTemplate,
+    formHelper: FormWithCSRF,
     heading: Heading,
     button: Button,
     config: FrontendAppConfig
@@ -31,14 +32,12 @@
     title = messages("locked.title"),
     showBackLink = true
 ) {
-    @heading(messages("locked.heading"))
+    @formHelper(action = routes.LockedController.onSubmit(), Symbol("autoComplete") -> "off") {
 
-    <p class="govuk-body">@messages("locked.paragraph")</p>
+        @heading(messages("locked.heading"))
 
-    <div>
-        @button(
-            messageKey = messages("locked.button"),
-            href = Some(config.manageTransitMovementsDraftDeparturesUrl)
-        )
-    </div>
+        <p class="govuk-body">@messages("locked.paragraph")</p>
+
+        @button(messageKey = "locked.button", attributes = Map("id" -> "submit"))
+    }
 }

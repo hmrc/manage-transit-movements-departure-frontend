@@ -44,5 +44,17 @@ class LockedControllerSpec extends SpecBase with AppWithDefaultMockFixtures with
       contentAsString(result) mustEqual
         view()(request, messages).toString
     }
+
+    "must redirect to Draft departure page" in {
+
+      setExistingUserAnswers(emptyUserAnswers)
+
+      val request = FakeRequest(POST, controllers.routes.LockedController.onPageLoad().url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual frontendAppConfig.manageTransitMovementsDraftDeparturesUrl
+    }
   }
 }
