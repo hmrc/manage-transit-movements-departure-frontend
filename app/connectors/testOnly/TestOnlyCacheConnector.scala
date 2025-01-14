@@ -17,10 +17,9 @@
 package connectors.testOnly
 
 import config.FrontendAppConfig
-import models.LocalReferenceNumber
 import play.api.Logging
 import play.api.http.Status.*
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.JsonBodyWritables.*
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2

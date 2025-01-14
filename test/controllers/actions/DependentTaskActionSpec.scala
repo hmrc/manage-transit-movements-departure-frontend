@@ -64,7 +64,7 @@ class DependentTaskActionSpec extends SpecBase with ScalaCheckPropertyChecks wit
           val result = harness(tasks)
           status(result) mustBe SEE_OTHER
           redirectLocation(result).value mustBe
-            controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url
+            controllers.preTaskList.routes.LocalReferenceNumberController.onPageReload(lrn).url
       }
     }
   }
