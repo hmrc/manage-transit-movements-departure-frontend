@@ -36,8 +36,7 @@ class DependentTaskActionImpl @Inject() (implicit val executionContext: Executio
     if (isTaskCompleted(PreTaskListTask.section)) {
       Future.successful(None)
     } else {
-      // TODO - use navigator to redirect to specific page
-      Future.successful(Option(Redirect(controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad())))
+      Future.successful(Option(Redirect(controllers.preTaskList.routes.LocalReferenceNumberController.onPageReload(request.userAnswers.lrn))))
     }
   }
 }
