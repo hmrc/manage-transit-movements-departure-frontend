@@ -50,5 +50,5 @@ class AdditionalDeclarationTypeViewSpec extends EnumerableViewBehaviours[Additio
 
   behave like pageWithRadioItems()
 
-  behave like pageWithSubmitButton("Save and continue")
+  behave like pageWithSubmitButton("Continue")
 }
