@@ -61,7 +61,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return user answers when status is Ok" in {
         server.stubFor(
           get(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(okJson(json))
         )
 
@@ -82,7 +81,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "return BadRequest when http status indicates" in {
         server.stubFor(
           get(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse.withStatus(BAD_REQUEST))
         )
 
@@ -94,7 +92,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "return failed future when response have an unexpected status" in {
         server.stubFor(
           get(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse.withStatus(505).withBody("body"))
         )
 
@@ -106,7 +103,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "return failed future when response cannot be parsed" in {
         server.stubFor(
           get(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(okJson("{}"))
         )
 
@@ -136,7 +132,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -153,7 +148,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" in {
         server.stubFor(
           put(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(OK))
         )
 
@@ -167,7 +161,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           put(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -279,7 +272,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" in {
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(OK))
         )
 
@@ -293,7 +285,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -307,7 +298,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -324,7 +314,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" in {
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(OK))
         )
 
@@ -338,7 +327,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -352,7 +340,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(aResponse().withStatus(status))
         )
 
@@ -369,7 +356,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return expiry in days when status is Ok" in {
         server.stubFor(
           get(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(okJson(JsNumber(30).toString()))
         )
 
@@ -403,7 +389,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return messages when status is Ok" in {
         server.stubFor(
           get(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .willReturn(okJson(json))
         )
 
@@ -423,7 +408,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
           status =>
             server.stubFor(
               get(urlEqualTo(url))
-                .withHeader("APIVersion", equalTo("2.0"))
                 .willReturn(aResponse.withStatus(status))
             )
 
@@ -445,7 +429,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" in {
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .withRequestBody(equalToJson(Json.stringify(JsString(newLrn.value))))
             .willReturn(aResponse().withStatus(OK))
         )
@@ -460,7 +443,6 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           put(urlEqualTo(url))
-            .withHeader("APIVersion", equalTo("2.0"))
             .withRequestBody(equalToJson(Json.stringify(JsString(newLrn.value))))
             .willReturn(aResponse().withStatus(status))
         )
