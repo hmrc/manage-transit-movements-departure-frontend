@@ -19,13 +19,11 @@ package services
 import base.SpecBase
 import connectors.CacheConnector
 import generators.Generators
-import models.SubmissionState.RejectedPendingChanges
 import models.UserAnswersResponse.Answers
 import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber, UserAnswersResponse}
 import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
-import viewModels.taskList.TaskStatus
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

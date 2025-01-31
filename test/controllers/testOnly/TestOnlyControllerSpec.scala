@@ -52,41 +52,8 @@ class TestOnlyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
       val lrn = nonEmptyString.sample.value
 
       "when answers successfully submitted to cache" - {
-        "must return Ok" - {
-          "when transition" in {
-            val json = Json.parse(s"""
-                 |{
-                 |  "lrn" : "$lrn",
-                 |  "eoriNumber" : "eori123",
-                 |  "isSubmitted" : "notSubmitted",
-                 |  "tasks" : {},
-                 |  "isTransitional" : true
-                 |}
-                 |""".stripMargin)
-
-            when(mockConnector.put(any(), any())(any())).thenReturn(Future.successful(true))
-            when(mockConnector.post(any(), any())(any())).thenReturn(Future.successful(true))
-
-            val request = FakeRequest(POST, testOnlyRoute)
-              .withHeaders("Authorization" -> bearerToken)
-              .withJsonBody(json)
-
-            val result = route(app, request).value
-
-            status(result) mustEqual OK
-
-            val headerCarrierCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
-
-            verify(mockConnector).put(eqTo(lrn), eqTo("2.0"))(headerCarrierCaptor.capture())
-            val headerCarrier = headerCarrierCaptor.getValue
-            verify(mockConnector).post(eqTo(lrn), eqTo(json))(eqTo(headerCarrier))
-
-            headerCarrier.authorization.value.value mustBe bearerToken
-            headerCarrier.sessionId.value.value mustBe sessionId
-          }
-
-          "when final" in {
-            val json = Json.parse(s"""
+        "must return Ok" in {
+          val json = Json.parse(s"""
                  |{
                  |  "lrn" : "$lrn",
                  |  "eoriNumber" : "eori123",
@@ -96,26 +63,26 @@ class TestOnlyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
                  |}
                  |""".stripMargin)
 
-            when(mockConnector.put(any(), any())(any())).thenReturn(Future.successful(true))
-            when(mockConnector.post(any(), any())(any())).thenReturn(Future.successful(true))
+          when(mockConnector.put(any())(any())).thenReturn(Future.successful(true))
+          when(mockConnector.post(any(), any())(any())).thenReturn(Future.successful(true))
 
-            val request = FakeRequest(POST, testOnlyRoute)
-              .withHeaders("Authorization" -> bearerToken)
-              .withJsonBody(json)
+          val request = FakeRequest(POST, testOnlyRoute)
+            .withHeaders("Authorization" -> bearerToken)
+            .withJsonBody(json)
 
-            val result = route(app, request).value
+          val result = route(app, request).value
 
-            status(result) mustEqual OK
+          status(result) mustEqual OK
 
-            val headerCarrierCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
+          val headerCarrierCaptor: ArgumentCaptor[HeaderCarrier] = ArgumentCaptor.forClass(classOf[HeaderCarrier])
 
-            verify(mockConnector).put(eqTo(lrn), eqTo("2.1"))(headerCarrierCaptor.capture())
-            val headerCarrier = headerCarrierCaptor.getValue
-            verify(mockConnector).post(eqTo(lrn), eqTo(json))(eqTo(headerCarrier))
+          verify(mockConnector).put(eqTo(lrn))(headerCarrierCaptor.capture())
+          val headerCarrier = headerCarrierCaptor.getValue
+          verify(mockConnector).post(eqTo(lrn), eqTo(json))(eqTo(headerCarrier))
 
-            headerCarrier.authorization.value.value mustBe bearerToken
-            headerCarrier.sessionId.value.value mustBe sessionId
-          }
+          headerCarrier.authorization.value.value mustBe bearerToken
+          headerCarrier.sessionId.value.value mustBe sessionId
+
         }
       }
 
@@ -131,7 +98,7 @@ class TestOnlyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
                |}
                |""".stripMargin)
 
-          when(mockConnector.put(any(), any())(any())).thenReturn(Future.successful(false))
+          when(mockConnector.put(any())(any())).thenReturn(Future.successful(false))
 
           val request = FakeRequest(POST, testOnlyRoute)
             .withHeaders("Authorization" -> bearerToken)
@@ -155,7 +122,7 @@ class TestOnlyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
                |}
                |""".stripMargin)
 
-          when(mockConnector.put(any(), any())(any())).thenReturn(Future.successful(false))
+          when(mockConnector.put(any())(any())).thenReturn(Future.successful(false))
           when(mockConnector.post(any(), any())(any())).thenReturn(Future.successful(false))
 
           val request = FakeRequest(POST, testOnlyRoute)

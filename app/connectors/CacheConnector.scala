@@ -16,7 +16,7 @@
 
 package connectors
 
-import config.{FrontendAppConfig, PhaseConfig}
+import config.FrontendAppConfig
 import models.LockCheck.*
 import models.{DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers, UserAnswersResponse}
 import play.api.Logging
@@ -32,22 +32,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CacheConnector @Inject() (
   config: FrontendAppConfig,
-  http: HttpClientV2,
-  phaseConfig: PhaseConfig
+  http: HttpClientV2
 )(implicit ec: ExecutionContext)
     extends Logging {
 
   private val baseUrl = s"${config.cacheUrl}"
 
-  private val headers = Seq(
-    "APIVersion" -> phaseConfig.values.apiVersion.toString
-  )
-
   def get(lrn: LocalReferenceNumber)(implicit hc: HeaderCarrier): Future[UserAnswersResponse] = {
     val url = url"$baseUrl/user-answers/$lrn"
     http
       .get(url)
-      .setHeader(headers*)
       .execute[UserAnswersResponse]
   }
 
@@ -87,7 +81,6 @@ class CacheConnector @Inject() (
     http
       .put(url)
       .withBody(Json.toJson(lrn.toString))
-      .setHeader(headers*)
       .execute[HttpResponse]
       .map(_.status == OK)
   }
@@ -104,7 +97,6 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/declaration/submit"
     http
       .post(url)
-      .setHeader(headers*)
       .withBody(Json.toJson(lrn))
       .execute[HttpResponse]
   }
@@ -113,7 +105,6 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/declaration/submit-amendment"
     http
       .post(url)
-      .setHeader(headers*)
       .withBody(Json.toJson(lrn))
       .execute[HttpResponse]
   }
@@ -122,7 +113,6 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/user-answers/$lrn/expiry"
     http
       .get(url)
-      .setHeader(headers*)
       .execute[Long]
   }
 
@@ -131,7 +121,6 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/messages/$lrn"
     http
       .get(url)
-      .setHeader(headers*)
       .execute[DepartureMessages]
   }
 
@@ -139,7 +128,6 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/user-answers/$oldLrn/copy"
     http
       .post(url)
-      .setHeader(headers*)
       .withBody(Json.toJson(newLrn))
       .execute[HttpResponse]
       .map(_.status == OK)
