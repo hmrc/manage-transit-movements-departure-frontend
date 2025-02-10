@@ -20,4 +20,4 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-accessibility-linter" % "1.0.0")
 
-addSbtPlugin("io.github.irundaia" % "sbt-sassify" % "1.5.2")
+addSbtPlugin("uk.gov.hmrc" % "sbt-sass-compiler" % "0.8.0")
