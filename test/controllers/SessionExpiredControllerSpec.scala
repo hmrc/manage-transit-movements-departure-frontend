@@ -66,7 +66,7 @@ class SessionExpiredControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          controllers.routes.DeleteLockController.delete(lrn, Some(RedirectUrl("http://localhost:9485/manage-transit-movements/what-do-you-want-to-do"))).url
+          s"http://localhost:9949/auth-login-stub/gg-sign-in?continue=http%3A%2F%2Flocalhost%3A10120%2Fmanage-transit-movements%2Fdepartures"
       }
 
       "when LRN is undefined" in {
@@ -77,9 +77,9 @@ class SessionExpiredControllerSpec extends SpecBase with AppWithDefaultMockFixtu
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual "http://localhost:9485/manage-transit-movements/what-do-you-want-to-do"
+        redirectLocation(result).value mustEqual
+          s"http://localhost:9949/auth-login-stub/gg-sign-in?continue=http%3A%2F%2Flocalhost%3A10120%2Fmanage-transit-movements%2Fdepartures"
       }
-
     }
   }
 }

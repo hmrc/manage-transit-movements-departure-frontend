@@ -18,6 +18,7 @@ package controllers
 
 import config.FrontendAppConfig
 import models.LocalReferenceNumber
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
@@ -31,19 +32,21 @@ class SessionExpiredController @Inject() (
   val config: FrontendAppConfig,
   view: SessionExpiredView
 ) extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
   def onPageLoad(lrn: Option[LocalReferenceNumber]): Action[AnyContent] = Action {
     implicit request =>
+      lrn
+        .map(_.value)
+        .map(
+          value => s"Session timed out for LRN: $value"
+        )
       Ok(view(lrn))
   }
 
   def onSubmit(lrn: Option[LocalReferenceNumber]): Action[AnyContent] = Action {
     _ =>
-      val url = s"${config.manageTransitMovementsUrl}/what-do-you-want-to-do"
-
-      lrn match
-        case Some(value) => Redirect(controllers.routes.DeleteLockController.delete(value, Some(RedirectUrl(url)))).withNewSession
-        case None        => Redirect(url).withNewSession
+      Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
   }
 }
