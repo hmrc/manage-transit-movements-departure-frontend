@@ -21,7 +21,6 @@ import models.LocalReferenceNumber
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.SessionExpiredView
 
@@ -37,11 +36,9 @@ class SessionExpiredController @Inject() (
 
   def onPageLoad(lrn: Option[LocalReferenceNumber]): Action[AnyContent] = Action {
     implicit request =>
-      lrn
-        .map(_.value)
-        .map(
-          value => s"Session timed out for LRN: $value"
-        )
+      lrn.foreach {
+        value => logger.info(s"Session timed out for LRN: $value")
+      }
       Ok(view(lrn))
   }
 
