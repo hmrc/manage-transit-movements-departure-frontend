@@ -47,7 +47,7 @@ class DeclarationSubmittedController @Inject() (
     onPageLoad(lrn, "IE013")
 
   private def onPageLoad(lrn: LocalReferenceNumber, messageType: String): Action[AnyContent] = actions
-    .requireDataIgnoreSubmissionStatus(lrn)
+    .requireDataAfterSubmission(lrn)
     .andThen(getMandatoryPage(OfficeOfDestinationPage))
     .async {
       implicit request =>

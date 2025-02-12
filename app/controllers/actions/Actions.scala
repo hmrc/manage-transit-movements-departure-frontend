@@ -35,6 +35,6 @@ class Actions @Inject() (
   def requireData(lrn: LocalReferenceNumber): ActionBuilder[DataRequest, AnyContent] =
     getData(lrn) andThen dataRequiredAction(lrn, ignoreSubmissionStatus = false) andThen lockAction()
 
-  def requireDataIgnoreSubmissionStatus(lrn: LocalReferenceNumber): ActionBuilder[DataRequest, AnyContent] =
-    getData(lrn) andThen dataRequiredAction(lrn, ignoreSubmissionStatus = true) andThen lockAction()
+  def requireDataAfterSubmission(lrn: LocalReferenceNumber): ActionBuilder[DataRequest, AnyContent] =
+    getData(lrn) andThen dataRequiredAction(lrn, ignoreSubmissionStatus = true)
 }
