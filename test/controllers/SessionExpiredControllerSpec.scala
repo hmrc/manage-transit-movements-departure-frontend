@@ -19,7 +19,6 @@ package controllers
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import views.html.SessionExpiredView
 
 class SessionExpiredControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
