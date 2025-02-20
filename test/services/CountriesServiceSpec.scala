@@ -50,7 +50,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
               beforeEach()
 
               when(mockRefDataConnector.getCountryCodesCTCCountry(any())(any(), any()))
-                .thenReturn(Future.successful(country))
+                .thenReturn(Future.successful(Right(country)))
 
               val result = service.isInCL112(customsOffice).futureValue
 
@@ -66,7 +66,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
           forAll(arbitrary[CustomsOffice]) {
             customsOffice =>
               when(mockRefDataConnector.getCountryCodesCTCCountry(any())(any(), any()))
-                .thenReturn(Future.failed(new NoReferenceDataFoundException("")))
+                .thenReturn(Future.successful(Left(new NoReferenceDataFoundException(""))))
 
               val result = service.isInCL112(customsOffice).futureValue
 
@@ -98,7 +98,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
               beforeEach()
 
               when(mockRefDataConnector.getCountryCustomsSecurityAgreementAreaCountry(any())(any(), any()))
-                .thenReturn(Future.successful(country))
+                .thenReturn(Future.successful(Right(country)))
 
               val result = service.isInCL147(customsOffice).futureValue
 
@@ -114,7 +114,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
           forAll(arbitrary[CustomsOffice]) {
             customsOffice =>
               when(mockRefDataConnector.getCountryCustomsSecurityAgreementAreaCountry(any())(any(), any()))
-                .thenReturn(Future.failed(new NoReferenceDataFoundException("")))
+                .thenReturn(Future.successful(Left(new NoReferenceDataFoundException(""))))
 
               val result = service.isInCL147(customsOffice).futureValue
 
@@ -146,7 +146,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
               beforeEach()
 
               when(mockRefDataConnector.getCountryCodeCommunityCountry(any())(any(), any()))
-                .thenReturn(Future.successful(country))
+                .thenReturn(Future.successful(Right(country)))
 
               val result = service.isInCL010(customsOffice).futureValue
 
@@ -162,7 +162,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
           forAll(arbitrary[CustomsOffice]) {
             customsOffice =>
               when(mockRefDataConnector.getCountryCodeCommunityCountry(any())(any(), any()))
-                .thenReturn(Future.failed(new NoReferenceDataFoundException("")))
+                .thenReturn(Future.successful(Left(new NoReferenceDataFoundException(""))))
 
               val result = service.isInCL010(customsOffice).futureValue
 

@@ -17,8 +17,7 @@
 package services
 
 import connectors.ReferenceDataConnector
-import connectors.ReferenceDataConnector.NoReferenceDataFoundException
-import models.reference._
+import models.reference.*
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -29,31 +28,15 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
   def isInCL112(customsOffice: CustomsOffice)(implicit hc: HeaderCarrier): Future[Boolean] =
     referenceDataConnector
       .getCountryCodesCTCCountry(customsOffice.countryId)
-      .map {
-        _ => true
-      }
-      .recover {
-        case _: NoReferenceDataFoundException => false
-      }
+      .map(_.isDefined)
 
   def isInCL147(customsOffice: CustomsOffice)(implicit hc: HeaderCarrier): Future[Boolean] =
     referenceDataConnector
       .getCountryCustomsSecurityAgreementAreaCountry(customsOffice.countryId)
-      .map {
-        _ => true
-      }
-      .recover {
-        case _: NoReferenceDataFoundException => false
-      }
+      .map(_.isDefined)
 
   def isInCL010(customsOffice: CustomsOffice)(implicit hc: HeaderCarrier): Future[Boolean] =
     referenceDataConnector
       .getCountryCodeCommunityCountry(customsOffice.countryId)
-      .map {
-        _ => true
-      }
-      .recover {
-        case _: NoReferenceDataFoundException => false
-      }
-
+      .map(_.isDefined)
 }

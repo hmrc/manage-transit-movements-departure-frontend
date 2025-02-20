@@ -56,7 +56,7 @@ class CustomsOfficesServiceSpec extends SpecBase with AppWithDefaultMockFixtures
       "must return a list of sorted GB and NI customs offices" in {
 
         when(mockRefDataConnector.getCustomsOfficesOfDepartureForCountry(any())(any(), any()))
-          .thenReturn(Future.successful(customsOffices))
+          .thenReturn(Future.successful(Right(customsOffices)))
 
         service.getCustomsOfficesOfDeparture.futureValue mustBe
           SelectableList(Seq(gbCustomsOffice2, xiCustomsOffice1, gbCustomsOffice1))

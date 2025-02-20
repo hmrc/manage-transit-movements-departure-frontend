@@ -16,7 +16,7 @@
 
 package services
 
-import config.Constants._
+import config.Constants.*
 import connectors.ReferenceDataConnector
 import models.ProcedureType
 import models.reference.{CustomsOffice, DeclarationType}
@@ -30,6 +30,7 @@ class DeclarationTypesService @Inject() (referenceDataConnector: ReferenceDataCo
   def getDeclarationTypes(officeOfDeparture: CustomsOffice, procedureType: ProcedureType)(implicit hc: HeaderCarrier): Future[Seq[DeclarationType]] =
     referenceDataConnector
       .getDeclarationTypes()
+      .map(_.resolve())
       .map(_.filterNot(_.code == T2SM))
       .map(_.toSeq)
       .map(filter(_, officeOfDeparture, procedureType))
