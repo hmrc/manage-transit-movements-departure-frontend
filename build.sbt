@@ -1,5 +1,4 @@
 import play.sbt.routes.RoutesKeys
-import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
@@ -22,6 +21,7 @@ lazy val microservice = (project in file("."))
   .settings(DefaultBuildSettings.defaultSettings() *)
   .settings(headerSettings(A11yTest) *)
   .settings(automateHeaderSettings(A11yTest))
+  .settings(CodeCoverageSettings.settings *)
   .settings(
     name := appName,
     RoutesKeys.routesImport ++= Seq(
@@ -43,18 +43,6 @@ lazy val microservice = (project in file("."))
       "views.utils.ViewUtils._"
     ),
     PlayKeys.playDefaultPort := 10120,
-    ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*repositories.*;" +
-      ".*BuildInfo.*;.*javascript.*;.*Routes.*;.*GuiceInjector;" +
-      ".*ControllerConfiguration",
-    ScoverageKeys.coverageExcludedPackages := Seq(
-      ".*views.html.components.*",
-      ".*views.html.resources.*",
-      ".*views.html.templates.*",
-      ".*views.utils.*"
-    ).mkString(";"),
-    ScoverageKeys.coverageMinimumStmtTotal := 90,
-    ScoverageKeys.coverageFailOnMinimum := true,
-    ScoverageKeys.coverageHighlighting  := true,
     ThisBuild / useSuperShell := false,
     scalacOptions ++= Seq(
       "-feature",
