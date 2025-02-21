@@ -26,5 +26,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class SecurityTypesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
 
   def getSecurityTypes()(implicit hc: HeaderCarrier): Future[Seq[SecurityType]] =
-    referenceDataConnector.getSecurityTypes().map(_.toSeq)
+    referenceDataConnector
+      .getSecurityTypes()
+      .map(_.resolve())
+      .map(_.toSeq)
 }

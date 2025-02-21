@@ -33,5 +33,6 @@ class CustomsOfficesService @Inject() (
   def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[SelectableList[CustomsOffice]] =
     referenceDataConnector
       .getCustomsOfficesOfDepartureForCountry(config.countriesOfDeparture*)
+      .map(_.resolve())
       .map(SelectableList(_))
 }

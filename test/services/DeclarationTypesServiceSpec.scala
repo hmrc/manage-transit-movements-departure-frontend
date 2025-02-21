@@ -57,7 +57,7 @@ class DeclarationTypesServiceSpec extends SpecBase with BeforeAndAfterEach with 
     reset(mockRefDataConnector)
 
     when(mockRefDataConnector.getDeclarationTypes()(any(), any()))
-      .thenReturn(Future.successful(declarationTypes))
+      .thenReturn(Future.successful(Right(declarationTypes)))
   }
 
   "DeclarationTypesService" - {
