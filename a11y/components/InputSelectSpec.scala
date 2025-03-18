@@ -17,7 +17,7 @@
 package components
 
 import a11ySpecBase.A11ySpecBase
-import forms.SelectableFormProvider
+import forms.SelectableFormProvider.CustomsOfficeFormProvider
 import models.SelectableList
 import models.reference.CustomsOffice
 import org.scalacheck.Arbitrary.arbitrary
@@ -43,7 +43,9 @@ class InputSelectSpec extends A11ySpecBase {
     val selectedValue  = Gen.oneOf(None, Some(customsOffices.values.head)).sample.value
     val selectItems    = customsOffices.values.toSelectItems(selectedValue)
     val additionalHtml = arbitrary[Html].sample.value
-    val form           = new SelectableFormProvider()(prefix, customsOffices)
+    val formProvider   = new CustomsOfficeFormProvider()
+    val form           = formProvider.apply(prefix, customsOffices)
+    val field          = formProvider.field
     val preparedForm = selectedValue match {
       case Some(customsOffice) => form.fill(customsOffice)
       case None                => form
@@ -53,21 +55,21 @@ class InputSelectSpec extends A11ySpecBase {
 
       "ordinary select" in {
         val content = template.apply(title) {
-          component.apply(preparedForm("value"), OrdinarySelect(title, caption), placeholder, selectItems, hint)
+          component.apply(preparedForm(field), OrdinarySelect(title, caption), placeholder, selectItems, hint)
         }
         content.toString() must passAccessibilityChecks
       }
 
       "select with additional html" in {
         val content = template.apply(title) {
-          component.apply(preparedForm("value"), SelectWithAdditionalHtml(title, caption, additionalHtml), placeholder, selectItems, hint)
+          component.apply(preparedForm(field), SelectWithAdditionalHtml(title, caption, additionalHtml), placeholder, selectItems, hint)
         }
         content.toString() must passAccessibilityChecks
       }
 
       "address country select" in {
         val content = template.apply(title) {
-          component.apply(preparedForm("value"), AddressCountrySelect(label), placeholder, selectItems, hint).withHeading(title)
+          component.apply(preparedForm(field), AddressCountrySelect(label), placeholder, selectItems, hint).withHeading(title)
         }
         content.toString() must passAccessibilityChecks
       }
