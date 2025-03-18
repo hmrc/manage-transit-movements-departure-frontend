@@ -16,9 +16,9 @@
 
 package controllers.preTaskList
 
-import controllers.actions._
+import controllers.actions.*
 import controllers.{NavigatorOps, SettableOps, SettableOpsRunner}
-import forms.SelectableFormProvider
+import forms.SelectableFormProvider.CustomsOfficeFormProvider
 import models.reference.CustomsOffice
 import models.{LocalReferenceNumber, Mode, SelectableList}
 import navigation.{PreTaskListNavigatorProvider, UserAnswersNavigator}
@@ -40,7 +40,7 @@ class OfficeOfDepartureController @Inject() (
   navigatorProvider: PreTaskListNavigatorProvider,
   actions: Actions,
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
-  formProvider: SelectableFormProvider,
+  formProvider: CustomsOfficeFormProvider,
   customsOfficesService: CustomsOfficesService,
   countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
@@ -49,7 +49,8 @@ class OfficeOfDepartureController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private def form(customsOfficeList: SelectableList[CustomsOffice]): Form[CustomsOffice] = formProvider("officeOfDeparture", customsOfficeList)
+  private def form(customsOfficeList: SelectableList[CustomsOffice]): Form[CustomsOffice] =
+    formProvider("officeOfDeparture", customsOfficeList)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = actions
     .requireData(lrn)
