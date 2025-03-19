@@ -15,6 +15,7 @@
  *@
 
 @import controllers.preTaskList.routes
+@import forms.SelectableFormProvider.CustomsOfficeFormProvider.field
 @import views.html.components.{Button, ErrorSummary, InputSelect}
 @import models.LocalReferenceNumber
 @import models.reference.CustomsOffice
@@ -44,7 +45,7 @@
         @errorSummary(form.errors)
 
         @select(
-            field = form("value"),
+            field = form(field),
             selectType = SelectWithAdditionalHtml(
                 heading = messages("officeOfDeparture.heading"),
                 additionalHtml = messages("officeOfDeparture.paragraph").toParagraph
