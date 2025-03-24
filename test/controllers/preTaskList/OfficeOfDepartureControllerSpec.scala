@@ -17,7 +17,7 @@
 package controllers.preTaskList
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import forms.SelectableFormProvider
+import forms.SelectableFormProvider.CustomsOfficeFormProvider
 import models.reference.CustomsOffice
 import models.{NormalMode, SelectableList, UserAnswers}
 import navigation.PreTaskListNavigatorProvider
@@ -32,7 +32,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import services.{CountriesService, CustomsOfficesService}
 import views.html.preTaskList.OfficeOfDepartureView
 
@@ -44,8 +44,12 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
   private val customsOffice2: CustomsOffice                 = CustomsOffice("GB2", "name", None, "GB")
   private val customsOffices: SelectableList[CustomsOffice] = SelectableList(Seq(customsOffice1, customsOffice2))
 
-  private val gbForm = new SelectableFormProvider()("officeOfDeparture", customsOffices)
-  private val mode   = NormalMode
+  private val formProvider = new CustomsOfficeFormProvider()
+  private val form         = formProvider.apply("officeOfDeparture", customsOffices)
+
+  private val field = formProvider.field
+
+  private val mode = NormalMode
 
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
   private val mockCountriesService: CountriesService           = mock[CountriesService]
@@ -78,7 +82,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(gbForm, lrn, customsOffices.values, mode)(request, messages).toString
+        view(form, lrn, customsOffices.values, mode)(request, messages).toString
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
@@ -95,7 +99,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
 
       status(result) mustEqual OK
 
-      val filledForm = gbForm.bind(Map("value" -> "GB1"))
+      val filledForm = form.bind(Map(field -> "GB1"))
 
       contentAsString(result) mustEqual
         view(filledForm, lrn, customsOffices.values, mode)(request, messages).toString
@@ -115,7 +119,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
             when(mockCountriesService.isInCL010(any())(any())).thenReturn(Future.successful(isInCL010))
 
             val request = FakeRequest(POST, officeOfDepartureRoute)
-              .withFormUrlEncodedBody(("value", "GB1"))
+              .withFormUrlEncodedBody((field, "GB1"))
 
             val result: Future[Result] = route(app, request).value
 
@@ -146,8 +150,8 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
       setExistingUserAnswers(emptyUserAnswers)
       when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
-      val request   = FakeRequest(POST, officeOfDepartureRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm = gbForm.bind(Map("value" -> ""))
+      val request   = FakeRequest(POST, officeOfDepartureRoute).withFormUrlEncodedBody((field, ""))
+      val boundForm = form.bind(Map(field -> ""))
 
       val result = route(app, request).value
 
@@ -175,7 +179,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
       setNoExistingUserAnswers()
 
       val request = FakeRequest(POST, officeOfDepartureRoute)
-        .withFormUrlEncodedBody(("value", "answer"))
+        .withFormUrlEncodedBody((field, "answer"))
 
       val result = route(app, request).value
 

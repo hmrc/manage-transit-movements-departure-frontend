@@ -30,7 +30,8 @@
 
 @mainTemplate(
     title = messages("declarationSubmitted.title"),
-    showBackLink = false
+    showBackLink = false,
+    lrn = Some(lrn)
 ) {
     @govukPanel(
         Panel(

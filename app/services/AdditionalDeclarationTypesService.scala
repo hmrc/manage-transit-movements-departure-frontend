@@ -26,5 +26,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class AdditionalDeclarationTypesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
 
   def getAdditionalDeclarationTypes()(implicit hc: HeaderCarrier): Future[Seq[AdditionalDeclarationType]] =
-    referenceDataConnector.getAdditionalDeclarationTypes().map(_.toSeq)
+    referenceDataConnector
+      .getAdditionalDeclarationTypes()
+      .map(_.resolve())
+      .map(_.toSeq)
 }

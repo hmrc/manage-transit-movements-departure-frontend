@@ -49,7 +49,7 @@ class AdditionalDeclarationTypesServiceSpec extends SpecBase with BeforeAndAfter
     reset(mockRefDataConnector)
 
     when(mockRefDataConnector.getAdditionalDeclarationTypes()(any(), any()))
-      .thenReturn(Future.successful(adts))
+      .thenReturn(Future.successful(Right(adts)))
   }
 
   "AdditionalDeclarationTypesService" - {

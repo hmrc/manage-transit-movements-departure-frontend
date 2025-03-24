@@ -49,7 +49,7 @@ class SecurityTypesServiceSpec extends SpecBase with BeforeAndAfterEach {
     "getSecurityTypes" - {
       "must return a list of sorted security types" in {
         when(mockRefDataConnector.getSecurityTypes()(any(), any()))
-          .thenReturn(Future.successful(securityTypes))
+          .thenReturn(Future.successful(Right(securityTypes)))
 
         service.getSecurityTypes().futureValue mustBe
           Seq(securityType4, securityType3, securityType2, securityType1)
