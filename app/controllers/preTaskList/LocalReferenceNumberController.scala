@@ -53,7 +53,7 @@ class LocalReferenceNumberController @Inject() (
 
   def onPageLoad(): Action[AnyContent] = identify {
     implicit request =>
-      sessionService.getLrnFromSession.flatMap(LocalReferenceNumber(_)) match {
+      sessionService.get.flatMap(LocalReferenceNumber(_)) match {
         case Some(lrn) => Ok(view(form.fill(lrn)))
         case None      => Ok(view(form))
       }
@@ -95,7 +95,7 @@ class LocalReferenceNumberController @Inject() (
                     }
               }
               .map {
-                result => sessionService.setLrnInSession(result, lrn)
+                result => sessionService.set(result, lrn)
               }
         )
   }

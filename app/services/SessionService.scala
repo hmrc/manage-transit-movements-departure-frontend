@@ -22,12 +22,14 @@ import services.SessionService.key
 
 class SessionService {
 
-  def getLrnFromSession[A <: Request[?]](implicit request: A): Option[String] =
+  def get[A <: Request[?]](implicit request: A): Option[String] =
     request.session.get(key)
 
-  def setLrnInSession[A <: Request[?]](result: Result, lrn: LocalReferenceNumber)(implicit request: A): Result =
-    result.addingToSession(key -> lrn.toString)(request)
+  def set[A <: Request[?]](result: Result, lrn: LocalReferenceNumber)(implicit request: A): Result =
+    result.addingToSession(key -> lrn.toString)
 
+  def remove[A <: Request[?]](result: Result)(implicit request: A): Result =
+    result.removingFromSession(key)
 }
 
 object SessionService {

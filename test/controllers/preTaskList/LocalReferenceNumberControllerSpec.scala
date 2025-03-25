@@ -50,7 +50,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
     super.beforeEach()
     reset(mockDuplicateService)
     reset(mockSessionService)
-    when(mockSessionService.setLrnInSession(any(), any())(any())).thenCallRealMethod()
+    when(mockSessionService.set(any(), any())(any())).thenCallRealMethod()
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
@@ -64,7 +64,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
   "LocalReferenceNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      when(mockSessionService.getLrnFromSession(any()))
+      when(mockSessionService.get(any()))
         .thenReturn(None)
 
       val request = FakeRequest(GET, localReferenceNumberRoute)
@@ -81,7 +81,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
     "must populate the view correctly on a GET when the question has previously been answered" - {
       "when onPageLoad" in {
-        when(mockSessionService.getLrnFromSession(any()))
+        when(mockSessionService.get(any()))
           .thenReturn(Some(lrn.value))
 
         val request = FakeRequest(GET, routes.LocalReferenceNumberController.onPageLoad().url)
@@ -198,7 +198,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
           verify(mockSessionRepository).get(eqTo(lrn))(any())
           verify(mockSessionRepository).put(eqTo(lrn))(any())
-          verify(mockSessionService).setLrnInSession(any(), eqTo(lrn))(any())
+          verify(mockSessionService).set(any(), eqTo(lrn))(any())
         }
       }
     }
@@ -225,7 +225,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
           verify(mockSessionRepository).get(eqTo(lrn))(any())
           verify(mockSessionRepository, never()).put(any())(any())
-          verify(mockSessionService).setLrnInSession(any(), eqTo(lrn))(any())
+          verify(mockSessionService).set(any(), eqTo(lrn))(any())
         }
       }
     }
@@ -247,7 +247,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
         verify(mockSessionRepository).get(eqTo(lrn))(any())
         verify(mockSessionRepository).put(eqTo(lrn))(any())
-        verify(mockSessionService).setLrnInSession(any(), eqTo(lrn))(any())
+        verify(mockSessionService).set(any(), eqTo(lrn))(any())
       }
 
       "to draft no longer available when session repository returns bad request" in {
@@ -266,7 +266,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
         verify(mockSessionRepository).get(eqTo(lrn))(any())
         verify(mockSessionRepository).put(eqTo(lrn))(any())
-        verify(mockSessionService).setLrnInSession(any(), eqTo(lrn))(any())
+        verify(mockSessionService).set(any(), eqTo(lrn))(any())
       }
     }
   }

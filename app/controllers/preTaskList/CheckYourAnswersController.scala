@@ -27,6 +27,7 @@ import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.SessionService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.preTaskList.PreTaskListViewModel.PreTaskListViewModelProvider
 import views.html.preTaskList.CheckYourAnswersView
@@ -41,7 +42,8 @@ class CheckYourAnswersController @Inject() (
   checkIfPreTaskListAlreadyCompleted: PreTaskListCompletedAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
-  viewModelProvider: PreTaskListViewModelProvider
+  viewModelProvider: PreTaskListViewModelProvider,
+  sessionService: SessionService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -70,6 +72,7 @@ class CheckYourAnswersController @Inject() (
           .updateTask(frontendAppConfig.isPreLodgeEnabled)
           .writeToSession(sessionRepository)
           .navigateTo(controllers.routes.TaskListController.onPageLoad(lrn))
+          .map(sessionService.remove(_))
     }
 
 }

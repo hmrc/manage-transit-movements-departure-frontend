@@ -28,14 +28,13 @@ class SessionServiceSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
 
   private val sessionService = new SessionService()
 
-  "getLrnFromSession" - {
-
+  "get" - {
     "when LRN exists" - {
       "must return Some value" in {
         forAll(arbitrary[String]) {
-          value =>
-            implicit val request: FakeRequest[?] = fakeRequest.withSession(SessionService.key -> value)
-            sessionService.getLrnFromSession.get mustEqual value
+          lrn =>
+            implicit val request: FakeRequest[?] = fakeRequest.withSession(SessionService.key -> lrn)
+            sessionService.get.get mustEqual lrn
         }
       }
     }
@@ -43,20 +42,54 @@ class SessionServiceSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
     "when LRN does not exist" - {
       "must return None" in {
         implicit val request: FakeRequest[?] = fakeRequest
-        sessionService.getLrnFromSession mustNot be(defined)
+        sessionService.get mustNot be(defined)
       }
     }
   }
 
-  "setLrnInSession" - {
+  "set" - {
     "must set LRN in session" in {
       forAll(arbitrary[LocalReferenceNumber]) {
         lrn =>
           implicit val request: FakeRequest[?] = fakeRequest
           val resultBefore                     = Ok
           resultBefore.session.get(SessionService.key) mustNot be(defined)
-          val resultAfter = sessionService.setLrnInSession(resultBefore, lrn)
+          val resultAfter = sessionService.set(resultBefore, lrn)
           resultAfter.session.get(SessionService.key).get mustEqual lrn.toString
+      }
+    }
+
+    "must overwrite LRN in session" in {
+      forAll(arbitrary[LocalReferenceNumber], arbitrary[LocalReferenceNumber]) {
+        (lrn1, lrn2) =>
+          implicit val request: FakeRequest[?] = fakeRequest.withSession(SessionService.key -> lrn1.toString)
+          val resultBefore                     = Ok
+          resultBefore.session.get(SessionService.key) must be(defined)
+          val resultAfter = sessionService.set(resultBefore, lrn2)
+          resultAfter.session.get(SessionService.key).get mustEqual lrn2.toString
+      }
+    }
+  }
+
+  "remove" - {
+    "must remove LRN from session" - {
+      "when there isn't an LRN in the session" in {
+        implicit val request: FakeRequest[?] = fakeRequest
+        val resultBefore                     = Ok
+        resultBefore.session.get(SessionService.key) mustNot be(defined)
+        val resultAfter = sessionService.remove(resultBefore)
+        resultAfter.session.get(SessionService.key) mustNot be(defined)
+      }
+
+      "when there is an LRN in the session" in {
+        forAll(arbitrary[LocalReferenceNumber]) {
+          lrn =>
+            implicit val request: FakeRequest[?] = fakeRequest.withSession(SessionService.key -> lrn.toString)
+            val resultBefore                     = Ok
+            resultBefore.session.get(SessionService.key) must be(defined)
+            val resultAfter = sessionService.remove(resultBefore)
+            resultAfter.session.get(SessionService.key) mustNot be(defined)
+        }
       }
     }
   }
