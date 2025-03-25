@@ -26,7 +26,7 @@ import play.api.test.FakeRequest
 
 class SessionServiceSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  private val referralService = new SessionService()
+  private val sessionService = new SessionService()
 
   "getLrnFromSession" - {
 
@@ -35,7 +35,7 @@ class SessionServiceSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
         forAll(arbitrary[String]) {
           value =>
             implicit val request: FakeRequest[?] = fakeRequest.withSession(SessionService.key -> value)
-            referralService.getLrnFromSession.get mustEqual value
+            sessionService.getLrnFromSession.get mustEqual value
         }
       }
     }
@@ -43,7 +43,7 @@ class SessionServiceSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
     "when LRN does not exist" - {
       "must return None" in {
         implicit val request: FakeRequest[?] = fakeRequest
-        referralService.getLrnFromSession mustNot be(defined)
+        sessionService.getLrnFromSession mustNot be(defined)
       }
     }
   }
@@ -51,12 +51,12 @@ class SessionServiceSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
   "setLrnInSession" - {
     "must set LRN in session" in {
       forAll(arbitrary[LocalReferenceNumber]) {
-        referral =>
+        lrn =>
           implicit val request: FakeRequest[?] = fakeRequest
           val resultBefore                     = Ok
           resultBefore.session.get(SessionService.key) mustNot be(defined)
-          val resultAfter = referralService.setLrnInSession(resultBefore, referral)
-          resultAfter.session.get(SessionService.key).get mustEqual referral.toString
+          val resultAfter = sessionService.setLrnInSession(resultBefore, lrn)
+          resultAfter.session.get(SessionService.key).get mustEqual lrn.toString
       }
     }
   }
