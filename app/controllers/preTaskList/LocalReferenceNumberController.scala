@@ -25,7 +25,7 @@ import play.api.data.{Form, FormError}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.DuplicateService
+import services.{DuplicateService, SessionService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.preTaskList.LocalReferenceNumberView
 
@@ -35,6 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LocalReferenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
+  sessionService: SessionService,
   duplicateService: DuplicateService,
   navigatorProvider: PreTaskListNavigatorProvider,
   identify: IdentifierAction,
@@ -52,7 +53,10 @@ class LocalReferenceNumberController @Inject() (
 
   def onPageLoad(): Action[AnyContent] = identify {
     implicit request =>
-      Ok(view(form))
+      sessionService.getLrnFromSession.flatMap(LocalReferenceNumber(_)) match {
+        case Some(lrn) => Ok(view(form.fill(lrn)))
+        case None      => Ok(view(form))
+      }
   }
 
   def onPageReload(lrn: LocalReferenceNumber): Action[AnyContent] = identify {
@@ -67,27 +71,32 @@ class LocalReferenceNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
           lrn =>
-            duplicateService.doesDraftOrSubmissionExistForLrn(lrn).flatMap {
-              case true =>
-                sessionRepository.get(lrn).map {
-                  case UserAnswersResponse.Answers(userAnswers) if userAnswers.status == SubmissionState.NotSubmitted =>
-                    Redirect(navigatorProvider(CheckMode).nextPage(userAnswers, None))
-                  case _ =>
-                    val formWithErrors = form.withError(FormError("value", s"$prefix.error.alreadyExists"))
-                    BadRequest(view(formWithErrors))
-                }
-              case false =>
-                sessionRepository
-                  .put(lrn)
-                  .flatMap {
-                    _ => sessionRepository.get(lrn)
+            duplicateService
+              .doesDraftOrSubmissionExistForLrn(lrn)
+              .flatMap {
+                case true =>
+                  sessionRepository.get(lrn).map {
+                    case UserAnswersResponse.Answers(userAnswers) if userAnswers.status == SubmissionState.NotSubmitted =>
+                      Redirect(navigatorProvider(CheckMode).nextPage(userAnswers, None))
+                    case _ =>
+                      val formWithErrors = form.withError(FormError("value", s"$prefix.error.alreadyExists"))
+                      BadRequest(view(formWithErrors))
                   }
-                  .map {
-                    case UserAnswersResponse.Answers(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers, None))
-                    case UserAnswersResponse.BadRequest           => Redirect(controllers.routes.DraftNoLongerAvailableController.onPageLoad())
-                    case _                                        => Redirect(controllers.routes.ErrorController.technicalDifficulties())
-                  }
-            }
+                case false =>
+                  sessionRepository
+                    .put(lrn)
+                    .flatMap {
+                      _ => sessionRepository.get(lrn)
+                    }
+                    .map {
+                      case UserAnswersResponse.Answers(userAnswers) => Redirect(navigatorProvider(NormalMode).nextPage(userAnswers, None))
+                      case UserAnswersResponse.BadRequest           => Redirect(controllers.routes.DraftNoLongerAvailableController.onPageLoad())
+                      case _                                        => Redirect(controllers.routes.ErrorController.technicalDifficulties())
+                    }
+              }
+              .map {
+                result => sessionService.setLrnInSession(result, lrn)
+              }
         )
   }
 }

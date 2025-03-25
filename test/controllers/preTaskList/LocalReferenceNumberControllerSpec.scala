@@ -30,7 +30,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import services.DuplicateService
+import services.{DuplicateService, SessionService}
 import views.html.preTaskList.LocalReferenceNumberView
 
 import scala.concurrent.Future
@@ -44,20 +44,29 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
   private lazy val localReferenceNumberRoute: String      = routes.LocalReferenceNumberController.onPageLoad().url
   private lazy val mockDuplicateService: DuplicateService = mock[DuplicateService]
+  private lazy val mockSessionService: SessionService     = mock[SessionService]
 
   override def beforeEach(): Unit = {
     super.beforeEach()
     reset(mockDuplicateService)
+    reset(mockSessionService)
+    when(mockSessionService.setLrnInSession(any(), any())(any())).thenCallRealMethod()
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[DuplicateService]).toInstance(mockDuplicateService))
+      .overrides(
+        bind(classOf[DuplicateService]).toInstance(mockDuplicateService),
+        bind(classOf[SessionService]).toInstance(mockSessionService)
+      )
 
   "LocalReferenceNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
+      when(mockSessionService.getLrnFromSession(any()))
+        .thenReturn(None)
+
       val request = FakeRequest(GET, localReferenceNumberRoute)
 
       val result = route(app, request).value
@@ -70,19 +79,39 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
         view(form)(request, messages).toString
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-      val request = FakeRequest(GET, routes.LocalReferenceNumberController.onPageReload(lrn).url)
+    "must populate the view correctly on a GET when the question has previously been answered" - {
+      "when onPageLoad" in {
+        when(mockSessionService.getLrnFromSession(any()))
+          .thenReturn(Some(lrn.value))
 
-      val result = route(app, request).value
+        val request = FakeRequest(GET, routes.LocalReferenceNumberController.onPageLoad().url)
 
-      val filledForm = form.bind(Map("value" -> lrn.value))
+        val result = route(app, request).value
 
-      val view = injector.instanceOf[LocalReferenceNumberView]
+        val filledForm = form.bind(Map("value" -> lrn.value))
 
-      status(result) mustEqual OK
+        val view = injector.instanceOf[LocalReferenceNumberView]
 
-      contentAsString(result) mustEqual
-        view(filledForm)(request, messages).toString
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(filledForm)(request, messages).toString
+      }
+
+      "when onPageReload" in {
+        val request = FakeRequest(GET, routes.LocalReferenceNumberController.onPageReload(lrn).url)
+
+        val result = route(app, request).value
+
+        val filledForm = form.bind(Map("value" -> lrn.value))
+
+        val view = injector.instanceOf[LocalReferenceNumberView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(filledForm)(request, messages).toString
+      }
     }
 
     "must return a Bad Request and errors when a duplicate local reference number is submitted" - {
@@ -169,8 +198,8 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
           verify(mockSessionRepository).get(eqTo(lrn))(any())
           verify(mockSessionRepository).put(eqTo(lrn))(any())
+          verify(mockSessionService).setLrnInSession(any(), eqTo(lrn))(any())
         }
-
       }
     }
 
@@ -196,8 +225,8 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
           verify(mockSessionRepository).get(eqTo(lrn))(any())
           verify(mockSessionRepository, never()).put(any())(any())
+          verify(mockSessionService).setLrnInSession(any(), eqTo(lrn))(any())
         }
-
       }
     }
 
@@ -218,6 +247,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
         verify(mockSessionRepository).get(eqTo(lrn))(any())
         verify(mockSessionRepository).put(eqTo(lrn))(any())
+        verify(mockSessionService).setLrnInSession(any(), eqTo(lrn))(any())
       }
 
       "to draft no longer available when session repository returns bad request" in {
@@ -236,6 +266,7 @@ class LocalReferenceNumberControllerSpec extends SpecBase with AppWithDefaultMoc
 
         verify(mockSessionRepository).get(eqTo(lrn))(any())
         verify(mockSessionRepository).put(eqTo(lrn))(any())
+        verify(mockSessionService).setLrnInSession(any(), eqTo(lrn))(any())
       }
     }
   }
