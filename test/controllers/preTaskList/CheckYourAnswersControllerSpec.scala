@@ -21,13 +21,14 @@ import generators.Generators
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.{reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
+import services.SessionService
 import viewModels.preTaskList.PreTaskListViewModel
 import viewModels.preTaskList.PreTaskListViewModel.PreTaskListViewModelProvider
 import viewModels.sections.Section
@@ -39,11 +40,22 @@ import scala.concurrent.Future
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   private lazy val mockViewModelProvider = mock[PreTaskListViewModelProvider]
+  private lazy val mockSessionService    = mock[SessionService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[PreTaskListViewModelProvider].toInstance(mockViewModelProvider))
+      .overrides(
+        bind[PreTaskListViewModelProvider].toInstance(mockViewModelProvider),
+        bind[SessionService].toInstance(mockSessionService)
+      )
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockViewModelProvider)
+    reset(mockSessionService)
+    when(mockSessionService.remove(any())(any())).thenCallRealMethod()
+  }
 
   "Check Your Answers Controller" - {
 
@@ -121,6 +133,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
           val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
           verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
           userAnswersCaptor.getValue.tasks.apply(".preTaskList") mustBe TaskStatus.Completed
+
+          verify(mockSessionService).remove(any())(any())
       }
     }
   }
