@@ -19,17 +19,21 @@ package controllers
 import controllers.actions.IdentifierAction
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.SessionService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
 
 class RedirectController @Inject() (
   identify: IdentifierAction,
-  cc: MessagesControllerComponents
+  cc: MessagesControllerComponents,
+  sessionService: SessionService
 ) extends FrontendController(cc)
     with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (Action andThen identify) {
-    Redirect(controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad())
+    implicit request =>
+      val result = Redirect(controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad())
+      sessionService.remove(result)
   }
 }
