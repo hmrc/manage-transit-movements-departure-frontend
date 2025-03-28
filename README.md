@@ -20,20 +20,10 @@ Run accessibility linter tests:
 
 ### Running manually or for journey tests
 
-To toggle between the Phase 5 transition and post-transition modes we have defined two separate modules, each with their own set of class bindings to handle the rules associated with these two periods.
-
-#### Transition
-<pre>
-sm2 --start CTC_TRADERS_P5_ACCEPTANCE_TRANSITION
-sm2 --stop MANAGE_TRANSIT_MOVEMENTS_DEPARTURE_FRONTEND_TRANSITION
-sbt -Dplay.additional.module=config.TransitionModule run
-</pre>
-
-#### Final
 <pre>
 sm2 --start CTC_TRADERS_P5_ACCEPTANCE
 sm2 --stop MANAGE_TRANSIT_MOVEMENTS_DEPARTURE_FRONTEND
-sbt -Dplay.additional.module=config.PostTransitionModule run
+sbt run
 </pre>
 
 ### Feature toggles
@@ -46,7 +36,6 @@ The following features can be toggled in [application.conf](conf/application.con
 | `countriesOfDeparture`       | `Seq[String]` | `sbt -DcountriesOfDeparture.0=GB countriesOfDeparture.1=XI run` | Controls which countries we fetch offices of departure for. This is so we can run XI only from June 28th before going live with both GB and XI on July 1st.                                    |
 | `banners.showUserResearch`   | `Boolean`     | `sbt -Dbanners.showUserResearch=true run`                       | Controls whether or not we show the user research banner.                                                                                                                                      |
 | `features.isPreLodgeEnabled` | `Boolean`     | `sbt -Dfeatures.isPreLodgeEnabled=true run`                     | Controls whether or not we ask the user if it is a standard (A) or pre-lodged (D) declaration. If false we default to standard (A).                                                            |
-| `play.additional.module`     | `String`      | `sbt -Dplay.additional.module=config.PostTransitionModule run`  | Controls which module (TransitionModule or PostTransitionModule) we bind to the application at start-up.                                                                                       |
 | `play.http.router`           | `String`      | `sbt -Dplay.http.router=testOnlyDoNotUseInAppConf.Routes run`   | Controls which router is used for the application, either `prod.Routes` or `testOnlyDoNotUseInAppConf.Routes`                                                                                  |
 
 ### Running Scaffold
