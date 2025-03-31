@@ -17,10 +17,28 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, verify, when}
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
+import services.SessionService
 
 class RedirectControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+
+  private lazy val mockSessionService: SessionService = mock[SessionService]
+
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(bind(classOf[SessionService]).toInstance(mockSessionService))
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockSessionService)
+    when(mockSessionService.remove(any())(any())).thenCallRealMethod()
+  }
 
   "return OK and the correct view for a GET" in {
     val request = FakeRequest(GET, routes.RedirectController.onPageLoad().url)
@@ -31,5 +49,7 @@ class RedirectControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
     redirectLocation(result).value mustEqual
       controllers.preTaskList.routes.LocalReferenceNumberController.onPageLoad().url
+
+    verify(mockSessionService).remove(any())(any())
   }
 }
