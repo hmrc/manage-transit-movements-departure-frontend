@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CTC-Departures PreTaskList Auto Completer
 // @namespace    http://tampermonkey.net/
-// @version      5.2
+// @version      5.3
 // @description  Script to automatically fill out CTC sections
 // @author       Reece-Carruthers
 // @match        http*://*/manage-transit-movements/what-do-you-want-to-do
@@ -121,7 +121,7 @@ const additionalDeclarationTypePage = (lrn, data) => {
 
 const officeOfDeparturePage = (lrn, data) => {
     if (currentPageIs(`/manage-transit-movements/departures/${lrn}/pre-task-list/office-of-departure`)) {
-        document.getElementById('value-select').value = data
+        document.getElementById('office-select').value = data
         document.getElementById('submit').click()
     }
 }
