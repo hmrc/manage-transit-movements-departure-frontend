@@ -45,12 +45,11 @@ class TestOnlyCacheConnector @Inject() (
       .map(_.status == OK)
   }
 
-  def put(lrn: String, version: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
+  def put(lrn: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
     val url = url"$baseUrl/user-answers"
     http
       .put(url)
       .withBody(Json.toJson(lrn))
-      .setHeader("APIVersion" -> version)
       .execute[HttpResponse]
       .map(_.status == OK)
   }

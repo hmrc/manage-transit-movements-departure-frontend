@@ -17,7 +17,6 @@
 package controllers.testOnly
 
 import connectors.testOnly.TestOnlyCacheConnector
-import play.api.Configuration
 import play.api.libs.json.{__, JsValue}
 import play.api.mvc.{Action, DefaultActionBuilder, MessagesControllerComponents}
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, SessionId}
@@ -29,8 +28,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TestOnlyController @Inject() (
   cc: MessagesControllerComponents,
   action: DefaultActionBuilder,
-  connector: TestOnlyCacheConnector,
-  config: Configuration
+  connector: TestOnlyCacheConnector
 )(implicit val ec: ExecutionContext)
     extends FrontendController(cc) {
 
@@ -42,16 +40,11 @@ class TestOnlyController @Inject() (
 
       val json = request.body
 
-      val version = json.asOpt((__ \ "isTransitional").read[Boolean]) match {
-        case Some(false) => config.get[String]("phase.final.apiVersion")
-        case _           => config.get[String]("phase.transitional.apiVersion")
-      }
-
       json.asOpt((__ \ "lrn").read[String]) match {
         case Some(lrn) =>
           (
             for {
-              put <- connector.put(lrn, version)
+              put <- connector.put(lrn)
               if put
               post <- connector.post(lrn, json)
               if post
@@ -63,5 +56,4 @@ class TestOnlyController @Inject() (
           Future.successful(BadRequest("LRN missing from JSON"))
       }
   }
-
 }
