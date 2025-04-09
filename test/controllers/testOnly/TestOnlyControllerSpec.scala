@@ -58,8 +58,7 @@ class TestOnlyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
                  |  "lrn" : "$lrn",
                  |  "eoriNumber" : "eori123",
                  |  "isSubmitted" : "notSubmitted",
-                 |  "tasks" : {},
-                 |  "isTransitional" : false
+                 |  "tasks" : {}
                  |}
                  |""".stripMargin)
 
@@ -93,8 +92,7 @@ class TestOnlyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
                |  "lrn" : "$lrn",
                |  "eoriNumber" : "eori123",
                |  "isSubmitted" : "notSubmitted",
-               |  "tasks" : {},
-               |  "isTransitional" : true
+               |  "tasks" : {}
                |}
                |""".stripMargin)
 
@@ -117,8 +115,7 @@ class TestOnlyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
                |  "lrn" : "$lrn",
                |  "eoriNumber" : "eori123",
                |  "isSubmitted" : "notSubmitted",
-               |  "tasks" : {},
-               |  "isTransitional" : true
+               |  "tasks" : {}
                |}
                |""".stripMargin)
 
