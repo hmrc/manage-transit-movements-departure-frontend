@@ -18,7 +18,6 @@ package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import helpers.{ItSpecBase, WireMockServerHandler}
-import models.UserAnswersResponse.Answers
 import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber, LockCheck, UserAnswers, UserAnswersResponse}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -64,7 +63,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
             .willReturn(okJson(json))
         )
 
-        connector.get(lrn).futureValue mustBe UserAnswersResponse.Answers(userAnswers)
+        connector.get(lrn).futureValue mustEqual UserAnswersResponse.Answers(userAnswers)
       }
 
       "return NoAnswers when no cached data found for provided LRN" in {
@@ -75,7 +74,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: UserAnswersResponse = await(connector.get(lrn))
 
-        result mustBe UserAnswersResponse.NoAnswers
+        result mustEqual UserAnswersResponse.NoAnswers
       }
 
       "return BadRequest when http status indicates" in {
@@ -86,7 +85,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: UserAnswersResponse = await(connector.get(lrn))
 
-        result mustBe UserAnswersResponse.BadRequest
+        result mustEqual UserAnswersResponse.BadRequest
       }
 
       "return failed future when response have an unexpected status" in {
@@ -124,7 +123,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: Boolean = await(connector.post(userAnswers))
 
-        result mustBe true
+        result mustEqual true
       }
 
       "return false for 4xx or 5xx response" in {
@@ -137,7 +136,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: Boolean = await(connector.post(userAnswers))
 
-        result mustBe false
+        result mustEqual false
       }
     }
 
@@ -153,7 +152,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: Boolean = await(connector.put(lrn))
 
-        result mustBe true
+        result mustEqual true
       }
 
       "return false for 4xx or 5xx response" in {
@@ -166,7 +165,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: Boolean = await(connector.put(lrn))
 
-        result mustBe false
+        result mustEqual false
       }
     }
 
@@ -179,7 +178,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: LockCheck = await(connector.checkLock(userAnswers))
 
-        result mustBe LockCheck.Unlocked
+        result mustEqual LockCheck.Unlocked
       }
 
       "must return Locked when status is Locked (423)" in {
@@ -187,7 +186,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: LockCheck = await(connector.checkLock(userAnswers))
 
-        result mustBe LockCheck.Locked
+        result mustEqual LockCheck.Locked
       }
 
       "return LockCheckFailure for other 4xx/5xx responses" in {
@@ -198,7 +197,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
             val result: LockCheck = await(connector.checkLock(userAnswers))
 
-            result mustBe LockCheck.LockCheckFailure
+            result mustEqual LockCheck.LockCheckFailure
         }
       }
     }
@@ -212,7 +211,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: Boolean = await(connector.deleteLock(userAnswers))
 
-        result mustBe true
+        result mustEqual true
       }
 
       "return false for other responses" in {
@@ -229,7 +228,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
             val result: Boolean = await(connector.deleteLock(userAnswers))
 
-            result mustBe false
+            result mustEqual false
         }
       }
     }
@@ -243,7 +242,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: Boolean = await(connector.delete(userAnswers.lrn))
 
-        result mustBe true
+        result mustEqual true
       }
 
       "return false for other responses" in {
@@ -260,7 +259,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
             val result: Boolean = await(connector.delete(userAnswers.lrn))
 
-            result mustBe false
+            result mustEqual false
         }
       }
     }
@@ -272,12 +271,14 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" in {
         server.stubFor(
           post(urlEqualTo(url))
+            .withHeader("API-Version", equalTo("1.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
             .willReturn(aResponse().withStatus(OK))
         )
 
         val result: HttpResponse = await(connector.submit(lrn.value))
 
-        result.status mustBe OK
+        result.status mustEqual OK
       }
 
       "return false for 4xx response" in {
@@ -285,12 +286,14 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
+            .withHeader("API-Version", equalTo("1.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
             .willReturn(aResponse().withStatus(status))
         )
 
         val result: HttpResponse = await(connector.submit(lrn.value))
 
-        result.status mustBe status
+        result.status mustEqual status
       }
 
       "return false for 5xx response" in {
@@ -298,12 +301,14 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
+            .withHeader("API-Version", equalTo("1.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
             .willReturn(aResponse().withStatus(status))
         )
 
         val result: HttpResponse = await(connector.submit(lrn.value))
 
-        result.status mustBe status
+        result.status mustEqual status
       }
     }
 
@@ -314,12 +319,14 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" in {
         server.stubFor(
           post(urlEqualTo(url))
+            .withHeader("API-Version", equalTo("1.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
             .willReturn(aResponse().withStatus(OK))
         )
 
         val result: HttpResponse = await(connector.submitAmendment(lrn.value))
 
-        result.status mustBe OK
+        result.status mustEqual OK
       }
 
       "return false for 4xx response" in {
@@ -327,12 +334,14 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
+            .withHeader("API-Version", equalTo("1.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
             .willReturn(aResponse().withStatus(status))
         )
 
         val result: HttpResponse = await(connector.submitAmendment(lrn.value))
 
-        result.status mustBe status
+        result.status mustEqual status
       }
 
       "return false for 5xx response" in {
@@ -340,12 +349,14 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
+            .withHeader("API-Version", equalTo("1.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
             .willReturn(aResponse().withStatus(status))
         )
 
         val result: HttpResponse = await(connector.submitAmendment(lrn.value))
 
-        result.status mustBe status
+        result.status mustEqual status
       }
     }
 
@@ -361,7 +372,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: Long = await(connector.getExpiryInDays(lrn.value))
 
-        result mustBe 30
+        result mustEqual 30
       }
     }
 
@@ -394,7 +405,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: DepartureMessages = await(connector.getMessages(lrn))
 
-        result mustBe DepartureMessages(
+        result mustEqual DepartureMessages(
           Seq(
             DepartureMessage("IE015"),
             DepartureMessage("IE928"),
@@ -413,7 +424,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
             val result: DepartureMessages = await(connector.getMessages(lrn))
 
-            result mustBe DepartureMessages(
+            result mustEqual DepartureMessages(
               Seq.empty[DepartureMessage]
             )
         }
@@ -435,7 +446,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: Boolean = await(connector.copy(oldLrn, newLrn))
 
-        result mustBe true
+        result mustEqual true
       }
 
       "return false for 4xx or 5xx response" in {
@@ -449,7 +460,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         val result: Boolean = await(connector.copy(oldLrn, newLrn))
 
-        result mustBe false
+        result mustEqual false
       }
     }
   }
