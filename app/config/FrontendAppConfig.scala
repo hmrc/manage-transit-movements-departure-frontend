@@ -23,6 +23,8 @@ import play.api.Configuration
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
+  val apiVersion: String = configuration.get[String]("microservice.services.manage-transit-movements-departure-cache.version")
+
   val appName: String = configuration.get[String]("appName")
 
   lazy val countriesOfDeparture: Seq[String] = configuration.get[Seq[String]]("countriesOfDeparture")
