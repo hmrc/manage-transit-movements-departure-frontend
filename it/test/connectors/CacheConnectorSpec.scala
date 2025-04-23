@@ -268,17 +268,48 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
       val url = s"/manage-transit-movements-departure-cache/declaration/submit"
 
-      "must return true when status is Ok" in {
-        server.stubFor(
-          post(urlEqualTo(url))
-            .withHeader("API-Version", equalTo("1.0"))
-            .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
-            .willReturn(aResponse().withStatus(OK))
-        )
+      "must return true when status is Ok" - {
+        "when phase 6 is enabled" in {
+          val app = guiceApplicationBuilder()
+            .configure("feature-flags.phase-6-enabled" -> true)
+            .build()
 
-        val result: HttpResponse = await(connector.submit(lrn.value))
+          running(app) {
+            val connector = app.injector.instanceOf[CacheConnector]
 
-        result.status mustEqual OK
+            server.stubFor(
+              post(urlEqualTo(url))
+                .withHeader("API-Version", equalTo("2.0"))
+                .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
+                .willReturn(aResponse().withStatus(OK))
+            )
+
+            val result: HttpResponse = await(connector.submit(lrn.value))
+
+            result.status mustEqual OK
+          }
+        }
+
+        "when phase 6 is disabled" in {
+          val app = guiceApplicationBuilder()
+            .configure("feature-flags.phase-6-enabled" -> false)
+            .build()
+
+          running(app) {
+            val connector = app.injector.instanceOf[CacheConnector]
+
+            server.stubFor(
+              post(urlEqualTo(url))
+                .withHeader("API-Version", equalTo("1.0"))
+                .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
+                .willReturn(aResponse().withStatus(OK))
+            )
+
+            val result: HttpResponse = await(connector.submit(lrn.value))
+
+            result.status mustEqual OK
+          }
+        }
       }
 
       "return false for 4xx response" in {
@@ -316,17 +347,48 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
       val url = s"/manage-transit-movements-departure-cache/declaration/submit-amendment"
 
-      "must return true when status is Ok" in {
-        server.stubFor(
-          post(urlEqualTo(url))
-            .withHeader("API-Version", equalTo("1.0"))
-            .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
-            .willReturn(aResponse().withStatus(OK))
-        )
+      "must return true when status is Ok" - {
+        "when phase 6 is enabled" in {
+          val app = guiceApplicationBuilder()
+            .configure("feature-flags.phase-6-enabled" -> true)
+            .build()
 
-        val result: HttpResponse = await(connector.submitAmendment(lrn.value))
+          running(app) {
+            val connector = app.injector.instanceOf[CacheConnector]
 
-        result.status mustEqual OK
+            server.stubFor(
+              post(urlEqualTo(url))
+                .withHeader("API-Version", equalTo("2.0"))
+                .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
+                .willReturn(aResponse().withStatus(OK))
+            )
+
+            val result: HttpResponse = await(connector.submitAmendment(lrn.value))
+
+            result.status mustEqual OK
+          }
+        }
+
+        "when phase 6 is disabled" in {
+          val app = guiceApplicationBuilder()
+            .configure("feature-flags.phase-6-enabled" -> false)
+            .build()
+
+          running(app) {
+            val connector = app.injector.instanceOf[CacheConnector]
+
+            server.stubFor(
+              post(urlEqualTo(url))
+                .withHeader("API-Version", equalTo("1.0"))
+                .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
+                .willReturn(aResponse().withStatus(OK))
+            )
+
+            val result: HttpResponse = await(connector.submitAmendment(lrn.value))
+
+            result.status mustEqual OK
+          }
+        }
       }
 
       "return false for 4xx response" in {
