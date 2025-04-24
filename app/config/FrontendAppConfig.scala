@@ -23,7 +23,9 @@ import play.api.Configuration
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
-  val apiVersion: String = configuration.get[String]("microservice.services.manage-transit-movements-departure-cache.version")
+  lazy val phase6Enabled: Boolean = configuration.get[Boolean]("feature-flags.phase-6-enabled")
+
+  val apiVersion: String = if (phase6Enabled) "2.0" else "1.0"
 
   val appName: String = configuration.get[String]("appName")
 
