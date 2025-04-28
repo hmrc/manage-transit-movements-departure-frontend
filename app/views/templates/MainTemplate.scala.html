@@ -75,7 +75,7 @@
     HmrcStandardPageParams(
         serviceURLs = ServiceURLs(
             serviceUrl = Some(appConfig.serviceUrl),
-            signOutUrl = Option.when(canSignOut)(renderConfig.signOutAndUnlockUrl(lrn)),
+            signOutUrl = Option.when(canSignOut)(renderConfig.signOutAndUnlockUrl(lrn))
         ),
         banners = Banners(
             phaseBanner = Some(betaBanner()),
