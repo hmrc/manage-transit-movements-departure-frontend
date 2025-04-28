@@ -33,8 +33,7 @@ import views.html.templates.MainTemplate
 
 class MainTemplateSpec extends SpecBase with ViewSpecAssertions with ScalaCheckPropertyChecks with Generators {
 
-  private val path                                           = "foo"
-  implicit private lazy val request: FakeRequest[AnyContent] = FakeRequest("GET", path)
+  private val path = "foo"
 
   "when not in trader test" - {
     val app = new GuiceApplicationBuilder()
@@ -42,11 +41,13 @@ class MainTemplateSpec extends SpecBase with ViewSpecAssertions with ScalaCheckP
       .build()
 
     "must point feedback at feedback form" in {
+      implicit lazy val request: FakeRequest[AnyContent] = FakeRequest("GET", path)
+
       forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.option(arbitrary[LocalReferenceNumber])) {
         (content, title, lrn) =>
           val view = app.injector
             .instanceOf[MainTemplate]
-            .apply(title, timeoutEnabled = true, canSignOut = true, showBackLink = true, lrn) {
+            .apply(title, timeoutEnabled = true, showBackLink = true, lrn) {
               Html.apply(content)
             }
 
@@ -58,11 +59,13 @@ class MainTemplateSpec extends SpecBase with ViewSpecAssertions with ScalaCheckP
     }
 
     "must use HMRC 'report technical issue' helper" in {
+      implicit lazy val request: FakeRequest[AnyContent] = FakeRequest("GET", path)
+
       forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.option(arbitrary[LocalReferenceNumber])) {
         (content, title, lrn) =>
           val view = app.injector
             .instanceOf[MainTemplate]
-            .apply(title, timeoutEnabled = true, canSignOut = true, showBackLink = true, lrn) {
+            .apply(title, timeoutEnabled = true, showBackLink = true, lrn) {
               Html.apply(content)
             }
 
@@ -71,6 +74,83 @@ class MainTemplateSpec extends SpecBase with ViewSpecAssertions with ScalaCheckP
           val link = getElementBySelector(doc, ".hmrc-report-technical-issue")
           getElementHref(link) mustBe s"http://localhost:9250/contact/report-technical-problem?service=CTCTraders&referrerUrl=$path"
           link.text() mustBe "Is this page not working properly? (opens in new tab)"
+      }
+    }
+
+    "when session has an auth token" - {
+
+      implicit lazy val request: FakeRequest[AnyContent] = FakeRequest("GET", path).withSession("authToken" -> "auth123")
+
+      "must render timeout dialog and sign out link" - {
+        "when LRN defined" in {
+          forAll(Gen.alphaNumStr, Gen.alphaNumStr, arbitrary[LocalReferenceNumber]) {
+            (content, title, lrn) =>
+              val view = app.injector
+                .instanceOf[MainTemplate]
+                .apply(title, timeoutEnabled = true, showBackLink = true, Some(lrn)) {
+                  Html.apply(content)
+                }
+
+              val doc = Jsoup.parse(view.toString())
+
+              val metas = getElementsByTag(doc, "meta")
+              assertElementExists(metas, _.attr("name") == "hmrc-timeout-dialog")
+              assertElementExists(metas, _.attr("data-keep-alive-url") == s"/manage-transit-movements/departures/$lrn/keep-alive")
+
+              val link = getElementByClass(doc, "hmrc-sign-out-nav__link")
+              assertElementContainsText(link, "Sign out")
+              assertElementContainsHref(
+                link,
+                controllers.routes.DeleteLockController.delete(lrn, None).url
+              )
+          }
+        }
+
+        "when LRN undefined" in {
+          forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+            (content, title) =>
+              val view = app.injector
+                .instanceOf[MainTemplate]
+                .apply(title, timeoutEnabled = true, showBackLink = true, None) {
+                  Html.apply(content)
+                }
+
+              val doc = Jsoup.parse(view.toString())
+
+              val metas = getElementsByTag(doc, "meta")
+              assertElementExists(metas, _.attr("name") == "hmrc-timeout-dialog")
+              assertElementExists(metas, _.attr("data-keep-alive-url") == "/manage-transit-movements/departures/keep-alive")
+
+              val link = getElementByClass(doc, "hmrc-sign-out-nav__link")
+              assertElementContainsText(link, "Sign out")
+              assertElementContainsHref(
+                link,
+                "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http://localhost:9514/feedback/manage-transit-departures"
+              )
+          }
+        }
+      }
+    }
+
+    "when session does not have an auth token" - {
+
+      implicit lazy val request: FakeRequest[AnyContent] = FakeRequest("GET", path)
+
+      "must not render timeout dialog or sign out link" in {
+        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.option(arbitrary[LocalReferenceNumber])) {
+          (content, title, lrn) =>
+            val view = app.injector
+              .instanceOf[MainTemplate]
+              .apply(title, timeoutEnabled = true, showBackLink = true, lrn) {
+                Html.apply(content)
+              }
+
+            val doc = Jsoup.parse(view.toString())
+
+            val metas = getElementsByTag(doc, "meta")
+            assertElementDoesNotExist(metas, _.attr("name") == "hmrc-timeout-dialog")
+            assertElementDoesNotExist(doc, "hmrc-sign-out-nav__link")
+        }
       }
     }
   }
@@ -83,11 +163,13 @@ class MainTemplateSpec extends SpecBase with ViewSpecAssertions with ScalaCheckP
     val config = app.injector.instanceOf[RenderConfig]
 
     "must point feedback at google form" in {
+      implicit lazy val request: FakeRequest[AnyContent] = FakeRequest("GET", path)
+
       forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.option(arbitrary[LocalReferenceNumber])) {
         (content, title, lrn) =>
           val view = app.injector
             .instanceOf[MainTemplate]
-            .apply(title, timeoutEnabled = true, canSignOut = true, showBackLink = true, lrn) {
+            .apply(title, timeoutEnabled = true, showBackLink = true, lrn) {
               Html.apply(content)
             }
 
@@ -99,11 +181,13 @@ class MainTemplateSpec extends SpecBase with ViewSpecAssertions with ScalaCheckP
     }
 
     "must use custom link for reporting issues" in {
+      implicit lazy val request: FakeRequest[AnyContent] = FakeRequest("GET", path)
+
       forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.option(arbitrary[LocalReferenceNumber])) {
         (content, title, lrn) =>
           val view = app.injector
             .instanceOf[MainTemplate]
-            .apply(title, timeoutEnabled = true, canSignOut = true, showBackLink = true, lrn) {
+            .apply(title, timeoutEnabled = true, showBackLink = true, lrn) {
               Html.apply(content)
             }
 
@@ -112,6 +196,83 @@ class MainTemplateSpec extends SpecBase with ViewSpecAssertions with ScalaCheckP
           val link = getElementBySelector(doc, ".hmrc-report-technical-issue")
           getElementHref(link) must startWith(s"mailto:${config.feedbackEmail}")
           link.text() mustBe s"If you have any questions or issues, email us at ${config.feedbackEmail}"
+      }
+    }
+
+    "when session has an auth token" - {
+
+      implicit lazy val request: FakeRequest[AnyContent] = FakeRequest("GET", path).withSession("authToken" -> "auth123")
+
+      "must render timeout dialog and sign out link" - {
+        "when LRN defined" in {
+          forAll(Gen.alphaNumStr, Gen.alphaNumStr, arbitrary[LocalReferenceNumber]) {
+            (content, title, lrn) =>
+              val view = app.injector
+                .instanceOf[MainTemplate]
+                .apply(title, timeoutEnabled = true, showBackLink = true, Some(lrn)) {
+                  Html.apply(content)
+                }
+
+              val doc = Jsoup.parse(view.toString())
+
+              val metas = getElementsByTag(doc, "meta")
+              assertElementExists(metas, _.attr("name") == "hmrc-timeout-dialog")
+              assertElementExists(metas, _.attr("data-keep-alive-url") == s"/manage-transit-movements/departures/$lrn/keep-alive")
+
+              val link = getElementByClass(doc, "hmrc-sign-out-nav__link")
+              assertElementContainsText(link, "Sign out")
+              assertElementContainsHref(
+                link,
+                controllers.routes.DeleteLockController.delete(lrn, None).url
+              )
+          }
+        }
+
+        "when LRN undefined" in {
+          forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
+            (content, title) =>
+              val view = app.injector
+                .instanceOf[MainTemplate]
+                .apply(title, timeoutEnabled = true, showBackLink = true, None) {
+                  Html.apply(content)
+                }
+
+              val doc = Jsoup.parse(view.toString())
+
+              val metas = getElementsByTag(doc, "meta")
+              assertElementExists(metas, _.attr("name") == "hmrc-timeout-dialog")
+              assertElementExists(metas, _.attr("data-keep-alive-url") == "/manage-transit-movements/departures/keep-alive")
+
+              val link = getElementByClass(doc, "hmrc-sign-out-nav__link")
+              assertElementContainsText(link, "Sign out")
+              assertElementContainsHref(
+                link,
+                "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http://localhost:9514/feedback/manage-transit-departures"
+              )
+          }
+        }
+      }
+    }
+
+    "when session does not have an auth token" - {
+
+      implicit lazy val request: FakeRequest[AnyContent] = FakeRequest("GET", path)
+
+      "must not render timeout dialog or sign out link" in {
+        forAll(Gen.alphaNumStr, Gen.alphaNumStr, Gen.option(arbitrary[LocalReferenceNumber])) {
+          (content, title, lrn) =>
+            val view = app.injector
+              .instanceOf[MainTemplate]
+              .apply(title, timeoutEnabled = true, showBackLink = true, lrn) {
+                Html.apply(content)
+              }
+
+            val doc = Jsoup.parse(view.toString())
+
+            val metas = getElementsByTag(doc, "meta")
+            assertElementDoesNotExist(metas, _.attr("name") == "hmrc-timeout-dialog")
+            assertElementDoesNotExist(doc, "hmrc-sign-out-nav__link")
+        }
       }
     }
   }

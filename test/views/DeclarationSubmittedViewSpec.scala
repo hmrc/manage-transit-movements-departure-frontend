@@ -34,8 +34,6 @@ class DeclarationSubmittedViewSpec extends PanelViewBehaviours with Generators {
 
   override val prefix: String = "declarationSubmitted"
 
-  override val urlContainsLrn: Boolean = true
-
   behave like pageWithTitle()
 
   behave like pageWithoutBackLink()
