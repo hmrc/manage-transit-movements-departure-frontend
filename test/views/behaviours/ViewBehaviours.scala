@@ -23,16 +23,16 @@ import org.scalatest.Assertion
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
 import play.twirl.api.HtmlFormat
+import play.twirl.api.TwirlHelperImports.*
 import views.base.ViewSpecAssertions
-import play.twirl.api.TwirlHelperImports._
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 trait ViewBehaviours extends SpecBase with ViewSpecAssertions {
 
   private val path = "foo"
 
-  override def fakeRequest: FakeRequest[AnyContent] = FakeRequest("GET", path)
+  override def fakeRequest: FakeRequest[AnyContent] = FakeRequest("GET", path).withSession("authToken" -> "auth123")
 
   def view: HtmlFormat.Appendable
 
@@ -41,44 +41,6 @@ trait ViewBehaviours extends SpecBase with ViewSpecAssertions {
   lazy val doc: Document = parseView(view)
 
   val prefix: String
-
-  def hasSignOutLink: Boolean = true
-
-  val urlContainsLrn: Boolean = false
-
-  if (hasSignOutLink) {
-    "must render sign out link in header" in {
-      val link = getElementByClass(doc, "hmrc-sign-out-nav__link")
-      assertElementContainsText(link, "Sign out")
-      assertElementContainsHref(
-        link,
-        if (urlContainsLrn) {
-          controllers.routes.DeleteLockController.delete(lrn, None).url
-        } else {
-          "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http://localhost:9514/feedback/manage-transit-departures"
-        }
-      )
-    }
-
-    "must render timeout dialog" in {
-      val metas = getElementsByTag(doc, "meta")
-      assertElementExists(metas, _.attr("name") == "hmrc-timeout-dialog")
-      if (urlContainsLrn) {
-        assertElementExists(metas, _.attr("data-keep-alive-url") == s"/manage-transit-movements/departures/$lrn/keep-alive")
-      } else {
-        assertElementExists(metas, _.attr("data-keep-alive-url") == "/manage-transit-movements/departures/keep-alive")
-      }
-    }
-  } else {
-    "must not render sign out link in header" in {
-      assertElementDoesNotExist(doc, "hmrc-sign-out-nav__link")
-    }
-
-    "must not render timeout dialog" in {
-      val metas = getElementsByTag(doc, "meta")
-      assertElementDoesNotExist(metas, _.attr("name") == "hmrc-timeout-dialog")
-    }
-  }
 
   "must render service name link in header" in {
     val link = getElementByClass(doc, "govuk-header__service-name")

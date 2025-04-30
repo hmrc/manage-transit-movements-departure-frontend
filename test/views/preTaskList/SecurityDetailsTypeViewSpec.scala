@@ -42,8 +42,6 @@ class SecurityDetailsTypeViewSpec extends EnumerableViewBehaviours[SecurityType]
     SecurityType("1", "ENS")
   )
 
-  override val urlContainsLrn: Boolean = true
-
   behave like pageWithTitle()
 
   behave like pageWithBackLink()

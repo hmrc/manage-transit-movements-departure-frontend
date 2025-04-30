@@ -30,8 +30,6 @@ trait TaskListViewBehaviours extends ViewBehaviours with Generators {
 
   val submissionState: SubmissionState.Value = SubmissionState.NotSubmitted
 
-  override val urlContainsLrn: Boolean = true
-
   def pageWithTaskList(lrn: LocalReferenceNumber): Unit =
     "page with task list" - {
 

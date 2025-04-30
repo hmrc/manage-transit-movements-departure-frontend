@@ -36,8 +36,6 @@ class NewLocalReferenceNumberViewSpec extends InputTextViewBehaviours[LocalRefer
 
   implicit override val arbitraryT: Arbitrary[LocalReferenceNumber] = arbitraryLocalReferenceNumber
 
-  override val urlContainsLrn: Boolean = false
-
   behave like pageWithTitle()
 
   behave like pageWithBackLink()
