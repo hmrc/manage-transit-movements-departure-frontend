@@ -11,7 +11,6 @@ ThisBuild / scalafmtOnCompile := true
 lazy val microservice = (project in file("."))
   .enablePlugins(
     PlayScala,
-    SbtAutoBuildPlugin,
     SbtDistributablesPlugin
   )
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
