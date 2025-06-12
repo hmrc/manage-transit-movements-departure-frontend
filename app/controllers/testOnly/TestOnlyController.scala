@@ -17,6 +17,7 @@
 package controllers.testOnly
 
 import connectors.testOnly.TestOnlyCacheConnector
+import play.api.libs.Files.logger
 import play.api.libs.json.{__, JsValue}
 import play.api.mvc.{Action, DefaultActionBuilder, MessagesControllerComponents}
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, SessionId}
@@ -24,6 +25,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 
 class TestOnlyController @Inject() (
   cc: MessagesControllerComponents,
@@ -50,7 +52,10 @@ class TestOnlyController @Inject() (
               if post
             } yield Ok
           ).recover {
-            case _ => InternalServerError
+            case NonFatal(e) =>
+              logger.warn(s"Internal Server error with message: ${e.getMessage}")
+              InternalServerError
+
           }
         case None =>
           Future.successful(BadRequest("LRN missing from JSON"))

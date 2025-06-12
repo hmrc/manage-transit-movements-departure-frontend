@@ -29,6 +29,7 @@ import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl.idFunctor
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
+import scala.util.control.NonFatal
 
 class DeleteLockController @Inject() (
   actions: Actions,
@@ -52,7 +53,7 @@ class DeleteLockController @Inject() (
           _ =>
             Redirect(url)
         } recover {
-          case exception =>
+          case NonFatal(exception) =>
             logger.info(s"Failed to unlock session for LRN $lrn", exception)
             Redirect(url)
         }
