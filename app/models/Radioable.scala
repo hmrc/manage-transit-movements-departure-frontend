@@ -42,6 +42,8 @@ trait Radioable[T] {
         if (messages.isDefinedAt(hintKey)) Some(Hint(content = Text(messages(hintKey)))) else None
       }
     )
+
+  def isOneOf(values: String*): Boolean = values.contains(code)
 }
 
 object Radioable {

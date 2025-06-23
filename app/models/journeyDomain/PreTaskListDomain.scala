@@ -16,7 +16,7 @@
 
 package models.journeyDomain
 
-import config.Constants.*
+import config.Constants.CountryCode.*
 import models.ProcedureType.Normal
 import models.reference.{CustomsOffice, DeclarationType, SecurityType}
 import models.{LocalReferenceNumber, ProcedureType, UserAnswers}

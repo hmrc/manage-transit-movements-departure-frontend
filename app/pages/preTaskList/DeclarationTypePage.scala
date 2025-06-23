@@ -16,7 +16,7 @@
 
 package pages.preTaskList
 
-import config.Constants.TIR
+import config.Constants.DeclarationType.TIR
 import models.reference.DeclarationType
 import models.{Mode, UserAnswers}
 import pages.QuestionPage

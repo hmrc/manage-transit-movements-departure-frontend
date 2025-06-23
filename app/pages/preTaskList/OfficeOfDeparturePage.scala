@@ -16,7 +16,7 @@
 
 package pages.preTaskList
 
-import config.Constants.GB
+import config.Constants.CountryCode.GB
 import models.reference.CustomsOffice
 import models.{Mode, UserAnswers}
 import pages.QuestionPage

@@ -16,7 +16,8 @@
 
 package services
 
-import config.Constants.*
+import config.Constants.CountryCode.*
+import config.Constants.DeclarationType.*
 import connectors.ReferenceDataConnector
 import models.ProcedureType
 import models.reference.{CustomsOffice, DeclarationType}
