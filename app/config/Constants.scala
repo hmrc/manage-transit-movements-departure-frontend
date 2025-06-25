@@ -17,10 +17,20 @@
 package config
 
 object Constants {
-  val GB = "GB"
-  val XI = "XI"
-  val AD = "AD"
 
-  val TIR  = "TIR"
-  val T2SM = "T2SM"
+  object CountryCode {
+    val GB = "GB"
+    val XI = "XI"
+    val AD = "AD"
+  }
+
+  object DeclarationType {
+    val TIR  = "TIR"
+    val T2SM = "T2SM"
+  }
+
+  object SecurityType {
+    val NoSecurity = "0"
+    val EXS        = "2"
+  }
 }

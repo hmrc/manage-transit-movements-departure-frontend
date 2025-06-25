@@ -17,7 +17,7 @@
 package models.reference
 
 import cats.Order
-import config.Constants.TIR
+import config.Constants.DeclarationType.TIR
 import models.{DynamicEnumerableType, Radioable}
 import play.api.libs.json.{Format, Json}
 

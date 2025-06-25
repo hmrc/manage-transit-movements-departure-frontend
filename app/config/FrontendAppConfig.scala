@@ -23,7 +23,8 @@ import play.api.Configuration
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
-  lazy val phase6Enabled: Boolean = configuration.get[Boolean]("feature-flags.phase-6-enabled")
+  lazy val phase6Enabled: Boolean      = configuration.get[Boolean]("feature-flags.phase-6-enabled")
+  lazy val phase6RulesEnabled: Boolean = configuration.get[Boolean]("feature-flags.phase-6-enabled-in-taxud")
 
   val apiVersion: String = if (phase6Enabled) "2.0" else "1.0"
 
