@@ -18,8 +18,10 @@ package models.reference
 
 import cats.Order
 import config.Constants.DeclarationType.TIR
+import config.FrontendAppConfig
 import models.{DynamicEnumerableType, Radioable}
-import play.api.libs.json.{Format, Json}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.json.{__, Format, Json, Reads}
 
 case class DeclarationType(
   code: String,
@@ -34,6 +36,16 @@ case class DeclarationType(
 }
 
 object DeclarationType extends DynamicEnumerableType[DeclarationType] {
+
+  def reads(config: FrontendAppConfig): Reads[DeclarationType] =
+    if (config.phase6Enabled) {
+      (
+        (__ \ "key").read[String] and
+          (__ \ "value").read[String]
+      )(DeclarationType.apply)
+    } else {
+      Json.reads[DeclarationType]
+    }
   implicit val format: Format[DeclarationType] = Json.format[DeclarationType]
 
   implicit val order: Order[DeclarationType] = (x: DeclarationType, y: DeclarationType) => (x, y).compareBy(_.code)

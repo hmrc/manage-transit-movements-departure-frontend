@@ -17,8 +17,10 @@
 package models.reference
 
 import cats.Order
+import config.FrontendAppConfig
 import models.{DynamicEnumerableType, Radioable}
-import play.api.libs.json.{Format, Json}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.json.{__, Format, Json, Reads}
 
 case class AdditionalDeclarationType(
   code: String,
@@ -31,6 +33,16 @@ case class AdditionalDeclarationType(
 }
 
 object AdditionalDeclarationType extends DynamicEnumerableType[AdditionalDeclarationType] {
+
+  def reads(config: FrontendAppConfig): Reads[AdditionalDeclarationType] =
+    if (config.phase6Enabled) {
+      (
+        (__ \ "key").read[String] and
+          (__ \ "value").read[String]
+      )(AdditionalDeclarationType.apply)
+    } else {
+      Json.reads[AdditionalDeclarationType]
+    }
   implicit val format: Format[AdditionalDeclarationType] = Json.format[AdditionalDeclarationType]
 
   implicit val order: Order[AdditionalDeclarationType] = (x: AdditionalDeclarationType, y: AdditionalDeclarationType) => (x, y).compareBy(_.code)
