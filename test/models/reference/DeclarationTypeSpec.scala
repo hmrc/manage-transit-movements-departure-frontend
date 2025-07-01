@@ -17,10 +17,12 @@
 package models.reference
 
 import base.SpecBase
+import config.FrontendAppConfig
 import generators.Generators
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, Json}
+import play.api.test.Helpers.running
 
 class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -40,19 +42,63 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
     }
 
     "must deserialise" - {
-      "when json contains a declaration type" in {
-        forAll(nonEmptyString, nonEmptyString) {
-          (code, description) =>
-            val declarationType = DeclarationType(code, description)
-            Json
-              .parse(s"""
-                   |{
-                   |  "code": "$code",
-                   |  "description": "$description"
-                   |}
-                   |""".stripMargin)
-              .as[DeclarationType] mustBe declarationType
+      "when phase-6" - {
+        "when json contains a declaration type" in {
+          running(_.configure("feature-flags.phase-6-enabled" -> true)) {
+            app =>
+              val config = app.injector.instanceOf[FrontendAppConfig]
+              forAll(nonEmptyString, nonEmptyString) {
+                (code, description) =>
+                  val declarationType = DeclarationType(code, description)
+                  Json
+                    .parse(s"""
+                         |{
+                         |  "key": "$code",
+                         |  "value": "$description"
+                         |}
+                         |""".stripMargin)
+                    .as[DeclarationType](DeclarationType.reads(config)) mustEqual declarationType
+              }
+          }
+
         }
+      }
+      "when phase-5" - {
+        "when json contains a declaration type" in {
+          running(_.configure("feature-flags.phase-6-enabled" -> false)) {
+            app =>
+              val config = app.injector.instanceOf[FrontendAppConfig]
+              forAll(nonEmptyString, nonEmptyString) {
+                (code, description) =>
+                  val declarationType = DeclarationType(code, description)
+                  Json
+                    .parse(s"""
+                         |{
+                         |  "code": "$code",
+                         |  "description": "$description"
+                         |}
+                         |""".stripMargin)
+                    .as[DeclarationType](DeclarationType.reads(config)) mustBe declarationType
+              }
+          }
+
+        }
+      }
+
+    }
+
+    "must read from mongo" in {
+      forAll(nonEmptyString, nonEmptyString) {
+        (code, description) =>
+          val declarationType = DeclarationType(code, description)
+          Json
+            .parse(s"""
+                 |{
+                 |  "code": "$code",
+                 |  "description": "$description"
+                 |}
+                 |""".stripMargin)
+            .as[DeclarationType] mustBe declarationType
       }
     }
 

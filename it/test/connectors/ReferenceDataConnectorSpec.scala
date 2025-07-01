@@ -18,12 +18,14 @@ package connectors
 
 import cats.data.NonEmptySet
 import com.github.tomakehurst.wiremock.client.WireMock.*
+import connectors.ReferenceDataConnector.NoReferenceDataFoundException
 import helpers.{ItSpecBase, WireMockServerHandler}
 import models.reference.*
 import org.scalacheck.Gen
 import org.scalatest.{Assertion, EitherValues}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.test.Helpers.running
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -31,6 +33,9 @@ import scala.concurrent.Future
 class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler with ScalaCheckPropertyChecks with EitherValues {
 
   private val baseUrl = "customs-reference-data/test-only"
+
+  private val phase6App: GuiceApplicationBuilder => GuiceApplicationBuilder = _ => guiceApplicationBuilder().configure("feature-flags.phase-6-enabled" -> true)
+  private val phase5App: GuiceApplicationBuilder => GuiceApplicationBuilder = _ => guiceApplicationBuilder().configure("feature-flags.phase-6-enabled" -> false)
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder = super
     .guiceApplicationBuilder()
@@ -85,161 +90,18 @@ class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler w
       |}
       |""".stripMargin
 
-  private val countriesResponseCTJson: String =
-    """
-      |{
-      |  "_links": {
-      |    "self": {
-      |      "href": "/customs-reference-data/lists/CountryCodesCTC"
-      |    }
-      |  },
-      |  "meta": {
-      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
-      |    "snapshotDate": "2023-01-01"
-      |  },
-      |  "id": "CountryCodesCTC",
-      |  "data": [
-      |    {
-      |      "activeFrom": "2023-01-23",
-      |      "code": "GB",
-      |      "state": "valid",
-      |      "description": "United Kingdom"
-      |    }
-      |  ]
-      |}
-      |""".stripMargin
-
-  private val countriesResponseAAJson: String =
-    """
-      |{
-      |  "_links": {
-      |    "self": {
-      |      "href": "/customs-reference-data/lists/CountryCustomsSecurityAgreementArea"
-      |    }
-      |  },
-      |  "meta": {
-      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
-      |    "snapshotDate": "2023-01-01"
-      |  },
-      |  "id": "CountryCustomsSecurityAgreementArea",
-      |  "data": [
-      |    {
-      |      "activeFrom": "2023-01-23",
-      |      "code": "GB",
-      |      "state": "valid",
-      |      "description": "United Kingdom"
-      |    }
-      |  ]
-      |}
-      |""".stripMargin
-
-  private val countriesResponseCommunity: String =
-    """
-      |{
-      |  "_links": {
-      |    "self": {
-      |      "href": "/customs-reference-data/lists/CountryCodesCommunity"
-      |    }
-      |  },
-      |  "meta": {
-      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
-      |    "snapshotDate": "2023-01-01"
-      |  },
-      |  "id": "CountryCodesCommunity",
-      |  "data": [
-      |    {
-      |      "activeFrom": "2023-01-23",
-      |      "code": "GB",
-      |      "state": "valid",
-      |      "description": "United Kingdom"
-      |    }
-      |  ]
-      |}
-      |""".stripMargin
-
-  private val securityTypesResponseJson: String =
-    """
-      |{
-      |  "_links": {
-      |    "self": {
-      |      "href": "/customs-reference-data/lists/DeclarationTypeSecurity"
-      |    }
-      |  },
-      |  "meta": {
-      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
-      |    "snapshotDate": "2023-01-01"
-      |  },
-      |  "id": "DeclarationTypeSecurity",
-      |  "data": [
-      |    {
-      |      "code": "2",
-      |      "description": "EXS"
-      |    },
-      |    {
-      |      "code": "3",
-      |      "description": "ENS &amp; EXS"
-      |    }
-      |  ]
-      |}
-      |""".stripMargin
-
-  private val declarationTypesResponseJson: String =
-    """
-      |{
-      |  "_links": {
-      |    "self": {
-      |      "href": "/customs-reference-data/lists/DeclarationType"
-      |    }
-      |  },
-      |  "meta": {
-      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
-      |    "snapshotDate": "2023-01-01"
-      |  },
-      |  "id": "DeclarationType",
-      |  "data": [
-      |    {
-      |      "code": "T2",
-      |      "description": "Goods having the customs status of Union goods, which are placed under the common transit procedure"
-      |    },
-      |    {
-      |      "code": "TIR",
-      |      "description": "TIR carnet"
-      |    }
-      |  ]
-      |}
-      |""".stripMargin
-
-  private val additionalDeclarationTypesResponseJson: String =
-    """
-      |{
-      |  "_links": {
-      |    "self": {
-      |      "href": "/customs-reference-data/lists/DeclarationType"
-      |    }
-      |  },
-      |  "meta": {
-      |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
-      |    "snapshotDate": "2023-01-01"
-      |  },
-      |  "id": "DeclarationType",
-      |  "data": [
-      |    {
-      |      "code": "A",
-      |      "description": "for a standard customs declaration (under Article 162 of the Code)"
-      |    },
-      |    {
-      |      "code": "D",
-      |      "description": "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code."
-      |    }
-      |  ]
-      |}
-      |""".stripMargin
-
-  private val emptyResponseJson: String =
+  private val phase5emptyResponseJson: String =
     """
       |{
       |  "data": []
       |}
+      |""".stripMargin
+
+  private val phase6emptyResponseJson: String =
+    """
+      |
+      | []
+      |
       |""".stripMargin
 
   "Reference Data" - {
@@ -266,7 +128,7 @@ class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler w
       "must throw a NoReferenceDataFoundException for an empty response" in {
         val countryId = "AR"
         val url       = s"/$baseUrl/lists/CustomsOffices?data.countryId=AR&data.roles.role=DEP"
-        checkNoReferenceDataFoundResponse(url, connector.getCustomsOfficesOfDepartureForCountry(countryId))
+        checkNoReferenceDataFoundResponse(url, phase5emptyResponseJson, connector.getCustomsOfficesOfDepartureForCountry(countryId))
       }
 
       "must return an exception when an error response is returned" in {
@@ -277,182 +139,652 @@ class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler w
     }
 
     "getCountryCodesCTCCountry" - {
-      def url(countryId: String) = s"/$baseUrl/lists/CountryCodesCTC?data.code=$countryId"
+      "when phase-6" - {
+        def phase6Url(countryId: String) = s"/$baseUrl/lists/CountryCodesCTC?keys=$countryId"
 
-      "must return Seq of Country when successful" in {
-        val countryId = "GB"
-        server.stubFor(
-          get(urlEqualTo(url(countryId)))
-            .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
-            .willReturn(okJson(countriesResponseCTJson))
-        )
+        def countriesResponseCTJson: String =
+          """
+            |[
+            |    {
+            |      "key": "GB",
+            |      "value": "United Kingdom"
+            |    }
+            |  ]
+            |""".stripMargin
+        "must return Seq of Country when successful" in {
+          val countryId = "GB"
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(phase6Url(countryId)))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
+                  .willReturn(okJson(countriesResponseCTJson))
+              )
 
-        val expectedResult = Country(countryId)
+              val expectedResult = Country(countryId)
 
-        connector.getCountryCodesCTCCountry(countryId).futureValue.value mustEqual expectedResult
+              connector.getCountryCodesCTCCountry(countryId).futureValue.value mustEqual expectedResult
+          }
+
+        }
+
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          val countryId = "AD"
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              checkNoReferenceDataFoundResponse(phase6Url(countryId), phase6emptyResponseJson, connector.getCountryCodesCTCCountry(countryId))
+          }
+
+        }
+
+        "must return an exception when an error response is returned" in {
+          val countryId = "AD"
+          checkErrorResponse(phase6Url(countryId), connector.getCountryCodesCTCCountry(countryId))
+        }
+      }
+      "when phase-5" - {
+        def phase5Url(countryId: String) = s"/$baseUrl/lists/CountryCodesCTC?data.code=$countryId"
+
+        def countriesResponseCTJson: String =
+          """
+            |{
+            |  "_links": {
+            |    "self": {
+            |      "href": "/customs-reference-data/lists/CountryCodesCTC"
+            |    }
+            |  },
+            |  "meta": {
+            |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+            |    "snapshotDate": "2023-01-01"
+            |  },
+            |  "id": "CountryCodesCTC",
+            |  "data": [
+            |    {
+            |      "activeFrom": "2023-01-23",
+            |      "code": "GB",
+            |      "state": "valid",
+            |      "description": "United Kingdom"
+            |    }
+            |  ]
+            |}
+            |""".stripMargin
+        "must return Seq of Country when successful" in {
+          val countryId = "GB"
+          running(phase5App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(phase5Url(countryId)))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
+                  .willReturn(okJson(countriesResponseCTJson))
+              )
+
+              val expectedResult = Country(countryId)
+
+              connector.getCountryCodesCTCCountry(countryId).futureValue.value mustEqual expectedResult
+          }
+
+        }
+
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          val countryId = "AD"
+          checkNoReferenceDataFoundResponse(phase5Url(countryId), phase5emptyResponseJson, connector.getCountryCodesCTCCountry(countryId))
+        }
+
+        "must return an exception when an error response is returned" in {
+          val countryId = "AD"
+          checkErrorResponse(phase5Url(countryId), connector.getCountryCodesCTCCountry(countryId))
+        }
       }
 
-      "must throw a NoReferenceDataFoundException for an empty response" in {
-        val countryId = "AD"
-        checkNoReferenceDataFoundResponse(url(countryId), connector.getCountryCodesCTCCountry(countryId))
-      }
-
-      "must return an exception when an error response is returned" in {
-        val countryId = "AD"
-        checkErrorResponse(url(countryId), connector.getCountryCodesCTCCountry(countryId))
-      }
     }
 
     "getCountryCustomsSecurityAgreementAreaCountry" - {
-      def url(countryId: String) = s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea?data.code=$countryId"
+      "when phase-6" - {
+        def phase6Url(countryId: String) = s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea?keys=$countryId"
+        def countriesResponseAAJson: String =
+          """
+            |[
+            |    {
+            |      "key": "GB",
+            |      "value": "United Kingdom"
+            |    }
+            |  ]
+            |""".stripMargin
+        "must return Seq of Country when successful" in {
+          val countryId = "GB"
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(phase6Url(countryId)))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
+                  .willReturn(okJson(countriesResponseAAJson))
+              )
 
-      "must return Seq of Country when successful" in {
-        val countryId = "GB"
-        server.stubFor(
-          get(urlEqualTo(url(countryId)))
-            .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
-            .willReturn(okJson(countriesResponseAAJson))
-        )
+              val expectedResult = Country(countryId)
 
-        val expectedResult = Country(countryId)
+              connector.getCountryCustomsSecurityAgreementAreaCountry(countryId).futureValue.value mustEqual expectedResult
+          }
 
-        connector.getCountryCustomsSecurityAgreementAreaCountry(countryId).futureValue.value mustEqual expectedResult
+        }
+
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          val countryId = "AD"
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              checkNoReferenceDataFoundResponse(phase6Url(countryId),
+                                                phase6emptyResponseJson,
+                                                connector.getCountryCustomsSecurityAgreementAreaCountry(countryId)
+              )
+          }
+
+        }
+
+        "must return an exception when an error response is returned" in {
+          val countryId = "AD"
+          checkErrorResponse(phase6Url(countryId), connector.getCountryCustomsSecurityAgreementAreaCountry(countryId))
+        }
+      }
+      "when phase-5" - {
+        def phase5Url(countryId: String) = s"/$baseUrl/lists/CountryCustomsSecurityAgreementArea?data.code=$countryId"
+
+        def countriesResponseAAJson: String =
+          """
+            |{
+            |  "_links": {
+            |    "self": {
+            |      "href": "/customs-reference-data/lists/CountryCustomsSecurityAgreementArea"
+            |    }
+            |  },
+            |  "meta": {
+            |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+            |    "snapshotDate": "2023-01-01"
+            |  },
+            |  "id": "CountryCustomsSecurityAgreementArea",
+            |  "data": [
+            |    {
+            |      "activeFrom": "2023-01-23",
+            |      "code": "GB",
+            |      "state": "valid",
+            |      "description": "United Kingdom"
+            |    }
+            |  ]
+            |}
+            |""".stripMargin
+        "must return Seq of Country when successful" in {
+          val countryId = "GB"
+          running(phase5App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(phase5Url(countryId)))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
+                  .willReturn(okJson(countriesResponseAAJson))
+              )
+
+              val expectedResult = Country(countryId)
+
+              connector.getCountryCustomsSecurityAgreementAreaCountry(countryId).futureValue.value mustEqual expectedResult
+          }
+
+        }
+
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          val countryId = "AD"
+          checkNoReferenceDataFoundResponse(phase5Url(countryId), phase5emptyResponseJson, connector.getCountryCustomsSecurityAgreementAreaCountry(countryId))
+        }
+
+        "must return an exception when an error response is returned" in {
+          val countryId = "AD"
+          checkErrorResponse(phase5Url(countryId), connector.getCountryCustomsSecurityAgreementAreaCountry(countryId))
+        }
       }
 
-      "must throw a NoReferenceDataFoundException for an empty response" in {
-        val countryId = "AD"
-        checkNoReferenceDataFoundResponse(url(countryId), connector.getCountryCustomsSecurityAgreementAreaCountry(countryId))
-      }
-
-      "must return an exception when an error response is returned" in {
-        val countryId = "AD"
-        checkErrorResponse(url(countryId), connector.getCountryCustomsSecurityAgreementAreaCountry(countryId))
-      }
     }
 
     "getCountryCodeCommunityCountry" - {
-      def url(countryId: String) = s"/$baseUrl/lists/CountryCodesCommunity?data.code=$countryId"
+      "when phase -6" - {
+        def phase6Url(countryId: String) = s"/$baseUrl/lists/CountryCodesCommunity?keys=$countryId"
+        def countriesResponseCommunity: String =
+          """
+            |[
+            |    {
+            |      "key": "GB",
+            |      "value": "United Kingdom"
+            |    }
+            |  ]
+            |""".stripMargin
+        "must return Seq of Country when successful" in {
+          val countryId = "GB"
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(phase6Url(countryId)))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
+                  .willReturn(okJson(countriesResponseCommunity))
+              )
 
-      "must return Seq of Country when successful" in {
-        val countryId = "GB"
-        server.stubFor(
-          get(urlEqualTo(url(countryId)))
-            .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
-            .willReturn(okJson(countriesResponseCommunity))
-        )
+              val expectedResult = Country(countryId)
 
-        val expectedResult = Country(countryId)
+              connector.getCountryCodeCommunityCountry(countryId).futureValue.value mustEqual expectedResult
+          }
 
-        connector.getCountryCodeCommunityCountry(countryId).futureValue.value mustEqual expectedResult
+        }
+
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          val countryId = "AD"
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              checkNoReferenceDataFoundResponse(phase6Url(countryId), phase6emptyResponseJson, connector.getCountryCodeCommunityCountry(countryId))
+          }
+
+        }
+
+        "must return an exception when an error response is returned" in {
+          val countryId = "AD"
+          checkErrorResponse(phase6Url(countryId), connector.getCountryCodeCommunityCountry(countryId))
+        }
+      }
+      "when phase -5" - {
+        def phase5Url(countryId: String) = s"/$baseUrl/lists/CountryCodesCommunity?data.code=$countryId"
+        def countriesResponseCommunity: String =
+          """
+            |{
+            |  "_links": {
+            |    "self": {
+            |      "href": "/customs-reference-data/lists/CountryCodesCommunity"
+            |    }
+            |  },
+            |  "meta": {
+            |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+            |    "snapshotDate": "2023-01-01"
+            |  },
+            |  "id": "CountryCodesCommunity",
+            |  "data": [
+            |    {
+            |      "activeFrom": "2023-01-23",
+            |      "code": "GB",
+            |      "state": "valid",
+            |      "description": "United Kingdom"
+            |    }
+            |  ]
+            |}
+            |""".stripMargin
+        "must return Seq of Country when successful" in {
+          val countryId = "GB"
+          running(phase5App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(phase5Url(countryId)))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
+                  .willReturn(okJson(countriesResponseCommunity))
+              )
+
+              val expectedResult = Country(countryId)
+
+              connector.getCountryCodeCommunityCountry(countryId).futureValue.value mustEqual expectedResult
+          }
+
+        }
+
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          val countryId = "AD"
+          checkNoReferenceDataFoundResponse(phase5Url(countryId), phase5emptyResponseJson, connector.getCountryCodeCommunityCountry(countryId))
+        }
+
+        "must return an exception when an error response is returned" in {
+          val countryId = "AD"
+          checkErrorResponse(phase5Url(countryId), connector.getCountryCodeCommunityCountry(countryId))
+        }
       }
 
-      "must throw a NoReferenceDataFoundException for an empty response" in {
-        val countryId = "AD"
-        checkNoReferenceDataFoundResponse(url(countryId), connector.getCountryCodeCommunityCountry(countryId))
-      }
-
-      "must return an exception when an error response is returned" in {
-        val countryId = "AD"
-        checkErrorResponse(url(countryId), connector.getCountryCodeCommunityCountry(countryId))
-      }
     }
 
     "getSecurityTypes" - {
       val url = s"/$baseUrl/lists/DeclarationTypeSecurity"
 
-      "must return Seq of security types when successful" in {
-        server.stubFor(
-          get(urlEqualTo(url))
-            .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
-            .willReturn(okJson(securityTypesResponseJson))
-        )
+      "when phase-6" - {
+        def securityTypesResponseJson: String =
+          """
+            |[
+            |    {
+            |      "key": "2",
+            |      "value": "EXS"
+            |    },
+            |    {
+            |      "key": "3",
+            |      "value": "ENS &amp; EXS"
+            |    }
+            |]
+            |""".stripMargin
 
-        val expectedResult = NonEmptySet.of(
-          SecurityType("2", "EXS"),
-          SecurityType("3", "ENS &amp; EXS")
-        )
+        "must return Seq of security types when successful" in {
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(url))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
+                  .willReturn(okJson(securityTypesResponseJson))
+              )
 
-        connector.getSecurityTypes().futureValue.value mustEqual expectedResult
+              val expectedResult = NonEmptySet.of(
+                SecurityType("2", "EXS"),
+                SecurityType("3", "ENS &amp; EXS")
+              )
+
+              connector.getSecurityTypes().futureValue.value mustEqual expectedResult
+          }
+
+        }
+
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              checkNoReferenceDataFoundResponse(url, phase6emptyResponseJson, connector.getSecurityTypes())
+          }
+
+        }
+
+        "must return an exception when an error response is returned" in {
+          checkErrorResponse(url, connector.getSecurityTypes())
+        }
+      }
+      "when phase-5" - {
+        def securityTypesResponseJson: String =
+          """
+            |{
+            |  "_links": {
+            |    "self": {
+            |      "href": "/customs-reference-data/lists/DeclarationTypeSecurity"
+            |    }
+            |  },
+            |  "meta": {
+            |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+            |    "snapshotDate": "2023-01-01"
+            |  },
+            |  "id": "DeclarationTypeSecurity",
+            |  "data": [
+            |    {
+            |      "code": "2",
+            |      "description": "EXS"
+            |    },
+            |    {
+            |      "code": "3",
+            |      "description": "ENS &amp; EXS"
+            |    }
+            |  ]
+            |}
+            |""".stripMargin
+
+        "must return Seq of security types when successful" in {
+          running(phase5App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(url))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
+                  .willReturn(okJson(securityTypesResponseJson))
+              )
+
+              val expectedResult = NonEmptySet.of(
+                SecurityType("2", "EXS"),
+                SecurityType("3", "ENS &amp; EXS")
+              )
+
+              connector.getSecurityTypes().futureValue.value mustEqual expectedResult
+          }
+
+        }
+
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          checkNoReferenceDataFoundResponse(url, phase5emptyResponseJson, connector.getSecurityTypes())
+        }
+
+        "must return an exception when an error response is returned" in {
+          checkErrorResponse(url, connector.getSecurityTypes())
+        }
       }
 
-      "must throw a NoReferenceDataFoundException for an empty response" in {
-        checkNoReferenceDataFoundResponse(url, connector.getSecurityTypes())
-      }
-
-      "must return an exception when an error response is returned" in {
-        checkErrorResponse(url, connector.getSecurityTypes())
-      }
     }
 
     "getDeclarationTypes" - {
       val url = s"/$baseUrl/lists/DeclarationType"
+      "when phase -6" - {
+        def declarationTypesResponseJson: String =
+          """
+            |[
+            |    {
+            |      "key": "T2",
+            |      "value": "Goods having the customs status of Union goods, which are placed under the common transit procedure"
+            |    },
+            |    {
+            |      "key": "TIR",
+            |      "value": "TIR carnet"
+            |    }
+            |  ]
+            |""".stripMargin
+        "must return Seq of declaration types when successful" in {
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(url))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
+                  .willReturn(okJson(declarationTypesResponseJson))
+              )
 
-      "must return Seq of declaration types when successful" in {
-        server.stubFor(
-          get(urlEqualTo(url))
-            .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
-            .willReturn(okJson(declarationTypesResponseJson))
-        )
+              val expectedResult = NonEmptySet.of(
+                DeclarationType("T2", "Goods having the customs status of Union goods, which are placed under the common transit procedure"),
+                DeclarationType("TIR", "TIR carnet")
+              )
 
-        val expectedResult = NonEmptySet.of(
-          DeclarationType("T2", "Goods having the customs status of Union goods, which are placed under the common transit procedure"),
-          DeclarationType("TIR", "TIR carnet")
-        )
+              connector.getDeclarationTypes().futureValue.value mustEqual expectedResult
+          }
 
-        connector.getDeclarationTypes().futureValue.value mustEqual expectedResult
+        }
+
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              checkNoReferenceDataFoundResponse(url, phase6emptyResponseJson, connector.getDeclarationTypes())
+          }
+
+        }
+
+        "must return an exception when an error response is returned" in {
+          checkErrorResponse(url, connector.getDeclarationTypes())
+        }
+      }
+      "when phase -5" - {
+        def declarationTypesResponseJson: String =
+          """
+            |{
+            |  "_links": {
+            |    "self": {
+            |      "href": "/customs-reference-data/lists/DeclarationType"
+            |    }
+            |  },
+            |  "meta": {
+            |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+            |    "snapshotDate": "2023-01-01"
+            |  },
+            |  "id": "DeclarationType",
+            |  "data": [
+            |    {
+            |      "code": "T2",
+            |      "description": "Goods having the customs status of Union goods, which are placed under the common transit procedure"
+            |    },
+            |    {
+            |      "code": "TIR",
+            |      "description": "TIR carnet"
+            |    }
+            |  ]
+            |}
+            |""".stripMargin
+        "must return Seq of declaration types when successful" in {
+          running(phase5App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(url))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
+                  .willReturn(okJson(declarationTypesResponseJson))
+              )
+
+              val expectedResult = NonEmptySet.of(
+                DeclarationType("T2", "Goods having the customs status of Union goods, which are placed under the common transit procedure"),
+                DeclarationType("TIR", "TIR carnet")
+              )
+
+              connector.getDeclarationTypes().futureValue.value mustEqual expectedResult
+          }
+
+        }
+
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          checkNoReferenceDataFoundResponse(url, phase5emptyResponseJson, connector.getDeclarationTypes())
+        }
+
+        "must return an exception when an error response is returned" in {
+          checkErrorResponse(url, connector.getDeclarationTypes())
+        }
       }
 
-      "must throw a NoReferenceDataFoundException for an empty response" in {
-        checkNoReferenceDataFoundResponse(url, connector.getDeclarationTypes())
-      }
-
-      "must return an exception when an error response is returned" in {
-        checkErrorResponse(url, connector.getDeclarationTypes())
-      }
     }
 
     "getAdditionalDeclarationTypes" - {
       val url = s"/$baseUrl/lists/DeclarationTypeAdditional"
+      "when phase-6" - {
 
-      "must return Seq of additional declaration types when successful" in {
-        server.stubFor(
-          get(urlEqualTo(url))
-            .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
-            .willReturn(okJson(additionalDeclarationTypesResponseJson))
-        )
+        def additionalDeclarationTypesResponseJson: String =
+          """
+            |[
+            |    {
+            |      "key": "A",
+            |      "value": "for a standard customs declaration (under Article 162 of the Code)"
+            |    },
+            |    {
+            |      "key": "D",
+            |      "value": "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code."
+            |    }
+            |  ]
+            |""".stripMargin
+        "must return Seq of additional declaration types when successful" in {
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(url))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.2.0+json"))
+                  .willReturn(okJson(additionalDeclarationTypesResponseJson))
+              )
 
-        val expectedResult = NonEmptySet.of(
-          AdditionalDeclarationType(
-            "A",
-            "for a standard customs declaration (under Article 162 of the Code)"
-          ),
-          AdditionalDeclarationType(
-            "D",
-            "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code."
-          )
-        )
+              val expectedResult = NonEmptySet.of(
+                AdditionalDeclarationType(
+                  "A",
+                  "for a standard customs declaration (under Article 162 of the Code)"
+                ),
+                AdditionalDeclarationType(
+                  "D",
+                  "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code."
+                )
+              )
+              connector.getAdditionalDeclarationTypes().futureValue.value mustEqual expectedResult
+          }
+        }
 
-        connector.getAdditionalDeclarationTypes().futureValue.value mustEqual expectedResult
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          running(phase6App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              checkNoReferenceDataFoundResponse(url, phase6emptyResponseJson, connector.getAdditionalDeclarationTypes())
+          }
+        }
+
+        "must return an exception when an error response is returned" in {
+          checkErrorResponse(url, connector.getAdditionalDeclarationTypes())
+        }
       }
+      "when phase-5" - {
+        def additionalDeclarationTypesResponseJson: String =
+          """
+            |{
+            |  "_links": {
+            |    "self": {
+            |      "href": "/customs-reference-data/lists/DeclarationType"
+            |    }
+            |  },
+            |  "meta": {
+            |    "version": "fb16648c-ea06-431e-bbf6-483dc9ebed6e",
+            |    "snapshotDate": "2023-01-01"
+            |  },
+            |  "id": "DeclarationType",
+            |  "data": [
+            |    {
+            |      "code": "A",
+            |      "description": "for a standard customs declaration (under Article 162 of the Code)"
+            |    },
+            |    {
+            |      "code": "D",
+            |      "description": "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code."
+            |    }
+            |  ]
+            |}
+            |""".stripMargin
+        "must return Seq of additional declaration types when successful" in {
+          running(phase5App) {
+            app =>
+              val connector = app.injector.instanceOf[ReferenceDataConnector]
+              server.stubFor(
+                get(urlEqualTo(url))
+                  .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
+                  .willReturn(okJson(additionalDeclarationTypesResponseJson))
+              )
 
-      "must throw a NoReferenceDataFoundException for an empty response" in {
-        checkNoReferenceDataFoundResponse(url, connector.getAdditionalDeclarationTypes())
-      }
+              val expectedResult = NonEmptySet.of(
+                AdditionalDeclarationType(
+                  "A",
+                  "for a standard customs declaration (under Article 162 of the Code)"
+                ),
+                AdditionalDeclarationType(
+                  "D",
+                  "For lodging a standard customs declaration (such as referred to under code A) in accordance with Article 171 of the Code."
+                )
+              )
+              connector.getAdditionalDeclarationTypes().futureValue.value mustEqual expectedResult
+          }
+        }
 
-      "must return an exception when an error response is returned" in {
-        checkErrorResponse(url, connector.getAdditionalDeclarationTypes())
+        "must throw a NoReferenceDataFoundException for an empty response" in {
+          checkNoReferenceDataFoundResponse(url, phase5emptyResponseJson, connector.getAdditionalDeclarationTypes())
+
+        }
+
+        "must return an exception when an error response is returned" in {
+          checkErrorResponse(url, connector.getAdditionalDeclarationTypes())
+        }
       }
     }
+
   }
 
-  private def checkNoReferenceDataFoundResponse(url: String, result: => Future[Either[Exception, ?]]): Assertion = {
+  private def checkNoReferenceDataFoundResponse(url: String, response: String, result: => Future[Either[Exception, ?]]): Assertion = {
     server.stubFor(
       get(urlEqualTo(url))
-        .withHeader("Accept", equalTo("application/vnd.hmrc.1.0+json"))
-        .willReturn(okJson(emptyResponseJson))
+        .willReturn(okJson(response))
     )
 
-    result.futureValue.left.value mustBe a[Exception]
+    result.futureValue.left.value mustBe a[NoReferenceDataFoundException]
   }
 
   private def checkErrorResponse(url: String, result: => Future[Either[Exception, ?]]): Assertion = {

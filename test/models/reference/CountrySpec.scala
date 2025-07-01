@@ -18,29 +18,79 @@ package models.reference
 
 import base.SpecBase
 import cats.data.NonEmptySet
+import config.FrontendAppConfig
 import generators.Generators
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, Json}
+import play.api.test.Helpers.running
 
 class CountrySpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "format" - {
     "must deserialise" - {
-      "when json contains a code" in {
-        forAll(nonEmptyString) {
-          value =>
-            val json = Json.parse(s"""
-                 |{
-                 |  "code" : "$value"
-                 |}
-                 |""".stripMargin)
+      "when phase-6" - {
+        "when json contains a code" in {
+          running(_.configure("feature-flags.phase-6-enabled" -> true)) {
+            app =>
+              val config = app.injector.instanceOf[FrontendAppConfig]
+              forAll(nonEmptyString) {
+                value =>
+                  val json = Json.parse(s"""
+                       |{
+                       |  "key" : "$value"
+                       |}
+                       |""".stripMargin)
 
-            val result = json.validate[Country]
+                  val result = json.validate[Country](Country.reads(config))
 
-            val expectedResult = Country(value)
+                  val expectedResult = Country(value)
 
-            result.get.mustBe(expectedResult)
+                  result.get.mustBe(expectedResult)
+              }
+          }
+
         }
+      }
+      "when phase-5" - {
+        "when json contains a code" in {
+          running(_.configure("feature-flags.phase-6-enabled" -> false)) {
+            app =>
+              val config = app.injector.instanceOf[FrontendAppConfig]
+              forAll(nonEmptyString) {
+                value =>
+                  val json = Json.parse(s"""
+                       |{
+                       |  "code" : "$value"
+                       |}
+                       |""".stripMargin)
+
+                  val result = json.validate[Country](Country.reads(config))
+
+                  val expectedResult = Country(value)
+
+                  result.get.mustBe(expectedResult)
+              }
+          }
+
+        }
+      }
+
+    }
+
+    "must read from mongo" in {
+      forAll(nonEmptyString) {
+        value =>
+          val json = Json.parse(s"""
+               |{
+               |  "code" : "$value"
+               |}
+               |""".stripMargin)
+
+          val result = json.validate[Country]
+
+          val expectedResult = Country(value)
+
+          result.get.mustBe(expectedResult)
       }
     }
 

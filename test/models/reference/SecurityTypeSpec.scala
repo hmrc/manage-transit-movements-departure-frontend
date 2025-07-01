@@ -17,9 +17,11 @@
 package models.reference
 
 import base.SpecBase
+import config.FrontendAppConfig
 import generators.Generators
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, Json}
+import play.api.test.Helpers.running
 
 class SecurityTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -39,19 +41,63 @@ class SecurityTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gener
     }
 
     "must deserialise" - {
-      "when json contains a security type" in {
-        forAll(nonEmptyString, nonEmptyString) {
-          (code, description) =>
-            val securityType = SecurityType(code, description)
-            Json
-              .parse(s"""
-                   |{
-                   |  "code": "$code",
-                   |  "description": "$description"
-                   |}
-                   |""".stripMargin)
-              .as[SecurityType] mustBe securityType
+      "when phase-6 " - {
+        "when json contains a security type" in {
+          running(_.configure("feature-flags.phase-6-enabled" -> true)) {
+            app =>
+              val config = app.injector.instanceOf[FrontendAppConfig]
+              forAll(nonEmptyString, nonEmptyString) {
+                (code, description) =>
+                  val securityType = SecurityType(code, description)
+                  Json
+                    .parse(s"""
+                         |{
+                         |  "key": "$code",
+                         |  "value": "$description"
+                         |}
+                         |""".stripMargin)
+                    .as[SecurityType](SecurityType.reads(config)) mustBe securityType
+              }
+          }
+
         }
+      }
+      "when phase-5 " - {
+        "when json contains a security type" in {
+          running(_.configure("feature-flags.phase-6-enabled" -> false)) {
+            app =>
+              val config = app.injector.instanceOf[FrontendAppConfig]
+              forAll(nonEmptyString, nonEmptyString) {
+                (code, description) =>
+                  val securityType = SecurityType(code, description)
+                  Json
+                    .parse(s"""
+                         |{
+                         |  "code": "$code",
+                         |  "description": "$description"
+                         |}
+                         |""".stripMargin)
+                    .as[SecurityType](SecurityType.reads(config)) mustBe securityType
+              }
+          }
+
+        }
+      }
+
+    }
+
+    "must read from mongo" in {
+      forAll(nonEmptyString, nonEmptyString) {
+        (code, description) =>
+          val securityType = SecurityType(code, description)
+          Json
+            .parse(s"""
+                 |{
+                 |  "code": "$code",
+                 |  "description": "$description"
+                 |}
+                 |""".stripMargin)
+            .as[SecurityType] mustBe securityType
       }
     }
 
