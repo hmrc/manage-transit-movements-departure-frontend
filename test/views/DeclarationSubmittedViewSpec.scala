@@ -79,4 +79,12 @@ class DeclarationSubmittedViewSpec extends PanelViewBehaviours with Generators {
     "Make another departure declaration",
     "/manage-transit-movements/departures"
   )
+
+  behave like pageWithContent("h2", "Before you go")
+
+  behave like pageWithLink(
+    "feedback",
+    "Take a short survey",
+    "http://localhost:9514/feedback/manage-transit-departures"
+  )
 }

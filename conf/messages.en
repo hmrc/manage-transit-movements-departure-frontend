@@ -197,12 +197,16 @@ task.items.amend = Amend items
 declarationSubmitted.title = Departure declaration sent
 declarationSubmitted.heading = Departure declaration sent
 declarationSubmitted.panel = for Local Reference Number (LRN)
-declarationSubmitted.h2 = What happens next
+declarationSubmitted.h2.first = What happens next
+declarationSubmitted.h2.second = Before you go
 declarationSubmitted.departures = Check the status of departure declarations
 declarationSubmitted.paragraph1 = to find out when goods have been released.
 declarationSubmitted.paragraph2.withTelephoneNumber = If the goods are not released when expected or you have another problem, contact Customs at {0} on {1}.
 declarationSubmitted.paragraph2.withoutTelephoneNumber = If the goods are not released when expected or you have another problem, contact Customs at {0}.
 declarationSubmitted.newDeparture = Make another departure declaration
+declarationSubmitted.survey = Take a short survey
+declarationSubmitted.survey1 = Your feedback helps us make our service better.
+declarationSubmitted.survey2 = to share your feedback on this service.
 
 locked.title = You cannot open this declaration right now
 locked.heading = You cannot open this declaration right now

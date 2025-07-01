@@ -16,12 +16,12 @@ object AppDependencies {
   val test: Seq[ModuleID] = Seq(
     "org.scalatest"              %% "scalatest"                % "3.2.19",
     "uk.gov.hmrc"                %% "bootstrap-test-play-30"   % bootstrapVersion,
-    "org.mockito"                 % "mockito-core"             % "5.17.0",
+    "org.mockito"                 % "mockito-core"             % "5.18.0",
     "org.scalatestplus"          %% "mockito-5-12"             % "3.2.19.0",
     "org.scalacheck"             %% "scalacheck"               % "1.18.1",
     "org.scalatestplus"          %% "scalacheck-1-18"          % "3.2.19.0",
     "io.github.wolfendale"       %% "scalacheck-gen-regexp"    % "1.1.0",
-    "org.jsoup"                   % "jsoup"                    % "1.20.1"
+    "org.jsoup"                   % "jsoup"                    % "1.21.1"
   ).map(_ % "test")
 
   def apply(): Seq[ModuleID] = compile ++ test

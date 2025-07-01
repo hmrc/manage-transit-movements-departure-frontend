@@ -34,6 +34,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
   lazy val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
+  lazy val feedbackUrl: String      = configuration.get[String]("urls.feedback")
 
   lazy val isPreLodgeEnabled: Boolean = configuration.get[Boolean]("features.isPreLodgeEnabled")
 
