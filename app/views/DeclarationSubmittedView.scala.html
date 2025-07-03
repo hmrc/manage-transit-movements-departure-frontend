@@ -40,7 +40,7 @@
         )
     )
 
-    <h2 class="govuk-heading-m">@messages("declarationSubmitted.h2")</h2>
+    <h2 class="govuk-heading-m">@messages("declarationSubmitted.h2.first")</h2>
 
     <p class="govuk-body">
         <a class="govuk-link" id="departure-declarations" href="@config.manageTransitMovementsViewDeparturesUrl">@messages("declarationSubmitted.departures")</a>
@@ -58,5 +58,13 @@
 
     <p class="govuk-body">
         <a class="govuk-link" id="new-departure" href="@routes.RedirectController.onPageLoad()">@messages("declarationSubmitted.newDeparture")</a>
+    </p>
+
+    <h2 class="govuk-heading-m">@messages("declarationSubmitted.h2.second")</h2>
+
+    <p class="govuk-body">
+        @messages("declarationSubmitted.survey1")
+        <a class="govuk-link" id="feedback" href="@config.feedbackUrl">@messages("declarationSubmitted.survey")</a>
+        @messages("declarationSubmitted.survey2")
     </p>
 }
