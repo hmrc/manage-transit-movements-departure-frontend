@@ -123,6 +123,7 @@ class CacheConnector @Inject() (
     val url = url"$baseUrl/messages/$lrn"
     http
       .get(url)
+      .setHeader("API-Version" -> config.apiVersion)
       .execute[DepartureMessages]
   }
 
