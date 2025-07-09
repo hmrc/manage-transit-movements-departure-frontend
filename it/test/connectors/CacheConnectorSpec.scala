@@ -459,21 +459,56 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
           |}
           |""".stripMargin
 
-      "must return messages when status is Ok" in {
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(okJson(json))
-        )
+      "must return messages when status is Ok" - {
+        "when phase 5" in {
+          val app = guiceApplicationBuilder()
+            .configure("feature-flags.phase-6-enabled" -> false)
+            .build()
 
-        val result: DepartureMessages = await(connector.getMessages(lrn))
+          running(app) {
+            val connector = app.injector.instanceOf[CacheConnector]
+            server.stubFor(
+              get(urlEqualTo(url))
+                .withHeader("API-Version", equalTo("1.0"))
+                .willReturn(okJson(json))
+            )
 
-        result mustEqual DepartureMessages(
-          Seq(
-            DepartureMessage("IE015"),
-            DepartureMessage("IE928"),
-            DepartureMessage("IE013")
-          )
-        )
+            val result: DepartureMessages = await(connector.getMessages(lrn))
+
+            result mustEqual DepartureMessages(
+              Seq(
+                DepartureMessage("IE015"),
+                DepartureMessage("IE928"),
+                DepartureMessage("IE013")
+              )
+            )
+          }
+        }
+
+        "when phase 6" in {
+          val app = guiceApplicationBuilder()
+            .configure("feature-flags.phase-6-enabled" -> true)
+            .build()
+
+          running(app) {
+            val connector = app.injector.instanceOf[CacheConnector]
+            server.stubFor(
+              get(urlEqualTo(url))
+                .withHeader("API-Version", equalTo("2.0"))
+                .willReturn(okJson(json))
+            )
+
+            val result: DepartureMessages = await(connector.getMessages(lrn))
+
+            result mustEqual DepartureMessages(
+              Seq(
+                DepartureMessage("IE015"),
+                DepartureMessage("IE928"),
+                DepartureMessage("IE013")
+              )
+            )
+          }
+        }
       }
 
       "must return empty list when status is NoContent or NotFound" in {
