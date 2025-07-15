@@ -38,7 +38,7 @@ class DeclarationTypePageSpec extends PageBehaviours {
               val preChange  = emptyUserAnswers.setValue(TIRCarnetReferencePage, carnetReference)
               val postChange = preChange.setValue(DeclarationTypePage, declarationType)
 
-              postChange.get(TIRCarnetReferencePage) mustNot be(defined)
+              postChange.get(TIRCarnetReferencePage) must not be defined
           }
         }
       }
