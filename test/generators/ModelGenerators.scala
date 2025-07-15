@@ -115,10 +115,10 @@ trait ModelGenerators {
   implicit lazy val arbitraryCustomsOffice: Arbitrary[CustomsOffice] =
     Arbitrary {
       for {
-        id          <- nonEmptyString
-        name        <- nonEmptyString
-        phoneNumber <- Gen.option(Gen.alphaNumStr)
-        countryId   <- nonEmptyString
+        id           <- nonEmptyString
+        name         <- nonEmptyString
+        phoneNumber  <- Gen.option(Gen.alphaNumStr)
+        countryId    <- nonEmptyString
         languageCode <- nonEmptyString
       } yield CustomsOffice(id, name, phoneNumber, countryId, languageCode)
     }
@@ -126,9 +126,9 @@ trait ModelGenerators {
   lazy val arbitraryXiCustomsOffice: Arbitrary[CustomsOffice] =
     Arbitrary {
       for {
-        id          <- stringsWithMaxLength(stringMaxLength)
-        name        <- stringsWithMaxLength(stringMaxLength)
-        phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
+        id           <- stringsWithMaxLength(stringMaxLength)
+        name         <- stringsWithMaxLength(stringMaxLength)
+        phoneNumber  <- Gen.option(stringsWithMaxLength(stringMaxLength))
         languageCode <- nonEmptyString
       } yield CustomsOffice(s"XI$id", name, phoneNumber, "XI", languageCode)
     }
@@ -136,9 +136,9 @@ trait ModelGenerators {
   lazy val arbitraryGbCustomsOffice: Arbitrary[CustomsOffice] =
     Arbitrary {
       for {
-        id          <- stringsWithMaxLength(stringMaxLength)
-        name        <- stringsWithMaxLength(stringMaxLength)
-        phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
+        id           <- stringsWithMaxLength(stringMaxLength)
+        name         <- stringsWithMaxLength(stringMaxLength)
+        phoneNumber  <- Gen.option(stringsWithMaxLength(stringMaxLength))
         languageCode <- nonEmptyString
       } yield CustomsOffice(s"GB$id", name, phoneNumber, "GB", languageCode)
     }

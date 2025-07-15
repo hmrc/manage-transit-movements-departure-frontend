@@ -22,8 +22,8 @@ import pages.behaviours.PageBehaviours
 
 class OfficeOfDeparturePageSpec extends PageBehaviours {
 
-  private val xiCustomsOffice = CustomsOffice("XI1", "Belfast", Some("phone number1"), "XI")
-  private val gbCustomsOffice = CustomsOffice("GB1", "Dover", Some("phone number2"), "GB")
+  private val xiCustomsOffice = CustomsOffice("XI1", "Belfast", Some("phone number1"), "XI", "EN")
+  private val gbCustomsOffice = CustomsOffice("GB1", "Dover", Some("phone number2"), "GB", "EN")
 
   "OfficeOfDeparturePage" - {
 

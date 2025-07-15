@@ -17,6 +17,7 @@
 package models.reference
 
 import cats.Order
+import forms.mappings.RichSeq
 import models.Selectable
 import play.api.libs.json.*
 
@@ -42,10 +43,14 @@ object CustomsOffice {
     Reads {
       case JsArray(values) =>
         JsSuccess {
-          val customsOffices = values.flatMap(_.asOpt[CustomsOffice]).toSeq
-          customsOffices
-            .find(_.languageCode == "EN")
-            .orElse(customsOffices.headOption)
+          values
+            .flatMap(_.asOpt[CustomsOffice])
+            .toSeq
+            .groupByPreserveOrder(_.id)
+            .flatMap {
+              case (_, offices) =>
+                offices.find(_.languageCode == "EN").orElse(offices.headOption)
+            }
             .toList
         }
       case _ =>

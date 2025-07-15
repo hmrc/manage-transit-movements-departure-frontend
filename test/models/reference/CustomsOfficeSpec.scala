@@ -31,29 +31,31 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
 
     "must serialise" - {
       "when phone number defined" in {
-        forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
-          (id, name, phoneNumber, countryId) =>
-            val customsOffice = CustomsOffice(id, name, Some(phoneNumber), countryId)
+        forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
+          (id, name, phoneNumber, countryId, languageCode) =>
+            val customsOffice = CustomsOffice(id, name, Some(phoneNumber), countryId, languageCode)
             Json.toJson(customsOffice) mustEqual Json.parse(s"""
                 |{
                 |  "id": "$id",
                 |  "name": "$name",
                 |  "phoneNumber": "$phoneNumber",
-                |  "countryId": "$countryId"
+                |  "countryId": "$countryId",
+                |  "languageCode": "$languageCode"
                 |}
                 |""".stripMargin)
         }
       }
 
       "when phone number undefined" in {
-        forAll(nonEmptyString, nonEmptyString, nonEmptyString) {
-          (id, name, countryId) =>
-            val customsOffice = CustomsOffice(id, name, None, countryId)
+        forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
+          (id, name, countryId, languageCode) =>
+            val customsOffice = CustomsOffice(id, name, None, countryId, languageCode)
             Json.toJson(customsOffice) mustEqual Json.parse(s"""
                 |{
                 |  "id": "$id",
                 |  "name": "$name",
-                |  "countryId": "$countryId"
+                |  "countryId": "$countryId",
+                |  "languageCode": "$languageCode"
                 |}
                 |""".stripMargin)
         }
@@ -62,16 +64,17 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
 
     "must deserialise" - {
       "when phone number defined" in {
-        forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
-          (id, name, phoneNumber, countryId) =>
-            val customsOffice = CustomsOffice(id, name, Some(phoneNumber), countryId)
+        forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
+          (id, name, phoneNumber, countryId, languageCode) =>
+            val customsOffice = CustomsOffice(id, name, Some(phoneNumber), countryId, languageCode)
             Json
               .parse(s"""
                 |{
                 |  "id": "$id",
                 |  "name": "$name",
                 |  "phoneNumber": "$phoneNumber",
-                |  "countryId": "$countryId"
+                |  "countryId": "$countryId",
+                |  "languageCode": "$languageCode"
                 |}
                 |""".stripMargin)
               .as[CustomsOffice] mustEqual customsOffice
@@ -79,15 +82,16 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
       }
 
       "when phone number undefined" in {
-        forAll(nonEmptyString, nonEmptyString, nonEmptyString) {
-          (id, name, countryId) =>
-            val customsOffice = CustomsOffice(id, name, None, countryId)
+        forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
+          (id, name, countryId, languageCode) =>
+            val customsOffice = CustomsOffice(id, name, None, countryId, languageCode)
             Json
               .parse(s"""
                 |{
                 |  "id": "$id",
                 |  "name": "$name",
-                |  "countryId": "$countryId"
+                |  "countryId": "$countryId",
+                |  "languageCode": "$languageCode"
                 |}
                 |""".stripMargin)
               .as[CustomsOffice] mustEqual customsOffice
@@ -113,26 +117,26 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
     }
 
     "must convert to select item" in {
-      forAll(nonEmptyString, nonEmptyString, nonEmptyString, arbitrary[Boolean]) {
-        (id, name, countryId, selected) =>
-          val customsOffice = CustomsOffice(id, name, None, countryId)
+      forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString, arbitrary[Boolean]) {
+        (id, name, countryId, languageCode, selected) =>
+          val customsOffice = CustomsOffice(id, name, None, countryId, languageCode)
           customsOffice.toSelectItem(selected) mustEqual SelectItem(Some(id), s"$name ($id)", selected)
       }
     }
 
     "must format as string" in {
-      forAll(nonEmptyString, nonEmptyString, nonEmptyString) {
-        (id, name, countryId) =>
-          val customsOffice = CustomsOffice(id, name, None, countryId)
+      forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
+        (id, name, countryId, languageCode) =>
+          val customsOffice = CustomsOffice(id, name, None, countryId, languageCode)
           customsOffice.toString mustEqual s"$name ($id)"
       }
     }
 
     "must order" in {
-      val customsOffice1 = CustomsOffice("FRCONF03", "TEST CONF 02", None, "FR")
-      val customsOffice2 = CustomsOffice("FRCONF01", "TEST CONF 02", None, "FR")
-      val customsOffice3 = CustomsOffice("FR620001", "Calais port tunnel bureau", None, "FR")
-      val customsOffice4 = CustomsOffice("FR590002", "Calais port tunnel bureau", None, "FR")
+      val customsOffice1 = CustomsOffice("FRCONF03", "TEST CONF 02", None, "FR", "FR")
+      val customsOffice2 = CustomsOffice("FRCONF01", "TEST CONF 02", None, "FR", "FR")
+      val customsOffice3 = CustomsOffice("FR620001", "Calais port tunnel bureau", None, "FR", "FR")
+      val customsOffice4 = CustomsOffice("FR590002", "Calais port tunnel bureau", None, "FR", "FR")
 
       val customsOffices = NonEmptySet.of(customsOffice1, customsOffice2, customsOffice3, customsOffice4)
 
@@ -175,9 +179,9 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
           val result = json.as[List[CustomsOffice]]
 
           result mustEqual List(
-            CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD"),
-            CustomsOffice("AD000002", "DCNJ PORTA", None, "AD"),
-            CustomsOffice("IT261101", "PASSO NUOVO", None, "IT")
+            CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD", "EN"),
+            CustomsOffice("AD000002", "DCNJ PORTA", None, "AD", "EN"),
+            CustomsOffice("IT261101", "PASSO NUOVO", None, "IT", "IT")
           )
         }
 
@@ -232,9 +236,9 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
           val result = json.as[List[CustomsOffice]]
 
           result mustEqual List(
-            CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD"),
-            CustomsOffice("AD000002", "DCNJ PORTA", None, "AD"),
-            CustomsOffice("IT261101", "PASSO NUOVO", None, "IT")
+            CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD", "EN"),
+            CustomsOffice("AD000002", "DCNJ PORTA", None, "AD", "EN"),
+            CustomsOffice("IT261101", "PASSO NUOVO", None, "IT", "IT")
           )
         }
       }

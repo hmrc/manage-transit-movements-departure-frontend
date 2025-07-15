@@ -135,6 +135,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
                 |      "id" : "GB1",
                 |      "name" : "someName",
                 |      "countryId" : "GB",
+                |      "languageCode" : "EN",
                 |      "isInCL112" : $isInCL112,
                 |      "isInCL147" : $isInCL147,
                 |      "isInCL010" : $isInCL010
