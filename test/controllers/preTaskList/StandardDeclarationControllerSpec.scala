@@ -76,7 +76,7 @@ class StandardDeclarationControllerSpec extends SpecBase with AppWithDefaultMock
 
       val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
       verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
-      userAnswersCaptor.getValue.data mustBe Json.parse("""
+      userAnswersCaptor.getValue.data mustEqual Json.parse("""
           |{
           |  "preTaskList" : {
           |    "additionalDeclarationType" : {

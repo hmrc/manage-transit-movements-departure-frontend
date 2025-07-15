@@ -25,140 +25,140 @@ class TaskStatusSpec extends SpecBase with ScalaCheckPropertyChecks with Generat
 
   "messageKey" - {
     "when Completed" in {
-      TaskStatus.Completed.messageKey mustBe "taskStatus.completed"
+      TaskStatus.Completed.messageKey mustEqual "taskStatus.completed"
     }
 
     "when InProgress" in {
-      TaskStatus.InProgress.messageKey mustBe "taskStatus.inProgress"
+      TaskStatus.InProgress.messageKey mustEqual "taskStatus.inProgress"
     }
 
     "when NotStarted" in {
-      TaskStatus.NotStarted.messageKey mustBe "taskStatus.notStarted"
+      TaskStatus.NotStarted.messageKey mustEqual "taskStatus.notStarted"
     }
 
     "when CannotStartYet" in {
-      TaskStatus.CannotStartYet.messageKey mustBe "taskStatus.cannotStartYet"
+      TaskStatus.CannotStartYet.messageKey mustEqual "taskStatus.cannotStartYet"
     }
 
     "when Error" in {
-      TaskStatus.Error.messageKey mustBe "taskStatus.error"
+      TaskStatus.Error.messageKey mustEqual "taskStatus.error"
     }
 
     "when Unavailable" in {
-      TaskStatus.Unavailable.messageKey mustBe "taskStatus.completed"
+      TaskStatus.Unavailable.messageKey mustEqual "taskStatus.completed"
     }
 
     "when CannotContinue" in {
-      TaskStatus.CannotContinue.messageKey mustBe "taskStatus.cannotContinue"
+      TaskStatus.CannotContinue.messageKey mustEqual "taskStatus.cannotContinue"
     }
   }
 
   "tag" - {
     "when Completed" in {
-      TaskStatus.Completed.tag mustBe "govuk-tag--green"
+      TaskStatus.Completed.tag mustEqual "govuk-tag--green"
     }
 
     "when InProgress" in {
-      TaskStatus.InProgress.tag mustBe "govuk-tag--blue"
+      TaskStatus.InProgress.tag mustEqual "govuk-tag--blue"
     }
 
     "when NotStarted" in {
-      TaskStatus.NotStarted.tag mustBe "govuk-tag--grey"
+      TaskStatus.NotStarted.tag mustEqual "govuk-tag--grey"
     }
 
     "when Unavailable" in {
-      TaskStatus.Unavailable.tag mustBe "govuk-tag--green"
+      TaskStatus.Unavailable.tag mustEqual "govuk-tag--green"
     }
 
     "when CannotStartYet" in {
-      TaskStatus.CannotStartYet.tag mustBe "govuk-tag--red"
+      TaskStatus.CannotStartYet.tag mustEqual "govuk-tag--red"
     }
 
     "when Error" in {
-      TaskStatus.Error.tag mustBe "govuk-tag--red"
+      TaskStatus.Error.tag mustEqual "govuk-tag--red"
     }
 
     "when CannotContinue" in {
-      TaskStatus.CannotContinue.tag mustBe "govuk-tag--yellow"
+      TaskStatus.CannotContinue.tag mustEqual "govuk-tag--yellow"
     }
   }
 
   "must serialise to json" - {
     "when completed" in {
       val result = Json.toJson[TaskStatus](TaskStatus.Completed)
-      result mustBe JsString("completed")
+      result mustEqual JsString("completed")
     }
 
     "when in progress" in {
       val result = Json.toJson[TaskStatus](TaskStatus.InProgress)
-      result mustBe JsString("in-progress")
+      result mustEqual JsString("in-progress")
     }
 
     "when not started" in {
       val result = Json.toJson[TaskStatus](TaskStatus.NotStarted)
-      result mustBe JsString("not-started")
+      result mustEqual JsString("not-started")
     }
 
     "when cannot start yet" in {
       val result = Json.toJson[TaskStatus](TaskStatus.CannotStartYet)
-      result mustBe JsString("cannot-start-yet")
+      result mustEqual JsString("cannot-start-yet")
     }
 
     "when error" in {
       val result = Json.toJson[TaskStatus](TaskStatus.Error)
-      result mustBe JsString("error")
+      result mustEqual JsString("error")
     }
 
     "when unavailable" in {
       val result = Json.toJson[TaskStatus](TaskStatus.Unavailable)
-      result mustBe JsString("unavailable")
+      result mustEqual JsString("unavailable")
     }
 
     "when cannot continue" in {
       val result = Json.toJson[TaskStatus](TaskStatus.CannotContinue)
-      result mustBe JsString("cannot-continue")
+      result mustEqual JsString("cannot-continue")
     }
   }
 
   "must deserialise from json" - {
     "when completed" in {
       val result = JsString("completed").as[TaskStatus]
-      result mustBe TaskStatus.Completed
+      result mustEqual TaskStatus.Completed
     }
 
     "when in progress" in {
       val result = JsString("in-progress").as[TaskStatus]
-      result mustBe TaskStatus.InProgress
+      result mustEqual TaskStatus.InProgress
     }
 
     "when not started" in {
       val result = JsString("not-started").as[TaskStatus]
-      result mustBe TaskStatus.NotStarted
+      result mustEqual TaskStatus.NotStarted
     }
 
     "when cannot start yet" in {
       val result = JsString("cannot-start-yet").as[TaskStatus]
-      result mustBe TaskStatus.CannotStartYet
+      result mustEqual TaskStatus.CannotStartYet
     }
 
     "when cannot-continue" in {
       val result = JsString("cannot-continue").as[TaskStatus]
-      result mustBe TaskStatus.CannotContinue
+      result mustEqual TaskStatus.CannotContinue
     }
 
     "when error" in {
       val result = JsString("error").as[TaskStatus]
-      result mustBe TaskStatus.Error
+      result mustEqual TaskStatus.Error
     }
 
     "when unavailable" in {
       val result = JsString("unavailable").as[TaskStatus]
-      result mustBe TaskStatus.Unavailable
+      result mustEqual TaskStatus.Unavailable
     }
 
     "when amended" in {
       val result = JsString("amended").as[TaskStatus]
-      result mustBe TaskStatus.Amended
+      result mustEqual TaskStatus.Amended
     }
 
     "when something else" in {

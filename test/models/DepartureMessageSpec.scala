@@ -38,7 +38,7 @@ class DepartureMessageSpec extends SpecBase with ScalaCheckPropertyChecks with G
 
             val expectedResult = DepartureMessage(value)
 
-            result.get.mustBe(expectedResult)
+            result.get.mustEqual(expectedResult)
         }
       }
     }
@@ -55,7 +55,7 @@ class DepartureMessageSpec extends SpecBase with ScalaCheckPropertyChecks with G
 
             val result = json.validate[DepartureMessage]
 
-            result.mustBe(a[JsError])
+            result mustBe a[JsError]
         }
       }
     }

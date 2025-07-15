@@ -28,38 +28,38 @@ class DocumentsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
     "must be Documents" - {
       "when status is CannotStartYet" in {
         val task = DocumentsTask(CannotStartYet)
-        task.name mustBe "Documents"
+        task.name mustEqual "Documents"
       }
     }
 
     "must be Add documents" - {
       "when status is NotStarted" in {
         val task = DocumentsTask(NotStarted)
-        task.name mustBe "Add documents"
+        task.name mustEqual "Add documents"
       }
     }
 
     "must be Edit documents" - {
       "when status is Completed" in {
         val task = DocumentsTask(Completed)
-        task.name mustBe "Edit documents"
+        task.name mustEqual "Edit documents"
       }
 
       "when status is InProgress" in {
         val task = DocumentsTask(InProgress)
-        task.name mustBe "Edit documents"
+        task.name mustEqual "Edit documents"
       }
 
       "when status is Amended" in {
         val task = DocumentsTask(Amended)
-        task.name mustBe "Edit documents"
+        task.name mustEqual "Edit documents"
       }
     }
 
     "must be Amend documents" - {
       "when status is Error" in {
         val task = DocumentsTask(Error)
-        task.name mustBe "Amend documents"
+        task.name mustEqual "Amend documents"
       }
     }
   }
@@ -69,7 +69,7 @@ class DocumentsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = DocumentsTask(taskStatus)
-          task.id mustBe "documents"
+          task.id mustEqual "documents"
       }
     }
   }

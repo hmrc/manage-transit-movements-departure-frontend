@@ -68,8 +68,8 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
           val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, NoAnswers)).map(_.left.value)
 
-          status(result) mustBe 303
-          redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
+          status(result) mustEqual 303
+          redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad(Some(lrn)).url
         }
       }
 
@@ -83,8 +83,8 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
           val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, BadRequest)).map(_.left.value)
 
-          status(result) mustBe 303
-          redirectLocation(result).value mustBe routes.DraftNoLongerAvailableController.onPageLoad().url
+          status(result) mustEqual 303
+          redirectLocation(result).value mustEqual routes.DraftNoLongerAvailableController.onPageLoad().url
         }
       }
 
@@ -101,8 +101,8 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
             val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Answers(userAnswers))).map(_.left.value)
 
-            status(result) mustBe 303
-            redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
+            status(result) mustEqual 303
+            redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad(Some(lrn)).url
           }
         }
 
@@ -123,8 +123,8 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
                 whenReady[Either[Result, DataRequest[?]], Assertion](result) {
                   result =>
-                    result.value.userAnswers mustBe userAnswers
-                    result.value.eoriNumber mustBe eoriNumber
+                    result.value.userAnswers mustEqual userAnswers
+                    result.value.eoriNumber mustEqual eoriNumber
                 }
             }
           }
@@ -146,8 +146,8 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
           val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, NoAnswers)).map(_.left.value)
 
-          status(result) mustBe 303
-          redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
+          status(result) mustEqual 303
+          redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad(Some(lrn)).url
         }
       }
 
@@ -180,8 +180,8 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
                   val result = harness.callRefine(OptionalDataRequest(fakeRequest, eoriNumber, Answers(userAnswers))).map(_.left.value)
 
-                  status(result) mustBe 303
-                  redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad(Some(lrn)).url
+                  status(result) mustEqual 303
+                  redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad(Some(lrn)).url
               }
             }
           }
@@ -211,8 +211,8 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
                   whenReady[Either[Result, DataRequest[?]], Assertion](result) {
                     result =>
-                      result.value.userAnswers mustBe userAnswers
-                      result.value.eoriNumber mustBe eoriNumber
+                      result.value.userAnswers mustEqual userAnswers
+                      result.value.eoriNumber mustEqual eoriNumber
                   }
               }
             }
@@ -234,8 +234,8 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
             whenReady[Either[Result, DataRequest[?]], Assertion](result) {
               result =>
-                result.value.userAnswers mustBe userAnswers
-                result.value.eoriNumber mustBe eoriNumber
+                result.value.userAnswers mustEqual userAnswers
+                result.value.eoriNumber mustEqual eoriNumber
             }
           }
         }
@@ -252,8 +252,8 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
 
             whenReady[Either[Result, DataRequest[?]], Assertion](result) {
               result =>
-                result.value.userAnswers mustBe userAnswers
-                result.value.eoriNumber mustBe eoriNumber
+                result.value.userAnswers mustEqual userAnswers
+                result.value.eoriNumber mustEqual eoriNumber
             }
           }
         }

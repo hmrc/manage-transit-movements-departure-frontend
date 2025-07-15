@@ -45,7 +45,7 @@ class CountrySpec extends SpecBase with ScalaCheckPropertyChecks with Generators
 
                   val expectedResult = Country(value)
 
-                  result.get.mustBe(expectedResult)
+                  result.get.mustEqual(expectedResult)
               }
           }
 
@@ -68,7 +68,7 @@ class CountrySpec extends SpecBase with ScalaCheckPropertyChecks with Generators
 
                   val expectedResult = Country(value)
 
-                  result.get.mustBe(expectedResult)
+                  result.get.mustEqual(expectedResult)
               }
           }
 
@@ -90,7 +90,7 @@ class CountrySpec extends SpecBase with ScalaCheckPropertyChecks with Generators
 
           val expectedResult = Country(value)
 
-          result.get.mustBe(expectedResult)
+          result.get.mustEqual(expectedResult)
       }
     }
 
@@ -106,7 +106,7 @@ class CountrySpec extends SpecBase with ScalaCheckPropertyChecks with Generators
 
             val result = json.validate[Country]
 
-            result.mustBe(a[JsError])
+            result mustBe a[JsError]
         }
       }
     }
@@ -124,7 +124,7 @@ class CountrySpec extends SpecBase with ScalaCheckPropertyChecks with Generators
                |}
                |""".stripMargin)
 
-          result mustBe expectedResult
+          result mustEqual expectedResult
       }
     }
   }
@@ -148,7 +148,7 @@ class CountrySpec extends SpecBase with ScalaCheckPropertyChecks with Generators
         .toSortedSet
         .toList
 
-      result.mustBe(orderedCountries)
+      result.mustEqual(orderedCountries)
     }
 
     "must ensure countries are unique by code" in {
@@ -172,7 +172,7 @@ class CountrySpec extends SpecBase with ScalaCheckPropertyChecks with Generators
         .toSortedSet
         .toList
 
-      result.mustBe(uniqueCountries)
+      result.mustEqual(uniqueCountries)
     }
   }
 }

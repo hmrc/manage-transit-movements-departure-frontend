@@ -79,8 +79,8 @@ class TestOnlyControllerSpec extends SpecBase with AppWithDefaultMockFixtures wi
           val headerCarrier = headerCarrierCaptor.getValue
           verify(mockConnector).post(eqTo(lrn), eqTo(json))(eqTo(headerCarrier))
 
-          headerCarrier.authorization.value.value mustBe bearerToken
-          headerCarrier.sessionId.value.value mustBe sessionId
+          headerCarrier.authorization.value.value mustEqual bearerToken
+          headerCarrier.sessionId.value.value mustEqual sessionId
 
         }
       }

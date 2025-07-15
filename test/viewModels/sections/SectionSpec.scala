@@ -34,7 +34,7 @@ class SectionSpec extends SpecBase with ScalaCheckPropertyChecks with Generators
 
           val result = section.removeTitle()
 
-          result.sectionTitle.mustBe(None)
+          result.sectionTitle must not be defined
       }
     }
   }

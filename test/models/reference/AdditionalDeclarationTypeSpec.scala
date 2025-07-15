@@ -31,7 +31,7 @@ class AdditionalDeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChec
       forAll(nonEmptyString, nonEmptyString) {
         (code, description) =>
           val additionalDeclarationType = AdditionalDeclarationType(code, description)
-          Json.toJson(additionalDeclarationType) mustBe Json.parse(s"""
+          Json.toJson(additionalDeclarationType) mustEqual Json.parse(s"""
                |{
                |  "code": "$code",
                |  "description": "$description"
@@ -56,7 +56,7 @@ class AdditionalDeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChec
                          |  "value": "$description"
                          |}
                          |""".stripMargin)
-                    .as[AdditionalDeclarationType](AdditionalDeclarationType.reads(config)) mustBe additionalDeclarationType
+                    .as[AdditionalDeclarationType](AdditionalDeclarationType.reads(config)) mustEqual additionalDeclarationType
               }
           }
 
@@ -77,7 +77,7 @@ class AdditionalDeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChec
                          |  "description": "$description"
                          |}
                          |""".stripMargin)
-                    .as[AdditionalDeclarationType](AdditionalDeclarationType.reads(config)) mustBe additionalDeclarationType
+                    .as[AdditionalDeclarationType](AdditionalDeclarationType.reads(config)) mustEqual additionalDeclarationType
               }
           }
 
@@ -97,7 +97,7 @@ class AdditionalDeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChec
                  |  "description": "$description"
                  |}
                  |""".stripMargin)
-            .as[AdditionalDeclarationType] mustBe additionalDeclarationType
+            .as[AdditionalDeclarationType] mustEqual additionalDeclarationType
       }
     }
 
@@ -113,7 +113,7 @@ class AdditionalDeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChec
 
             val result = json.validate[AdditionalDeclarationType]
 
-            result.mustBe(a[JsError])
+            result mustBe a[JsError]
         }
       }
     }
@@ -122,7 +122,7 @@ class AdditionalDeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChec
       forAll(nonEmptyString, nonEmptyString) {
         (code, description) =>
           val additionalDeclarationType = AdditionalDeclarationType(code, description)
-          additionalDeclarationType.toString mustBe s"$code - $description"
+          additionalDeclarationType.toString mustEqual s"$code - $description"
       }
     }
   }

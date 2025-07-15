@@ -69,7 +69,7 @@ class DeclarationTypesServiceSpec extends SpecBase with BeforeAndAfterEach with 
             officeOfDeparture =>
               beforeEach()
 
-              service.getDeclarationTypes(officeOfDeparture, ProcedureType.Normal).futureValue mustBe
+              service.getDeclarationTypes(officeOfDeparture, ProcedureType.Normal).futureValue mustEqual
                 Seq(declarationType6, declarationType5, declarationType4, declarationType3, declarationType1)
 
               verify(mockRefDataConnector).getDeclarationTypes()(any(), any())
@@ -81,7 +81,7 @@ class DeclarationTypesServiceSpec extends SpecBase with BeforeAndAfterEach with 
             (officeOfDeparture, procedureType) =>
               beforeEach()
 
-              service.getDeclarationTypes(officeOfDeparture, procedureType).futureValue mustBe
+              service.getDeclarationTypes(officeOfDeparture, procedureType).futureValue mustEqual
                 Seq(declarationType6, declarationType5, declarationType4, declarationType3)
 
               verify(mockRefDataConnector).getDeclarationTypes()(any(), any())
@@ -93,7 +93,7 @@ class DeclarationTypesServiceSpec extends SpecBase with BeforeAndAfterEach with 
             officeOfDeparture =>
               beforeEach()
 
-              service.getDeclarationTypes(officeOfDeparture, ProcedureType.Simplified).futureValue mustBe
+              service.getDeclarationTypes(officeOfDeparture, ProcedureType.Simplified).futureValue mustEqual
                 Seq(declarationType6, declarationType5, declarationType4, declarationType3)
 
               verify(mockRefDataConnector).getDeclarationTypes()(any(), any())

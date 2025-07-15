@@ -47,23 +47,23 @@ trait TaskListViewBehaviours extends ViewBehaviours with Generators {
             task.status match {
               case CannotStartYet | Unavailable =>
                 "must contain a name" in {
-                  name.text() mustBe task.name
+                  name.text() mustEqual task.name
                 }
               case _ =>
                 "must contain a name with a link" in {
                   val link = name.getElementsByClass("govuk-link govuk-task-list__link").first()
-                  getElementHref(link) mustBe task.href(lrn)(frontendAppConfig)
-                  link.attr("aria-describedby") mustBe s"task-list-${taskIndex + 1}-status"
-                  link.text() mustBe task.name
+                  getElementHref(link) mustEqual task.href(lrn)(frontendAppConfig)
+                  link.attr("aria-describedby") mustEqual s"task-list-${taskIndex + 1}-status"
+                  link.text() mustEqual task.name
                 }
             }
 
             "must contain a tag" in {
               val status = renderedTask.getElementsByClass("govuk-task-list__status").first()
-              status.id() mustBe s"task-list-${taskIndex + 1}-status"
+              status.id() mustEqual s"task-list-${taskIndex + 1}-status"
               val tag = status.getElementsByClass("govuk-tag").first()
-              tag.text() mustBe messages(task.status.messageKey)
-              tag.id() mustBe s"${task.id}-status"
+              tag.text() mustEqual messages(task.status.messageKey)
+              tag.id() mustEqual s"${task.id}-status"
               assert(tag.hasClass(task.status.tag))
             }
           }

@@ -30,48 +30,48 @@ class ItemsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
     "must be Items" - {
       "when status is CannotStartYet" in {
         val task = ItemsTask(CannotStartYet)
-        task.name mustBe "Items"
+        task.name mustEqual "Items"
       }
 
       "when status is CannotContinue" in {
         val task = ItemsTask(CannotContinue)
-        task.name mustBe "Items"
+        task.name mustEqual "Items"
       }
 
       "when status is Unavailable" in {
         val task = ItemsTask(Unavailable)
-        task.name mustBe "Items"
+        task.name mustEqual "Items"
       }
     }
 
     "must be Add items" - {
       "when status is NotStarted" in {
         val task = ItemsTask(NotStarted)
-        task.name mustBe "Add items"
+        task.name mustEqual "Add items"
       }
     }
 
     "must be Edit items" - {
       "when status is Completed" in {
         val task = ItemsTask(Completed)
-        task.name mustBe "Edit items"
+        task.name mustEqual "Edit items"
       }
 
       "when status is InProgress" in {
         val task = ItemsTask(InProgress)
-        task.name mustBe "Edit items"
+        task.name mustEqual "Edit items"
       }
 
       "when status is Amended" in {
         val task = ItemsTask(Amended)
-        task.name mustBe "Edit items"
+        task.name mustEqual "Edit items"
       }
     }
 
     "must be Amend items" - {
       "when status is Error" in {
         val task = ItemsTask(Error)
-        task.name mustBe "Amend items"
+        task.name mustEqual "Amend items"
       }
     }
   }
@@ -81,7 +81,7 @@ class ItemsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = ItemsTask(taskStatus)
-          task.id mustBe "items"
+          task.id mustEqual "items"
       }
     }
   }
@@ -103,7 +103,7 @@ class ItemsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
           (taskStatus, lrn) =>
             val task   = ItemsTask(taskStatus)
             val result = task.toTaskListItem(lrn)(messages, frontendAppConfig)
-            result.href mustBe None
+            result.href must not be defined
         }
       }
     }

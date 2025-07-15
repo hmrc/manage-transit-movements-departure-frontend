@@ -28,7 +28,7 @@ class TaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val result = Task.apply(".traderDetails", taskStatus)
-          result.get mustBe TraderDetailsTask(taskStatus)
+          result.get mustEqual TraderDetailsTask(taskStatus)
       }
     }
 
@@ -36,7 +36,7 @@ class TaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val result = Task.apply(".routeDetails", taskStatus)
-          result.get mustBe RouteDetailsTask(taskStatus)
+          result.get mustEqual RouteDetailsTask(taskStatus)
       }
     }
 
@@ -44,7 +44,7 @@ class TaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val result = Task.apply(".transportDetails", taskStatus)
-          result.get mustBe TransportTask(taskStatus)
+          result.get mustEqual TransportTask(taskStatus)
       }
     }
 
@@ -52,7 +52,7 @@ class TaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val result = Task.apply(".documents", taskStatus)
-          result.get mustBe DocumentsTask(taskStatus)
+          result.get mustEqual DocumentsTask(taskStatus)
       }
     }
 
@@ -60,7 +60,7 @@ class TaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val result = Task.apply(".items", taskStatus)
-          result.get mustBe ItemsTask(taskStatus)
+          result.get mustEqual ItemsTask(taskStatus)
       }
     }
 
@@ -68,7 +68,7 @@ class TaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val result = Task.apply(".guaranteeDetails", taskStatus)
-          result.get mustBe GuaranteeDetailsTask(taskStatus)
+          result.get mustEqual GuaranteeDetailsTask(taskStatus)
       }
     }
 

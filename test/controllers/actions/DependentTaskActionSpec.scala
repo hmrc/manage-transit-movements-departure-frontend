@@ -46,15 +46,15 @@ class DependentTaskActionSpec extends SpecBase with ScalaCheckPropertyChecks wit
     "return None if pre-task list is complete" in {
       val tasks  = Map(PreTaskListTask.section -> TaskStatus.Completed)
       val result = harness(tasks)
-      status(result) mustBe OK
-      redirectLocation(result) mustBe None
+      status(result) mustEqual OK
+      redirectLocation(result) must not be defined
     }
 
     "return None if pre-task list is unavailable" in {
       val tasks  = Map(PreTaskListTask.section -> TaskStatus.Unavailable)
       val result = harness(tasks)
-      status(result) mustBe OK
-      redirectLocation(result) mustBe None
+      status(result) mustEqual OK
+      redirectLocation(result) must not be defined
     }
 
     "return to LRN page if pre- task list is incomplete" in {
@@ -62,8 +62,8 @@ class DependentTaskActionSpec extends SpecBase with ScalaCheckPropertyChecks wit
         taskStatus =>
           val tasks  = Map(PreTaskListTask.section -> taskStatus)
           val result = harness(tasks)
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
             controllers.preTaskList.routes.LocalReferenceNumberController.onPageReload(lrn).url
       }
     }

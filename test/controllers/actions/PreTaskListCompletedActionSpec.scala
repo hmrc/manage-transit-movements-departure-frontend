@@ -46,7 +46,7 @@ class PreTaskListCompletedActionSpec extends SpecBase with ScalaCheckPropertyChe
           val action = new Harness()
           val tasks  = Map(PreTaskListTask.section -> taskStatus)
           val result = action.callFilter(tasks).futureValue
-          result mustBe None
+          result must not be defined
       }
     }
 
@@ -54,7 +54,7 @@ class PreTaskListCompletedActionSpec extends SpecBase with ScalaCheckPropertyChe
       val action = new Harness()
       val tasks  = Map(PreTaskListTask.section -> TaskStatus.Completed)
       val result = action.callFilter(tasks).map(_.value)
-      redirectLocation(result).value mustBe controllers.routes.TaskListController.onPageLoad(emptyUserAnswers.lrn).url
+      redirectLocation(result).value mustEqual controllers.routes.TaskListController.onPageLoad(emptyUserAnswers.lrn).url
     }
   }
 }

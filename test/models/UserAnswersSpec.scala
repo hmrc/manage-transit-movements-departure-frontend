@@ -58,7 +58,7 @@ class UserAnswersSpec extends SpecBase {
           testPagePath -> testPageAnswer
         )
 
-        result.data mustBe expectedData
+        result.data mustEqual expectedData
       }
 
       "must run cleanup when given a different answer" in {
@@ -72,7 +72,7 @@ class UserAnswersSpec extends SpecBase {
           testPagePath -> testPageAnswer2
         )
 
-        result.data mustBe expectedData
+        result.data mustEqual expectedData
       }
 
       "must not run cleanup when given the same answer" in {
@@ -87,7 +87,7 @@ class UserAnswersSpec extends SpecBase {
           testPagePath        -> testPageAnswer
         )
 
-        result.data mustBe expectedData
+        result.data mustEqual expectedData
       }
     }
 
@@ -96,14 +96,14 @@ class UserAnswersSpec extends SpecBase {
         "when task has not previously been set" in {
           val task   = TraderDetailsTask(TaskStatus.InProgress)
           val result = emptyUserAnswers.updateTask(task.section, task.status)
-          result.tasks mustBe Map(TraderDetailsTask.section -> TaskStatus.InProgress)
+          result.tasks mustEqual Map(TraderDetailsTask.section -> TaskStatus.InProgress)
         }
 
         "when task has previously been set" in {
           val tasks       = Map(TraderDetailsTask.section -> TaskStatus.InProgress)
           val updatedTask = TraderDetailsTask(TaskStatus.Completed)
           val result      = emptyUserAnswers.copy(tasks = tasks).updateTask(updatedTask.section, updatedTask.status)
-          result.tasks mustBe Map(TraderDetailsTask.section -> TaskStatus.Completed)
+          result.tasks mustEqual Map(TraderDetailsTask.section -> TaskStatus.Completed)
         }
 
         "when there are other tasks" in {
@@ -114,7 +114,7 @@ class UserAnswersSpec extends SpecBase {
           )
           val updatedTask = TraderDetailsTask(TaskStatus.Completed)
           val result      = emptyUserAnswers.copy(tasks = tasks).updateTask(updatedTask.section, updatedTask.status)
-          result.tasks mustBe Map(
+          result.tasks mustEqual Map(
             TraderDetailsTask.section -> TaskStatus.Completed,
             RouteDetailsTask.section  -> TaskStatus.NotStarted,
             TransportTask.section     -> TaskStatus.CannotStartYet

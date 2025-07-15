@@ -31,7 +31,7 @@ class SecurityTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gener
       forAll(nonEmptyString, nonEmptyString) {
         (code, description) =>
           val securityType = SecurityType(code, description)
-          Json.toJson(securityType) mustBe Json.parse(s"""
+          Json.toJson(securityType) mustEqual Json.parse(s"""
               |{
               |  "code": "$code",
               |  "description": "$description"
@@ -56,7 +56,7 @@ class SecurityTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gener
                          |  "value": "$description"
                          |}
                          |""".stripMargin)
-                    .as[SecurityType](SecurityType.reads(config)) mustBe securityType
+                    .as[SecurityType](SecurityType.reads(config)) mustEqual securityType
               }
           }
 
@@ -77,7 +77,7 @@ class SecurityTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gener
                          |  "description": "$description"
                          |}
                          |""".stripMargin)
-                    .as[SecurityType](SecurityType.reads(config)) mustBe securityType
+                    .as[SecurityType](SecurityType.reads(config)) mustEqual securityType
               }
           }
 
@@ -97,7 +97,7 @@ class SecurityTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gener
                  |  "description": "$description"
                  |}
                  |""".stripMargin)
-            .as[SecurityType] mustBe securityType
+            .as[SecurityType] mustEqual securityType
       }
     }
 
@@ -113,7 +113,7 @@ class SecurityTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gener
 
             val result = json.validate[SecurityType]
 
-            result.mustBe(a[JsError])
+            result mustBe a[JsError]
         }
       }
     }
@@ -123,13 +123,13 @@ class SecurityTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Gener
         forAll(nonEmptyString, nonEmptyString) {
           (code, description) =>
             val securityType = SecurityType(code, description)
-            securityType.toString mustBe description
+            securityType.toString mustEqual description
         }
       }
 
       "when description contains raw HTML" in {
         val securityType = SecurityType("3", "ENS &amp; EXS")
-        securityType.toString mustBe "ENS & EXS"
+        securityType.toString mustEqual "ENS & EXS"
       }
     }
   }
