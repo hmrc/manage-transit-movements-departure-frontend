@@ -48,10 +48,10 @@
     </p>
 
     @officeOfDestination match {
-        case CustomsOffice(id, name, Some(tel), _) => {
+        case CustomsOffice(id, name, Some(tel), _, _) => {
             <p class="govuk-body">@messages("declarationSubmitted.paragraph2.withTelephoneNumber", name, tel)</p>
         }
-        case CustomsOffice(id, name, None, _) => {
+        case CustomsOffice(id, name, None, _, _) => {
             <p class="govuk-body">@messages("declarationSubmitted.paragraph2.withoutTelephoneNumber", name)</p>
         }
     }
