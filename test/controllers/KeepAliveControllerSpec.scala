@@ -37,7 +37,7 @@ class KeepAliveControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       val result = route(app, FakeRequest(GET, keepAliveRoute(Some(lrn)))).value
 
-      status(result) mustBe NO_CONTENT
+      status(result) mustEqual NO_CONTENT
 
       verify(mockSessionRepository, times(1)).get(any())(any())
       verify(mockSessionRepository, times(1)).set(any())(any())
@@ -46,7 +46,7 @@ class KeepAliveControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
     "not touch mongo cache when lrn is not available" in {
       val result = route(app, FakeRequest(GET, keepAliveRoute(None))).value
 
-      status(result) mustBe NO_CONTENT
+      status(result) mustEqual NO_CONTENT
 
       verify(mockSessionRepository, never()).get(any())(any())
       verify(mockSessionRepository, never()).set(any())(any())
@@ -57,7 +57,7 @@ class KeepAliveControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       val result = route(app, FakeRequest(GET, keepAliveRoute(Some(lrn)))).value
 
-      status(result) mustBe NO_CONTENT
+      status(result) mustEqual NO_CONTENT
 
       verify(mockSessionRepository, times(1)).get(any())(any())
       verify(mockSessionRepository, never()).set(any())(any())

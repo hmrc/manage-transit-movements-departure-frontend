@@ -56,7 +56,7 @@ class AdditionalDeclarationTypesServiceSpec extends SpecBase with BeforeAndAfter
 
     "getAdditionalDeclarationTypes" - {
       "must return a list of sorted additional declaration types" in {
-        service.getAdditionalDeclarationTypes().futureValue mustBe
+        service.getAdditionalDeclarationTypes().futureValue mustEqual
           Seq(adt1, adt2)
 
         verify(mockRefDataConnector).getAdditionalDeclarationTypes()(any(), any())

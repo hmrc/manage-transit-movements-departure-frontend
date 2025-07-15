@@ -28,38 +28,38 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
     "must be Guarantee Details" - {
       "when status is CannotStartYet" in {
         val task = GuaranteeDetailsTask(CannotStartYet)
-        task.name mustBe "Guarantee details"
+        task.name mustEqual "Guarantee details"
       }
     }
 
     "must be Add guarantee details" - {
       "when status is NotStarted" in {
         val task = GuaranteeDetailsTask(NotStarted)
-        task.name mustBe "Add guarantee details"
+        task.name mustEqual "Add guarantee details"
       }
     }
 
     "must be Edit guarantee details" - {
       "when status is Completed" in {
         val task = GuaranteeDetailsTask(Completed)
-        task.name mustBe "Edit guarantee details"
+        task.name mustEqual "Edit guarantee details"
       }
 
       "when status is InProgress" in {
         val task = GuaranteeDetailsTask(InProgress)
-        task.name mustBe "Edit guarantee details"
+        task.name mustEqual "Edit guarantee details"
       }
 
       "when status is Amended" in {
         val task = GuaranteeDetailsTask(Amended)
-        task.name mustBe "Edit guarantee details"
+        task.name mustEqual "Edit guarantee details"
       }
     }
 
     "must be Amend guarantee details" - {
       "when status is Error" in {
         val task = GuaranteeDetailsTask(Error)
-        task.name mustBe "Amend guarantee details"
+        task.name mustEqual "Amend guarantee details"
       }
     }
   }
@@ -69,7 +69,7 @@ class GuaranteeDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks wi
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = GuaranteeDetailsTask(taskStatus)
-          task.id mustBe "guarantee-details"
+          task.id mustEqual "guarantee-details"
       }
     }
   }

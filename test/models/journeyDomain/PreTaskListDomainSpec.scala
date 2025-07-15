@@ -66,8 +66,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
           val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
 
-          result.value.value mustBe expectedResult
-          result.value.pages mustBe Seq(
+          result.value.value mustEqual expectedResult
+          result.value.pages mustEqual Seq(
             AdditionalDeclarationTypePage,
             OfficeOfDeparturePage,
             ProcedureTypePage,
@@ -99,8 +99,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
           val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(userAnswers)
 
-          result.value.value mustBe expectedResult
-          result.value.pages mustBe Seq(
+          result.value.value mustEqual expectedResult
+          result.value.pages mustEqual Seq(
             AdditionalDeclarationTypePage,
             OfficeOfDeparturePage,
             ProcedureTypePage,
@@ -124,8 +124,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
           val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
 
-          result.left.value.page mustBe TIRCarnetReferencePage
-          result.left.value.pages mustBe Seq(
+          result.left.value.page mustEqual TIRCarnetReferencePage
+          result.left.value.pages mustEqual Seq(
             AdditionalDeclarationTypePage,
             OfficeOfDeparturePage,
             ProcedureTypePage,
@@ -146,8 +146,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
           val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
 
-          result.left.value.page mustBe DeclarationTypePage
-          result.left.value.pages mustBe Seq(
+          result.left.value.page mustEqual DeclarationTypePage
+          result.left.value.pages mustEqual Seq(
             AdditionalDeclarationTypePage,
             OfficeOfDeparturePage,
             ProcedureTypePage,
@@ -183,8 +183,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
           val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
 
-          result.value.value mustBe expectedResult
-          result.value.pages mustBe Seq(
+          result.value.value mustEqual expectedResult
+          result.value.pages mustEqual Seq(
             StandardDeclarationPage,
             OfficeOfDeparturePage,
             ProcedureTypePage,
@@ -216,8 +216,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
           val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(userAnswers)
 
-          result.value.value mustBe expectedResult
-          result.value.pages mustBe Seq(
+          result.value.value mustEqual expectedResult
+          result.value.pages mustEqual Seq(
             StandardDeclarationPage,
             OfficeOfDeparturePage,
             ProcedureTypePage,
@@ -241,8 +241,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
           val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
 
-          result.left.value.page mustBe TIRCarnetReferencePage
-          result.left.value.pages mustBe Seq(
+          result.left.value.page mustEqual TIRCarnetReferencePage
+          result.left.value.pages mustEqual Seq(
             StandardDeclarationPage,
             OfficeOfDeparturePage,
             ProcedureTypePage,
@@ -263,8 +263,8 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
 
           val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
 
-          result.left.value.page mustBe DeclarationTypePage
-          result.left.value.pages mustBe Seq(
+          result.left.value.page mustEqual DeclarationTypePage
+          result.left.value.pages mustEqual Seq(
             StandardDeclarationPage,
             OfficeOfDeparturePage,
             ProcedureTypePage,

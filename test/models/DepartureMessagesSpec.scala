@@ -52,7 +52,7 @@ class DepartureMessagesSpec extends SpecBase with ScalaCheckPropertyChecks with 
           )
         )
 
-        result.get.mustBe(expectedResult)
+        result.get.mustEqual(expectedResult)
       }
     }
 
@@ -66,7 +66,7 @@ class DepartureMessagesSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         val result = json.validate[DepartureMessages]
 
-        result.mustBe(a[JsError])
+        result mustBe a[JsError]
       }
     }
   }
@@ -83,21 +83,21 @@ class DepartureMessagesSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
       "must return true" - {
         "when checking if messages contains IE015" in {
-          messages.contains("IE015").mustBe(true)
+          messages.contains("IE015").mustEqual(true)
         }
 
         "when checking if messages contains IE928" in {
-          messages.contains("IE928").mustBe(true)
+          messages.contains("IE928").mustEqual(true)
         }
 
         "when checking if messages contains IE028" in {
-          messages.contains("IE028").mustBe(true)
+          messages.contains("IE028").mustEqual(true)
         }
       }
 
       "must return false" - {
         "when given message type doesn't exist in list of messages" in {
-          messages.contains("IE029").mustBe(false)
+          messages.contains("IE029").mustEqual(false)
         }
       }
     }

@@ -132,7 +132,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
 
           val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
           verify(mockSessionRepository).set(userAnswersCaptor.capture())(any())
-          userAnswersCaptor.getValue.tasks.apply(".preTaskList") mustBe TaskStatus.Completed
+          userAnswersCaptor.getValue.tasks.apply(".preTaskList") mustEqual TaskStatus.Completed
 
           verify(mockSessionService).remove(any())(any())
       }

@@ -28,38 +28,38 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
     "must be Trader Details" - {
       "when status is CannotStartYet" in {
         val task = TraderDetailsTask(CannotStartYet)
-        task.name mustBe "Trader details"
+        task.name mustEqual "Trader details"
       }
     }
 
     "must be Add trader details" - {
       "when status is NotStarted" in {
         val task = TraderDetailsTask(NotStarted)
-        task.name mustBe "Add trader details"
+        task.name mustEqual "Add trader details"
       }
     }
 
     "must be Edit trader details" - {
       "when status is Completed" in {
         val task = TraderDetailsTask(Completed)
-        task.name mustBe "Edit trader details"
+        task.name mustEqual "Edit trader details"
       }
 
       "when status is InProgress" in {
         val task = TraderDetailsTask(InProgress)
-        task.name mustBe "Edit trader details"
+        task.name mustEqual "Edit trader details"
       }
 
       "when status is Amended" in {
         val task = TraderDetailsTask(Amended)
-        task.name mustBe "Edit trader details"
+        task.name mustEqual "Edit trader details"
       }
     }
 
     "must be Amend trader details" - {
       "when status is Error" in {
         val task = TraderDetailsTask(Error)
-        task.name mustBe "Amend trader details"
+        task.name mustEqual "Amend trader details"
       }
     }
   }
@@ -69,7 +69,7 @@ class TraderDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with 
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = TraderDetailsTask(taskStatus)
-          task.id mustBe "trader-details"
+          task.id mustEqual "trader-details"
       }
     }
   }

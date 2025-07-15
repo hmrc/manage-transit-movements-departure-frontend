@@ -34,7 +34,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
         forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
           (id, name, phoneNumber, countryId) =>
             val customsOffice = CustomsOffice(id, name, Some(phoneNumber), countryId)
-            Json.toJson(customsOffice) mustBe Json.parse(s"""
+            Json.toJson(customsOffice) mustEqual Json.parse(s"""
                 |{
                 |  "id": "$id",
                 |  "name": "$name",
@@ -49,7 +49,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
         forAll(nonEmptyString, nonEmptyString, nonEmptyString) {
           (id, name, countryId) =>
             val customsOffice = CustomsOffice(id, name, None, countryId)
-            Json.toJson(customsOffice) mustBe Json.parse(s"""
+            Json.toJson(customsOffice) mustEqual Json.parse(s"""
                 |{
                 |  "id": "$id",
                 |  "name": "$name",
@@ -74,7 +74,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
                 |  "countryId": "$countryId"
                 |}
                 |""".stripMargin)
-              .as[CustomsOffice] mustBe customsOffice
+              .as[CustomsOffice] mustEqual customsOffice
         }
       }
 
@@ -90,7 +90,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
                 |  "countryId": "$countryId"
                 |}
                 |""".stripMargin)
-              .as[CustomsOffice] mustBe customsOffice
+              .as[CustomsOffice] mustEqual customsOffice
         }
       }
     }
@@ -107,7 +107,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
 
             val result = json.validate[CustomsOffice]
 
-            result.mustBe(a[JsError])
+            result mustBe a[JsError]
         }
       }
     }
@@ -116,7 +116,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
       forAll(nonEmptyString, nonEmptyString, nonEmptyString, arbitrary[Boolean]) {
         (id, name, countryId, selected) =>
           val customsOffice = CustomsOffice(id, name, None, countryId)
-          customsOffice.toSelectItem(selected) mustBe SelectItem(Some(id), s"$name ($id)", selected)
+          customsOffice.toSelectItem(selected) mustEqual SelectItem(Some(id), s"$name ($id)", selected)
       }
     }
 
@@ -124,7 +124,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
       forAll(nonEmptyString, nonEmptyString, nonEmptyString) {
         (id, name, countryId) =>
           val customsOffice = CustomsOffice(id, name, None, countryId)
-          customsOffice.toString mustBe s"$name ($id)"
+          customsOffice.toString mustEqual s"$name ($id)"
       }
     }
 
@@ -138,7 +138,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
 
       val result = SelectableList(customsOffices).values
 
-      result mustBe Seq(
+      result mustEqual Seq(
         customsOffice4,
         customsOffice3,
         customsOffice2,
@@ -174,7 +174,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
 
           val result = json.as[List[CustomsOffice]]
 
-          result mustBe List(
+          result mustEqual List(
             CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD"),
             CustomsOffice("AD000002", "DCNJ PORTA", None, "AD"),
             CustomsOffice("IT261101", "PASSO NUOVO", None, "IT")
@@ -231,7 +231,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
 
           val result = json.as[List[CustomsOffice]]
 
-          result mustBe List(
+          result mustEqual List(
             CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD"),
             CustomsOffice("AD000002", "DCNJ PORTA", None, "AD"),
             CustomsOffice("IT261101", "PASSO NUOVO", None, "IT")
@@ -249,7 +249,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
 
           val result = json.validate[List[CustomsOffice]]
 
-          result mustBe JsError("Expected customs offices to be in a JsArray")
+          result mustEqual JsError("Expected customs offices to be in a JsArray")
         }
       }
     }

@@ -93,7 +93,7 @@ class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours {
             )
             .mkString
           val result = form.bind(Map(fieldName -> valueWithSpaces))
-          result.value.value mustBe LocalReferenceNumber(value).get
+          result.value.value mustEqual LocalReferenceNumber(value).get
       }
     }
   }

@@ -54,7 +54,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
               val result = service.isInCL112(customsOffice).futureValue
 
-              result mustBe true
+              result mustEqual true
 
               verify(mockRefDataConnector).getCountryCodesCTCCountry(eqTo(customsOffice.countryId))(any(), any())
           }
@@ -70,7 +70,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
               val result = service.isInCL112(customsOffice).futureValue
 
-              result mustBe false
+              result mustEqual false
           }
         }
       }
@@ -102,7 +102,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
               val result = service.isInCL147(customsOffice).futureValue
 
-              result mustBe true
+              result mustEqual true
 
               verify(mockRefDataConnector).getCountryCustomsSecurityAgreementAreaCountry(eqTo(customsOffice.countryId))(any(), any())
           }
@@ -118,7 +118,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
               val result = service.isInCL147(customsOffice).futureValue
 
-              result mustBe false
+              result mustEqual false
           }
         }
       }
@@ -150,7 +150,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
               val result = service.isInCL010(customsOffice).futureValue
 
-              result mustBe true
+              result mustEqual true
 
               verify(mockRefDataConnector).getCountryCodeCommunityCountry(eqTo(customsOffice.countryId))(any(), any())
           }
@@ -166,7 +166,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
 
               val result = service.isInCL010(customsOffice).futureValue
 
-              result mustBe false
+              result mustEqual false
           }
         }
       }

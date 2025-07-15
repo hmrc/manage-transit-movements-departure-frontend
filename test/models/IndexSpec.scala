@@ -33,11 +33,11 @@ class IndexSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
     val key    = "index"
 
     "bind a valid index" in {
-      binder.bind(key, "1") mustBe Right(Index(0))
+      binder.bind(key, "1").value mustEqual Index(0)
     }
 
     "fail to bind an index with negative value" in {
-      binder.bind(key, "-1") mustBe Left("Index binding failed")
+      binder.bind(key, "-1").left.value mustEqual "Index binding failed"
     }
 
     "unbind an index" in {
@@ -51,7 +51,7 @@ class IndexSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
         val position = 0
         val index    = Index(position)
         val result   = index.isFirst
-        result.mustBe(true)
+        result.mustEqual(true)
       }
     }
 
@@ -61,7 +61,7 @@ class IndexSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
           position =>
             val index  = Index(position)
             val result = index.isFirst
-            result.mustBe(false)
+            result.mustEqual(false)
         }
       }
     }

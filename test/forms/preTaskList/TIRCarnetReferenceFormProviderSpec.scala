@@ -77,7 +77,7 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
         strs.foreach {
           str =>
             val result = form.bind(Map(fieldName -> str)).apply(fieldName)
-            result.value.value mustBe str
+            result.value.value mustEqual str
         }
       }
 
@@ -95,14 +95,14 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
         strs.foreach {
           str =>
             val result = form.bind(Map(fieldName -> str)).apply(fieldName)
-            result.value.value mustBe str
+            result.value.value mustEqual str
         }
       }
 
       "25000000" in {
         val str    = "25000000"
         val result = form.bind(Map(fieldName -> str)).apply(fieldName)
-        result.value.value mustBe str
+        result.value.value mustEqual str
       }
 
       "(X[A-Z]|[A-Z]X)(2[5-9]|[3-9][0-9]|[1-9][0-9][0-9])[0-9]{6}" in {
@@ -118,19 +118,19 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
         strs.foreach {
           str =>
             val result = form.bind(Map(fieldName -> str)).apply(fieldName)
-            result.value.value mustBe str
+            result.value.value mustEqual str
         }
       }
     }
 
     "must bing strings with spaces" in {
       val result = form.bind(Map(fieldName -> "HX877242599   "))
-      result.value.value mustBe "HX877242599"
+      result.value.value mustEqual "HX877242599"
     }
 
     "must bind lowercase string and convert it to uppercase" in {
       val result = form.bind(Map(fieldName -> "xe28707033"))
-      result.value.value mustBe "XE28707033"
+      result.value.value mustEqual "XE28707033"
     }
   }
 }

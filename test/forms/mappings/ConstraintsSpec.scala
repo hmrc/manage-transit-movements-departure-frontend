@@ -132,7 +132,7 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
 
     "must return InValid for a string shorter than the allowed length" in {
       val result = minLength(10, "error.length")("a" * 9)
-      result mustBe Invalid("error.length", 10)
+      result mustEqual Invalid("error.length", 10)
     }
 
     "must return Valid for a string equal to the allowed length" in {
@@ -150,7 +150,7 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
 
     "must return InValid for a string shorter than the exact length" in {
       val result = exactLength(10, "error.length")("a" * 9)
-      result mustBe Invalid("error.length", 10)
+      result mustEqual Invalid("error.length", 10)
     }
 
     "must return Valid for a string equal to the exact length" in {

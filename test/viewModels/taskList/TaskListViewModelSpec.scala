@@ -33,30 +33,30 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
         val viewModel = new TaskListViewModelProvider().apply(answers)
         val tasks     = viewModel.tasks
 
-        tasks.size mustBe 6
+        tasks.size mustEqual 6
 
-        tasks.head.name mustBe "Add trader details"
-        tasks.head.status mustBe TaskStatus.NotStarted
+        tasks.head.name mustEqual "Add trader details"
+        tasks.head.status mustEqual TaskStatus.NotStarted
         tasks.head.href(answers.lrn)(frontendAppConfig) must endWith(s"/trader-details/$lrn")
 
-        tasks(1).name mustBe "Add route details"
-        tasks(1).status mustBe TaskStatus.NotStarted
+        tasks(1).name mustEqual "Add route details"
+        tasks(1).status mustEqual TaskStatus.NotStarted
         tasks(1).href(answers.lrn)(frontendAppConfig) must endWith(s"/route-details/$lrn")
 
-        tasks(2).name mustBe "Transport details"
-        tasks(2).status mustBe TaskStatus.CannotStartYet
+        tasks(2).name mustEqual "Transport details"
+        tasks(2).status mustEqual TaskStatus.CannotStartYet
         tasks(2).href(answers.lrn)(frontendAppConfig) must endWith(s"/transport-details/$lrn")
 
-        tasks(3).name mustBe "Add documents"
-        tasks(3).status mustBe TaskStatus.NotStarted
+        tasks(3).name mustEqual "Add documents"
+        tasks(3).status mustEqual TaskStatus.NotStarted
         tasks(3).href(answers.lrn)(frontendAppConfig) must endWith(s"/documents/$lrn")
 
-        tasks(4).name mustBe "Items"
-        tasks(4).status mustBe TaskStatus.CannotStartYet
+        tasks(4).name mustEqual "Items"
+        tasks(4).status mustEqual TaskStatus.CannotStartYet
         tasks(4).href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
 
-        tasks(5).name mustBe "Add guarantee details"
-        tasks(5).status mustBe TaskStatus.NotStarted
+        tasks(5).name mustEqual "Add guarantee details"
+        tasks(5).status mustEqual TaskStatus.NotStarted
         tasks(5).href(answers.lrn)(frontendAppConfig) must endWith(s"/guarantee-details/$lrn")
       }
     }
@@ -68,7 +68,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
             val tasks   = Map(PreTaskListTask.section -> taskStatus)
             val answers = emptyUserAnswers.copy(tasks = tasks)
             val result  = new TaskListViewModelProvider().apply(answers)
-            result.tasks.foreach(_.status mustBe TaskStatus.CannotStartYet)
+            result.tasks.foreach(_.status mustEqual TaskStatus.CannotStartYet)
         }
       }
     }
@@ -84,8 +84,8 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
         val result  = new TaskListViewModelProvider().apply(answers)
 
         val transportTask = result.tasks(2)
-        transportTask.name mustBe "Add transport details"
-        transportTask.status mustBe TaskStatus.NotStarted
+        transportTask.name mustEqual "Add transport details"
+        transportTask.status mustEqual TaskStatus.NotStarted
         transportTask.href(answers.lrn)(frontendAppConfig) must endWith(s"/transport-details/$lrn")
       }
     }
@@ -104,8 +104,8 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         val itemsTask = result.tasks(4: Int)
 
-        itemsTask.name mustBe "Add items"
-        itemsTask.status mustBe TaskStatus.NotStarted
+        itemsTask.name mustEqual "Add items"
+        itemsTask.status mustEqual TaskStatus.NotStarted
         itemsTask.href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
       }
     }
@@ -125,8 +125,8 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         val itemsTask = result.tasks(4: Int)
 
-        itemsTask.name mustBe "Items"
-        itemsTask.status mustBe TaskStatus.CannotContinue
+        itemsTask.name mustEqual "Items"
+        itemsTask.status mustEqual TaskStatus.CannotContinue
         itemsTask.href(answers.lrn)(frontendAppConfig) must endWith(s"/items/$lrn")
       }
     }
@@ -145,23 +145,23 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
         val answers = emptyUserAnswers.copy(tasks = tasks)
         val result  = new TaskListViewModelProvider().apply(answers)
 
-        result.tasks.head.name mustBe "Amend trader details"
-        result.tasks.head.status mustBe TaskStatus.Error
+        result.tasks.head.name mustEqual "Amend trader details"
+        result.tasks.head.status mustEqual TaskStatus.Error
 
-        result.tasks(1).name mustBe "Amend route details"
-        result.tasks(1).status mustBe TaskStatus.Error
+        result.tasks(1).name mustEqual "Amend route details"
+        result.tasks(1).status mustEqual TaskStatus.Error
 
-        result.tasks(2).name mustBe "Amend transport details"
-        result.tasks(2).status mustBe TaskStatus.Error
+        result.tasks(2).name mustEqual "Amend transport details"
+        result.tasks(2).status mustEqual TaskStatus.Error
 
-        result.tasks(3).name mustBe "Amend documents"
-        result.tasks(3).status mustBe TaskStatus.Error
+        result.tasks(3).name mustEqual "Amend documents"
+        result.tasks(3).status mustEqual TaskStatus.Error
 
-        result.tasks(4: Int).name mustBe "Amend items"
-        result.tasks(4: Int).status mustBe TaskStatus.Error
+        result.tasks(4: Int).name mustEqual "Amend items"
+        result.tasks(4: Int).status mustEqual TaskStatus.Error
 
-        result.tasks(5: Int).name mustBe "Amend guarantee details"
-        result.tasks(5: Int).status mustBe TaskStatus.Error
+        result.tasks(5: Int).name mustEqual "Amend guarantee details"
+        result.tasks(5: Int).status mustEqual TaskStatus.Error
       }
     }
   }
@@ -181,7 +181,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
       val answers = emptyUserAnswers.copy(tasks = tasks)
       val result  = new TaskListViewModelProvider().apply(answers)
 
-      result.showSubmissionButton mustBe true
+      result.showSubmissionButton mustEqual true
     }
 
     "must be true if everything is complete" in {
@@ -197,7 +197,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
       val answers = emptyUserAnswers.copy(tasks = tasks)
       val result  = new TaskListViewModelProvider().apply(answers)
 
-      result.showSubmissionButton mustBe true
+      result.showSubmissionButton mustEqual true
     }
 
     "must be true if everything is amended" in {
@@ -213,7 +213,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
       val answers = emptyUserAnswers.copy(tasks = tasks)
       val result  = new TaskListViewModelProvider().apply(answers)
 
-      result.showSubmissionButton mustBe true
+      result.showSubmissionButton mustEqual true
     }
 
     "must be false if everything is not complete" in {
@@ -228,7 +228,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
       val answers = emptyUserAnswers.copy(tasks = tasks)
       val result  = new TaskListViewModelProvider().apply(answers)
 
-      result.showSubmissionButton mustBe false
+      result.showSubmissionButton mustEqual false
     }
   }
 
@@ -246,7 +246,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
       val answers = emptyUserAnswers.copy(tasks = tasks, status = SubmissionState.Amendment)
       val result  = new TaskListViewModelProvider().apply(answers)
 
-      result.showSubmissionButton mustBe false
+      result.showSubmissionButton mustEqual false
     }
 
     "must be true if at least one amended" in {
@@ -262,7 +262,7 @@ class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with 
       val answers = emptyUserAnswers.copy(tasks = tasks, status = SubmissionState.Amendment)
       val result  = new TaskListViewModelProvider().apply(answers)
 
-      result.showSubmissionButton mustBe true
+      result.showSubmissionButton mustEqual true
     }
   }
 }

@@ -60,12 +60,12 @@ class UserAnswersJsonFormatSpec extends SpecBase with ScalaCheckPropertyChecks w
 
       "read correctly" in {
         val result = json.as[UserAnswers]
-        result mustBe userAnswers
+        result mustEqual userAnswers
       }
 
       "write correctly" in {
         val result = Json.toJson(userAnswers)
-        result mustBe json
+        result mustEqual json
       }
 
       "be readable as a LocalDateTime for backwards compatibility" in {

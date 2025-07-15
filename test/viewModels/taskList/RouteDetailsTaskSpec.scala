@@ -28,38 +28,38 @@ class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with G
     "must be Route details" - {
       "when status is CannotStartYet" in {
         val task = RouteDetailsTask(CannotStartYet)
-        task.name mustBe "Route details"
+        task.name mustEqual "Route details"
       }
     }
 
     "must be Add route details" - {
       "when status is NotStarted" in {
         val task = RouteDetailsTask(NotStarted)
-        task.name mustBe "Add route details"
+        task.name mustEqual "Add route details"
       }
     }
 
     "must be Edit route details" - {
       "when status is Completed" in {
         val task = RouteDetailsTask(Completed)
-        task.name mustBe "Edit route details"
+        task.name mustEqual "Edit route details"
       }
 
       "when status is InProgress" in {
         val task = RouteDetailsTask(InProgress)
-        task.name mustBe "Edit route details"
+        task.name mustEqual "Edit route details"
       }
 
       "when status is Amended" in {
         val task = RouteDetailsTask(Amended)
-        task.name mustBe "Edit route details"
+        task.name mustEqual "Edit route details"
       }
     }
 
     "must be Amend route details" - {
       "when status is Error" in {
         val task = RouteDetailsTask(Error)
-        task.name mustBe "Amend route details"
+        task.name mustEqual "Amend route details"
       }
     }
   }
@@ -69,7 +69,7 @@ class RouteDetailsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with G
       forAll(arbitrary[TaskStatus]) {
         taskStatus =>
           val task = RouteDetailsTask(taskStatus)
-          task.id mustBe "route-details"
+          task.id mustEqual "route-details"
       }
     }
   }

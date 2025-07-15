@@ -51,7 +51,7 @@ trait InputTextViewBehaviours[T] extends QuestionViewBehaviours[T] with Generato
         inputPrefix.foreach {
           value =>
             "must have the correct prefix" in {
-              getElementByClass(doc, "govuk-input__prefix").text() mustBe value
+              getElementByClass(doc, "govuk-input__prefix").text() mustEqual value
             }
         }
 
@@ -62,7 +62,7 @@ trait InputTextViewBehaviours[T] extends QuestionViewBehaviours[T] with Generato
         val docWithFilledForm = parseView(applyView(form.fill(validValue)))
 
         "include the form's value in the value input" in {
-          docWithFilledForm.getElementById("value").attr("value") mustBe validValue.toString
+          docWithFilledForm.getElementById("value").attr("value") mustEqual validValue.toString
         }
 
         behave like pageWithoutErrorSummary(docWithFilledForm)

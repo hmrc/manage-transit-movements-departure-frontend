@@ -42,7 +42,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
             val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
             val result = helper.localReferenceNumber
 
-            result mustBe SummaryListRow(
+            result mustEqual SummaryListRow(
               key = Key("Local Reference Number (LRN)".toText),
               value = Value(s"$lrn".toText),
               actions = Some(
@@ -69,7 +69,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
             mode =>
               val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.additionalDeclarationType
-              result mustBe None
+              result must not be defined
           }
         }
       }
@@ -83,19 +83,17 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
               val result = helper.additionalDeclarationType
 
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("Is this a standard or pre-lodged declaration?".toText),
-                  value = Value(additionalDeclarationType.asString.toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = routes.AdditionalDeclarationTypeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("whether this is a standard or pre-lodged declaration"),
-                          attributes = Map()
-                        )
+              result.value mustEqual SummaryListRow(
+                key = Key("Is this a standard or pre-lodged declaration?".toText),
+                value = Value(additionalDeclarationType.asString.toText),
+                actions = Some(
+                  Actions(
+                    items = List(
+                      ActionItem(
+                        content = "Change".toText,
+                        href = routes.AdditionalDeclarationTypeController.onPageLoad(answers.lrn, mode).url,
+                        visuallyHiddenText = Some("whether this is a standard or pre-lodged declaration"),
+                        attributes = Map()
                       )
                     )
                   )
@@ -113,7 +111,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
             mode =>
               val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.officeOfDeparture
-              result mustBe None
+              result must not be defined
           }
         }
       }
@@ -127,19 +125,17 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
               val result = helper.officeOfDeparture
 
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("Office of departure".toText),
-                  value = Value(s"$customsOffice".toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = routes.OfficeOfDepartureController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("office of departure"),
-                          attributes = Map()
-                        )
+              result.value mustEqual SummaryListRow(
+                key = Key("Office of departure".toText),
+                value = Value(s"$customsOffice".toText),
+                actions = Some(
+                  Actions(
+                    items = List(
+                      ActionItem(
+                        content = "Change".toText,
+                        href = routes.OfficeOfDepartureController.onPageLoad(answers.lrn, mode).url,
+                        visuallyHiddenText = Some("office of departure"),
+                        attributes = Map()
                       )
                     )
                   )
@@ -157,7 +153,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
             mode =>
               val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.procedureType
-              result mustBe None
+              result must not be defined
           }
         }
       }
@@ -171,19 +167,17 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
               val result = helper.procedureType
 
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("Type of procedure".toText),
-                  value = Value(messages(s"procedureType.$procedureType").toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = routes.ProcedureTypeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("type of procedure"),
-                          attributes = Map()
-                        )
+              result.value mustEqual SummaryListRow(
+                key = Key("Type of procedure".toText),
+                value = Value(messages(s"procedureType.$procedureType").toText),
+                actions = Some(
+                  Actions(
+                    items = List(
+                      ActionItem(
+                        content = "Change".toText,
+                        href = routes.ProcedureTypeController.onPageLoad(answers.lrn, mode).url,
+                        visuallyHiddenText = Some("type of procedure"),
+                        attributes = Map()
                       )
                     )
                   )
@@ -201,7 +195,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
             mode =>
               val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.declarationType
-              result mustBe None
+              result must not be defined
           }
         }
       }
@@ -215,19 +209,17 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
               val result = helper.declarationType
 
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("Type of declaration".toText),
-                  value = Value(declarationType.asString.toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = routes.DeclarationTypeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("type of declaration"),
-                          attributes = Map()
-                        )
+              result.value mustEqual SummaryListRow(
+                key = Key("Type of declaration".toText),
+                value = Value(declarationType.asString.toText),
+                actions = Some(
+                  Actions(
+                    items = List(
+                      ActionItem(
+                        content = "Change".toText,
+                        href = routes.DeclarationTypeController.onPageLoad(answers.lrn, mode).url,
+                        visuallyHiddenText = Some("type of declaration"),
+                        attributes = Map()
                       )
                     )
                   )
@@ -245,7 +237,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
             mode =>
               val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.tirCarnet
-              result mustBe None
+              result must not be defined
           }
         }
       }
@@ -259,19 +251,17 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
               val result = helper.tirCarnet
 
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("TIR carnet reference".toText),
-                  value = Value(tirCarnetReference.toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = routes.TIRCarnetReferenceController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("TIR carnet reference"),
-                          attributes = Map()
-                        )
+              result.value mustEqual SummaryListRow(
+                key = Key("TIR carnet reference".toText),
+                value = Value(tirCarnetReference.toText),
+                actions = Some(
+                  Actions(
+                    items = List(
+                      ActionItem(
+                        content = "Change".toText,
+                        href = routes.TIRCarnetReferenceController.onPageLoad(answers.lrn, mode).url,
+                        visuallyHiddenText = Some("TIR carnet reference"),
+                        attributes = Map()
                       )
                     )
                   )
@@ -289,7 +279,7 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
             mode =>
               val helper = new PreTaskListCheckYourAnswersHelper(emptyUserAnswers, mode)
               val result = helper.securityType
-              result mustBe None
+              result must not be defined
           }
         }
       }
@@ -303,19 +293,17 @@ class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckProp
               val helper = new PreTaskListCheckYourAnswersHelper(answers, mode)
               val result = helper.securityType
 
-              result mustBe Some(
-                SummaryListRow(
-                  key = Key("Safety and security details".toText),
-                  value = Value(securityDetailsType.asString.toText),
-                  actions = Some(
-                    Actions(
-                      items = List(
-                        ActionItem(
-                          content = "Change".toText,
-                          href = routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode).url,
-                          visuallyHiddenText = Some("safety and security details"),
-                          attributes = Map()
-                        )
+              result.value mustEqual SummaryListRow(
+                key = Key("Safety and security details".toText),
+                value = Value(securityDetailsType.asString.toText),
+                actions = Some(
+                  Actions(
+                    items = List(
+                      ActionItem(
+                        content = "Change".toText,
+                        href = routes.SecurityDetailsTypeController.onPageLoad(answers.lrn, mode).url,
+                        visuallyHiddenText = Some("safety and security details"),
+                        attributes = Map()
                       )
                     )
                   )

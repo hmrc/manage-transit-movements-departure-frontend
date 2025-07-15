@@ -32,7 +32,7 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
       forAll(Gen.alphaNumStr, Gen.alphaNumStr) {
         (code, description) =>
           val declarationType = DeclarationType(code, description)
-          Json.toJson(declarationType) mustBe Json.parse(s"""
+          Json.toJson(declarationType) mustEqual Json.parse(s"""
               |{
               |  "code": "$code",
               |  "description": "$description"
@@ -78,7 +78,7 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
                          |  "description": "$description"
                          |}
                          |""".stripMargin)
-                    .as[DeclarationType](DeclarationType.reads(config)) mustBe declarationType
+                    .as[DeclarationType](DeclarationType.reads(config)) mustEqual declarationType
               }
           }
 
@@ -98,7 +98,7 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
                  |  "description": "$description"
                  |}
                  |""".stripMargin)
-            .as[DeclarationType] mustBe declarationType
+            .as[DeclarationType] mustEqual declarationType
       }
     }
 
@@ -114,7 +114,7 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
 
             val result = json.validate[DeclarationType]
 
-            result.mustBe(a[JsError])
+            result mustBe a[JsError]
         }
       }
     }
@@ -123,7 +123,7 @@ class DeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Ge
       forAll(nonEmptyString, nonEmptyString) {
         (code, description) =>
           val declarationType = DeclarationType(code, description)
-          declarationType.toString mustBe s"$code - $description"
+          declarationType.toString mustEqual s"$code - $description"
       }
     }
   }

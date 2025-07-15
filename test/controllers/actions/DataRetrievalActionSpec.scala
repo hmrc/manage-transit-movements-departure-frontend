@@ -71,7 +71,7 @@ class DataRetrievalActionSpec extends SpecBase with Generators {
 
         when(sessionRepository.get(any())(any())).thenReturn(Future.successful(UserAnswersResponse.NoAnswers))
 
-        harness(lrn, request => request.userAnswers mustBe UserAnswersResponse.NoAnswers)
+        harness(lrn, request => request.userAnswers mustEqual UserAnswersResponse.NoAnswers)
       }
     }
 
@@ -81,7 +81,7 @@ class DataRetrievalActionSpec extends SpecBase with Generators {
 
         when(sessionRepository.get(any())(any())).thenReturn(Future.successful(Answers(emptyUserAnswers)))
 
-        harness(lrn, request => request.userAnswers mustBe Answers(emptyUserAnswers))
+        harness(lrn, request => request.userAnswers mustEqual Answers(emptyUserAnswers))
       }
     }
   }
