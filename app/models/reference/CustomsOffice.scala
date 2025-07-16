@@ -17,8 +17,10 @@
 package models.reference
 
 import cats.Order
+import config.FrontendAppConfig
 import forms.mappings.RichSeq
 import models.Selectable
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.*
 
 case class CustomsOffice(
@@ -37,23 +39,47 @@ case class CustomsOffice(
 object CustomsOffice {
   implicit val format: OFormat[CustomsOffice] = Json.format[CustomsOffice]
 
+  def reads(config: FrontendAppConfig): Reads[CustomsOffice] =
+    if (config.phase6Enabled) {
+      (
+        (__ \ "referenceNumber").read[String] and
+          (__ \ "customsOfficeLsd" \ "customsOfficeUsualName").read[String] and
+          (__ \ "phoneNumber").readNullable[String] and
+          (__ \ "countryCode").read[String] and
+          (__ \ "customsOfficeLsd" \ "languageCode").read[String]
+      )(CustomsOffice.apply)
+    } else {
+      Json.reads[CustomsOffice]
+    }
+
   implicit val order: Order[CustomsOffice] = (x: CustomsOffice, y: CustomsOffice) => (x, y).compareBy(_.name, _.id)
 
-  implicit val listReads: Reads[List[CustomsOffice]] =
-    Reads {
-      case JsArray(values) =>
-        JsSuccess {
-          values
-            .flatMap(_.asOpt[CustomsOffice])
-            .toSeq
-            .groupByPreserveOrder(_.id)
-            .flatMap {
-              case (_, offices) =>
-                offices.find(_.languageCode == "EN").orElse(offices.headOption)
-            }
-            .toList
-        }
-      case _ =>
-        JsError("Expected customs offices to be in a JsArray")
+  def listReads(config: FrontendAppConfig): Reads[List[CustomsOffice]] =
+    if (config.phase6Enabled) {
+      Reads.list(reads(config))
+    } else {
+      Reads {
+        case JsArray(values) =>
+          JsSuccess {
+            values
+              .flatMap(_.asOpt[CustomsOffice])
+              .toSeq
+              .groupByPreserveOrder(_.id)
+              .flatMap {
+                case (_, offices) =>
+                  offices.find(_.languageCode == "EN").orElse(offices.headOption)
+              }
+              .toList
+          }
+        case _ =>
+          JsError("Expected customs offices to be in a JsArray")
+      }
+    }
+
+  def queryParameters(role: String, countryCodes: String*)(config: FrontendAppConfig): Seq[(String, String)] =
+    if (config.phase6Enabled) {
+      countryCodes.map("countryCodes" -> _) :+ ("roles" -> role)
+    } else {
+      countryCodes.map("data.countryId" -> _) :+ ("data.roles.role" -> role)
     }
 }
