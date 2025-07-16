@@ -46,8 +46,8 @@ class OfficeOfDeparturePageSpec extends PageBehaviours {
 
                 val postChange = preChange.setValue(OfficeOfDeparturePage, gbCustomsOffice)
 
-                postChange.get(DeclarationTypePage) mustNot be(defined)
-                postChange.get(TIRCarnetReferencePage) mustNot be(defined)
+                postChange.get(DeclarationTypePage) must not be defined
+                postChange.get(TIRCarnetReferencePage) must not be defined
             }
           }
         }

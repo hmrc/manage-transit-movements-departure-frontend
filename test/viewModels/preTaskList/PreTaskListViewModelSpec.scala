@@ -34,7 +34,7 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
         val viewModelProvider = injector.instanceOf[PreTaskListViewModelProvider]
         val section           = viewModelProvider.apply(answers).section
 
-        section.sectionTitle mustNot be(defined)
+        section.sectionTitle must not be defined
         section.rows.length mustEqual 1
         section.rows.head.value.value mustEqual "1234567890"
       }
@@ -54,7 +54,7 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
         val viewModelProvider = injector.instanceOf[PreTaskListViewModelProvider]
         val section           = viewModelProvider.apply(answers).section
 
-        section.sectionTitle mustNot be(defined)
+        section.sectionTitle must not be defined
         section.rows.length mustEqual 7
         section.rows.head.value.content.asHtml.toString() mustEqual "1234567890"
         section.rows(1).value.value mustEqual "Standard - the goods have already boarded at a UK port or airport"

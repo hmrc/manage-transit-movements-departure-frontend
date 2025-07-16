@@ -42,7 +42,7 @@ class SessionServiceSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
     "when LRN does not exist" - {
       "must return None" in {
         implicit val request: FakeRequest[?] = fakeRequest
-        sessionService.get mustNot be(defined)
+        sessionService.get must not be defined
       }
     }
   }
@@ -53,7 +53,7 @@ class SessionServiceSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
         lrn =>
           implicit val request: FakeRequest[?] = fakeRequest
           val resultBefore                     = Ok
-          resultBefore.session.get(SessionService.key) mustNot be(defined)
+          resultBefore.session.get(SessionService.key) must not be defined
           val resultAfter = sessionService.set(resultBefore, lrn)
           resultAfter.session.get(SessionService.key).get mustEqual lrn.toString
       }
@@ -76,9 +76,9 @@ class SessionServiceSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
       "when there isn't an LRN in the session" in {
         implicit val request: FakeRequest[?] = fakeRequest
         val resultBefore                     = Ok
-        resultBefore.session.get(SessionService.key) mustNot be(defined)
+        resultBefore.session.get(SessionService.key) must not be defined
         val resultAfter = sessionService.remove(resultBefore)
-        resultAfter.session.get(SessionService.key) mustNot be(defined)
+        resultAfter.session.get(SessionService.key) must not be defined
       }
 
       "when there is an LRN in the session" in {
@@ -88,7 +88,7 @@ class SessionServiceSpec extends SpecBase with ScalaCheckPropertyChecks with Gen
             val resultBefore                     = Ok
             resultBefore.session.get(SessionService.key) must be(defined)
             val resultAfter = sessionService.remove(resultBefore)
-            resultAfter.session.get(SessionService.key) mustNot be(defined)
+            resultAfter.session.get(SessionService.key) must not be defined
         }
       }
     }
