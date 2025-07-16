@@ -123,8 +123,8 @@ class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler w
               )
 
               val expectedResult = NonEmptySet.of(
-                CustomsOffice("GB1", "testName1", None, "GB", "EN"),
-                CustomsOffice("GB2", "testName2", None, "GB", "EN")
+                CustomsOffice("GB1", "testName1", None, "GB"),
+                CustomsOffice("GB2", "testName2", None, "GB")
               )
 
               connector.getCustomsOfficesOfDepartureForCountry(countryIds*).futureValue.value mustEqual expectedResult
@@ -192,8 +192,8 @@ class ReferenceDataConnectorSpec extends ItSpecBase with WireMockServerHandler w
               )
 
               val expectedResult = NonEmptySet.of(
-                CustomsOffice("GB000054", "Glasgow Airport", Some("+44(0)300 106 3520"), "GB", "EN"),
-                CustomsOffice("XI000014", "Belfast International Airport", Some("+44 (0)3000 575 988"), "XI", "EN")
+                CustomsOffice("GB000054", "Glasgow Airport", Some("+44(0)300 106 3520"), "GB"),
+                CustomsOffice("XI000014", "Belfast International Airport", Some("+44 (0)3000 575 988"), "XI")
               )
 
               connector.getCustomsOfficesOfDepartureForCountry(countryIds*).futureValue.value mustEqual expectedResult

@@ -115,32 +115,29 @@ trait ModelGenerators {
   implicit lazy val arbitraryCustomsOffice: Arbitrary[CustomsOffice] =
     Arbitrary {
       for {
-        id           <- nonEmptyString
-        name         <- nonEmptyString
-        phoneNumber  <- Gen.option(Gen.alphaNumStr)
-        countryId    <- nonEmptyString
-        languageCode <- nonEmptyString
-      } yield CustomsOffice(id, name, phoneNumber, countryId, languageCode)
+        id          <- nonEmptyString
+        name        <- nonEmptyString
+        phoneNumber <- Gen.option(Gen.alphaNumStr)
+        countryId   <- nonEmptyString
+      } yield CustomsOffice(id, name, phoneNumber, countryId)
     }
 
   lazy val arbitraryXiCustomsOffice: Arbitrary[CustomsOffice] =
     Arbitrary {
       for {
-        id           <- stringsWithMaxLength(stringMaxLength)
-        name         <- stringsWithMaxLength(stringMaxLength)
-        phoneNumber  <- Gen.option(stringsWithMaxLength(stringMaxLength))
-        languageCode <- nonEmptyString
-      } yield CustomsOffice(s"XI$id", name, phoneNumber, "XI", languageCode)
+        id          <- stringsWithMaxLength(stringMaxLength)
+        name        <- stringsWithMaxLength(stringMaxLength)
+        phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
+      } yield CustomsOffice(s"XI$id", name, phoneNumber, "XI")
     }
 
   lazy val arbitraryGbCustomsOffice: Arbitrary[CustomsOffice] =
     Arbitrary {
       for {
-        id           <- stringsWithMaxLength(stringMaxLength)
-        name         <- stringsWithMaxLength(stringMaxLength)
-        phoneNumber  <- Gen.option(stringsWithMaxLength(stringMaxLength))
-        languageCode <- nonEmptyString
-      } yield CustomsOffice(s"GB$id", name, phoneNumber, "GB", languageCode)
+        id          <- stringsWithMaxLength(stringMaxLength)
+        name        <- stringsWithMaxLength(stringMaxLength)
+        phoneNumber <- Gen.option(stringsWithMaxLength(stringMaxLength))
+      } yield CustomsOffice(s"GB$id", name, phoneNumber, "GB")
     }
 
   lazy val arbitraryOfficeOfDeparture: Arbitrary[CustomsOffice] =

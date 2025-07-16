@@ -40,9 +40,9 @@ class CustomsOfficesServiceSpec extends SpecBase with AppWithDefaultMockFixtures
 
   val service: CustomsOfficesService = app.injector.instanceOf[CustomsOfficesService]
 
-  val gbCustomsOffice1: CustomsOffice            = CustomsOffice("GB1", "BOSTON", None, "GB", "EN")
-  val gbCustomsOffice2: CustomsOffice            = CustomsOffice("GB2", "Appledore", None, "GB", "EN")
-  val xiCustomsOffice1: CustomsOffice            = CustomsOffice("XI1", "Belfast", None, "XI", "EN")
+  val gbCustomsOffice1: CustomsOffice            = CustomsOffice("GB1", "BOSTON", None, "GB")
+  val gbCustomsOffice2: CustomsOffice            = CustomsOffice("GB2", "Appledore", None, "GB")
+  val xiCustomsOffice1: CustomsOffice            = CustomsOffice("XI1", "Belfast", None, "XI")
   val customsOffices: NonEmptySet[CustomsOffice] = NonEmptySet.of(gbCustomsOffice1, gbCustomsOffice2, xiCustomsOffice1)
 
   override def beforeEach(): Unit = {

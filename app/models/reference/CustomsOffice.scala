@@ -23,13 +23,7 @@ import models.Selectable
 import play.api.libs.functional.syntax.*
 import play.api.libs.json.*
 
-case class CustomsOffice(
-  id: String,
-  name: String,
-  phoneNumber: Option[String],
-  countryId: String,
-  languageCode: String
-) extends Selectable {
+case class CustomsOffice(id: String, name: String, phoneNumber: Option[String], countryId: String) extends Selectable {
 
   override def toString: String = s"$name ($id)"
 
@@ -45,8 +39,7 @@ object CustomsOffice {
         (__ \ "referenceNumber").read[String] and
           (__ \ "customsOfficeLsd" \ "customsOfficeUsualName").read[String] and
           (__ \ "phoneNumber").readNullable[String] and
-          (__ \ "countryCode").read[String] and
-          (__ \ "customsOfficeLsd" \ "languageCode").read[String]
+          (__ \ "countryCode").read[String]
       )(CustomsOffice.apply)
     } else {
       Json.reads[CustomsOffice]
@@ -58,17 +51,27 @@ object CustomsOffice {
     if (config.phase6Enabled) {
       Reads.list(reads(config))
     } else {
+      case class TempCustomsOffice(customsOffice: CustomsOffice, languageCode: String)
+
+      implicit val reads: Reads[TempCustomsOffice] = (
+        __.read[CustomsOffice] and
+          (__ \ "languageCode").read[String]
+      )(TempCustomsOffice.apply)
+
       Reads {
         case JsArray(values) =>
           JsSuccess {
             values
-              .flatMap(_.asOpt[CustomsOffice])
+              .flatMap(_.asOpt[TempCustomsOffice])
               .toSeq
-              .groupByPreserveOrder(_.id)
+              .groupByPreserveOrder(_.customsOffice.id)
               .flatMap {
-                case (_, offices) =>
-                  offices.find(_.languageCode == "EN").orElse(offices.headOption)
+                case (_, customsOffices) =>
+                  customsOffices
+                    .find(_.languageCode == "EN")
+                    .orElse(customsOffices.headOption)
               }
+              .map(_.customsOffice)
               .toList
           }
         case _ =>

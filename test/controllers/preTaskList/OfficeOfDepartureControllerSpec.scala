@@ -40,8 +40,8 @@ import scala.concurrent.Future
 
 class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks {
 
-  private val customsOffice1: CustomsOffice                 = CustomsOffice("GB1", "someName", None, "GB", "EN")
-  private val customsOffice2: CustomsOffice                 = CustomsOffice("GB2", "name", None, "GB", "EN")
+  private val customsOffice1: CustomsOffice                 = CustomsOffice("GB1", "someName", None, "GB")
+  private val customsOffice2: CustomsOffice                 = CustomsOffice("GB2", "name", None, "GB")
   private val customsOffices: SelectableList[CustomsOffice] = SelectableList(Seq(customsOffice1, customsOffice2))
 
   private val formProvider = new CustomsOfficeFormProvider()
@@ -135,7 +135,6 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
                 |      "id" : "GB1",
                 |      "name" : "someName",
                 |      "countryId" : "GB",
-                |      "languageCode" : "EN",
                 |      "isInCL112" : $isInCL112,
                 |      "isInCL147" : $isInCL147,
                 |      "isInCL010" : $isInCL010
