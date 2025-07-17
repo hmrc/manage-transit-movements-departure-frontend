@@ -56,7 +56,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   def getCustomsOfficesOfDepartureForCountry(
     countryCodes: String*
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Responses[CustomsOffice]] = {
-    val queryParameters                            = CustomsOffice.queryParameters("DEP", countryCodes*)(config)
+    val queryParameters                            = CustomsOffice.queryParameters(roles = Seq("DEP"), countryCodes = countryCodes)(config)
     val url                                        = url"${config.customsReferenceDataUrl}/lists/CustomsOffices?$queryParameters"
     implicit val reads: Reads[List[CustomsOffice]] = CustomsOffice.listReads(config)
     get[CustomsOffice](url)

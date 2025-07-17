@@ -79,10 +79,19 @@ object CustomsOffice {
       }
     }
 
-  def queryParameters(role: String, countryCodes: String*)(config: FrontendAppConfig): Seq[(String, String)] =
+  def queryParameters(
+    roles: Seq[String] = Nil,
+    countryCodes: Seq[String] = Nil
+  )(config: FrontendAppConfig): Seq[(String, String)] =
     if (config.phase6Enabled) {
-      countryCodes.map("countryCodes" -> _) :+ ("roles" -> role)
+      Seq(
+        countryCodes.map("countryCodes" -> _),
+        roles.map("roles" -> _)
+      ).flatten
     } else {
-      countryCodes.map("data.countryId" -> _) :+ ("data.roles.role" -> role)
+      Seq(
+        countryCodes.map("data.countryId" -> _),
+        roles.map("data.roles.role" -> _)
+      ).flatten
     }
 }
