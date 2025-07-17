@@ -133,27 +133,6 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
             TIRCarnetReferencePage
           )
         }
-
-        "when a TIR with a GB customs office" in {
-
-          val tirUserAnswers = emptyUserAnswers
-            .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
-            .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
-            .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
-            .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
-            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
-
-          val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
-
-          result.left.value.page mustEqual DeclarationTypePage
-          result.left.value.pages mustEqual Seq(
-            AdditionalDeclarationTypePage,
-            OfficeOfDeparturePage,
-            ProcedureTypePage,
-            DeclarationTypePage
-          )
-        }
       }
     }
 
@@ -250,29 +229,7 @@ class PreTaskListDomainSpec extends SpecBase with UserAnswersSpecHelper with Gen
             TIRCarnetReferencePage
           )
         }
-
-        "when a TIR with a GB customs office" in {
-
-          val tirUserAnswers = emptyUserAnswers
-            .unsafeSetVal(AdditionalDeclarationTypePage)(AdditionalDeclarationType(additionalDeclarationType, ""))
-            .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
-            .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(DeclarationTypePage)(tirDeclarationType)
-            .unsafeSetVal(TIRCarnetReferencePage)(carnetRef)
-            .unsafeSetVal(SecurityDetailsTypePage)(securityDetails)
-
-          val result = UserAnswersReader[PreTaskListDomain](isPreLodgeEnabled).run(tirUserAnswers)
-
-          result.left.value.page mustEqual DeclarationTypePage
-          result.left.value.pages mustEqual Seq(
-            StandardDeclarationPage,
-            OfficeOfDeparturePage,
-            ProcedureTypePage,
-            DeclarationTypePage
-          )
-        }
       }
     }
-
   }
 }

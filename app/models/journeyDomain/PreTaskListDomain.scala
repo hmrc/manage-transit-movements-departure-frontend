@@ -16,8 +16,6 @@
 
 package models.journeyDomain
 
-import config.Constants.CountryCode.*
-import models.ProcedureType.Normal
 import models.reference.{CustomsOffice, DeclarationType, SecurityType}
 import models.{LocalReferenceNumber, ProcedureType, UserAnswers}
 import pages.preTaskList.*
@@ -44,32 +42,18 @@ object PreTaskListDomain {
     }
 
   private val tirCarnetReferenceReader: Read[Option[String]] =
-    OfficeOfDeparturePage.reader
-      .to {
-        _.countryId match {
-          case XI =>
-            ProcedureTypePage
-              .filterOptionalDependent(_ == Normal) {
-                DeclarationTypePage.filterOptionalDependent(_.isTIR) {
-                  TIRCarnetReferencePage.reader
-                }
-              }
-              .flatten
-          case _ =>
-            DeclarationTypePage.filterMandatoryDependent(!_.isTIR) {
-              UserAnswersReader.none
-            }
-        }
-      }
+    DeclarationTypePage.filterOptionalDependent(_.isTIR) {
+      TIRCarnetReferencePage.reader
+    }
 
-  private def standardDeclarationReader(preLodgeFlag: Boolean): Read[String] = if (preLodgeFlag) {
-    AdditionalDeclarationTypePage.reader.to(
-      x => UserAnswersReader.success(x.code)
-    )
-  } else {
-    StandardDeclarationPage.reader
-
-  }
+  private def standardDeclarationReader(preLodgeFlag: Boolean): Read[String] =
+    if (preLodgeFlag) {
+      AdditionalDeclarationTypePage.reader.to(
+        x => UserAnswersReader.success(x.code)
+      )
+    } else {
+      StandardDeclarationPage.reader
+    }
 
   implicit def reader(preLodgeFlag: Boolean): UserAnswersReader[PreTaskListDomain] =
     (
