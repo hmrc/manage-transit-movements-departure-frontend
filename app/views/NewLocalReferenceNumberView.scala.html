@@ -26,7 +26,7 @@
     errorSummary: ErrorSummary
 )
 
-@(form: Form[LocalReferenceNumber], oldLocalReferenceNumber: LocalReferenceNumber)(implicit request: Request[_], messages: Messages)
+@(form: Form[LocalReferenceNumber], oldLocalReferenceNumber: LocalReferenceNumber)(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(
     title = messages("newLocalReferenceNumber.title"),

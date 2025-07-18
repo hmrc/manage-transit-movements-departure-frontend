@@ -29,7 +29,7 @@
     button: Button
 )
 
-@(form: Form[AdditionalDeclarationType], lrn: LocalReferenceNumber, values: Seq[AdditionalDeclarationType], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[AdditionalDeclarationType], lrn: LocalReferenceNumber, values: Seq[AdditionalDeclarationType], mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(
     title = messages("additionalDeclarationType.title"),

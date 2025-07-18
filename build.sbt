@@ -47,7 +47,8 @@ lazy val microservice = (project in file("."))
       "-language:postfixOps",
       "-language:higherKinds",
       "-Wconf:src=routes/.*:s",
-      "-Wconf:src=html/.*:s",
+      "-Wconf:src=html/.*&msg=unused import:s",
+      "-Wconf:msg=Flag.* set repeatedly:s"
     ),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,

@@ -15,17 +15,15 @@
  *@
 
 @import views.html.components.{Button, Heading}
-@import config.FrontendAppConfig
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
     heading: Heading,
-    button: Button,
-    config: FrontendAppConfig
+    button: Button
 )
 
-@(lrn:LocalReferenceNumber, mode:Mode)(implicit request: Request[_], messages: Messages)
+@(lrn:LocalReferenceNumber, mode:Mode)(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(
     title = messages("preTaskList.standardDeclaration.title"),

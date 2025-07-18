@@ -27,7 +27,7 @@
     button: Button
 )(implicit config: FrontendAppConfig)
 
-@(lrn: LocalReferenceNumber, viewModel: TaskListViewModel, expiryInDays: Long)(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, viewModel: TaskListViewModel, expiryInDays: Long)(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(
     title = messages("taskList.title"),

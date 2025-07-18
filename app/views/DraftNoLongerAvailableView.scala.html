@@ -15,18 +15,16 @@
  *@
 
 @import views.html.components.Heading
-@import config.FrontendAppConfig
 @import views.html.components.Button
 
 @this(
         mainTemplate: MainTemplate,
         formHelper: FormWithCSRF,
         heading: Heading,
-        button: Button,
-        config: FrontendAppConfig
+        button: Button
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(
     title = messages("draftNoLongerAvailable.title"),

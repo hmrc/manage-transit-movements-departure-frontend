@@ -15,7 +15,7 @@
     button: Button
 )
 
-@(form: Form[$referenceClass$], lrn: LocalReferenceNumber, $referenceClassPlural;format="decap"$: Seq[$referenceClass$], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[$referenceClass$], lrn: LocalReferenceNumber, $referenceClassPlural;format="decap"$: Seq[$referenceClass$], mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(
     title = messages("$package$.$className;format="decap"$.title"),

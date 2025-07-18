@@ -28,7 +28,7 @@
     errorSummary: ErrorSummary
 )
 
-@(form: Form[ProcedureType], values: Seq[ProcedureType], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[ProcedureType], values: Seq[ProcedureType], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(
     title = messages("procedureType.title"),

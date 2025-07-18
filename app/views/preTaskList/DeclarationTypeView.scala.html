@@ -29,7 +29,7 @@
     errorSummary: ErrorSummary
 )
 
-@(form: Form[DeclarationType], values: Seq[DeclarationType], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[DeclarationType], values: Seq[DeclarationType], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(
     title = messages("declarationType.title"),

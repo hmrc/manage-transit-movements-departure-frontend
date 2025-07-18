@@ -16,17 +16,15 @@
 
 @import views.html.components.Button
 @import views.html.components.Heading
-@import config.FrontendAppConfig
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
     heading: Heading,
     button: Button,
-    config: FrontendAppConfig
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(
     title = messages("locked.title"),
