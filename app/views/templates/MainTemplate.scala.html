@@ -27,12 +27,10 @@
     renderConfig: RenderConfig,
     appConfig: FrontendAppConfig,
     hmrcStandardPage: HmrcStandardPage,
-    hmrcInternalHead: HmrcInternalHead,
     hmrcTimeoutDialog: HmrcTimeoutDialog,
     betaBanner: MyBetaBanner,
     stylesheets: Stylesheets,
     javascripts: Javascripts,
-    govukBackLink: GovukBackLink,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
 )(implicit cfConfig: ContactFrontendConfig)
 
@@ -41,7 +39,7 @@
     timeoutEnabled: Boolean = true,
     showBackLink: Boolean = false,
     lrn: Option[LocalReferenceNumber] = None
-)(mainContent: Html)(implicit request: Request[_], messages: Messages)
+)(mainContent: Html)(implicit request: Request[?], messages: Messages)
 
 @canSignOut = @{request.session.get("authToken").isDefined}
 

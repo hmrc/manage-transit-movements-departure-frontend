@@ -27,7 +27,7 @@
     errorSummary: ErrorSummary
 )
 
-@(form: Form[_], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[?], lrn: LocalReferenceNumber, mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(
     title = messages("tirCarnetReference.title"),
