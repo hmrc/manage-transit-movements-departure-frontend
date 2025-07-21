@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
 @import viewModels.components.InputSelectViewModel
@@ -39,7 +38,7 @@
         hint = hint.map(x => Hint(content = Text(x))),
         items = SelectItem(value = Some(""), text = placeholder) +: selectItems,
         errorMessage = field.error.map { e =>
-            ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(e.message, e.args: _*)))
+            ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(e.message, e.args*)))
         }
     )
     .withFormField(field)

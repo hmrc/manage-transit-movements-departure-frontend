@@ -29,7 +29,7 @@
     govukWarningText : GovukWarningText
 )
 
-@(lrn: LocalReferenceNumber, sections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(lrn: LocalReferenceNumber, sections: Seq[Section])(implicit request: Request[?], messages: Messages)
 
 @mainTemplate(
     title = messages("preTaskList.checkYourAnswers.title"),
