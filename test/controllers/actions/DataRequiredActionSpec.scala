@@ -16,15 +16,16 @@
 
 package controllers.actions
 
-import base.{AppWithDefaultMockFixtures, SpecBase}
+import base.SpecBase
 import connectors.CacheConnector
 import controllers.routes
+import models.UserAnswersResponse.*
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber, SubmissionState, UserAnswers, UserAnswersResponse}
+import models.{DepartureMessage, DepartureMessages, LocalReferenceNumber, SubmissionState, UserAnswers}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
 import org.scalacheck.Gen
-import org.scalatest.{Assertion, EitherValues}
+import org.scalatest.Assertion
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.Json
 import play.api.mvc.Result
@@ -32,9 +33,8 @@ import play.api.test.Helpers.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import models.UserAnswersResponse.*
 
-class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks {
+class DataRequiredActionSpec extends SpecBase with ScalaCheckPropertyChecks {
 
   private class Harness(
     cacheConnector: CacheConnector
@@ -46,11 +46,6 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
   }
 
   private val mockCacheConnector = mock[CacheConnector]
-
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockCacheConnector)
-  }
 
   "Data Required Action" - {
 
@@ -110,8 +105,6 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
           "must return Right with DataRequest" in {
             forAll(Gen.oneOf(SubmissionState.NotSubmitted, SubmissionState.Amendment)) {
               submissionStatus =>
-                beforeEach()
-
                 when(mockCacheConnector.getMessages(any())(any()))
                   .thenReturn(Future.successful(DepartureMessages()))
 
@@ -160,8 +153,6 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
             "must return Left and redirect to session expired" in {
               forAll(submissionStatusGen) {
                 submissionStatus =>
-                  beforeEach()
-
                   val departureMessages = DepartureMessages(
                     Seq(
                       DepartureMessage("IE015"),
@@ -190,8 +181,6 @@ class DataRequiredActionSpec extends SpecBase with EitherValues with AppWithDefa
             "must return Right with DataRequest" in {
               forAll(submissionStatusGen) {
                 submissionStatus =>
-                  beforeEach()
-
                   val departureMessages = DepartureMessages(
                     Seq(
                       DepartureMessage("IE015"),

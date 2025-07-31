@@ -23,16 +23,17 @@ import models.requests.DataRequest
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.mvc.{Result, Results}
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import viewModels.taskList.{PreTaskListTask, TaskStatus}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DependentTaskActionSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 
   def harness(tasks: Map[String, TaskStatus]): Future[Result] = {
 
-    lazy val action = app.injector.instanceOf[DependentTaskAction]
+    lazy val action = new DependentTaskActionImpl()
 
     action
       .invokeBlock(

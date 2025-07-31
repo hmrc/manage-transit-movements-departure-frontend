@@ -16,21 +16,23 @@
 
 package services
 
-import base.{AppWithDefaultMockFixtures, SpecBase}
+import base.SpecBase
 import cats.data.NonEmptySet
+import config.FrontendAppConfig
 import connectors.ReferenceDataConnector
 import models.reference.SecurityType
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.running
+import org.scalatest.BeforeAndAfterEach
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class SecurityTypesServiceSpec extends SpecBase with AppWithDefaultMockFixtures {
+class SecurityTypesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+
+  private val mockFrontendAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   private val securityType3 = SecurityType("3", "ENS &amp; EXS")
   private val securityType2 = SecurityType("2", "EXS")
@@ -38,11 +40,6 @@ class SecurityTypesServiceSpec extends SpecBase with AppWithDefaultMockFixtures 
   private val securityType0 = SecurityType("0", "Not used for safety and security purposes")
 
   private val securityTypes = NonEmptySet.of(securityType3, securityType2, securityType1, securityType0)
-
-  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
-    super
-      .guiceApplicationBuilder()
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
@@ -54,37 +51,31 @@ class SecurityTypesServiceSpec extends SpecBase with AppWithDefaultMockFixtures 
     "getSecurityTypes" - {
       "must return a list of sorted security types" - {
         "when other countries aren't on phase 6 rules" in {
-          running(
-            _ => guiceApplicationBuilder().configure("feature-flags.phase-6-enabled-in-taxud" -> false)
-          ) {
-            app =>
-              val service = app.injector.instanceOf[SecurityTypesService]
+          val service = new SecurityTypesService(mockRefDataConnector, mockFrontendAppConfig)
 
-              when(mockRefDataConnector.getSecurityTypes()(any(), any()))
-                .thenReturn(Future.successful(Right(securityTypes)))
+          when(mockRefDataConnector.getSecurityTypes()(any(), any()))
+            .thenReturn(Future.successful(Right(securityTypes)))
 
-              service.getSecurityTypes().futureValue mustEqual
-                Seq(securityType0, securityType1, securityType2, securityType3)
+          when(mockFrontendAppConfig.phase6RulesEnabled).thenReturn(false)
 
-              verify(mockRefDataConnector).getSecurityTypes()(any(), any())
-          }
+          service.getSecurityTypes().futureValue mustEqual
+            Seq(securityType0, securityType1, securityType2, securityType3)
+
+          verify(mockRefDataConnector).getSecurityTypes()(any(), any())
         }
 
         "when other countries are on phase 6 rules" in {
-          running(
-            _ => guiceApplicationBuilder().configure("feature-flags.phase-6-enabled-in-taxud" -> true)
-          ) {
-            app =>
-              val service = app.injector.instanceOf[SecurityTypesService]
+          val service = new SecurityTypesService(mockRefDataConnector, mockFrontendAppConfig)
 
-              when(mockRefDataConnector.getSecurityTypes()(any(), any()))
-                .thenReturn(Future.successful(Right(securityTypes)))
+          when(mockRefDataConnector.getSecurityTypes()(any(), any()))
+            .thenReturn(Future.successful(Right(securityTypes)))
 
-              service.getSecurityTypes().futureValue mustEqual
-                Seq(securityType0, securityType2)
+          when(mockFrontendAppConfig.phase6RulesEnabled).thenReturn(true)
 
-              verify(mockRefDataConnector).getSecurityTypes()(any(), any())
-          }
+          service.getSecurityTypes().futureValue mustEqual
+            Seq(securityType0, securityType2)
+
+          verify(mockRefDataConnector).getSecurityTypes()(any(), any())
         }
       }
     }

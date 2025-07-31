@@ -33,7 +33,8 @@ import scala.concurrent.Future
 class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with Generators with ScalaCheckPropertyChecks {
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private val service                                      = new CountriesService(mockRefDataConnector)
+
+  private val service = new CountriesService(mockRefDataConnector)
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)

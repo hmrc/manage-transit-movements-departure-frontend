@@ -23,33 +23,21 @@ import models.requests.{IdentifierRequest, OptionalDataRequest}
 import models.{EoriNumber, LocalReferenceNumber, UserAnswersResponse}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{AnyContent, Request, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends SpecBase with Generators {
 
-  val sessionRepository: SessionRepository = mock[SessionRepository]
-
-  override lazy val app: Application = {
-
-    import play.api.inject._
-
-    new GuiceApplicationBuilder()
-      .overrides(
-        bind[SessionRepository].toInstance(sessionRepository)
-      )
-      .build()
-  }
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
   def harness(lrn: LocalReferenceNumber, f: OptionalDataRequest[AnyContent] => Unit): Unit = {
 
-    lazy val actionProvider = app.injector.instanceOf[DataRetrievalActionProviderImpl]
+    lazy val actionProvider = new DataRetrievalActionProviderImpl(mockSessionRepository)
 
     actionProvider(lrn)
       .invokeBlock(
@@ -69,7 +57,7 @@ class DataRetrievalActionSpec extends SpecBase with Generators {
 
       "where there are no existing answers for this LRN" in {
 
-        when(sessionRepository.get(any())(any())).thenReturn(Future.successful(UserAnswersResponse.NoAnswers))
+        when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(UserAnswersResponse.NoAnswers))
 
         harness(lrn, request => request.userAnswers mustEqual UserAnswersResponse.NoAnswers)
       }
@@ -79,7 +67,7 @@ class DataRetrievalActionSpec extends SpecBase with Generators {
 
       "when there are existing answers for this LRN" in {
 
-        when(sessionRepository.get(any())(any())).thenReturn(Future.successful(Answers(emptyUserAnswers)))
+        when(mockSessionRepository.get(any())(any())).thenReturn(Future.successful(Answers(emptyUserAnswers)))
 
         harness(lrn, request => request.userAnswers mustEqual Answers(emptyUserAnswers))
       }

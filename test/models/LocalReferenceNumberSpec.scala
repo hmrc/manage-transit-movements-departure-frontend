@@ -16,16 +16,14 @@
 
 package models
 
+import base.SpecBase
 import generators.Generators
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.EitherValues
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import play.api.libs.json.{JsString, Json}
 import play.api.mvc.PathBindable
 
-class LocalReferenceNumberSpec extends AnyFreeSpec with Generators with Matchers with EitherValues {
+class LocalReferenceNumberSpec extends SpecBase with Generators {
 
   "a Local Reference Number" - {
     val pathBindable = implicitly[PathBindable[LocalReferenceNumber]]

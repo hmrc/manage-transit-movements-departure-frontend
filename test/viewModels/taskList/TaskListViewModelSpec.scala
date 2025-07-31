@@ -16,14 +16,14 @@
 
 package viewModels.taskList
 
-import base.SpecBase
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import models.SubmissionState
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import viewModels.taskList.TaskListViewModel.TaskListViewModelProvider
 
-class TaskListViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class TaskListViewModelSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   "apply" - {
     "when pre task list is completed" - {

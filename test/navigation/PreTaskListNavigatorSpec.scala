@@ -17,21 +17,27 @@
 package navigation
 
 import base.SpecBase
+import config.FrontendAppConfig
 import controllers.preTaskList.routes
 import generators.Generators
-import models._
+import models.*
+import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
+  private val mockFrontendAppConfig = mock[FrontendAppConfig]
+
   "Pre Task List Navigator" - {
 
     "when answers complete" - {
       "must redirect to check your answers" in {
-        forAll(arbitraryPreTaskListAnswers(emptyUserAnswers), arbitrary[Mode]) {
-          (answers, mode) =>
-            val navigatorProvider = new PreTaskListNavigatorProviderImpl(frontendAppConfig)
+        forAll(arbitraryPreTaskListAnswers(emptyUserAnswers), arbitrary[Mode], arbitrary[Boolean]) {
+          (answers, mode, isPreLodgeEnabled) =>
+            when(mockFrontendAppConfig.isPreLodgeEnabled).thenReturn(isPreLodgeEnabled)
+
+            val navigatorProvider = new PreTaskListNavigatorProviderImpl(mockFrontendAppConfig)
             val navigator         = navigatorProvider.apply(mode)
 
             navigator

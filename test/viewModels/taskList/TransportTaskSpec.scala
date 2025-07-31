@@ -16,13 +16,13 @@
 
 package viewModels.taskList
 
-import base.SpecBase
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import viewModels.taskList.TaskStatus._
+import viewModels.taskList.TaskStatus.*
 
-class TransportTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class TransportTaskSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   "name" - {
     "must be Transport details" - {

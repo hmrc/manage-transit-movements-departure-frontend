@@ -20,13 +20,23 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatest.Assertion
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, status, GET, *}
+import services.LockService
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 import scala.concurrent.Future
 
 class DeleteLockControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
+
+  private val mockLockService = mock[LockService]
+
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(bind(classOf[LockService]).toInstance(mockLockService))
 
   override def beforeEach(): Unit = {
     super.beforeEach()

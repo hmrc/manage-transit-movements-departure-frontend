@@ -30,7 +30,13 @@ import scala.concurrent.Future
 class AdditionalDeclarationTypesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private val service                                      = new AdditionalDeclarationTypesService(mockRefDataConnector)
+
+  private val service = new AdditionalDeclarationTypesService(mockRefDataConnector)
+
+  override def beforeEach(): Unit = {
+    reset(mockRefDataConnector)
+    super.beforeEach()
+  }
 
   private val adt1 = AdditionalDeclarationType(
     "A",
@@ -44,18 +50,13 @@ class AdditionalDeclarationTypesServiceSpec extends SpecBase with BeforeAndAfter
 
   private val adts = NonEmptySet.of(adt2, adt1)
 
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockRefDataConnector)
-
-    when(mockRefDataConnector.getAdditionalDeclarationTypes()(any(), any()))
-      .thenReturn(Future.successful(Right(adts)))
-  }
-
   "AdditionalDeclarationTypesService" - {
 
     "getAdditionalDeclarationTypes" - {
       "must return a list of sorted additional declaration types" in {
+        when(mockRefDataConnector.getAdditionalDeclarationTypes()(any(), any()))
+          .thenReturn(Future.successful(Right(adts)))
+
         service.getAdditionalDeclarationTypes().futureValue mustEqual
           Seq(adt1, adt2)
 
