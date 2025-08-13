@@ -16,7 +16,7 @@
 
 package utils.cyaHelpers
 
-import base.SpecBase
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.preTaskList.routes
 import generators.Generators
 import models.reference.{AdditionalDeclarationType, CustomsOffice, DeclarationType, SecurityType}
@@ -24,12 +24,12 @@ import models.{LocalReferenceNumber, Mode, ProcedureType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.preTaskList._
-import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+import pages.preTaskList.*
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
 import uk.gov.hmrc.govukfrontend.views.html.components.{ActionItem, Actions}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 
-class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class PreTaskListCheckYourAnswersHelperSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   "PreTaskListCheckYourAnswersHelper" - {
 

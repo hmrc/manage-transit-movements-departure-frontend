@@ -16,16 +16,14 @@
 
 package models
 
+import base.SpecBase
 import generators.Generators
-import models.SubmissionState._
+import models.SubmissionState.*
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.EitherValues
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import play.api.libs.json.{JsString, Json}
 
-class SubmissionStateSpec extends AnyFreeSpec with Generators with Matchers with EitherValues {
+class SubmissionStateSpec extends SpecBase with Generators {
 
   "submissionState" - {
 

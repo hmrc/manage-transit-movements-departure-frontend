@@ -28,7 +28,10 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DataRetrievalActionProviderImpl @Inject() (sessionRepository: SessionRepository, ec: ExecutionContext) extends DataRetrievalActionProvider {
+class DataRetrievalActionProviderImpl @Inject() (
+  sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends DataRetrievalActionProvider {
 
   def apply(lrn: LocalReferenceNumber): ActionTransformer[IdentifierRequest, OptionalDataRequest] =
     new DataRetrievalAction(lrn, ec, sessionRepository)

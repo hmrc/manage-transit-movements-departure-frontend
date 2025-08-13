@@ -17,14 +17,15 @@
 package controllers.actions
 
 import models.requests.DataRequest
-import play.api.mvc.Result
-import services.LockService
+import play.api.mvc.{ActionFilter, Result}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class FakeLockAction(lockService: LockService) extends LockAction(lockService) {
+class FakeLockAction extends ActionFilter[DataRequest] {
 
   override protected def filter[A](request: DataRequest[A]): Future[Option[Result]] =
     Future.successful(None)
+
+  override protected def executionContext: ExecutionContext =
+    scala.concurrent.ExecutionContext.Implicits.global
 }

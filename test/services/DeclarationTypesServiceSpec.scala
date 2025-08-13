@@ -34,7 +34,8 @@ import scala.concurrent.Future
 class DeclarationTypesServiceSpec extends SpecBase with BeforeAndAfterEach with ScalaCheckPropertyChecks with Generators {
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private val service                                      = new DeclarationTypesService(mockRefDataConnector)
+
+  private val service = new DeclarationTypesService(mockRefDataConnector)
 
   private val declarationType1 = DeclarationType("TIR", "TIR description")
   private val declarationType2 = DeclarationType("T2SM", "T2SM description")
@@ -55,9 +56,6 @@ class DeclarationTypesServiceSpec extends SpecBase with BeforeAndAfterEach with 
   override def beforeEach(): Unit = {
     super.beforeEach()
     reset(mockRefDataConnector)
-
-    when(mockRefDataConnector.getDeclarationTypes()(any(), any()))
-      .thenReturn(Future.successful(Right(declarationTypes)))
   }
 
   "DeclarationTypesService" - {
@@ -68,6 +66,8 @@ class DeclarationTypesServiceSpec extends SpecBase with BeforeAndAfterEach with 
           forAll(arbitrary[CustomsOffice](arbitraryXiCustomsOffice)) {
             officeOfDeparture =>
               beforeEach()
+              when(mockRefDataConnector.getDeclarationTypes()(any(), any()))
+                .thenReturn(Future.successful(Right(declarationTypes)))
 
               service.getDeclarationTypes(officeOfDeparture, ProcedureType.Normal).futureValue mustEqual
                 Seq(declarationType6, declarationType5, declarationType4, declarationType3, declarationType1)
@@ -80,6 +80,8 @@ class DeclarationTypesServiceSpec extends SpecBase with BeforeAndAfterEach with 
           forAll(arbitrary[CustomsOffice](arbitraryGbCustomsOffice), arbitrary[ProcedureType]) {
             (officeOfDeparture, procedureType) =>
               beforeEach()
+              when(mockRefDataConnector.getDeclarationTypes()(any(), any()))
+                .thenReturn(Future.successful(Right(declarationTypes)))
 
               service.getDeclarationTypes(officeOfDeparture, procedureType).futureValue mustEqual
                 Seq(declarationType6, declarationType5, declarationType4, declarationType3)
@@ -92,6 +94,8 @@ class DeclarationTypesServiceSpec extends SpecBase with BeforeAndAfterEach with 
           forAll(arbitrary[CustomsOffice](arbitraryXiCustomsOffice)) {
             officeOfDeparture =>
               beforeEach()
+              when(mockRefDataConnector.getDeclarationTypes()(any(), any()))
+                .thenReturn(Future.successful(Right(declarationTypes)))
 
               service.getDeclarationTypes(officeOfDeparture, ProcedureType.Simplified).futureValue mustEqual
                 Seq(declarationType6, declarationType5, declarationType4, declarationType3)

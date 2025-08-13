@@ -16,17 +16,13 @@
 
 package base
 
-import config.{FrontendAppConfig, RenderConfig}
 import models.{EoriNumber, LocalReferenceNumber, RichJsObject, SubmissionState, UserAnswers}
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{EitherValues, OptionValues, TryValues}
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import pages.{QuestionPage, ReadOnlyPage}
-import play.api.i18n.{Messages, MessagesApi}
-import play.api.inject.Injector
 import play.api.libs.json.{Format, JsResultException, Json, Reads}
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
@@ -35,16 +31,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.Future
 
-trait SpecBase
-    extends AnyFreeSpec
-    with Matchers
-    with OptionValues
-    with EitherValues
-    with GuiceOneAppPerSuite
-    with TryValues
-    with ScalaFutures
-    with IntegrationPatience
-    with MockitoSugar {
+trait SpecBase extends AnyFreeSpec with Matchers with OptionValues with EitherValues with TryValues with ScalaFutures with MockitoSugar {
 
   val eoriNumber: EoriNumber    = EoriNumber("GB1234567891234")
   val lrn: LocalReferenceNumber = LocalReferenceNumber("ABCD1234567890123").get
@@ -55,14 +42,6 @@ trait SpecBase
   val emptyUserAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj(), status = SubmissionState.NotSubmitted)
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
-
-  def injector: Injector = app.injector
-
-  def messagesApi: MessagesApi    = injector.instanceOf[MessagesApi]
-  implicit def messages: Messages = messagesApi.preferred(fakeRequest)
-
-  def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-  def renderConfig: RenderConfig           = injector.instanceOf[RenderConfig]
 
   implicit class RichUserAnswers(userAnswers: UserAnswers) {
 

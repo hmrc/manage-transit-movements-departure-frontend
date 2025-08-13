@@ -16,15 +16,15 @@
 
 package viewModels.taskList
 
-import base.SpecBase
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import models.LocalReferenceNumber
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import viewModels.taskList.TaskStatus._
+import viewModels.taskList.TaskStatus.*
 
-class ItemsTaskSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class ItemsTaskSpec extends SpecBase with AppWithDefaultMockFixtures with ScalaCheckPropertyChecks with Generators {
 
   "name" - {
     "must be Items" - {

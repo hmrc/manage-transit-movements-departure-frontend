@@ -16,14 +16,14 @@
 
 package viewModels.preTaskList
 
-import base.SpecBase
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import models.reference.{AdditionalDeclarationType, CustomsOffice, DeclarationType, SecurityType}
 import models.{LocalReferenceNumber, ProcedureType}
-import pages.preTaskList._
+import pages.preTaskList.*
 import viewModels.preTaskList.PreTaskListViewModel.PreTaskListViewModelProvider
 
-class PreTaskListViewModelSpec extends SpecBase with Generators {
+class PreTaskListViewModelSpec extends SpecBase with AppWithDefaultMockFixtures with Generators {
 
   "apply" - {
     "when user answers empty" - {
@@ -31,7 +31,7 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
         val answers = emptyUserAnswers
           .copy(lrn = LocalReferenceNumber("1234567890").get)
 
-        val viewModelProvider = injector.instanceOf[PreTaskListViewModelProvider]
+        val viewModelProvider = new PreTaskListViewModelProvider()
         val section           = viewModelProvider.apply(answers).section
 
         section.sectionTitle must not be defined
@@ -51,7 +51,7 @@ class PreTaskListViewModelSpec extends SpecBase with Generators {
           .setValue(TIRCarnetReferencePage, "tir carnet reference")
           .setValue(SecurityDetailsTypePage, SecurityType("0", "Not used for safety and security purposes"))
 
-        val viewModelProvider = injector.instanceOf[PreTaskListViewModelProvider]
+        val viewModelProvider = new PreTaskListViewModelProvider()
         val section           = viewModelProvider.apply(answers).section
 
         section.sectionTitle must not be defined

@@ -27,7 +27,7 @@ case class PreTaskListViewModel(section: Section)
 
 object PreTaskListViewModel {
 
-  class PreTaskListViewModelProvider @Inject() () {
+  class PreTaskListViewModelProvider @Inject() {
 
     def apply(userAnswers: UserAnswers)(implicit messages: Messages): PreTaskListViewModel = {
       val helper = new PreTaskListCheckYourAnswersHelper(userAnswers, CheckMode)

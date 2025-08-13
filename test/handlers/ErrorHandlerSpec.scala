@@ -22,14 +22,14 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import play.api.libs.typedmap.TypedMap
 import play.api.mvc.request.{RemoteConnection, RequestTarget}
 import play.api.mvc.{Headers, RequestHeader, Result}
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 
 import scala.concurrent.Future
 
 // scalastyle:off magic.number
 class ErrorHandlerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  private lazy val handler: ErrorHandler = app.injector.instanceOf[ErrorHandler]
+  private lazy val handler: ErrorHandler = new ErrorHandler(messagesApi)
 
   "must redirect to NotFound page when given a 404" in {
 

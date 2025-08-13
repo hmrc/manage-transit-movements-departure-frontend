@@ -31,7 +31,8 @@ import scala.concurrent.Future
 class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generators {
 
   private val mockCacheConnector: CacheConnector = mock[CacheConnector]
-  private val duplicateService: DuplicateService = new DuplicateService(mockCacheConnector)
+
+  private val service: DuplicateService = new DuplicateService(mockCacheConnector)
 
   override def beforeEach(): Unit = {
     reset(mockCacheConnector)
@@ -48,7 +49,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
         "when copy returns true" in {
           when(mockCacheConnector.copy(eqTo(lrn), eqTo(newLrn))(any())).thenReturn(Future.successful(true))
 
-          duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustEqual true
+          service.copyUserAnswers(lrn, newLrn).futureValue mustEqual true
 
           verify(mockCacheConnector).copy(eqTo(lrn), eqTo(newLrn))(any())
         }
@@ -58,7 +59,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
         "when copy returns false" in {
           when(mockCacheConnector.copy(eqTo(lrn), eqTo(newLrn))(any())).thenReturn(Future.successful(false))
 
-          duplicateService.copyUserAnswers(lrn, newLrn).futureValue mustEqual false
+          service.copyUserAnswers(lrn, newLrn).futureValue mustEqual false
 
           verify(mockCacheConnector).copy(eqTo(lrn), eqTo(newLrn))(any())
         }
@@ -70,7 +71,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
         "if draft exists" in {
           when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(Answers(emptyUserAnswers)))
 
-          duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustEqual true
+          service.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustEqual true
 
           verify(mockCacheConnector).get(eqTo(lrn))(any())
           verify(mockCacheConnector, never()).getMessages(any())(any())
@@ -87,7 +88,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
           when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(UserAnswersResponse.NoAnswers))
           when(mockCacheConnector.getMessages(any())(any())).thenReturn(Future.successful(messages))
 
-          duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustEqual true
+          service.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustEqual true
 
           verify(mockCacheConnector).get(eqTo(lrn))(any())
           verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
@@ -105,7 +106,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
           when(mockCacheConnector.get(any())(any())).thenReturn(Future.successful(UserAnswersResponse.NoAnswers))
           when(mockCacheConnector.getMessages(any())(any())).thenReturn(Future.successful(messages))
 
-          duplicateService.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustEqual false
+          service.doesDraftOrSubmissionExistForLrn(lrn).futureValue mustEqual false
 
           verify(mockCacheConnector).get(eqTo(lrn))(any())
           verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
@@ -127,7 +128,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
         when(mockCacheConnector.getMessages(eqTo(lrn))(any()))
           .thenReturn(Future.successful(messages))
 
-        duplicateService.doesIE028ExistForLrn(lrn).futureValue mustEqual true
+        service.doesIE028ExistForLrn(lrn).futureValue mustEqual true
 
         verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
       }
@@ -144,7 +145,7 @@ class DuplicateServiceSpec extends SpecBase with BeforeAndAfterEach with Generat
         when(mockCacheConnector.getMessages(eqTo(lrn))(any()))
           .thenReturn(Future.successful(messages))
 
-        duplicateService.doesIE028ExistForLrn(lrn).futureValue mustEqual false
+        service.doesIE028ExistForLrn(lrn).futureValue mustEqual false
 
         verify(mockCacheConnector).getMessages(eqTo(lrn))(any())
       }

@@ -16,11 +16,10 @@
 
 package models
 
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
+import base.SpecBase
 import play.api.libs.json.{JsString, Json}
 
-class ModeSpec extends AnyFreeSpec with Matchers {
+class ModeSpec extends SpecBase {
 
   "NormalMode" - {
     val mode: Mode = NormalMode
