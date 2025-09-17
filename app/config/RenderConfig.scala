@@ -39,7 +39,6 @@ class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderCo
 
   override val isTraderTest: Boolean = configuration.get[Boolean]("trader-test.enabled")
   override val feedbackEmail: String = configuration.get[String]("trader-test.feedback.email")
-  override val feedbackForm: String  = configuration.get[String]("trader-test.feedback.link")
 
   override def mailto(implicit request: Request[?], messages: Messages): String = {
     val subject = messages("site.email.subject")
@@ -70,6 +69,5 @@ trait RenderConfig {
   val userResearchUrl: String
   val isTraderTest: Boolean
   val feedbackEmail: String
-  val feedbackForm: String
   def mailto(implicit request: Request[?], messages: Messages): String
 }
