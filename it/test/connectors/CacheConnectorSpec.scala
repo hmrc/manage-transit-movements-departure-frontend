@@ -271,7 +271,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" - {
         "when phase 6 is enabled" in {
           val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-enabled" -> true)
+            .configure("feature-flags.phase-6-api-enabled" -> true)
             .build()
 
           running(app) {
@@ -292,7 +292,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         "when phase 6 is disabled" in {
           val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-enabled" -> false)
+            .configure("feature-flags.phase-6-api-enabled" -> false)
             .build()
 
           running(app) {
@@ -350,7 +350,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return true when status is Ok" - {
         "when phase 6 is enabled" in {
           val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-enabled" -> true)
+            .configure("feature-flags.phase-6-api-enabled" -> true)
             .build()
 
           running(app) {
@@ -371,7 +371,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         "when phase 6 is disabled" in {
           val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-enabled" -> false)
+            .configure("feature-flags.phase-6-api-enabled" -> false)
             .build()
 
           running(app) {
@@ -462,7 +462,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
       "must return messages when status is Ok" - {
         "when phase 5" in {
           val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-enabled" -> false)
+            .configure("feature-flags.phase-6-api-enabled" -> false)
             .build()
 
           running(app) {
@@ -487,7 +487,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         "when phase 6" in {
           val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-enabled" -> true)
+            .configure("feature-flags.phase-6-api-enabled" -> true)
             .build()
 
           running(app) {
