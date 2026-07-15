@@ -38,6 +38,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val feedbackUrl: String      = configuration.get[String]("urls.feedback")
 
   lazy val isPreLodgeEnabled: Boolean = configuration.get[Boolean]("features.isPreLodgeEnabled")
+  lazy val isIE022Enabled: Boolean    = configuration.get[Boolean]("features.isIE022Enabled")
 
   lazy val customsReferenceDataUrl: String = configuration.get[Service]("microservice.services.customs-reference-data").fullServiceUrl
 
