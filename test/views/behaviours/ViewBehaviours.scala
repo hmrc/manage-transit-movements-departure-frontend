@@ -43,7 +43,7 @@ trait ViewBehaviours extends SpecBase with AppWithDefaultMockFixtures with ViewS
   val prefix: String
 
   "must render service name link in header" in {
-    val link = getElementByClass(doc, "govuk-header__service-name")
+    val link = getElementByClass(doc, "govuk-service-navigation__link")
     assertElementContainsText(link, "Manage your transit movements")
     assertElementContainsHref(link, "http://localhost:9485/manage-transit-movements/what-do-you-want-to-do")
   }
@@ -55,7 +55,7 @@ trait ViewBehaviours extends SpecBase with AppWithDefaultMockFixtures with ViewS
       .find(_.text() == "Accessibility statement")
       .get
 
-    getElementHref(link) mustEqual s"http://localhost:12346/accessibility-statement/manage-transit-movements?referrerUrl=$path"
+    getElementHref(link) mustEqual s"http://localhost:12346/accessibility-statement/manage-transit-movements?referrerUrl=$path&useServiceNavigation"
   }
 
   "must not render language toggle" in {
@@ -66,7 +66,7 @@ trait ViewBehaviours extends SpecBase with AppWithDefaultMockFixtures with ViewS
     val link = getElementByClass(doc, "hmrc-report-technical-issue")
 
     assertElementContainsText(link, "Is this page not working properly? (opens in new tab)")
-    getElementHref(link) mustEqual s"http://localhost:9250/contact/report-technical-problem?service=CTCTraders&referrerUrl=$path"
+    getElementHref(link) mustEqual s"http://localhost:9250/contact/report-technical-problem?service=CTCTraders&referrerUrl=$path&useServiceNavigation"
   }
 
   def pageWithTitle(args: Any*): Unit =
