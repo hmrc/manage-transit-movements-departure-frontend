@@ -18,7 +18,6 @@ package services
 
 import base.SpecBase
 import cats.data.NonEmptySet
-import config.FrontendAppConfig
 import connectors.ReferenceDataConnector
 import models.reference.SecurityType
 import org.mockito.ArgumentMatchers.any
@@ -31,8 +30,6 @@ import scala.concurrent.Future
 class SecurityTypesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-
-  private val mockFrontendAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
   private val securityType3 = SecurityType("3", "ENS &amp; EXS")
   private val securityType2 = SecurityType("2", "EXS")
@@ -50,27 +47,12 @@ class SecurityTypesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
     "getSecurityTypes" - {
       "must return a list of sorted security types" - {
-        "when other countries aren't on phase 6 rules" in {
-          val service = new SecurityTypesService(mockRefDataConnector, mockFrontendAppConfig)
+
+        "when other countries are on rules" in {
+          val service = new SecurityTypesService(mockRefDataConnector)
 
           when(mockRefDataConnector.getSecurityTypes()(any(), any()))
             .thenReturn(Future.successful(Right(securityTypes)))
-
-          when(mockFrontendAppConfig.phase6RulesEnabled).thenReturn(false)
-
-          service.getSecurityTypes().futureValue mustEqual
-            Seq(securityType0, securityType1, securityType2, securityType3)
-
-          verify(mockRefDataConnector).getSecurityTypes()(any(), any())
-        }
-
-        "when other countries are on phase 6 rules" in {
-          val service = new SecurityTypesService(mockRefDataConnector, mockFrontendAppConfig)
-
-          when(mockRefDataConnector.getSecurityTypes()(any(), any()))
-            .thenReturn(Future.successful(Right(securityTypes)))
-
-          when(mockFrontendAppConfig.phase6RulesEnabled).thenReturn(true)
 
           service.getSecurityTypes().futureValue mustEqual
             Seq(securityType0, securityType2)

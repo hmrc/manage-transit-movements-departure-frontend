@@ -38,8 +38,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http
       .get(url)
       .setHeader(HeaderNames.Accept -> {
-        val version = if (config.phase6Enabled) "2.0" else "1.0"
-        s"application/vnd.hmrc.$version+json"
+        "application/vnd.hmrc.2.0+json"
       })
       .execute[Responses[T]]
 
@@ -47,50 +46,50 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     get[T](url).map(_.map(_.head))
 
   def getCountryCodeCommunityCountry(countryId: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Response[Country]] = {
-    val queryParameters                = Country.queryParameters(countryId)(config)
+    val queryParameters                = Country.queryParameters(countryId)
     val url                            = url"${config.customsReferenceDataUrl}/lists/CountryCodesCommunity?$queryParameters"
-    implicit val reads: Reads[Country] = Country.reads(config)
+    implicit val reads: Reads[Country] = Country.reads
     getOne[Country](url)
   }
 
   def getCustomsOfficesOfDepartureForCountry(
     countryCodes: String*
   )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Responses[CustomsOffice]] = {
-    val queryParameters                            = CustomsOffice.queryParameters(roles = Seq("DEP"), countryCodes = countryCodes)(config)
+    val queryParameters                            = CustomsOffice.queryParameters(roles = Seq("DEP"), countryCodes = countryCodes)
     val url                                        = url"${config.customsReferenceDataUrl}/lists/CustomsOffices?$queryParameters"
-    implicit val reads: Reads[List[CustomsOffice]] = CustomsOffice.listReads(config)
+    implicit val reads: Reads[List[CustomsOffice]] = CustomsOffice.listReads
     get[CustomsOffice](url)
   }
 
   def getCountryCodesCTCCountry(countryId: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Response[Country]] = {
-    val queryParameters                = Country.queryParameters(countryId)(config)
+    val queryParameters                = Country.queryParameters(countryId)
     val url                            = url"${config.customsReferenceDataUrl}/lists/CountryCodesCTC?$queryParameters"
-    implicit val reads: Reads[Country] = Country.reads(config)
+    implicit val reads: Reads[Country] = Country.reads
     getOne[Country](url)
   }
 
   def getCountryCustomsSecurityAgreementAreaCountry(countryId: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Response[Country]] = {
-    val queryParameters                = Country.queryParameters(countryId)(config)
+    val queryParameters                = Country.queryParameters(countryId)
     val url                            = url"${config.customsReferenceDataUrl}/lists/CountryCustomsSecurityAgreementArea?$queryParameters"
-    implicit val reads: Reads[Country] = Country.reads(config)
+    implicit val reads: Reads[Country] = Country.reads
     getOne[Country](url)
   }
 
   def getSecurityTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Responses[SecurityType]] = {
     val url                                 = url"${config.customsReferenceDataUrl}/lists/DeclarationTypeSecurity"
-    implicit val reads: Reads[SecurityType] = SecurityType.reads(config)
+    implicit val reads: Reads[SecurityType] = SecurityType.reads
     get[SecurityType](url)
   }
 
   def getDeclarationTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Responses[DeclarationType]] = {
     val url                                    = url"${config.customsReferenceDataUrl}/lists/DeclarationType"
-    implicit val reads: Reads[DeclarationType] = DeclarationType.reads(config)
+    implicit val reads: Reads[DeclarationType] = DeclarationType.reads
     get[DeclarationType](url)
   }
 
   def getAdditionalDeclarationTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Responses[AdditionalDeclarationType]] = {
     val url                                              = url"${config.customsReferenceDataUrl}/lists/DeclarationTypeAdditional"
-    implicit val reads: Reads[AdditionalDeclarationType] = AdditionalDeclarationType.reads(config)
+    implicit val reads: Reads[AdditionalDeclarationType] = AdditionalDeclarationType.reads
     get[AdditionalDeclarationType](url)
   }
 
@@ -98,8 +97,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     (_: String, url: String, response: HttpResponse) =>
       response.status match {
         case OK =>
-          val json = if (config.phase6Enabled) response.json else response.json \ "data"
-          json.validate[List[A]] match {
+          response.json.validate[List[A]] match {
             case JsSuccess(Nil, _) =>
               Left(NoReferenceDataFoundException(url))
             case JsSuccess(head :: tail, _) =>

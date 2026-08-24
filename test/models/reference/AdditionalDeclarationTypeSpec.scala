@@ -17,73 +17,29 @@
 package models.reference
 
 import base.SpecBase
-import config.FrontendAppConfig
 import generators.Generators
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, Json}
-import play.api.test.Helpers.running
 
 class AdditionalDeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   "AdditionalDeclarationType" - {
 
-    "must serialise" in {
-      forAll(nonEmptyString, nonEmptyString) {
-        (code, description) =>
-          val additionalDeclarationType = AdditionalDeclarationType(code, description)
-          Json.toJson(additionalDeclarationType) mustEqual Json.parse(s"""
-               |{
-               |  "code": "$code",
-               |  "description": "$description"
-               |}
-               |""".stripMargin)
-      }
-    }
-
     "must deserialise" - {
-      "when phase-6" - {
-        "when json contains an additional declaration type" in {
-          running(_.configure("feature-flags.phase-6-enabled" -> true)) {
-            app =>
-              val config = app.injector.instanceOf[FrontendAppConfig]
-              forAll(nonEmptyString, nonEmptyString) {
-                (code, description) =>
-                  val additionalDeclarationType = AdditionalDeclarationType(code, description)
-                  Json
-                    .parse(s"""
+      "when json contains an additional declaration type" in {
+        forAll(nonEmptyString, nonEmptyString) {
+          (code, description) =>
+            val additionalDeclarationType = AdditionalDeclarationType(code, description)
+            Json
+              .parse(s"""
                          |{
                          |  "key": "$code",
                          |  "value": "$description"
                          |}
                          |""".stripMargin)
-                    .as[AdditionalDeclarationType](AdditionalDeclarationType.reads(config)) mustEqual additionalDeclarationType
-              }
-          }
-
+              .as[AdditionalDeclarationType](AdditionalDeclarationType.reads) mustEqual additionalDeclarationType
         }
       }
-      "when phase-5" - {
-        "when json contains an additional declaration type" in {
-          running(_.configure("feature-flags.phase-6-enabled" -> false)) {
-            app =>
-              val config = app.injector.instanceOf[FrontendAppConfig]
-              forAll(nonEmptyString, nonEmptyString) {
-                (code, description) =>
-                  val additionalDeclarationType = AdditionalDeclarationType(code, description)
-                  Json
-                    .parse(s"""
-                         |{
-                         |  "code": "$code",
-                         |  "description": "$description"
-                         |}
-                         |""".stripMargin)
-                    .as[AdditionalDeclarationType](AdditionalDeclarationType.reads(config)) mustEqual additionalDeclarationType
-              }
-          }
-
-        }
-      }
-
     }
 
     "must read from mongo" in {
