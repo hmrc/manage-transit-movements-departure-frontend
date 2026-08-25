@@ -25,6 +25,19 @@ class AdditionalDeclarationTypeSpec extends SpecBase with ScalaCheckPropertyChec
 
   "AdditionalDeclarationType" - {
 
+    "must serialise" in {
+      forAll(nonEmptyString, nonEmptyString) {
+        (code, description) =>
+          val additionalDeclarationType = AdditionalDeclarationType(code, description)
+          Json.toJson(additionalDeclarationType) mustEqual Json.parse(s"""
+               |{
+               |  "code": "$code",
+               |  "description": "$description"
+               |}
+               |""".stripMargin)
+      }
+    }
+
     "must deserialise" - {
       "when json contains an additional declaration type" in {
         forAll(nonEmptyString, nonEmptyString) {

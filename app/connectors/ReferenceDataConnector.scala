@@ -37,9 +37,10 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
   private def get[T](url: URL)(implicit ec: ExecutionContext, hc: HeaderCarrier, reads: HttpReads[Responses[T]]): Future[Responses[T]] =
     http
       .get(url)
-      .setHeader(HeaderNames.Accept -> {
-        "application/vnd.hmrc.2.0+json"
-      })
+      .setHeader(
+        HeaderNames.Accept ->
+          "application/vnd.hmrc.2.0+json"
+      )
       .execute[Responses[T]]
 
   private def getOne[T](url: URL)(implicit ec: ExecutionContext, hc: HeaderCarrier, reads: HttpReads[Responses[T]]): Future[Response[T]] =
