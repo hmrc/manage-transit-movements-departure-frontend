@@ -22,12 +22,7 @@ import play.api.Configuration
 
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
-
-  lazy val phase6Enabled: Boolean      = configuration.get[Boolean]("feature-flags.phase-6-enabled")
-  lazy val phase6ApiEnabled: Boolean   = configuration.get[Boolean]("feature-flags.phase-6-api-enabled")
-  lazy val phase6RulesEnabled: Boolean = configuration.get[Boolean]("feature-flags.phase-6-enabled-in-taxud")
-
-  val apiVersion: String = if (phase6ApiEnabled) "2.0" else "1.0"
+  val apiVersion: String = "2.0"
 
   val appName: String = configuration.get[String]("appName")
 
@@ -49,7 +44,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val enrolmentIdentifierKey: String = configuration.get[String]("enrolment.identifierKey")
   lazy val eccEnrolmentSplashPage: String = configuration.get[String]("urls.eccEnrolmentSplashPage")
 
-  lazy val manageTransitMovementsUrl: String                = configuration.get[String]("urls.manageTransitMovementsFrontend")
+  private lazy val manageTransitMovementsUrl: String        = configuration.get[String]("urls.manageTransitMovementsFrontend")
   lazy val serviceUrl: String                               = s"$manageTransitMovementsUrl/what-do-you-want-to-do"
   lazy val manageTransitMovementsViewDeparturesUrl: String  = s"$manageTransitMovementsUrl/view-departure-declarations"
   lazy val manageTransitMovementsDraftDeparturesUrl: String = s"$manageTransitMovementsUrl/draft-declarations"

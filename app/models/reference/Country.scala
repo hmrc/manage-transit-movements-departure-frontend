@@ -17,27 +17,19 @@
 package models.reference
 
 import cats.Order
-import config.FrontendAppConfig
 import play.api.libs.json.{__, Format, Json, Reads}
 
 case class Country(code: String)
 
 object Country {
 
-  def reads(config: FrontendAppConfig): Reads[Country] =
-    if (config.phase6Enabled) {
-      (__ \ "key").read[String].map(Country(_))
-
-    } else {
-      Json.reads[Country]
-    }
+  val reads: Reads[Country] =
+    (__ \ "key").read[String].map(Country(_))
 
   implicit val format: Format[Country] = Json.format[Country]
 
   implicit val order: Order[Country] = (x: Country, y: Country) => (x, y).compareBy(_.code)
 
-  def queryParameters(code: String)(config: FrontendAppConfig): Seq[(String, String)] = {
-    val key = if (config.phase6Enabled) "keys" else "data.code"
-    Seq(key -> code)
-  }
+  def queryParameters(code: String): Seq[(String, String)] =
+    Seq("keys" -> code)
 }

@@ -268,48 +268,18 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
       val url = s"/manage-transit-movements-departure-cache/declaration/submit"
 
-      "must return true when status is Ok" - {
-        "when phase 6 is enabled" in {
-          val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-api-enabled" -> true)
-            .build()
+      "must return true when status is Ok" in {
 
-          running(app) {
-            val connector = app.injector.instanceOf[CacheConnector]
+        server.stubFor(
+          post(urlEqualTo(url))
+            .withHeader("API-Version", equalTo("2.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
+            .willReturn(aResponse().withStatus(OK))
+        )
 
-            server.stubFor(
-              post(urlEqualTo(url))
-                .withHeader("API-Version", equalTo("2.0"))
-                .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
-                .willReturn(aResponse().withStatus(OK))
-            )
+        val result: HttpResponse = await(connector.submit(lrn.value))
 
-            val result: HttpResponse = await(connector.submit(lrn.value))
-
-            result.status mustEqual OK
-          }
-        }
-
-        "when phase 6 is disabled" in {
-          val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-api-enabled" -> false)
-            .build()
-
-          running(app) {
-            val connector = app.injector.instanceOf[CacheConnector]
-
-            server.stubFor(
-              post(urlEqualTo(url))
-                .withHeader("API-Version", equalTo("1.0"))
-                .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
-                .willReturn(aResponse().withStatus(OK))
-            )
-
-            val result: HttpResponse = await(connector.submit(lrn.value))
-
-            result.status mustEqual OK
-          }
-        }
+        result.status mustEqual OK
       }
 
       "return false for 4xx response" in {
@@ -317,7 +287,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("API-Version", equalTo("1.0"))
+            .withHeader("API-Version", equalTo("2.0"))
             .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
             .willReturn(aResponse().withStatus(status))
         )
@@ -332,7 +302,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("API-Version", equalTo("1.0"))
+            .withHeader("API-Version", equalTo("2.0"))
             .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
             .willReturn(aResponse().withStatus(status))
         )
@@ -347,48 +317,18 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
       val url = s"/manage-transit-movements-departure-cache/declaration/submit-amendment"
 
-      "must return true when status is Ok" - {
-        "when phase 6 is enabled" in {
-          val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-api-enabled" -> true)
-            .build()
+      "must return true when status is Ok" in {
 
-          running(app) {
-            val connector = app.injector.instanceOf[CacheConnector]
+        server.stubFor(
+          post(urlEqualTo(url))
+            .withHeader("API-Version", equalTo("2.0"))
+            .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
+            .willReturn(aResponse().withStatus(OK))
+        )
 
-            server.stubFor(
-              post(urlEqualTo(url))
-                .withHeader("API-Version", equalTo("2.0"))
-                .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
-                .willReturn(aResponse().withStatus(OK))
-            )
+        val result: HttpResponse = await(connector.submitAmendment(lrn.value))
 
-            val result: HttpResponse = await(connector.submitAmendment(lrn.value))
-
-            result.status mustEqual OK
-          }
-        }
-
-        "when phase 6 is disabled" in {
-          val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-api-enabled" -> false)
-            .build()
-
-          running(app) {
-            val connector = app.injector.instanceOf[CacheConnector]
-
-            server.stubFor(
-              post(urlEqualTo(url))
-                .withHeader("API-Version", equalTo("1.0"))
-                .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
-                .willReturn(aResponse().withStatus(OK))
-            )
-
-            val result: HttpResponse = await(connector.submitAmendment(lrn.value))
-
-            result.status mustEqual OK
-          }
-        }
+        result.status mustEqual OK
       }
 
       "return false for 4xx response" in {
@@ -396,7 +336,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("API-Version", equalTo("1.0"))
+            .withHeader("API-Version", equalTo("2.0"))
             .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
             .willReturn(aResponse().withStatus(status))
         )
@@ -411,7 +351,7 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
 
         server.stubFor(
           post(urlEqualTo(url))
-            .withHeader("API-Version", equalTo("1.0"))
+            .withHeader("API-Version", equalTo("2.0"))
             .withRequestBody(equalToJson(Json.stringify(JsString(lrn.toString))))
             .willReturn(aResponse().withStatus(status))
         )
@@ -459,56 +399,22 @@ class CacheConnectorSpec extends ItSpecBase with WireMockServerHandler with Scal
           |}
           |""".stripMargin
 
-      "must return messages when status is Ok" - {
-        "when phase 5" in {
-          val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-api-enabled" -> false)
-            .build()
+      "must return messages when status is Ok" in {
+        server.stubFor(
+          get(urlEqualTo(url))
+            .withHeader("API-Version", equalTo("2.0"))
+            .willReturn(okJson(json))
+        )
 
-          running(app) {
-            val connector = app.injector.instanceOf[CacheConnector]
-            server.stubFor(
-              get(urlEqualTo(url))
-                .withHeader("API-Version", equalTo("1.0"))
-                .willReturn(okJson(json))
-            )
+        val result: DepartureMessages = await(connector.getMessages(lrn))
 
-            val result: DepartureMessages = await(connector.getMessages(lrn))
-
-            result mustEqual DepartureMessages(
-              Seq(
-                DepartureMessage("IE015"),
-                DepartureMessage("IE928"),
-                DepartureMessage("IE013")
-              )
-            )
-          }
-        }
-
-        "when phase 6" in {
-          val app = guiceApplicationBuilder()
-            .configure("feature-flags.phase-6-api-enabled" -> true)
-            .build()
-
-          running(app) {
-            val connector = app.injector.instanceOf[CacheConnector]
-            server.stubFor(
-              get(urlEqualTo(url))
-                .withHeader("API-Version", equalTo("2.0"))
-                .willReturn(okJson(json))
-            )
-
-            val result: DepartureMessages = await(connector.getMessages(lrn))
-
-            result mustEqual DepartureMessages(
-              Seq(
-                DepartureMessage("IE015"),
-                DepartureMessage("IE928"),
-                DepartureMessage("IE013")
-              )
-            )
-          }
-        }
+        result mustEqual DepartureMessages(
+          Seq(
+            DepartureMessage("IE015"),
+            DepartureMessage("IE928"),
+            DepartureMessage("IE013")
+          )
+        )
       }
 
       "must return empty list when status is NoContent or NotFound" in {

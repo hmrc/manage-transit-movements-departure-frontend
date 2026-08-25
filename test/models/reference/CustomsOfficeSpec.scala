@@ -18,13 +18,11 @@ package models.reference
 
 import base.SpecBase
 import cats.data.NonEmptySet
-import config.FrontendAppConfig
 import generators.Generators
 import models.SelectableList
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, Json}
-import play.api.test.Helpers.running
 import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 
 class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -63,59 +61,13 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
     }
 
     "must deserialise" - {
-      "when phase 5" - {
-        "when phone number defined" in {
-          running(_.configure("feature-flags.phase-6-enabled" -> false)) {
-            app =>
-              val config = app.injector.instanceOf[FrontendAppConfig]
-              forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
-                (id, name, phoneNumber, countryId) =>
-                  val customsOffice = CustomsOffice(id, name, Some(phoneNumber), countryId)
-                  Json
-                    .parse(s"""
-                         |{
-                         |  "id": "$id",
-                         |  "name": "$name",
-                         |  "phoneNumber": "$phoneNumber",
-                         |  "countryId": "$countryId"
-                         |}
-                         |""".stripMargin)
-                    .as[CustomsOffice](CustomsOffice.reads(config)) mustEqual customsOffice
-              }
-          }
-        }
 
-        "when phone number undefined" in {
-          running(_.configure("feature-flags.phase-6-enabled" -> false)) {
-            app =>
-              val config = app.injector.instanceOf[FrontendAppConfig]
-              forAll(nonEmptyString, nonEmptyString, nonEmptyString) {
-                (id, name, countryId) =>
-                  val customsOffice = CustomsOffice(id, name, None, countryId)
-                  Json
-                    .parse(s"""
-                         |{
-                         |  "id": "$id",
-                         |  "name": "$name",
-                         |  "countryId": "$countryId"
-                         |}
-                         |""".stripMargin)
-                    .as[CustomsOffice](CustomsOffice.reads(config)) mustEqual customsOffice
-              }
-          }
-        }
-      }
-
-      "when phase 6" - {
-        "when phone number defined" in {
-          running(_.configure("feature-flags.phase-6-enabled" -> true)) {
-            app =>
-              val config = app.injector.instanceOf[FrontendAppConfig]
-              forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
-                (id, name, phoneNumber, countryId) =>
-                  val customsOffice = CustomsOffice(id, name, Some(phoneNumber), countryId)
-                  Json
-                    .parse(s"""
+      "when phone number defined" in {
+        forAll(nonEmptyString, nonEmptyString, nonEmptyString, nonEmptyString) {
+          (id, name, phoneNumber, countryId) =>
+            val customsOffice = CustomsOffice(id, name, Some(phoneNumber), countryId)
+            Json
+              .parse(s"""
                          |{
                          |  "referenceNumber": "$id",
                          |  "customsOfficeLsd": {
@@ -125,20 +77,16 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
                          |  "phoneNumber": "$phoneNumber"
                          |}
                          |""".stripMargin)
-                    .as[CustomsOffice](CustomsOffice.reads(config)) mustEqual customsOffice
-              }
-          }
+              .as[CustomsOffice](CustomsOffice.reads) mustEqual customsOffice
         }
+      }
 
-        "when phone number undefined" in {
-          running(_.configure("feature-flags.phase-6-enabled" -> true)) {
-            app =>
-              val config = app.injector.instanceOf[FrontendAppConfig]
-              forAll(nonEmptyString, nonEmptyString, nonEmptyString) {
-                (id, name, countryId) =>
-                  val customsOffice = CustomsOffice(id, name, None, countryId)
-                  Json
-                    .parse(s"""
+      "when phone number undefined" in {
+        forAll(nonEmptyString, nonEmptyString, nonEmptyString) {
+          (id, name, countryId) =>
+            val customsOffice = CustomsOffice(id, name, None, countryId)
+            Json
+              .parse(s"""
                          |{
                          |  "referenceNumber": "$id",
                          |  "customsOfficeLsd": {
@@ -147,9 +95,7 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
                          |  "countryCode": "$countryId"
                          |}
                          |""".stripMargin)
-                    .as[CustomsOffice](CustomsOffice.reads(config)) mustEqual customsOffice
-              }
-          }
+              .as[CustomsOffice](CustomsOffice.reads) mustEqual customsOffice
         }
       }
     }
@@ -206,133 +152,9 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
     }
 
     "listReads" - {
-      "when phase 5" - {
-        "must read list of customs offices" - {
-          "when offices have distinct IDs" in {
-            running(_.configure("feature-flags.phase-6-enabled" -> false)) {
-              app =>
-                val config = app.injector.instanceOf[FrontendAppConfig]
-                val json = Json.parse("""
-                    |[
-                    |  {
-                    |    "id" : "AD000001",
-                    |    "name" : "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA",
-                    |    "countryId" : "AD",
-                    |    "languageCode" : "EN"
-                    |  },
-                    |  {
-                    |    "id" : "AD000002",
-                    |    "name" : "DCNJ PORTA",
-                    |    "countryId" : "AD",
-                    |    "languageCode" : "EN"
-                    |  },
-                    |  {
-                    |    "id": "IT261101",
-                    |    "name": "PASSO NUOVO",
-                    |    "countryId": "IT",
-                    |    "languageCode": "IT"
-                    |  }
-                    |]
-                    |""".stripMargin)
-
-                val result = json.as[List[CustomsOffice]](CustomsOffice.listReads(config))
-
-                result mustEqual List(
-                  CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD"),
-                  CustomsOffice("AD000002", "DCNJ PORTA", None, "AD"),
-                  CustomsOffice("IT261101", "PASSO NUOVO", None, "IT")
-                )
-            }
-          }
-
-          "when offices have duplicate IDs must prioritise the office with an EN language code" in {
-            running(_.configure("feature-flags.phase-6-enabled" -> false)) {
-              app =>
-                val config = app.injector.instanceOf[FrontendAppConfig]
-                val json = Json.parse("""
-                    |[
-                    |  {
-                    |    "id" : "AD000001",
-                    |    "name" : "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA",
-                    |    "countryId" : "AD",
-                    |    "languageCode" : "EN"
-                    |  },
-                    |  {
-                    |    "id" : "AD000001",
-                    |    "name" : "ADUANA DE ST. JULIÀ DE LÒRIA",
-                    |    "countryId" : "AD",
-                    |    "languageCode" : "ES"
-                    |  },
-                    |  {
-                    |    "id" : "AD000001",
-                    |    "name" : "BUREAU DE SANT JULIÀ DE LÒRIA",
-                    |    "countryId" : "AD",
-                    |    "languageCode" : "FR"
-                    |  },
-                    |  {
-                    |    "id" : "AD000002",
-                    |    "name" : "DCNJ PORTA",
-                    |    "countryId" : "AD",
-                    |    "languageCode" : "FR"
-                    |  },
-                    |  {
-                    |    "id" : "AD000002",
-                    |    "name" : "DCNJ PORTA",
-                    |    "countryId" : "AD",
-                    |    "languageCode" : "ES"
-                    |  },
-                    |  {
-                    |    "id" : "AD000002",
-                    |    "name" : "DCNJ PORTA",
-                    |    "countryId" : "AD",
-                    |    "languageCode" : "EN"
-                    |  },
-                    |  {
-                    |    "id": "IT261101",
-                    |    "name": "PASSO NUOVO",
-                    |    "countryId": "IT",
-                    |    "languageCode": "IT"
-                    |  }
-                    |]
-                    |""".stripMargin)
-
-                val result = json.as[List[CustomsOffice]](CustomsOffice.listReads(config))
-
-                result mustEqual List(
-                  CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD"),
-                  CustomsOffice("AD000002", "DCNJ PORTA", None, "AD"),
-                  CustomsOffice("IT261101", "PASSO NUOVO", None, "IT")
-                )
-            }
-          }
-        }
-
-        "must fail to read list of customs offices" - {
-          "when not an array" in {
-            running(_.configure("feature-flags.phase-6-enabled" -> false)) {
-              app =>
-                val config = app.injector.instanceOf[FrontendAppConfig]
-                val json = Json.parse("""
-                    |{
-                    |  "foo" : "bar"
-                    |}
-                    |""".stripMargin)
-
-                val result = json.validate[List[CustomsOffice]](CustomsOffice.listReads(config))
-
-                result mustEqual JsError("Expected customs offices to be in a JsArray")
-            }
-          }
-        }
-      }
-
-      "when phase 6" - {
-        "must read list of customs offices" - {
-          "when offices have distinct IDs" in {
-            running(_.configure("feature-flags.phase-6-enabled" -> true)) {
-              app =>
-                val config = app.injector.instanceOf[FrontendAppConfig]
-                val json = Json.parse("""
+      "must read list of customs offices" - {
+        "when offices have distinct IDs" in {
+          val json = Json.parse("""
                     |[
                     |  {
                     |    "referenceNumber" : "AD000001",
@@ -361,33 +183,27 @@ class CustomsOfficeSpec extends SpecBase with ScalaCheckPropertyChecks with Gene
                     |]
                     |""".stripMargin)
 
-                val result = json.as[List[CustomsOffice]](CustomsOffice.listReads(config))
+          val result = json.as[List[CustomsOffice]](CustomsOffice.listReads)
 
-                result mustEqual List(
-                  CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD"),
-                  CustomsOffice("AD000002", "DCNJ PORTA", None, "AD"),
-                  CustomsOffice("IT261101", "PASSO NUOVO", None, "IT")
-                )
-            }
-          }
+          result mustEqual List(
+            CustomsOffice("AD000001", "CUSTOMS OFFICE SANT JULIÀ DE LÒRIA", None, "AD"),
+            CustomsOffice("AD000002", "DCNJ PORTA", None, "AD"),
+            CustomsOffice("IT261101", "PASSO NUOVO", None, "IT")
+          )
         }
+      }
 
-        "must fail to read list of customs offices" - {
-          "when not an array" in {
-            running(_.configure("feature-flags.phase-6-enabled" -> true)) {
-              app =>
-                val config = app.injector.instanceOf[FrontendAppConfig]
-                val json = Json.parse("""
+      "must fail to read list of customs offices" - {
+        "when not an array" in {
+          val json = Json.parse("""
                     |{
                     |  "foo" : "bar"
                     |}
                     |""".stripMargin)
 
-                val result = json.validate[List[CustomsOffice]](CustomsOffice.listReads(config))
+          val result = json.validate[List[CustomsOffice]](CustomsOffice.listReads)
 
-                result mustEqual JsError("error.expected.jsarray")
-            }
-          }
+          result mustEqual JsError("error.expected.jsarray")
         }
       }
     }

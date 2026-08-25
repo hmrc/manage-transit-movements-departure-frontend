@@ -17,7 +17,6 @@
 package services
 
 import config.Constants.SecurityType.*
-import config.FrontendAppConfig
 import connectors.ReferenceDataConnector
 import models.reference.SecurityType
 import uk.gov.hmrc.http.HeaderCarrier
@@ -26,16 +25,11 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SecurityTypesService @Inject() (
-  referenceDataConnector: ReferenceDataConnector,
-  config: FrontendAppConfig
+  referenceDataConnector: ReferenceDataConnector
 )(implicit ec: ExecutionContext) {
 
   private def filter(values: Seq[SecurityType]): Seq[SecurityType] =
-    if (config.phase6RulesEnabled) {
-      values.filter(_.isOneOf(NoSecurity, EXS))
-    } else {
-      values
-    }
+    values.filter(_.isOneOf(NoSecurity, EXS))
 
   def getSecurityTypes()(implicit hc: HeaderCarrier): Future[Seq[SecurityType]] =
     referenceDataConnector
