@@ -125,6 +125,5 @@ If a new update for the scripts has been released, you must visit the relevant f
 
 ### License
 
-
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
 
