@@ -18,6 +18,4 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.2.2")
 
 addSbtPlugin("com.github.sbt" % "sbt-digest" % "2.0.0")
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-accessibility-linter" % "1.0.0")
-
 addSbtPlugin("uk.gov.hmrc" % "sbt-sass-compiler" % "0.13.0")
