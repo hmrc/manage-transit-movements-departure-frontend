@@ -14,10 +14,6 @@ lazy val microservice = (project in file("."))
     SbtDistributablesPlugin
   )
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
-  .configs(A11yTest)
-  .settings(inConfig(A11yTest)(org.scalafmt.sbt.ScalafmtPlugin.scalafmtConfigSettings) *)
-  .settings(headerSettings(A11yTest) *)
-  .settings(automateHeaderSettings(A11yTest))
   .settings(CodeCoverageSettings.settings *)
   .settings(
     name := appName,
